@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            let mainView = ViewController()
+            let mainView = MannaListViewController()
             let registerView = RegisterUserViewController()
             
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {

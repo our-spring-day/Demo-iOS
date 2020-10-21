@@ -52,7 +52,7 @@ class RegisterUserViewController: UIViewController {
     }
     
     @objc func complete() {
-        let view = UINavigationController(rootViewController: ViewController())
+        let view = UINavigationController(rootViewController: MannaListViewController())
         guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
         guard let userName = userName.text else { return }
         
