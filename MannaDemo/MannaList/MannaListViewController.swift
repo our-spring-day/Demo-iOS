@@ -9,13 +9,22 @@ import UIKit
 import SnapKit
 import Then
 
-class MannaListViewController: UIViewController {
+protocol reloadData {
+    func reloadData()
+}
+
+class MannaListViewController: UIViewController, reloadData {
     
     var createMannaButton: UIBarButtonItem?
     let tableView = UITableView()
     let refreshControl = UIRefreshControl()
     
+    func reloadData() {
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
+        getMannaList()
         super.viewDidLoad()
         attribute()
         layout()
@@ -25,7 +34,7 @@ class MannaListViewController: UIViewController {
         createMannaButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createMannaButtonAction(_:)))
         self.do {
             $0.title = "Manna List"
-            //            $0.navigationController?.navigationBar.prefersLargeTitles = true
+            $0.navigationController?.navigationBar.prefersLargeTitles = true
             $0.navigationItem.rightBarButtonItem = createMannaButton
         }
         tableView.do {
@@ -46,16 +55,26 @@ class MannaListViewController: UIViewController {
         }
     }
     
+    func getMannaList() {
+        
+    }
+    
     @objc func createMannaButtonAction(_ sender: UIBarButtonItem) {
         
         let view = CreateMannaViewController()
-        self.present(view, animated: true, completion: {
-            self.tableView.reloadData()
-        })
+        view.parentView = self
+        
+        self.present(view, animated: true)
     }
     
     @objc func updateUI(refresh: UIRefreshControl) {
         refresh.endRefreshing()
+        
+        
+        
+        
+        
+        
         MannaModel.model.append(Manna(time: "test", name: "테스트스터디명"))
     }
     

@@ -11,6 +11,7 @@ import SwiftKeychainWrapper
 
 class CreateMannaViewController: UIViewController {
     var textField = UITextField()
+    var parentView: reloadData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +70,9 @@ extension CreateMannaViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         postManna()
         self.view.endEditing(true)
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true,completion: {
+            self.parentView?.reloadData()
+        })
         return true
     }
 }
