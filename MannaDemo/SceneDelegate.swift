@@ -17,32 +17,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            let mainView = MannaListViewController()
-            let registerView = RegisterUserViewController()
-            
-            if KeychainWrapper.standard.string(forKey: "device_id") == nil {
-                if let uuid = UIDevice.current.identifierForVendor?.uuidString {
-                    let saveSuccessful: Bool = KeychainWrapper.standard.set(uuid, forKey: "device_id")
-                    print("keychain is successful : \(saveSuccessful)")
-                }
-                window.rootViewController = registerView
-            } else {
-                if let deviceID = KeychainWrapper.standard.string(forKey: "device_id") {
-                    print(deviceID)
-                    AF.request(url, method: .get, parameters: ["device_id": deviceID]).responseJSON { response in
-                        switch response.result {
-                            case .success(let value):
-                                let json = value
-                                print("\(value) 가 유저의 데이터임")
-                            case .failure(let _):
-                                print("유저 조회안됨")
-                            }
-                    }
-                }
-                let navigationView = UINavigationController(rootViewController: mainView)
-                window.rootViewController = navigationView
-            }
-
+//            let mainView = MannaListViewController()
+//            let registerView = RegisterUserViewController()
+//
+//            if KeychainWrapper.standard.string(forKey: "device_id") == nil {
+//                if let uuid = UIDevice.current.identifierForVendor?.uuidString {
+//                    let saveSuccessful: Bool = KeychainWrapper.standard.set(uuid, forKey: "device_id")
+//                    print("keychain is successful : \(saveSuccessful)")
+//                }
+//                window.rootViewController = registerView
+//            } else {
+//                if let deviceID = KeychainWrapper.standard.string(forKey: "device_id") {
+//                    print(deviceID)
+//                    AF.request(url, method: .get, parameters: ["device_id": deviceID]).responseJSON { response in
+//                        switch response.result {
+//                            case .success(let value):
+//                                let json = value
+//                                print("\(value) 가 유저의 데이터임")
+//                            case .failure(let _):
+//                                print("유저 조회안됨")
+//                            }
+//                    }
+//                }
+//                let navigationView = UINavigationController(rootViewController: mainView)
+//                window.rootViewController = navigationView
+//            }
+            let mapView = MapViewController()
+            window.rootViewController = mapView
             self.window = window
             window.makeKeyAndVisible()
         }
