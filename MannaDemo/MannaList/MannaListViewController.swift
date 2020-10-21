@@ -11,9 +11,8 @@ import Then
 
 class MannaListViewController: UIViewController {
     
-    var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 0))
     let createMannaButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createMannaButtonAction))
-    let navItem = UINavigationItem(title: "Manna List")
+    let tableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,26 +22,40 @@ class MannaListViewController: UIViewController {
     
     func attribute() {
         self.do {
-            $0.title = "테스트"
+            $0.title = "Manna List"
+            $0.navigationController?.navigationBar.prefersLargeTitles = true
+            $0.navigationItem.rightBarButtonItem = createMannaButton
         }
-        navItem.do {
-            $0.rightBarButtonItem = createMannaButton
+        tableView.do {
+            $0.register(MannaListTableViewCell.self, forCellReuseIdentifier: MannaListTableViewCell.id)
+            $0.delegate = self
+            $0.dataSource = self
         }
-        navigationBar.do {
-            $0.prefersLargeTitles = true
-            $0.setItems([navItem], animated: true)
-        }
+        
     }
     
     func layout() {
-        view.addSubview(navigationBar)
+        view.addSubview(tableView)
         
-        navigationBar.snp.makeConstraints {
-            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+        tableView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
     @objc func createMannaButtonAction() {
         
     }
+}
+
+extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: MannaListTableViewCell.id) as! MannaListTableViewCell
+        return cell
+    }
+    
+    
 }
