@@ -6,22 +6,14 @@
 //
 
 import UIKit
+import Alamofire
 import SwiftKeychainWrapper
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    let url = "http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/user"
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-//
-//        if let windowScene = scene as? UIWindowScene {
-//              let window = UIWindow(windowScene: windowScene)
-//              let mainView = RegisterUserViewController()
-//              window.rootViewController = mainView
-//              self.window = window
-//              window.makeKeyAndVisible()
-//            }
         
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
@@ -35,6 +27,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 }
                 window.rootViewController = registerView
             } else {
+                if let deviceID = KeychainWrapper.standard.string(forKey: "device_id") {
+                    print(deviceID)
+                    AF.request(url, method: .get, parameters: ["device_id": deviceID]).responseJSON { response in
+                        switch response.result {
+                            case .success(let value):
+                                let json = value
+                                print("\(value) 가 유저의 데이터임")
+                            case .failure(let _):
+                                print("유저 조회안됨")
+                            }
+                    }
+                }
                 let navigationView = UINavigationController(rootViewController: mainView)
                 window.rootViewController = navigationView
             }
