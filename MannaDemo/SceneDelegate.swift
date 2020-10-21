@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -13,9 +14,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        
         if let windowScene = scene as? UIWindowScene {
               let window = UIWindow(windowScene: windowScene)
-              let mainView = ViewController()
+              let mainView = CheckUserViewController()
               window.rootViewController = mainView
               self.window = window
               window.makeKeyAndVisible()
