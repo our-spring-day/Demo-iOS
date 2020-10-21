@@ -43,10 +43,9 @@ class CreateMannaViewController: UIViewController {
     }
     
     func postManna() {
-        var param = Parameters()
-        
-            param = [
-                "device_id" : "uuid",
+        guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
+        var param: Parameters = [
+                "device_id" : deviceID,
                 "manna_name" : textField.text
             ]
         
@@ -55,7 +54,6 @@ class CreateMannaViewController: UIViewController {
         result.responseJSON() { response in
                 print("JSON = \(try! response.result.get())")
             if let jsonObject = try! response.result.get()  as? [String: Any] {
-                
                 print("타임스탬프 : \(jsonObject["create_timestamp"]!)")
                 print("만나네임 : \(jsonObject["manna_name"]!)")
                 print("uuid : \(jsonObject["uuid"]!)")
@@ -66,8 +64,9 @@ class CreateMannaViewController: UIViewController {
 
 extension CreateMannaViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        postManna()
         self.view.endEditing(true)
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: nil),
         return true
     }
 }
