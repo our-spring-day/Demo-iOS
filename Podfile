@@ -11,6 +11,7 @@ target 'MannaDemo' do
   pod 'NMapsMap'
   pod 'SwiftKeychainWrapper'
   pod 'Socket.IO-Client-Swift’
+  pod 'SwiftyJSON'
   # Pods for MannaDemo
 
 end

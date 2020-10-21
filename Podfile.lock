@@ -6,6 +6,7 @@ PODS:
     - Starscream (~> 3.1)
   - Starscream (3.1.1)
   - SwiftKeychainWrapper (4.0.1)
+  - SwiftyJSON (5.0.0)
   - Then (2.6.0)
 
 DEPENDENCIES:
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - SnapKit
   - Socket.IO-Client-Swift
   - SwiftKeychainWrapper
+  - SwiftyJSON
   - Then
 
 SPEC REPOS:
@@ -24,6 +26,7 @@ SPEC REPOS:
     - Socket.IO-Client-Swift
     - Starscream
     - SwiftKeychainWrapper
+    - SwiftyJSON
     - Then
 
 SPEC CHECKSUMS:
@@ -33,8 +36,9 @@ SPEC CHECKSUMS:
   Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
   Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   Then: 90cd104fd951cec1980a03f57704ad8f784d4d79
 
-PODFILE CHECKSUM: 6d7bcf91437f89fb864f43c586167844a8054b47
+PODFILE CHECKSUM: c5a37279435d3596b6c3e6a9cc84a2fb1b875172
 
 COCOAPODS: 1.9.1
