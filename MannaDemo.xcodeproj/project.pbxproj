@@ -18,6 +18,8 @@
 		CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE75253254028FE008E0BA1 /* MannaListViewController.swift */; };
 		CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */; };
 		CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */; };
+		CCF3BC552540446500C7F718 /* Manna.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF3BC542540446500C7F718 /* Manna.swift */; };
+		CCF3BC59254046BA00C7F718 /* MannaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF3BC58254046BA00C7F718 /* MannaModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		CCE75253254028FE008E0BA1 /* MannaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListViewController.swift; sourceTree = "<group>"; };
 		CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListTableViewCell.swift; sourceTree = "<group>"; };
 		CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMannaViewController.swift; sourceTree = "<group>"; };
+		CCF3BC542540446500C7F718 /* Manna.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manna.swift; sourceTree = "<group>"; };
+		CCF3BC58254046BA00C7F718 /* MannaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaModel.swift; sourceTree = "<group>"; };
 		F05EEAB596BC60F316DCC8BA /* Pods-MannaDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MannaDemo.debug.xcconfig"; path = "Target Support Files/Pods-MannaDemo/Pods-MannaDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,6 +116,7 @@
 		CCE752492540288F008E0BA1 /* MannaList */ = {
 			isa = PBXGroup;
 			children = (
+				CCF3BC532540444600C7F718 /* Entity */,
 				CCE7525725402DCF008E0BA1 /* Component */,
 				CCE75253254028FE008E0BA1 /* MannaListViewController.swift */,
 				CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */,
@@ -125,6 +130,15 @@
 				CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */,
 			);
 			path = Component;
+			sourceTree = "<group>";
+		};
+		CCF3BC532540444600C7F718 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				CCF3BC542540446500C7F718 /* Manna.swift */,
+				CCF3BC58254046BA00C7F718 /* MannaModel.swift */,
+			);
+			path = Entity;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,6 +256,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */,
+				CCF3BC552540446500C7F718 /* Manna.swift in Sources */,
+				CCF3BC59254046BA00C7F718 /* MannaModel.swift in Sources */,
 				CC8B845F2540231A00441445 /* ViewController.swift in Sources */,
 				CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */,
 				CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */,
