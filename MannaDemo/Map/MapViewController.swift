@@ -48,6 +48,6 @@ class MapViewController: UIViewController {
     }
     
     @objc func test() {
-        
+        self.dismiss(animated: true)
     }
 }

@@ -122,6 +122,8 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.reloadData()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        let view = MapViewController()
+        view.modalPresentationStyle = .fullScreen
+        self.present(view, animated: true, completion: nil)
     }
 }
