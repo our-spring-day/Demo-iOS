@@ -10,8 +10,8 @@ import SnapKit
 import Then
 
 class MannaListViewController: UIViewController {
-    
-    let createMannaButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createMannaButtonAction))
+
+    var createMannaButton: UIBarButtonItem?
     let tableView = UITableView()
     
     override func viewDidLoad() {
@@ -21,6 +21,7 @@ class MannaListViewController: UIViewController {
     }
     
     func attribute() {
+        createMannaButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createMannaButtonAction(_:)))
         self.do {
             $0.title = "Manna List"
             $0.navigationController?.navigationBar.prefersLargeTitles = true
@@ -42,8 +43,12 @@ class MannaListViewController: UIViewController {
         }
     }
     
-    @objc func createMannaButtonAction() {
+    @objc func createMannaButtonAction(_ sender: UIBarButtonItem) {
         
+        let view = CreateMannaViewController()
+        self.present(view, animated: true, completion: {
+            self.tableView.reloadData()
+        })
     }
 }
 
@@ -56,6 +61,4 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MannaListTableViewCell.id) as! MannaListTableViewCell
         return cell
     }
-    
-    
 }

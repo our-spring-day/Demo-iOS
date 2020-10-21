@@ -16,6 +16,7 @@
 		CC8B84672540231A00441445 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84652540231A00441445 /* LaunchScreen.storyboard */; };
 		CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE75253254028FE008E0BA1 /* MannaListViewController.swift */; };
 		CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */; };
+		CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		CC8B84682540231A00441445 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CCE75253254028FE008E0BA1 /* MannaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListViewController.swift; sourceTree = "<group>"; };
 		CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListTableViewCell.swift; sourceTree = "<group>"; };
+		CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMannaViewController.swift; sourceTree = "<group>"; };
 		F05EEAB596BC60F316DCC8BA /* Pods-MannaDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MannaDemo.debug.xcconfig"; path = "Target Support Files/Pods-MannaDemo/Pods-MannaDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,6 +103,7 @@
 			children = (
 				CCE7525725402DCF008E0BA1 /* Component */,
 				CCE75253254028FE008E0BA1 /* MannaListViewController.swift */,
+				CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */,
 			);
 			path = MannaList;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 			files = (
 				CC8B845F2540231A00441445 /* ViewController.swift in Sources */,
 				CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */,
+				CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */,
 				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
