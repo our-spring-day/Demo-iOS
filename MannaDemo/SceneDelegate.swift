@@ -31,14 +31,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {
                 if let uuid = UIDevice.current.identifierForVendor?.uuidString {
                     let saveSuccessful: Bool = KeychainWrapper.standard.set(uuid, forKey: "device_id")
-                    print("is successful : \(saveSuccessful)")
+                    print("keychain is successful : \(saveSuccessful)")
                 }
                 window.rootViewController = registerView
             } else {
                 let navigationView = UINavigationController(rootViewController: mainView)
                 window.rootViewController = navigationView
             }
-            window.rootViewController = mainView
+
             self.window = window
             window.makeKeyAndVisible()
         }
