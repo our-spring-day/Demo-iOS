@@ -14,6 +14,7 @@
 		CC8B84622540231A00441445 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84602540231A00441445 /* Main.storyboard */; };
 		CC8B84642540231A00441445 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84632540231A00441445 /* Assets.xcassets */; };
 		CC8B84672540231A00441445 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84652540231A00441445 /* LaunchScreen.storyboard */; };
+		CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE75253254028FE008E0BA1 /* MannaListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		CC8B84632540231A00441445 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC8B84662540231A00441445 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CC8B84682540231A00441445 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CCE75253254028FE008E0BA1 /* MannaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListViewController.swift; sourceTree = "<group>"; };
 		F05EEAB596BC60F316DCC8BA /* Pods-MannaDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MannaDemo.debug.xcconfig"; path = "Target Support Files/Pods-MannaDemo/Pods-MannaDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +82,7 @@
 		CC8B84592540231900441445 /* MannaDemo */ = {
 			isa = PBXGroup;
 			children = (
+				CCE752492540288F008E0BA1 /* MannaList */,
 				CC8B845A2540231A00441445 /* AppDelegate.swift */,
 				CC8B845C2540231A00441445 /* SceneDelegate.swift */,
 				CC8B845E2540231A00441445 /* ViewController.swift */,
@@ -89,6 +92,14 @@
 				CC8B84682540231A00441445 /* Info.plist */,
 			);
 			path = MannaDemo;
+			sourceTree = "<group>";
+		};
+		CCE752492540288F008E0BA1 /* MannaList */ = {
+			isa = PBXGroup;
+			children = (
+				CCE75253254028FE008E0BA1 /* MannaListViewController.swift */,
+			);
+			path = MannaList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,6 +218,7 @@
 			files = (
 				CC8B845F2540231A00441445 /* ViewController.swift in Sources */,
 				CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */,
+				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
