@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -48,7 +48,6 @@
 				F05EEAB596BC60F316DCC8BA /* Pods-MannaDemo.debug.xcconfig */,
 				12E1B65D9483B6E9E3DCA74F /* Pods-MannaDemo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
