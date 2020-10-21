@@ -14,14 +14,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+//
+//        if let windowScene = scene as? UIWindowScene {
+//              let window = UIWindow(windowScene: windowScene)
+//              let mainView = RegisterUserViewController()
+//              window.rootViewController = mainView
+//              self.window = window
+//              window.makeKeyAndVisible()
+//            }
         
         if let windowScene = scene as? UIWindowScene {
-              let window = UIWindow(windowScene: windowScene)
-              let mainView = RegisterUserViewController()
-              window.rootViewController = mainView
-              self.window = window
-              window.makeKeyAndVisible()
+            let window = UIWindow(windowScene: windowScene)
+            let mainView = ViewController()
+            let registerView = RegisterUserViewController()
+            
+            if KeychainWrapper.standard.string(forKey: "device_id") == nil {
+                if let uuid = UIDevice.current.identifierForVendor?.uuidString {
+                    let saveSuccessful: Bool = KeychainWrapper.standard.set(uuid, forKey: "device_id")
+                    print("is successful : \(saveSuccessful)")
+                }
+                window.rootViewController = registerView
+            } else {
+                let navigationView = UINavigationController(rootViewController: mainView)
+                window.rootViewController = navigationView
             }
+            window.rootViewController = mainView
+            self.window = window
+            window.makeKeyAndVisible()
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
