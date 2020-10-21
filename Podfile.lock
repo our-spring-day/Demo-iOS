@@ -1,0 +1,40 @@
+PODS:
+  - Alamofire (5.2.2)
+  - NMapsMap (3.8.0)
+  - SnapKit (5.0.1)
+  - Socket.IO-Client-Swift (15.2.0):
+    - Starscream (~> 3.1)
+  - Starscream (3.1.1)
+  - SwiftKeychainWrapper (4.0.1)
+  - Then (2.6.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - NMapsMap
+  - SnapKit
+  - Socket.IO-Client-Swift
+  - SwiftKeychainWrapper
+  - Then
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - NMapsMap
+    - SnapKit
+    - Socket.IO-Client-Swift
+    - Starscream
+    - SwiftKeychainWrapper
+    - Then
+
+SPEC CHECKSUMS:
+  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  NMapsMap: b3633ad688483a318be9293aeddd323a714fb08b
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
+  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
+  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
+  Then: 90cd104fd951cec1980a03f57704ad8f784d4d79
+
+PODFILE CHECKSUM: 6d7bcf91437f89fb864f43c586167844a8054b47
+
+COCOAPODS: 1.9.1
