@@ -8,6 +8,9 @@
 import UIKit
 import SnapKit
 import Then
+import Alamofire
+import SwiftKeychainWrapper
+import SwiftyJSON
 
 protocol reloadData {
     func reloadData()
@@ -24,8 +27,8 @@ class MannaListViewController: UIViewController, reloadData {
     }
     
     override func viewDidLoad() {
-        getMannaList()
         super.viewDidLoad()
+        getMannaList()
         attribute()
         layout()
     }
@@ -55,15 +58,12 @@ class MannaListViewController: UIViewController, reloadData {
         }
     }
     
-    func getMannaList() {
-        
-    }
+    
     
     @objc func createMannaButtonAction(_ sender: UIBarButtonItem) {
         
         let view = CreateMannaViewController()
         view.parentView = self
-        
         self.present(view, animated: true)
     }
     
@@ -71,11 +71,38 @@ class MannaListViewController: UIViewController, reloadData {
         refresh.endRefreshing()
         
         
+        DispatchQueue.global().sync {
+            getMannaList()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func getMannaList() {
+//        MannaModel.model.removeAll()
         
+        guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
         
+        let param: Parameters = [
+            "device_id" : deviceID,
+        ]
         
-        
-        MannaModel.model.append(Manna(time: "test", name: "테스트스터디명"))
+        let result = AF.request("http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/manna", parameters: param).responseJSON { response in
+            switch response.result {
+                case .success(let value):
+                    print("\(value)")
+                    if let addressList = JSON(value).array {
+                        for item in addressList {
+                            print(item["manna_name"])
+                            print(item["create_timestamp"])
+                            MannaModel.model.append(Manna(time: item["create_timestamp"].string!, name: item["manna_name"].string!))
+                        }
+                    }
+                case .failure(let err):
+                    print("\(err)")
+                }
+           }
     }
     
 }
@@ -92,5 +119,8 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         tableView.reloadData()
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath)
     }
 }
