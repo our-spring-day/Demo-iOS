@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .brown
+        KeychainWrapper.standard.removeObject(forKey: "device_id")
     }
 }
 

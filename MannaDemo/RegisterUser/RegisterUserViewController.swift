@@ -61,6 +61,7 @@ class RegisterUserViewController: UIViewController {
             "username": userName
         ]
         registerUser(parameter)
+        print("등록완료!!!")
         view.modalPresentationStyle = .fullScreen
         present(view, animated: true, completion: nil)
     }
