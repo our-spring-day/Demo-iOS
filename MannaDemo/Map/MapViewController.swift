@@ -17,6 +17,9 @@ class MapViewController: UIViewController {
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
+    
+    var otherMakers: [NMFMarker] = []
+    
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     
@@ -31,6 +34,7 @@ class MapViewController: UIViewController {
         attribute()
         layout()
         socket.delegate = self
+        
     }
     
     var myLocation = NMFMarker().then {
@@ -43,7 +47,7 @@ class MapViewController: UIViewController {
         $0.frame.size.height = 40
         $0.layer.cornerRadius = $0.frame.width / 2
         $0.clipsToBounds = true
-        $0.addTarget(self, action: #selector(test), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(back), for: .touchUpInside)
     }
     let information = UIButton().then {
         $0.setImage(#imageLiteral(resourceName: "information"), for: .normal)
@@ -84,14 +88,18 @@ class MapViewController: UIViewController {
         }
     }
     
-    @objc func test() {
+    @objc func back() {
         socket.disconnect()
         self.dismiss(animated: true)
     }
     
     @objc func emitLocation() {
-//        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         socket.write(string: "\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)")
+    }
+    
+    func marking(marker: NMFMarker, lat: Double, Lng: Double) {
+        marker.position = NMGLatLng(lat: lat, lng: Lng)
+        marker.mapView = mapView
     }
 }
 
@@ -106,10 +114,7 @@ extension MapViewController: CLLocationManagerDelegate {
         myLocation.mapView = mapView
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-        
     }
-    
-    
 }
 
 extension MapViewController: WebSocketDelegate{
@@ -123,6 +128,8 @@ extension MapViewController: WebSocketDelegate{
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         print("\(text)")
+        
+//        marking(marker: otherMakers[token], lat: lat, Lng: lng)
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
