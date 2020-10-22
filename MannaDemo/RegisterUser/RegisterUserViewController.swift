@@ -18,6 +18,8 @@ class RegisterUserViewController: UIViewController {
         $0.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         $0.textAlignment = .center
         $0.placeholder = "닉네임 입력"
+        $0.backgroundColor = .white
+        $0.textColor = .black
     }
     let completeButton = UIButton().then {
         $0.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
