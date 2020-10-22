@@ -8,12 +8,31 @@
 import UIKit
 import NMapsMap
 import CoreLocation
+import Starscream
 
 class MapViewController: UIViewController {
+    
+    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=4")!)
     
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
+    var myLatitude: Double = 0
+    var myLongitude: Double = 0
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        socket.connect()
+        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
+        //        카메라 첫 시점 세팅
+        //        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: $0.currentLocation.lat, lng: $0.currentLocation.lng))
+        //        cameraUpdate.animation = .easeOut
+        //        mapView.moveCamera(cameraUpdate)
+        attribute()
+        layout()
+        socket.delegate = self
+    }
+    
     var myLocation = NMFMarker().then {
         $0.width = 30
         $0.height = 40
@@ -34,15 +53,7 @@ class MapViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        카메라 첫 시점 세팅
-//        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: $0.currentLocation.lat, lng: $0.currentLocation.lng))
-//        cameraUpdate.animation = .easeOut
-//        mapView.moveCamera(cameraUpdate)
-        attribute()
-        layout()
-    }
+    
     
     func attribute() {
         mapView.do {
@@ -74,7 +85,13 @@ class MapViewController: UIViewController {
     }
     
     @objc func test() {
+        socket.disconnect()
         self.dismiss(animated: true)
+    }
+    
+    @objc func emitLocation() {
+//        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        socket.write(string: "\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)")
     }
 }
 
@@ -87,6 +104,29 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         myLocation.position = NMGLatLng(lat: locValue.latitude, lng: locValue.longitude)
         myLocation.mapView = mapView
+        myLatitude = locValue.latitude
+        myLongitude = locValue.longitude
         
     }
+    
+    
+}
+
+extension MapViewController: WebSocketDelegate{
+    func websocketDidConnect(socket: WebSocketClient) {
+        print("sockect Connect!")
+    }
+    
+    func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
+        print("sockect Disconnect ㅠㅠ")
+    }
+    
+    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+        print("\(text)")
+    }
+    
+    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+        print("\(data)")
+    }
+    
 }
