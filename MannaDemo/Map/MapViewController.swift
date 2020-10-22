@@ -14,8 +14,8 @@ import SwiftyJSON
 class MapViewController: UIViewController {
     
     //서버에 내 uuid 입력 되면 주석처리 된걸로 써야 함
-    //    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid)")!)
-    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=3")!)
+    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid!)")!)
+    //    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=3")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
@@ -43,9 +43,9 @@ class MapViewController: UIViewController {
     
     var markers: [NMFMarker] = [NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker()]
     
-    var tokenWithIndex: [String : Int] = ["8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 0,
-                                          "asdfkjaewlkfj2" : 1,
-                                          "asdljf342" : 3]
+    var tokenWithIndex: [String : Int] = ["4" : 0,
+                                          "3" : 1,
+                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4": 2]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     
@@ -101,9 +101,12 @@ class MapViewController: UIViewController {
     }
     
     func marking(marker: NMFMarker, lat: Double, Lng: Double) {
-        marker.position = NMGLatLng(lat: lat, lng: Lng)
-        marker.captionText = "땡땡땡"
-        marker.mapView = mapView
+        if marker.captionText != "나" {
+            marker.position = NMGLatLng(lat: lat, lng: Lng)
+            marker.captionText = "다른사람"
+            marker.mapView = mapView
+        }
+        
     }
 }
 
@@ -116,13 +119,16 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-        print(locValue)
-        
+        //        print(locValue)
+        myLocation.captionText = "나"
         marking(marker: myLocation, lat: locValue.latitude, Lng: locValue.longitude)
     }
 }
 
-extension MapViewController: WebSocketDelegate{
+extension MapViewController: WebSocketDelegate {
+    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+        print("\(data)")
+    }
     func websocketDidConnect(socket: WebSocketClient) {
         print("sockect Connect!")
     }
@@ -133,32 +139,34 @@ extension MapViewController: WebSocketDelegate{
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         var deviceToken: String?
-        var lat: Double?
-        var lng: Double?
+        var lat_: Double?
+        var lng_: Double?
         
         let json = text
         
         if let data = json.data(using: .utf8) {
             if let json = try? JSON(data: data)["from"]["deviceToken"] {
-                deviceToken = json.string!
-                print(deviceToken)
+                guard let temp = json.string else { return }
+                deviceToken = temp
+                print("deviceToken : \(deviceToken!)")
             }
+            
             if let json = try? JSON(data: data)["message"] {
-                let text = json.string!.components(separatedBy: ",")
+                guard let tmp = json.string else { return }
+                let text = tmp.components(separatedBy: ",")
                 let temp = text[0].components(separatedBy: ":")[1]
                 let temp2 = text[1].components(separatedBy: ":")[1]
-                lat = Double(temp)
-                lng = Double(temp2)
-                print(temp)
-                print(temp2)
+                lat_ = Double(temp)
+                lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
+                print("latitude : \(lat_)")
+                print("longitude : \(lng_)")
             }
+            
+            guard let token = deviceToken else { return }
+            guard let lat = lat_ else { return }
+            guard let lng = lng_ else { return }
+            
+            marking(marker: markers[tokenWithIndex[token]!], lat: lat, Lng: lng)
         }
-        marking(marker: markers[tokenWithIndex[deviceToken!]!], lat: lat!, Lng: lng!)
-//        marking(marker: otherMakers[tokenWithIndex[deviceToken]], lat: lat, Lng: lng)
     }
-    
-    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        print("\(data)")
-    }
-    
 }
