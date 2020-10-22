@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         switch response.result {
                             case .success(let value):
                                 let json = value
-                                print("\(value) 가 유저의 데이터임")
+                                print("성공")
                             case .failure(let _):
                                 print("유저 조회안됨")
                             }

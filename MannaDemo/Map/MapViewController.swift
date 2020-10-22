@@ -9,14 +9,13 @@ import UIKit
 import NMapsMap
 import CoreLocation
 import Starscream
-
-
+import SwiftyJSON
 
 class MapViewController: UIViewController {
     
     //서버에 내 uuid 입력 되면 주석처리 된걸로 써야 함
-//    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid)")!)
-    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=4")!)
+    //    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid)")!)
+    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=3")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
@@ -33,7 +32,7 @@ class MapViewController: UIViewController {
         $0.addTarget(self, action: #selector(back), for: .touchUpInside)
     }
     let information = UIButton().then {
-        $0.setImage(#imageLiteral(resourceName: "information"), for: .normal)
+        $0.setImage(#imageLiteral(resourceName: "info"), for: .normal)
         $0.frame.size.width = 40
         $0.frame.size.height = 40
         $0.layer.cornerRadius = $0.frame.width / 2
@@ -133,8 +132,29 @@ extension MapViewController: WebSocketDelegate{
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        print("\(text)")
-//        marking(marker: otherMakers[tokenWithIndex[형이파싱한토큰]], lat: 파싱한lat, Lng: 파싱한lng)
+        var deviceToken: String?
+        var lat: Double?
+        var lng: Double?
+        
+        let json = text
+        
+        if let data = json.data(using: .utf8) {
+            if let json = try? JSON(data: data)["from"]["deviceToken"] {
+                deviceToken = json.string!
+                print(deviceToken)
+            }
+            if let json = try? JSON(data: data)["message"] {
+                let text = json.string!.components(separatedBy: ",")
+                let temp = text[0].components(separatedBy: ":")[1]
+                let temp2 = text[1].components(separatedBy: ":")[1]
+                lat = Double(temp)
+                lng = Double(temp2)
+                print(temp)
+                print(temp2)
+            }
+        }
+        marking(marker: markers[tokenWithIndex[deviceToken!]!], lat: lat!, Lng: lng!)
+//        marking(marker: otherMakers[tokenWithIndex[deviceToken]], lat: lat, Lng: lng)
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
