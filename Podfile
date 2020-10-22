@@ -12,6 +12,7 @@ target 'MannaDemo' do
   pod 'SwiftKeychainWrapper'
   pod 'Socket.IO-Client-Swift’
   pod 'SwiftyJSON'
-  # Pods for MannaDemo
+  pod 'Starscream'  
+# Pods for MannaDemo
 
 end

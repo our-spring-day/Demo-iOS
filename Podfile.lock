@@ -14,6 +14,7 @@ DEPENDENCIES:
   - NMapsMap
   - SnapKit
   - Socket.IO-Client-Swift
+  - Starscream
   - SwiftKeychainWrapper
   - SwiftyJSON
   - Then
@@ -39,6 +40,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   Then: 90cd104fd951cec1980a03f57704ad8f784d4d79
 
-PODFILE CHECKSUM: c5a37279435d3596b6c3e6a9cc84a2fb1b875172
+PODFILE CHECKSUM: b61a0d621c8d1fa17814b36fef0952c622552bb0
 
 COCOAPODS: 1.9.1
