@@ -10,33 +10,16 @@ import NMapsMap
 import CoreLocation
 import Starscream
 
+
+
 class MapViewController: UIViewController {
     
+    //서버에 내 uuid 입력 되면 주석처리 된걸로 써야 함
+//    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid)")!)
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=4")!)
-    
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
-    
-    var otherMakers: [NMFMarker] = []
-    
-    var myLatitude: Double = 0
-    var myLongitude: Double = 0
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        socket.connect()
-        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
-        //        카메라 첫 시점 세팅
-        //        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: $0.currentLocation.lat, lng: $0.currentLocation.lng))
-        //        cameraUpdate.animation = .easeOut
-        //        mapView.moveCamera(cameraUpdate)
-        attribute()
-        layout()
-        socket.delegate = self
-        
-    }
-    
     var myLocation = NMFMarker().then {
         $0.width = 30
         $0.height = 40
@@ -57,7 +40,28 @@ class MapViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
+    //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
     
+    var markers: [NMFMarker] = [NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker()]
+    
+    var tokenWithIndex: [String : Int] = ["8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 0,
+                                          "asdfkjaewlkfj2" : 1,
+                                          "asdljf342" : 3]
+    var myLatitude: Double = 0
+    var myLongitude: Double = 0
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        socket.connect()
+        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
+        //        카메라 첫 시점 세팅
+        //        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: $0.currentLocation.lat, lng: $0.currentLocation.lng))
+        //        cameraUpdate.animation = .easeOut
+        //        mapView.moveCamera(cameraUpdate)
+        attribute()
+        layout()
+        socket.delegate = self
+    }
     
     func attribute() {
         mapView.do {
@@ -94,11 +98,12 @@ class MapViewController: UIViewController {
     }
     
     @objc func emitLocation() {
-        socket.write(string: "\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)")
+        socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
     }
     
     func marking(marker: NMFMarker, lat: Double, Lng: Double) {
         marker.position = NMGLatLng(lat: lat, lng: Lng)
+        marker.captionText = "땡땡땡"
         marker.mapView = mapView
     }
 }
@@ -110,10 +115,11 @@ extension MapViewController: NMFMapViewCameraDelegate {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        myLocation.position = NMGLatLng(lat: locValue.latitude, lng: locValue.longitude)
-        myLocation.mapView = mapView
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
+        print(locValue)
+        
+        marking(marker: myLocation, lat: locValue.latitude, Lng: locValue.longitude)
     }
 }
 
@@ -128,8 +134,7 @@ extension MapViewController: WebSocketDelegate{
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         print("\(text)")
-        
-//        marking(marker: otherMakers[token], lat: lat, Lng: lng)
+//        marking(marker: otherMakers[tokenWithIndex[형이파싱한토큰]], lat: 파싱한lat, Lng: 파싱한lng)
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
