@@ -31,7 +31,6 @@ class MannaListViewController: UIViewController, reloadData {
         self.getMannaList(completion: {
             self.tableView.reloadData()
         })
-        
         attribute()
         layout()
     }
@@ -108,14 +107,16 @@ class MannaListViewController: UIViewController, reloadData {
 
 extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MannaModel.model.count
+//        return MannaModel.model.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MannaListTableViewCell.id,for: indexPath) as! MannaListTableViewCell
-        if MannaModel.model.count > 0 {
-            cell.title.text = MannaModel.model[indexPath.row].name
-        }
+//        if MannaModel.model.count > 0 {
+//            cell.title.text = MannaModel.model[indexPath.row].name
+//        }
+        cell.title.text = "비어있는 데이터"
         return cell
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
