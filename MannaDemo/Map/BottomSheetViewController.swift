@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 extension BottomSheetViewController {
     private enum State {
@@ -14,16 +15,24 @@ extension BottomSheetViewController {
     }
     private enum Constant {
         static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height / 2
-        static var partialViewYPosition: CGFloat { UIScreen.main.bounds.height - (UIScreen.main.bounds.height * 0.125)}
+        static var partialViewYPosition: CGFloat { UIScreen.main.bounds.height * 0.875}
     }
 }
 
 class BottomSheetViewController: UIView {
     var standardY = CGFloat(0)
+    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.85, height: 50))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
+        
+        self.addSubview(collectionView)
+        
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(snp.top).offset(10)
+            $0.centerX.equalTo(snp.centerX)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -79,6 +88,9 @@ class BottomSheetViewController: UIView {
             $0.layer.cornerRadius = 20
             $0.clipsToBounds = true
             $0.addGestureRecognizer(gesture)
+        }
+        collectionView.do {
+            $0.backgroundColor = .cyan
         }
     }
 }

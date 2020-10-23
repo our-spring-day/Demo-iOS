@@ -76,8 +76,8 @@ class MapViewController: UIViewController {
             $0.startUpdatingLocation()
         }
         bottomSheet.do {
-            $0.backgroundColor = .white
-            $0.alpha = 0.9
+            $0.backgroundColor = .gray
+            $0.alpha = 0.7
         }
     }
     
