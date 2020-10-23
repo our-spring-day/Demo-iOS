@@ -75,7 +75,7 @@ class MapViewController: UIViewController {
         mapView.do {
             $0.frame = view.frame
             $0.mapType = .navi
-//            $0.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: true)
+            //            $0.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: true)
             $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
             $0.symbolScale = 0.85
         }
@@ -99,7 +99,7 @@ class MapViewController: UIViewController {
         var test = NMFCameraUpdate(zoomTo: zoomLevel)
         test.animation = .easeOut
         mapView.moveCamera(test)
-
+        
     }
     @objc func didzoomOutClicked() {
         zoomLevel -= 1
@@ -166,15 +166,10 @@ class MapViewController: UIViewController {
     }
     
     func camereUpdateOnlyOnce() {
+        mapView.zoomLevel = 10
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         mapView.moveCamera(cameraUpdate)
     }
-
-    func camereUpdateOnlyOnce() {
-            mapView.zoomLevel = 10
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-            mapView.moveCamera(cameraUpdate)
-        }
     
     func showToast(message: String) {
         let toastLabel = UILabel()
@@ -191,7 +186,7 @@ class MapViewController: UIViewController {
             $0.widthAnchor.constraint(equalToConstant: 170).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 45).isActive = true
         }
-
+        
         toastLabel.do {
             $0.text = "\(message)"
             $0.font = UIFont.boldSystemFont(ofSize: 15)
@@ -206,7 +201,7 @@ class MapViewController: UIViewController {
             toastLabel.removeFromSuperview()
         }
     }
-   
+    
 }
 
 
@@ -227,7 +222,7 @@ extension MapViewController: CLLocationManagerDelegate {
         myLocation.captionText = "나"
         myLocation.iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].image)
         myLocation.mapView = mapView
-        
+        print("처음에 여기 타야돼")
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
