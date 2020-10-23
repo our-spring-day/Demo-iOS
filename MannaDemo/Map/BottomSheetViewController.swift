@@ -21,7 +21,7 @@ extension BottomSheetViewController {
 
 class BottomSheetViewController: UIView {
     var standardY = CGFloat(0)
-    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.85, height: 200))
+    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.7, height: 200))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,7 +30,7 @@ class BottomSheetViewController: UIView {
         self.addSubview(collectionView)
         
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(snp.top).offset(10)
+            $0.top.equalTo(snp.top).offset(30)
             $0.centerX.equalTo(snp.centerX)
         }
     }

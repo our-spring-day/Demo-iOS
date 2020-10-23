@@ -57,9 +57,7 @@ class MapViewController: UIViewController {
         socket.connect()
         Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         //        카메라 첫 시점 세팅
-        //        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: $0.currentLocation.lat, lng: $0.currentLocation.lng))
-        //        cameraUpdate.animation = .easeOut
-        //        mapView.moveCamera(cameraUpdate)
+        
         attribute()
         layout()
         socket.delegate = self
@@ -179,6 +177,9 @@ extension MapViewController: WebSocketDelegate {
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
             
             marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
+            //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
+            UserModel.userList[tokenWithIndex].latitude = lat
+            UserModel.userList[tokenWithIndex].longitude = lng
         }
     }
 }
@@ -195,7 +196,9 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath)
-        
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: UserModel.userList[indexPath.row].latitude, lng: UserModel.userList[indexPath.row].longitude))
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 1.5
+        mapView.moveCamera(cameraUpdate)
     }
 }
