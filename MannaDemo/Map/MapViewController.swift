@@ -106,7 +106,6 @@ class MapViewController: UIViewController {
             marker.captionText = "다른사람"
             marker.mapView = mapView
         }
-        
     }
 }
 
@@ -119,7 +118,6 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-        //        print(locValue)
         myLocation.captionText = "나"
         marking(marker: myLocation, lat: locValue.latitude, Lng: locValue.longitude)
     }
@@ -146,27 +144,37 @@ extension MapViewController: WebSocketDelegate {
         
         if let data = json.data(using: .utf8) {
             if let json = try? JSON(data: data)["from"]["deviceToken"] {
-                guard let temp = json.string else { return }
-                deviceToken = temp
+                if let temp = json.string {
+                    deviceToken = temp
+                }
                 print("deviceToken : \(deviceToken!)")
             }
             
             if let json = try? JSON(data: data)["message"] {
-                guard let tmp = json.string else { return }
-                let text = tmp.components(separatedBy: ",")
-                let temp = text[0].components(separatedBy: ":")[1]
-                let temp2 = text[1].components(separatedBy: ":")[1]
-                lat_ = Double(temp)
-                lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
-                print("latitude : \(lat_)")
-                print("longitude : \(lng_)")
+                if let tmp = json.string {
+                    let text = tmp.components(separatedBy: ",")
+                    let temp = text[0].components(separatedBy: ":")[1]
+                    let temp2 = text[1].components(separatedBy: ":")[1]
+                    lat_ = Double(temp)
+                    lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
+                }
+//                guard let tmp = json.string else { return }
+//
+//                let text = tmp.components(separatedBy: ",")
+//                let temp = text[0].components(separatedBy: ":")[1]
+//                let temp2 = text[1].components(separatedBy: ":")[1]
+//                lat_ = Double(temp)
+//                lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
+                print("latitude : \(lat_!)")
+                print("longitude : \(lng_!)")
             }
             
             guard let token = deviceToken else { return }
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
+            guard let index = tokenWithIndex[token] else { return }
             
-            marking(marker: markers[tokenWithIndex[token]!], lat: lat, Lng: lng)
+            marking(marker: markers[index], lat: lat, Lng: lng)
         }
     }
 }
