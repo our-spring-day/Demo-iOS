@@ -13,6 +13,8 @@ class CreateMannaViewController: UIViewController {
     var textField = UITextField()
     var parentView: reloadData?
     var guideLabel = UILabel()
+    var clearTextButton = UIButton()
+    var completeBUtton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,11 @@ class CreateMannaViewController: UIViewController {
     func attribute() {
         view.do {
             $0.backgroundColor = .black
+            $0.alpha = 0.8
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor.white.cgColor
+            $0.layer.cornerRadius = 30
+            $0.layer.masksToBounds = true
         }
         guideLabel.do {
             $0.font = UIFont.boldSystemFont(ofSize: 25)
@@ -34,11 +41,16 @@ class CreateMannaViewController: UIViewController {
             $0.textAlignment = .center
             $0.delegate = self
         }
+        clearTextButton.do {
+            $0.setImage(#imageLiteral(resourceName: "Image-6"), for: .normal)
+            $0.addTarget(self, action: #selector(didClickedBackButton), for: .touchUpInside)
+        }
     }
     
     func layout() {
         view.addSubview(textField)
         view.addSubview(guideLabel)
+        view.addSubview(clearTextButton)
         
         textField.snp.makeConstraints {
             $0.width.equalTo(300)
@@ -50,6 +62,11 @@ class CreateMannaViewController: UIViewController {
             $0.width.equalTo(300)
             $0.height.equalTo(70)
             $0.top.leading.equalTo(view.safeAreaLayoutGuide).offset(30)
+        }
+        clearTextButton.snp.makeConstraints {
+            $0.centerY.equalTo(textField)
+            $0.leading.equalTo(textField.snp.trailing).offset(10)
+            $0.height.width.equalTo(25)
         }
     }
     
@@ -73,6 +90,9 @@ class CreateMannaViewController: UIViewController {
                  
             }
         }
+    }
+    @objc func didClickedBackButton() {
+        textField.text = ""
     }
 }
 

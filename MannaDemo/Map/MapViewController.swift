@@ -12,7 +12,6 @@ import Starscream
 import SwiftyJSON
 
 class MapViewController: UIViewController {
-    //서버에 내 uuid 입력 되면 주석처리 된걸로 써야 함
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid!)")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
@@ -38,17 +37,18 @@ class MapViewController: UIViewController {
     }
     
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
-    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
+//    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
+    var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var markers: [NMFMarker] = []
     
     
-    var tokenWithIndex: [String : Int] = ["0954A791-B5BE-4B56-8F25-07554A4D6684" : 0,
-                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 1,
-                                          "f606564d8371e455" : 2,
-                                          "3" : 3,
+    var tokenWithIndex: [String : Int] = ["f606564d8371e455" : 0,
+                                          "5dcd757a5c7d4c52" : 1,
+                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
+                                          "0954A791-B5BE-4B56-8F25-07554A4D6684" : 3,
                                           "4" : 4,
                                           "5" : 5,
-                                          "6" : 6,
+                                          "C65CDF73-8C04-4F76-A26A-AE3400FEC14B" : 6,
                                           "7" : 7]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
