@@ -28,6 +28,7 @@ class MannaListViewController: UIViewController, reloadData {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        KeychainWrapper.standard.removeObject(forKey: "device_id")
         self.getMannaList(completion: {
             self.tableView.reloadData()
         })

@@ -10,6 +10,7 @@
 		8E7C8A978621D2D74141175E /* Pods_MannaDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746C721A3B03AF62EF85DC20 /* Pods_MannaDemo.framework */; };
 		A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5155631254029BE00487BEF /* RegisterUserViewController.swift */; };
 		A515563925404C9500487BEF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A515563825404C9500487BEF /* MapViewController.swift */; };
+		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
 		CC2500B72541F09D00D630D8 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2500B62541F09D00D630D8 /* UUID.swift */; };
 		CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845A2540231A00441445 /* AppDelegate.swift */; };
 		CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845C2540231A00441445 /* SceneDelegate.swift */; };
@@ -30,6 +31,7 @@
 		746C721A3B03AF62EF85DC20 /* Pods_MannaDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MannaDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5155631254029BE00487BEF /* RegisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserViewController.swift; sourceTree = "<group>"; };
 		A515563825404C9500487BEF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		CC2500B62541F09D00D630D8 /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
 		CC8B84572540231900441445 /* MannaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MannaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC8B845A2540231A00441445 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				A515563825404C9500487BEF /* MapViewController.swift */,
+				CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
 				A515563925404C9500487BEF /* MapViewController.swift in Sources */,
 				CCEC0F0E2541D9330028B497 /* User.swift in Sources */,
+				CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
