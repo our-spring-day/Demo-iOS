@@ -35,6 +35,7 @@ class MapViewController: UIViewController {
         $0.layer.cornerRadius = $0.frame.width / 2
         $0.clipsToBounds = true
     }
+    var zoomLevel: Double = 10
     
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
     //    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
@@ -55,7 +56,7 @@ class MapViewController: UIViewController {
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
-                                                              height: UIScreen.main.bounds.height * 0.6333))
+                                                              height: UIScreen.main.bounds.height * 0.55))
     var cameraUpdateOnlyOnceFlag = true
     
     override func viewDidLoad() {
@@ -73,6 +74,10 @@ class MapViewController: UIViewController {
     func attribute() {
         mapView.do {
             $0.frame = view.frame
+            $0.mapType = .navi
+            //            $0.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: true)
+            $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
+            $0.symbolScale = 0.85
         }
         locationManager.do {
             $0.delegate = self
@@ -83,7 +88,30 @@ class MapViewController: UIViewController {
         bottomSheet.do {
             $0.collectionView.delegate = self
             $0.collectionView.dataSource = self
+            $0.zoomIn.addTarget(self, action: #selector(didzoomInClicked), for: .touchUpInside)
+            $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
+            $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
         }
+        
+    }
+    @objc func didzoomInClicked() {
+        zoomLevel += 1
+        var test = NMFCameraUpdate(zoomTo: zoomLevel)
+        test.animation = .easeOut
+        mapView.moveCamera(test)
+        
+    }
+    @objc func didzoomOutClicked() {
+        zoomLevel -= 1
+        var test = NMFCameraUpdate(zoomTo: zoomLevel)
+        test.animation = .easeOut
+        mapView.moveCamera(test)
+    }
+    @objc func cameraUpdateToMyLocation() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 1.3
+        mapView.moveCamera(cameraUpdate)
     }
     
     func layout() {
@@ -91,6 +119,8 @@ class MapViewController: UIViewController {
         view.addSubview(backButton)
         view.addSubview(information)
         view.addSubview(bottomSheet)
+        
+        
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -106,8 +136,9 @@ class MapViewController: UIViewController {
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(view.frame.width)
             $0.height.equalTo(view.frame.height)
-            $0.top.equalTo(UIScreen.main.bounds.height * 0.6333)
+            $0.top.equalTo(UIScreen.main.bounds.height * 0.55)
         }
+        
     }
     
     @objc func back() {
@@ -135,6 +166,7 @@ class MapViewController: UIViewController {
     }
     
     func camereUpdateOnlyOnce() {
+        mapView.zoomLevel = 10
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         mapView.moveCamera(cameraUpdate)
     }
@@ -168,9 +200,8 @@ class MapViewController: UIViewController {
         } completion: { _ in
             toastLabel.removeFromSuperview()
         }
-
     }
-   
+    
 }
 
 
@@ -191,7 +222,7 @@ extension MapViewController: CLLocationManagerDelegate {
         myLocation.captionText = "나"
         myLocation.iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].image)
         myLocation.mapView = mapView
-        
+        print("처음에 여기 타야돼")
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
@@ -269,10 +300,12 @@ extension MapViewController: WebSocketDelegate {
             guard let lng = lng_ else { return }
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
             
-            marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
+            if token != MyUUID.uuid {
+                marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
+                UserModel.userList[tokenWithIndex].latitude = lat
+                UserModel.userList[tokenWithIndex].longitude = lng
+            }
             //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
-            UserModel.userList[tokenWithIndex].latitude = lat
-            UserModel.userList[tokenWithIndex].longitude = lng
             bottomSheet.collectionView.reloadData()
         }
     }
