@@ -45,7 +45,8 @@ class MapViewController: UIViewController {
     
     var tokenWithIndex: [String : Int] = ["4" : 0,
                                           "3" : 1,
-                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4": 2]
+                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4": 2,
+                                          "0954A791-B5BE-4B56-8F25-07554A4D6684": 3]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     
@@ -144,9 +145,12 @@ extension MapViewController: WebSocketDelegate {
         
         if let data = json.data(using: .utf8) {
             if let json = try? JSON(data: data)["from"]["deviceToken"] {
-                if let temp = json.string {
+                guard let temp = json.string else { return }
                     deviceToken = temp
-                }
+                    if deviceToken! == MyUUID.uuid! {
+                        print("내꺼는 안줄꺼에요")
+                        return
+                    }
                 print("deviceToken : \(deviceToken!)")
             }
             
@@ -158,13 +162,6 @@ extension MapViewController: WebSocketDelegate {
                     lat_ = Double(temp)
                     lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
                 }
-//                guard let tmp = json.string else { return }
-//
-//                let text = tmp.components(separatedBy: ",")
-//                let temp = text[0].components(separatedBy: ":")[1]
-//                let temp2 = text[1].components(separatedBy: ":")[1]
-//                lat_ = Double(temp)
-//                lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
                 print("latitude : \(lat_!)")
                 print("longitude : \(lng_!)")
             }
