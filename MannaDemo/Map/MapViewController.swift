@@ -62,7 +62,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         array()
         socket.connect()
-        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         bottomSheet.collectionView.reloadData()
         socket.connect()
         attribute()
@@ -181,34 +181,60 @@ extension MapViewController: WebSocketDelegate {
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+        
+        
+//소켓 입장
+        
+//{"sender":{"deviceToken":"0954A791-B5BE-4B56-8F25-07554A4D6684","username":"정재인"},"type":"JOIN"}
+    
+//소켓 나감
+        
+//{"sender":{"deviceToken":"0954A791-B5BE-4B56-8F25-07554A4D6684","username":"정재인"},"type":"LEAVE"}
+        
+//위치 전송
+        
+//
+        
+        
+        var type: String?
         var deviceToken: String?
+        var username: String?
         var lat_: Double?
         var lng_: Double?
         let json = text
         
         if let data = json.data(using: .utf8) {
-            if let json = try? JSON(data: data)["from"]["deviceToken"] {
+            
+            //누가보냈는지
+            if let json = try? JSON(data) ["sender"] {
+                deviceToken = json["deviceToken"].string
+                username = json["username"].string
+            }
+            
+            //타입은 무엇이고
+            if let json = try? JSON(data) ["type"] {
                 guard let temp = json.string else { return }
-                deviceToken = temp
-                if deviceToken! == MyUUID.uuid! {
-                    print("내꺼는 안줄꺼에요")
-                    return
-                }
-                print("deviceToken : \(deviceToken!)")
+                type = temp
             }
             
-            if let json = try? JSON(data: data)["message"] {
-                if let tmp = json.string {
-                    let text = tmp.components(separatedBy: ",")
-                    let temp = text[0].components(separatedBy: ":")[1]
-                    let temp2 = text[1].components(separatedBy: ":")[1]
-                    lat_ = Double(temp)
-                    lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
-                }
-                print("latitude : \(lat_!)")
-                print("longitude : \(lng_!)")
-            }
+            //타입에 따른 처리
+            switch type {
             
+            case "LOCATION" :
+                if let json = try? JSON(data)["location"] {
+                    lat_ = json["latitude"].double
+                    lng_ = json["longitude"].double
+                    print(lat_!,lng_!)
+                }
+            case "LEAVE" :
+                print(username!, "님이 나가셨네요")
+            case "JOIN" :
+                print(username!, "님이 들어오셨네요")
+            case .none:
+                print("none")
+            case .some(_):
+                print("some")
+            }
             guard let token = deviceToken else { return }
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
