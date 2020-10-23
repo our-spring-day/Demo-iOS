@@ -116,6 +116,8 @@ class MapViewController: UIViewController {
             marker.position = NMGLatLng(lat: lat, lng: Lng)
             marker.captionText = "다른사람"
             marker.mapView = mapView
+
+        }
     }
 }
 
@@ -157,19 +159,24 @@ extension MapViewController: WebSocketDelegate {
         if let data = json.data(using: .utf8) {
             if let json = try? JSON(data: data)["from"]["deviceToken"] {
                 guard let temp = json.string else { return }
-                deviceToken = temp
+                    deviceToken = temp
+                    if deviceToken! == MyUUID.uuid! {
+                        print("내꺼는 안줄꺼에요")
+                        return
+                    }
                 print("deviceToken : \(deviceToken!)")
             }
             
             if let json = try? JSON(data: data)["message"] {
-                guard let tmp = json.string else { return }
-                let text = tmp.components(separatedBy: ",")
-                let temp = text[0].components(separatedBy: ":")[1]
-                let temp2 = text[1].components(separatedBy: ":")[1]
-                lat_ = Double(temp)
-                lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
-                print("latitude : \(lat_)")
-                print("longitude : \(lng_)")
+                if let tmp = json.string {
+                    let text = tmp.components(separatedBy: ",")
+                    let temp = text[0].components(separatedBy: ":")[1]
+                    let temp2 = text[1].components(separatedBy: ":")[1]
+                    lat_ = Double(temp)
+                    lng_ = Double(temp2.trimmingCharacters(in: ["}"]))
+                }
+                print("latitude : \(lat_!)")
+                print("longitude : \(lng_!)")
             }
             
             guard let token = deviceToken else { return }
