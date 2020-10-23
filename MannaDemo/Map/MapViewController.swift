@@ -62,7 +62,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         array()
         socket.connect()
-        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         bottomSheet.collectionView.reloadData()
         socket.connect()
         attribute()
