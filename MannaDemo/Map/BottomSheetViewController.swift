@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 extension BottomSheetViewController {
     private enum State {
@@ -13,17 +14,25 @@ extension BottomSheetViewController {
         case full
     }
     private enum Constant {
-        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height / 2
-        static var partialViewYPosition: CGFloat { UIScreen.main.bounds.height - (UIScreen.main.bounds.height * 0.125)}
+        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.6333
+        static var partialViewYPosition: CGFloat { UIScreen.main.bounds.height * 0.875}
     }
 }
 
 class BottomSheetViewController: UIView {
     var standardY = CGFloat(0)
+    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.7, height: 200))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
+        
+        self.addSubview(collectionView)
+        
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(snp.top).offset(30)
+            $0.centerX.equalTo(snp.centerX)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -36,6 +45,11 @@ class BottomSheetViewController: UIView {
                             y: yPosition,
                             width: self.frame.width,
                             height: self.frame.height)
+        if yPosition == Constant.partialViewYPosition {
+            self.alpha = 0.2
+        } else {
+            self.alpha = 0.8
+        }
     }
     
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
@@ -79,6 +93,7 @@ class BottomSheetViewController: UIView {
             $0.layer.cornerRadius = 20
             $0.clipsToBounds = true
             $0.addGestureRecognizer(gesture)
+            $0.backgroundColor = .gray
         }
     }
 }

@@ -11,6 +11,8 @@
 		A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5155631254029BE00487BEF /* RegisterUserViewController.swift */; };
 		A515563925404C9500487BEF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A515563825404C9500487BEF /* MapViewController.swift */; };
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
+		CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */; };
+		CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */; };
 		CC2500B72541F09D00D630D8 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2500B62541F09D00D630D8 /* UUID.swift */; };
 		CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845A2540231A00441445 /* AppDelegate.swift */; };
 		CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845C2540231A00441445 /* SceneDelegate.swift */; };
@@ -32,6 +34,8 @@
 		A5155631254029BE00487BEF /* RegisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserViewController.swift; sourceTree = "<group>"; };
 		A515563825404C9500487BEF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionView.swift; sourceTree = "<group>"; };
+		CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionViewCell.swift; sourceTree = "<group>"; };
 		CC2500B62541F09D00D630D8 /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
 		CC8B84572540231900441445 /* MannaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MannaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC8B845A2540231A00441445 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +96,8 @@
 			children = (
 				A515563825404C9500487BEF /* MapViewController.swift */,
 				CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */,
+				CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */,
+				CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -293,6 +299,8 @@
 				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
+				CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */,
+				CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */,
 				A515563925404C9500487BEF /* MapViewController.swift in Sources */,
 				CCEC0F0E2541D9330028B497 /* User.swift in Sources */,
 				CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */,
