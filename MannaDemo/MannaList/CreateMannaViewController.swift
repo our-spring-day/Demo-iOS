@@ -12,6 +12,7 @@ import SwiftKeychainWrapper
 class CreateMannaViewController: UIViewController {
     var textField = UITextField()
     var parentView: reloadData?
+    var guideLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +25,11 @@ class CreateMannaViewController: UIViewController {
         view.do {
             $0.backgroundColor = .black
         }
+        guideLabel.do {
+            $0.font = UIFont.boldSystemFont(ofSize: 25)
+            $0.text = "원하는 제목을 입력하세요 "
+        }
         textField.do {
-            $0.backgroundColor = .white
-            $0.textColor = .black
             $0.attributedPlaceholder = NSAttributedString(string: "약속 제목을 입력하세욧", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
             $0.textAlignment = .center
             $0.delegate = self
@@ -35,11 +38,18 @@ class CreateMannaViewController: UIViewController {
     
     func layout() {
         view.addSubview(textField)
+        view.addSubview(guideLabel)
         
         textField.snp.makeConstraints {
             $0.width.equalTo(300)
             $0.height.equalTo(70)
-            $0.top.centerX.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(guideLabel.snp.bottom).offset(10)
+            $0.centerX.equalTo(view.snp.centerX)
+        }
+        guideLabel.snp.makeConstraints {
+            $0.width.equalTo(300)
+            $0.height.equalTo(70)
+            $0.top.leading.equalTo(view.safeAreaLayoutGuide).offset(30)
         }
     }
     
