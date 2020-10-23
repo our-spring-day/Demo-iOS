@@ -49,7 +49,10 @@ class MapViewController: UIViewController {
                                           "0954A791-B5BE-4B56-8F25-07554A4D6684": 3]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
-    
+    var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
+                                                              y: 0,
+                                                              width: UIScreen.main.bounds.width,
+                                                              height: UIScreen.main.bounds.height/2))
     override func viewDidLoad() {
         super.viewDidLoad()
         socket.connect()
@@ -73,12 +76,17 @@ class MapViewController: UIViewController {
             $0.desiredAccuracy = kCLLocationAccuracyBest
             $0.startUpdatingLocation()
         }
+        bottomSheet.do {
+            $0.backgroundColor = .white
+            $0.alpha = 0.9
+        }
     }
     
     func layout() {
         view.addSubview(mapView)
         view.addSubview(backButton)
         view.addSubview(information)
+        view.addSubview(bottomSheet)
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -89,6 +97,12 @@ class MapViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
+        }
+        bottomSheet.snp.makeConstraints {
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.width.equalTo(view.frame.width)
+            $0.height.equalTo(view.frame.height)
+            $0.centerY.equalTo(view.frame.maxY)
         }
     }
     
@@ -102,10 +116,10 @@ class MapViewController: UIViewController {
     }
     
     func marking(marker: NMFMarker, lat: Double, Lng: Double) {
-        if marker.captionText != "나" {
             marker.position = NMGLatLng(lat: lat, lng: Lng)
             marker.captionText = "다른사람"
             marker.mapView = mapView
+
         }
     }
 }
@@ -119,8 +133,9 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
+        myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
         myLocation.captionText = "나"
-        marking(marker: myLocation, lat: locValue.latitude, Lng: locValue.longitude)
+        myLocation.mapView = mapView
     }
 }
 
@@ -169,9 +184,9 @@ extension MapViewController: WebSocketDelegate {
             guard let token = deviceToken else { return }
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
-            guard let index = tokenWithIndex[token] else { return }
+            guard let tokenWithIndex = tokenWithIndex[token] else { return }
             
-            marking(marker: markers[index], lat: lat, Lng: lng)
+            marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
         }
     }
 }
