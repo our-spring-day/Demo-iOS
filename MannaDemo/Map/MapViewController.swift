@@ -110,6 +110,7 @@ class MapViewController: UIViewController {
     @objc func cameraUpdateToMyLocation() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 1.3
         mapView.moveCamera(cameraUpdate)
     }
     
