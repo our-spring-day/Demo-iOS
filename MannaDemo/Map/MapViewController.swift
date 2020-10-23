@@ -235,10 +235,12 @@ extension MapViewController: WebSocketDelegate {
             guard let lng = lng_ else { return }
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
             
-            marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
+            if token != MyUUID.uuid {
+                marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
+                UserModel.userList[tokenWithIndex].latitude = lat
+                UserModel.userList[tokenWithIndex].longitude = lng
+            }
             //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
-            UserModel.userList[tokenWithIndex].latitude = lat
-            UserModel.userList[tokenWithIndex].longitude = lng
             bottomSheet.collectionView.reloadData()
         }
     }
