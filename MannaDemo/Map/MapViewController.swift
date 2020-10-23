@@ -56,6 +56,7 @@ class MapViewController: UIViewController {
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
                                                               height: UIScreen.main.bounds.height/2))
+    var cameraUpdateOnlyOnceFlag = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,7 +122,10 @@ class MapViewController: UIViewController {
         marker.position = NMGLatLng(lat: lat, lng: Lng)
         marker.captionText = "다른사람"
         marker.mapView = mapView
-        
+    }
+    func camereUpdateOnlyOnce() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        mapView.moveCamera(cameraUpdate)
     }
 }
 
@@ -138,6 +142,11 @@ extension MapViewController: CLLocationManagerDelegate {
         myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
         myLocation.captionText = "나"
         myLocation.mapView = mapView
+        
+        if cameraUpdateOnlyOnceFlag {
+            camereUpdateOnlyOnce()
+            cameraUpdateOnlyOnceFlag = false
+        }
     }
 }
 
@@ -205,10 +214,13 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         if UserModel.userList[indexPath.row].latitude != 0 {
             cell.profileImage.image = UserModel.userList[indexPath.row].image
             cell.backgroundColor = nil
+            cell.isUserInteractionEnabled = true
         } else {
-            cell.backgroundColor = .red
-            cell.profileImage.image = nil
+//            cell.backgroundColor = .red
+            cell.profileImage.image = #imageLiteral(resourceName: "Image-7")
+            cell.isUserInteractionEnabled = false
         }
+        
         return cell
     }
     
