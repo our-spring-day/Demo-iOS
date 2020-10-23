@@ -23,7 +23,7 @@ class MannaCollectionView: UICollectionView {
     func attribute() {
         self.do {
             $0.backgroundColor = .white
-            $0.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
+//            $0.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
             $0.isPagingEnabled = true
             $0.showsHorizontalScrollIndicator = false
         }
@@ -34,7 +34,7 @@ class MannaCollectionView: UICollectionView {
             $0.itemSize = CGSize(width: 50, height: 50)
             $0.scrollDirection = .horizontal
         }
-        self.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
+        
     }
     
     func layout() {

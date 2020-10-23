@@ -9,7 +9,6 @@ import UIKit
 
 class MannaCollectionViewCell: UICollectionViewCell {
     static  let identifier = "cell"
-    
     var profileImage = UIImageView()
     
     override func layoutSubviews() {
@@ -34,7 +33,7 @@ class MannaCollectionViewCell: UICollectionViewCell {
         addSubview(self.profileImage)
         
         profileImage.snp.makeConstraints {
-            $0.leading.top.trailing.bottom.equalTo(0)
+            $0.leading.top.trailing.bottom.equalToSuperview()
         }
     }
     

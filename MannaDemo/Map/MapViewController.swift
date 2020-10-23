@@ -78,6 +78,10 @@ class MapViewController: UIViewController {
         bottomSheet.do {
             $0.backgroundColor = .gray
             $0.alpha = 0.7
+            $0.collectionView.delegate = self
+            $0.collectionView.dataSource = self
+//            $0.collectionView.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
+            $0.collectionView.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
         }
     }
     
@@ -180,5 +184,21 @@ extension MapViewController: WebSocketDelegate {
             
             marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
         }
+    }
+}
+
+extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
+        cell.profileImage.image = #imageLiteral(resourceName: "testImage")
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath)
     }
 }
