@@ -14,25 +14,23 @@ extension BottomSheetViewController {
         case full
     }
     private enum Constant {
-        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.6333
-        static var partialViewYPosition: CGFloat { UIScreen.main.bounds.height * 0.875}
+        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.55
+        static var partialViewYPosition: CGFloat { UIScreen.main.bounds.height * 0.8}
     }
 }
 
 class BottomSheetViewController: UIView {
     var standardY = CGFloat(0)
     var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.8, height: 200))
+    var backgroundView = UIView()
+    var zoomIn = UIButton()
+    var zoomOut = UIButton()
+    var myLocation = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
-        
-        self.addSubview(collectionView)
-        
-        collectionView.snp.makeConstraints {
-            $0.top.equalTo(snp.top).offset(30)
-            $0.centerX.equalTo(snp.centerX)
-        }
+        layout()
     }
     
     required init?(coder: NSCoder) {
@@ -92,8 +90,66 @@ class BottomSheetViewController: UIView {
         self.do {
             $0.layer.cornerRadius = 20
             $0.clipsToBounds = true
-            $0.addGestureRecognizer(gesture)
+            $0.backgroundColor = .none
+        }
+        backgroundView.do {
             $0.backgroundColor = .gray
+            $0.layer.cornerRadius = 20
+            $0.clipsToBounds = true
+            $0.addGestureRecognizer(gesture)
+        }
+        zoomIn.do {
+            $0.backgroundColor = .gray
+            $0.setTitle("+", for: .normal)
+            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+            $0.layer.cornerRadius = 5
+            $0.layer.masksToBounds = true
+        }
+        zoomOut.do {
+            $0.backgroundColor = .gray
+            $0.setTitle("-", for: .normal)
+            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+            $0.layer.cornerRadius = 5
+            $0.layer.masksToBounds = true
+        }
+        myLocation.do {
+            $0.backgroundColor = .gray
+            $0.setTitle("o", for: .normal)
+            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+            $0.layer.cornerRadius = 5
+            $0.layer.masksToBounds = true
+        }
+    }
+    
+    func layout() {
+        addSubview(backgroundView)
+        backgroundView.addSubview(collectionView)
+        addSubview(zoomIn)
+        addSubview(zoomOut)
+        addSubview(myLocation)
+        
+        backgroundView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(60)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(backgroundView.snp.top).offset(20)
+            $0.centerX.equalTo(snp.centerX)
+        }
+        zoomIn.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
+            $0.leading.equalTo(snp.leading).offset(15)
+            $0.width.height.equalTo(30)
+        }
+        zoomOut.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
+            $0.leading.equalTo(zoomIn.snp.trailing).offset(15)
+            $0.width.height.equalTo(30)
+        }
+        myLocation.snp.makeConstraints {
+            $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
+            $0.trailing.equalTo(snp.trailing).offset(-15)
+            $0.width.height.equalTo(30)
         }
     }
 }

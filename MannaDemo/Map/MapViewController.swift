@@ -36,6 +36,7 @@ class MapViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
+    
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
 //    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
     var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
@@ -55,7 +56,7 @@ class MapViewController: UIViewController {
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
-                                                              height: UIScreen.main.bounds.height * 0.6333))
+                                                              height: UIScreen.main.bounds.height * 0.55))
     var cameraUpdateOnlyOnceFlag = true
     
     override func viewDidLoad() {
@@ -73,6 +74,7 @@ class MapViewController: UIViewController {
     func attribute() {
         mapView.do {
             $0.frame = view.frame
+            $0.mapType = .navi
         }
         locationManager.do {
             $0.delegate = self
@@ -83,7 +85,23 @@ class MapViewController: UIViewController {
         bottomSheet.do {
             $0.collectionView.delegate = self
             $0.collectionView.dataSource = self
+            $0.zoomIn.addTarget(self, action: #selector(didzoomInClicked), for: .touchUpInside)
+            $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
+            $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
         }
+        
+    }
+    @objc func didzoomInClicked() {
+        mapView.zoomLevel += 1
+
+    }
+    @objc func didzoomOutClicked() {
+        mapView.zoomLevel -= 1
+    }
+    @objc func cameraUpdateToMyLocation() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        cameraUpdate.animation = .fly
+        mapView.moveCamera(cameraUpdate)
     }
     
     func layout() {
@@ -91,6 +109,8 @@ class MapViewController: UIViewController {
         view.addSubview(backButton)
         view.addSubview(information)
         view.addSubview(bottomSheet)
+        
+        
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -106,8 +126,9 @@ class MapViewController: UIViewController {
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(view.frame.width)
             $0.height.equalTo(view.frame.height)
-            $0.top.equalTo(UIScreen.main.bounds.height * 0.6333)
+            $0.top.equalTo(UIScreen.main.bounds.height * 0.55)
         }
+        
     }
     
     @objc func back() {
@@ -137,7 +158,6 @@ class MapViewController: UIViewController {
         func camereUpdateOnlyOnce() {
             let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
             mapView.moveCamera(cameraUpdate)
-            
         }
     }
     
