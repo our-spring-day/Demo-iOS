@@ -38,10 +38,10 @@ class MapViewController: UIViewController {
     }
     
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
-    var user: [String] = ["상원", "재인", "우석", "종찬", "연재", "용권", "효근"]
+    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
     var markers: [NMFMarker] = []
- 
-
+    
+    
     var tokenWithIndex: [String : Int] = ["0954A791-B5BE-4B56-8F25-07554A4D6684" : 0,
                                           "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 1,
                                           "f606564d8371e455" : 2,
@@ -133,14 +133,15 @@ class MapViewController: UIViewController {
             }
             markers.append(temp)
         }
-    
-    func camereUpdateOnlyOnce() {
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-        mapView.moveCamera(cameraUpdate)
-
     }
-}
-
+        
+        func camereUpdateOnlyOnce() {
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+            mapView.moveCamera(cameraUpdate)
+            
+        }
+    }
+    
 
 extension MapViewController: NMFMapViewCameraDelegate {
     
@@ -212,6 +213,7 @@ extension MapViewController: WebSocketDelegate {
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
+            
             marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
             //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
             UserModel.userList[tokenWithIndex].latitude = lat
