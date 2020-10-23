@@ -111,7 +111,6 @@ class MapViewController: UIViewController {
     }
     
     @objc func back() {
-        socket.disconnect()
         self.dismiss(animated: true)
     }
     
@@ -150,6 +149,8 @@ extension MapViewController: NMFMapViewCameraDelegate {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.showsBackgroundLocationIndicator = true
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
         UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].latitude = myLatitude
