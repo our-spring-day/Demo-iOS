@@ -45,6 +45,8 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UIUserInterfaceStyle</key>
+	<string>Dark</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>Location Always Usage Description</key>

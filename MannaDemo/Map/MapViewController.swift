@@ -12,15 +12,13 @@ import Starscream
 import SwiftyJSON
 
 class MapViewController: UIViewController {
-    var tempMarker: NMFMarker?
     //서버에 내 uuid 입력 되면 주석처리 된걸로 써야 함
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid!)")!)
-    //    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=3")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
     var myLocation = NMFMarker().then {
-        $0.width = 30
+        $0.width = 40
         $0.height = 40
     }
     let backButton = UIButton().then {
@@ -42,25 +40,31 @@ class MapViewController: UIViewController {
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
     var user: [String] = ["상원", "재인", "우석", "종찬", "연재", "용권", "효근"]
     var markers: [NMFMarker] = []
-    
-    var tokenWithIndex: [String : Int] = ["8F630481-548D-4B8A-B501-FFD90ADFDBA4": 0,
-                                          "0954A791-B5BE-4B56-8F25-07554A4D6684": 1,
-                                          "f606564d8371e455": 2]
+ 
+
+    var tokenWithIndex: [String : Int] = ["0954A791-B5BE-4B56-8F25-07554A4D6684" : 0,
+                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 1,
+                                          "f606564d8371e455" : 2,
+                                          "3" : 3,
+                                          "4" : 4,
+                                          "5" : 5,
+                                          "6" : 6,
+                                          "7" : 7]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
-                                                              height: UIScreen.main.bounds.height/2))
+                                                              height: UIScreen.main.bounds.height * 0.6333))
+    var cameraUpdateOnlyOnceFlag = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         array()
         socket.connect()
         Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
-        //        카메라 첫 시점 세팅
-        //        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: $0.currentLocation.lat, lng: $0.currentLocation.lng))
-        //        cameraUpdate.animation = .easeOut
-        //        mapView.moveCamera(cameraUpdate)
+        bottomSheet.collectionView.reloadData()
+        socket.connect()
         attribute()
         layout()
         socket.delegate = self
@@ -77,8 +81,8 @@ class MapViewController: UIViewController {
             $0.startUpdatingLocation()
         }
         bottomSheet.do {
-            $0.backgroundColor = .white
-            $0.alpha = 0.9
+            $0.collectionView.delegate = self
+            $0.collectionView.dataSource = self
         }
     }
     
@@ -102,7 +106,7 @@ class MapViewController: UIViewController {
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(view.frame.width)
             $0.height.equalTo(view.frame.height)
-            $0.centerY.equalTo(view.frame.maxY)
+            $0.top.equalTo(UIScreen.main.bounds.height * 0.6333)
         }
     }
     
@@ -129,8 +133,14 @@ class MapViewController: UIViewController {
             }
             markers.append(temp)
         }
+    
+    func camereUpdateOnlyOnce() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        mapView.moveCamera(cameraUpdate)
+
     }
 }
+
 
 extension MapViewController: NMFMapViewCameraDelegate {
     
@@ -141,8 +151,18 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
+        UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].latitude = myLatitude
+        UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].longitude = myLongitude
         myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
+        myLocation.captionText = "나"
+        myLocation.iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].image)
         myLocation.mapView = mapView
+        
+        if cameraUpdateOnlyOnceFlag {
+            camereUpdateOnlyOnce()
+            cameraUpdateOnlyOnceFlag = false
+            bottomSheet.collectionView.reloadData()
+        }
     }
 }
 
@@ -150,6 +170,7 @@ extension MapViewController: WebSocketDelegate {
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         print("\(data)")
     }
+    
     func websocketDidConnect(socket: WebSocketClient) {
         print("sockect Connect!")
     }
@@ -162,7 +183,6 @@ extension MapViewController: WebSocketDelegate {
         var deviceToken: String?
         var lat_: Double?
         var lng_: Double?
-        
         let json = text
         
         if let data = json.data(using: .utf8) {
@@ -192,8 +212,37 @@ extension MapViewController: WebSocketDelegate {
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
-            
             marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
+            //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
+            UserModel.userList[tokenWithIndex].latitude = lat
+            UserModel.userList[tokenWithIndex].longitude = lng
+            bottomSheet.collectionView.reloadData()
         }
+    }
+}
+
+extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return UserModel.userList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
+        if UserModel.userList[indexPath.row].latitude != 0 {
+            cell.profileImage.image = UserModel.userList[indexPath.row].image
+            cell.backgroundColor = nil
+            cell.isUserInteractionEnabled = true
+        } else {
+            cell.profileImage.image = #imageLiteral(resourceName: "Image-7")
+            cell.isUserInteractionEnabled = false
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: UserModel.userList[indexPath.row].latitude, lng: UserModel.userList[indexPath.row].longitude))
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 1.2
+        mapView.moveCamera(cameraUpdate)
     }
 }
