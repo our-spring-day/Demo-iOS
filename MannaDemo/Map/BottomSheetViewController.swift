@@ -21,7 +21,7 @@ extension BottomSheetViewController {
 
 class BottomSheetViewController: UIView {
     var standardY = CGFloat(0)
-    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.7, height: 200))
+    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.8, height: 200))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
