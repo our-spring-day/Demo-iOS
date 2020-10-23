@@ -37,7 +37,7 @@ class MapViewController: UIViewController {
     }
     
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
-//    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
+    //    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
     var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var markers: [NMFMarker] = []
     
@@ -133,14 +133,25 @@ class MapViewController: UIViewController {
             markers.append(temp)
         }
     }
-        
-        func camereUpdateOnlyOnce() {
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-            mapView.moveCamera(cameraUpdate)
-            
-        }
+    
+    func camereUpdateOnlyOnce() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        mapView.moveCamera(cameraUpdate)
     }
     
+    func showToast(controller: UIViewController, message: String, seconds: Double) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.view.backgroundColor = UIColor.black
+        alert.view.alpha = 0.6
+        alert.view.layer.cornerRadius = 15
+        controller.present(alert, animated: true)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+            alert.dismiss(animated: true)
+        }
+    }
+}
+
 
 extension MapViewController: NMFMapViewCameraDelegate {
     
@@ -217,11 +228,13 @@ extension MapViewController: WebSocketDelegate {
             case "LEAVE" :
                 guard let name = username else { return }
                 //이거 토스트로 띄우실?
+                showToast(controller: self, message: "\(name)님이 나가셨습니다.", seconds: 1.5)
                 print(name, "님이 나가셨네요")
                 
             case "JOIN" :
                 guard let name = username else { return }
                 //이거 토스트로 띄우실
+                showToast(controller: self, message: "\(name)님이 들어오셨습니다.", seconds: 1.5)
                 print(name, "님이 들어오셨네요")
                 
             case .none:
