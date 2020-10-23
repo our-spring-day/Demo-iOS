@@ -10,6 +10,7 @@
 		8E7C8A978621D2D74141175E /* Pods_MannaDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746C721A3B03AF62EF85DC20 /* Pods_MannaDemo.framework */; };
 		A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5155631254029BE00487BEF /* RegisterUserViewController.swift */; };
 		A515563925404C9500487BEF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A515563825404C9500487BEF /* MapViewController.swift */; };
+		A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A549EDD32543510900EC65E3 /* ShowToast.swift */; };
 		A5D48F1A2542A60F00399462 /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F192542A60F00399462 /* Marker.swift */; };
 		A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F202542AD9B00399462 /* UIView+Ext.swift */; };
 		A5D48F252542AE3B00399462 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F242542AE3B00399462 /* UserView.swift */; };
@@ -36,6 +37,7 @@
 		746C721A3B03AF62EF85DC20 /* Pods_MannaDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MannaDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5155631254029BE00487BEF /* RegisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserViewController.swift; sourceTree = "<group>"; };
 		A515563825404C9500487BEF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		A549EDD32543510900EC65E3 /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
 		A5D48F192542A60F00399462 /* Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
 		A5D48F202542AD9B00399462 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		A5D48F242542AE3B00399462 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				CC2500B62541F09D00D630D8 /* UUID.swift */,
+				A549EDD32543510900EC65E3 /* ShowToast.swift */,
 			);
 			path = singletone;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */,
 				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
+				A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
 				CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */,
 				CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */,

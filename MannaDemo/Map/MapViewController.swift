@@ -38,7 +38,7 @@ class MapViewController: UIViewController {
     var zoomLevel: Double = 10
     
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
-//    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
+    //    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
     var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var markers: [NMFMarker] = []
     
@@ -164,14 +164,51 @@ class MapViewController: UIViewController {
             markers.append(temp)
         }
     }
-        
-        func camereUpdateOnlyOnce() {
+    
+    func camereUpdateOnlyOnce() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        mapView.moveCamera(cameraUpdate)
+    }
+
+    func camereUpdateOnlyOnce() {
             mapView.zoomLevel = 10
             let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
             mapView.moveCamera(cameraUpdate)
         }
-    }
     
+    func showToast(message: String) {
+        let toastLabel = UILabel()
+            .then {
+                $0.backgroundColor = UIColor.lightGray
+                $0.textColor = UIColor.black
+                $0.textAlignment = .center
+            }
+        view.addSubview(toastLabel)
+        toastLabel.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            $0.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100).isActive = true
+            $0.widthAnchor.constraint(equalToConstant: 170).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        }
+
+        toastLabel.do {
+            $0.text = "\(message)"
+            $0.font = UIFont.boldSystemFont(ofSize: 15)
+            $0.alpha = 1.0
+            $0.layer.cornerRadius = 15
+            $0.clipsToBounds = true
+        }
+        
+        UIView.animate(withDuration: 1.5) {
+            toastLabel.alpha = 0.0
+        } completion: { _ in
+            toastLabel.removeFromSuperview()
+        }
+    }
+   
+}
+
 
 extension MapViewController: NMFMapViewCameraDelegate {
     
@@ -248,11 +285,13 @@ extension MapViewController: WebSocketDelegate {
             case "LEAVE" :
                 guard let name = username else { return }
                 //이거 토스트로 띄우실?
+                showToast(message: "\(name)님 나가셨습니다.")
                 print(name, "님이 나가셨네요")
                 
             case "JOIN" :
                 guard let name = username else { return }
                 //이거 토스트로 띄우실
+                showToast(message: "\(name)님 접속하셨습니다.")
                 print(name, "님이 들어오셨네요")
                 
             case .none:
