@@ -45,6 +45,11 @@ class BottomSheetViewController: UIView {
                             y: yPosition,
                             width: self.frame.width,
                             height: self.frame.height)
+        if yPosition == Constant.partialViewYPosition {
+            self.alpha = 0.2
+        } else {
+            self.alpha = 0.8
+        }
     }
     
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
@@ -89,10 +94,6 @@ class BottomSheetViewController: UIView {
             $0.clipsToBounds = true
             $0.addGestureRecognizer(gesture)
             $0.backgroundColor = .gray
-            $0.alpha = 0.7
-        }
-        collectionView.do {
-            $0.alpha = 1
         }
     }
 }

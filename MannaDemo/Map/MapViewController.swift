@@ -40,24 +40,29 @@ class MapViewController: UIViewController {
     }
     
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
-    
     var markers: [NMFMarker] = [NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker()]
     
     var tokenWithIndex: [String : Int] = ["0954A791-B5BE-4B56-8F25-07554A4D6684" : 0,
                                           "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 1,
-                                          "f606564d8371e455" : 3]
+                                          "f606564d8371e455" : 2,
+                                          "3" : 3,
+                                          "4" : 4,
+                                          "5" : 5,
+                                          "6" : 6,
+                                          "7" : 7]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
                                                               height: UIScreen.main.bounds.height/2))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        bottomSheet.collectionView.reloadData()
         socket.connect()
-        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
-        //        카메라 첫 시점 세팅
         
+        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         attribute()
         layout()
         socket.delegate = self
@@ -113,13 +118,13 @@ class MapViewController: UIViewController {
     }
     
     func marking(marker: NMFMarker, lat: Double, Lng: Double) {
-            marker.position = NMGLatLng(lat: lat, lng: Lng)
-            marker.captionText = "다른사람"
-            marker.mapView = mapView
-
-        }
+        marker.position = NMGLatLng(lat: lat, lng: Lng)
+        marker.captionText = "다른사람"
+        marker.mapView = mapView
+        
     }
 }
+
 
 extension MapViewController: NMFMapViewCameraDelegate {
     
@@ -130,7 +135,6 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-        
         myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
         myLocation.captionText = "나"
         myLocation.mapView = mapView
@@ -153,17 +157,16 @@ extension MapViewController: WebSocketDelegate {
         var deviceToken: String?
         var lat_: Double?
         var lng_: Double?
-        
         let json = text
         
         if let data = json.data(using: .utf8) {
             if let json = try? JSON(data: data)["from"]["deviceToken"] {
                 guard let temp = json.string else { return }
-                    deviceToken = temp
-                    if deviceToken! == MyUUID.uuid! {
-                        print("내꺼는 안줄꺼에요")
-                        return
-                    }
+                deviceToken = temp
+                if deviceToken! == MyUUID.uuid! {
+                    print("내꺼는 안줄꺼에요")
+                    return
+                }
                 print("deviceToken : \(deviceToken!)")
             }
             
@@ -183,25 +186,29 @@ extension MapViewController: WebSocketDelegate {
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
-            
             marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
             //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
             UserModel.userList[tokenWithIndex].latitude = lat
             UserModel.userList[tokenWithIndex].longitude = lng
-            
+            bottomSheet.collectionView.reloadData()
         }
     }
 }
 
 extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var userListMappingArray = UserModel.userList.map { $0.latitude != 0 && $0.longitude != 0}
-        return userListMappingArray.count
+        return UserModel.userList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
-        cell.profileImage.image = #imageLiteral(resourceName: "testImage")
+        if UserModel.userList[indexPath.row].latitude != 0 {
+            cell.profileImage.image = UserModel.userList[indexPath.row].image
+            cell.backgroundColor = nil
+        } else {
+            cell.backgroundColor = .red
+            cell.profileImage.image = nil
+        }
         return cell
     }
     
