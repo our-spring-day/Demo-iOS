@@ -42,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 let navigationView = UINavigationController(rootViewController: mainView)
                 window.rootViewController = navigationView
             }
-//            let mapView = MapViewController()
+//            let mapView = ViewController()
 //            window.rootViewController = mapView
             self.window = window
             window.makeKeyAndVisible()

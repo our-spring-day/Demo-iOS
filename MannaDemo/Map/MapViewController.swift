@@ -12,7 +12,7 @@ import Starscream
 import SwiftyJSON
 
 class MapViewController: UIViewController {
-    
+    var tempMarker: NMFMarker?
     //서버에 내 uuid 입력 되면 주석처리 된걸로 써야 함
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid!)")!)
     //    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=3")!)
@@ -40,13 +40,12 @@ class MapViewController: UIViewController {
     }
     
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
+    var user: [String] = ["상원", "재인", "우석", "종찬", "연재", "용권", "효근"]
+    var markers: [NMFMarker] = []
     
-    var markers: [NMFMarker] = [NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker()]
-    
-    var tokenWithIndex: [String : Int] = ["4" : 0,
-                                          "3" : 1,
-                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4": 2,
-                                          "0954A791-B5BE-4B56-8F25-07554A4D6684": 3]
+    var tokenWithIndex: [String : Int] = ["8F630481-548D-4B8A-B501-FFD90ADFDBA4": 0,
+                                          "0954A791-B5BE-4B56-8F25-07554A4D6684": 1,
+                                          "f606564d8371e455": 2]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
@@ -55,6 +54,7 @@ class MapViewController: UIViewController {
                                                               height: UIScreen.main.bounds.height/2))
     override func viewDidLoad() {
         super.viewDidLoad()
+        array()
         socket.connect()
         Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         //        카메라 첫 시점 세팅
@@ -116,10 +116,18 @@ class MapViewController: UIViewController {
     }
     
     func marking(marker: NMFMarker, lat: Double, Lng: Double) {
-            marker.position = NMGLatLng(lat: lat, lng: Lng)
-            marker.captionText = "다른사람"
-            marker.mapView = mapView
-
+        marker.position = NMGLatLng(lat: lat, lng: Lng)
+        marker.mapView = mapView
+    }
+    
+    func array() {
+        for str in user {
+            let temp = NMFMarker().then {
+                $0.iconImage = NMFOverlayImage(image: UIImage(named: str)!)
+                $0.width = 40
+                $0.height = 40
+            }
+            markers.append(temp)
         }
     }
 }
@@ -134,7 +142,6 @@ extension MapViewController: CLLocationManagerDelegate {
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
         myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-        myLocation.captionText = "나"
         myLocation.mapView = mapView
     }
 }
@@ -161,11 +168,11 @@ extension MapViewController: WebSocketDelegate {
         if let data = json.data(using: .utf8) {
             if let json = try? JSON(data: data)["from"]["deviceToken"] {
                 guard let temp = json.string else { return }
-                    deviceToken = temp
-                    if deviceToken! == MyUUID.uuid! {
-                        print("내꺼는 안줄꺼에요")
-                        return
-                    }
+                deviceToken = temp
+                if deviceToken! == MyUUID.uuid! {
+                    print("내꺼는 안줄꺼에요")
+                    return
+                }
                 print("deviceToken : \(deviceToken!)")
             }
             
