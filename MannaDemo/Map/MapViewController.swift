@@ -128,6 +128,7 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
+        
         myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
         myLocation.captionText = "나"
         myLocation.mapView = mapView
@@ -180,13 +181,15 @@ extension MapViewController: WebSocketDelegate {
             //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
             UserModel.userList[tokenWithIndex].latitude = lat
             UserModel.userList[tokenWithIndex].longitude = lng
+            
         }
     }
 }
 
 extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 9
+        var userListMappingArray = UserModel.userList.map { $0.latitude != 0 && $0.longitude != 0}
+        return userListMappingArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
