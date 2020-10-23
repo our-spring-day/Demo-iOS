@@ -43,9 +43,9 @@ class MapViewController: UIViewController {
     
     var markers: [NMFMarker] = [NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker()]
     
-    var tokenWithIndex: [String : Int] = ["4" : 0,
-                                          "3" : 1,
-                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4": 2]
+    var tokenWithIndex: [String : Int] = ["0954A791-B5BE-4B56-8F25-07554A4D6684" : 0,
+                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 1,
+                                          "f606564d8371e455" : 3]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
