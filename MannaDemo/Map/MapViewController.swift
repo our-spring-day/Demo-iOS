@@ -76,12 +76,8 @@ class MapViewController: UIViewController {
             $0.startUpdatingLocation()
         }
         bottomSheet.do {
-            $0.backgroundColor = .gray
-            $0.alpha = 0.7
             $0.collectionView.delegate = self
             $0.collectionView.dataSource = self
-//            $0.collectionView.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
-            $0.collectionView.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
         }
     }
     
@@ -189,7 +185,7 @@ extension MapViewController: WebSocketDelegate {
 
 extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 9
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -200,5 +196,6 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath)
+        
     }
 }

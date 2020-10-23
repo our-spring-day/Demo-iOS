@@ -21,7 +21,7 @@ extension BottomSheetViewController {
 
 class BottomSheetViewController: UIView {
     var standardY = CGFloat(0)
-    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.85, height: 50))
+    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.85, height: 200))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -88,9 +88,11 @@ class BottomSheetViewController: UIView {
             $0.layer.cornerRadius = 20
             $0.clipsToBounds = true
             $0.addGestureRecognizer(gesture)
+            $0.backgroundColor = .gray
+            $0.alpha = 0.7
         }
         collectionView.do {
-            $0.backgroundColor = .cyan
+            $0.alpha = 1
         }
     }
 }
