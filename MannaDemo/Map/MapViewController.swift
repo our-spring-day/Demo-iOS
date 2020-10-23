@@ -35,7 +35,7 @@ class MapViewController: UIViewController {
         $0.layer.cornerRadius = $0.frame.width / 2
         $0.clipsToBounds = true
     }
-    
+    var zoomLevel: Double = 10
     
     //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
 //    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
@@ -75,6 +75,9 @@ class MapViewController: UIViewController {
         mapView.do {
             $0.frame = view.frame
             $0.mapType = .navi
+//            $0.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: true)
+            $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
+            $0.symbolScale = 0.85
         }
         locationManager.do {
             $0.delegate = self
@@ -92,11 +95,17 @@ class MapViewController: UIViewController {
         
     }
     @objc func didzoomInClicked() {
-        mapView.zoomLevel += 1
+        zoomLevel += 1
+        var test = NMFCameraUpdate(zoomTo: zoomLevel)
+        test.animation = .easeOut
+        mapView.moveCamera(test)
 
     }
     @objc func didzoomOutClicked() {
-        mapView.zoomLevel -= 1
+        zoomLevel -= 1
+        var test = NMFCameraUpdate(zoomTo: zoomLevel)
+        test.animation = .easeOut
+        mapView.moveCamera(test)
     }
     @objc func cameraUpdateToMyLocation() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
@@ -156,6 +165,7 @@ class MapViewController: UIViewController {
     }
         
         func camereUpdateOnlyOnce() {
+            mapView.zoomLevel = 10
             let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
             mapView.moveCamera(cameraUpdate)
         }
