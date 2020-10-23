@@ -46,10 +46,10 @@ class MapViewController: UIViewController {
                                           "5dcd757a5c7d4c52" : 1,
                                           "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
                                           "0954A791-B5BE-4B56-8F25-07554A4D6684" : 3,
-                                          "4" : 4,
+                                          "8D44FAA1-2F87-4702-9DAC-B8B15D949880" : 4,
                                           "5" : 5,
                                           "C65CDF73-8C04-4F76-A26A-AE3400FEC14B" : 6,
-                                          "7" : 7]
+                                          "00008030-001C292E2E30802E" : 7]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
@@ -182,20 +182,6 @@ extension MapViewController: WebSocketDelegate {
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         
-        
-//소켓 입장
-        
-//{"sender":{"deviceToken":"0954A791-B5BE-4B56-8F25-07554A4D6684","username":"정재인"},"type":"JOIN"}
-    
-//소켓 나감
-        
-//{"sender":{"deviceToken":"0954A791-B5BE-4B56-8F25-07554A4D6684","username":"정재인"},"type":"LEAVE"}
-        
-//위치 전송
-        
-//
-        
-        
         var type: String?
         var deviceToken: String?
         var username: String?
@@ -205,7 +191,7 @@ extension MapViewController: WebSocketDelegate {
         
         if let data = json.data(using: .utf8) {
             
-            //누가보냈는지
+            //누가 보냈는지
             if let json = try? JSON(data) ["sender"] {
                 deviceToken = json["deviceToken"].string
                 username = json["username"].string
@@ -226,12 +212,20 @@ extension MapViewController: WebSocketDelegate {
                     lng_ = json["longitude"].double
                     print(lat_!,lng_!)
                 }
+                
             case "LEAVE" :
-                print(username!, "님이 나가셨네요")
+                guard let name = username else { return }
+                //이거 토스트로 띄우실?
+                print(name, "님이 나가셨네요")
+                
             case "JOIN" :
-                print(username!, "님이 들어오셨네요")
+                guard let name = username else { return }
+                //이거 토스트로 띄우실
+                print(name, "님이 들어오셨네요")
+                
             case .none:
                 print("none")
+                
             case .some(_):
                 print("some")
             }
