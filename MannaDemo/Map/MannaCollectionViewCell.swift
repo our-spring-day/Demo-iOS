@@ -23,7 +23,7 @@ class MannaCollectionViewCell: UICollectionViewCell {
     
     func attribute() {
         profileImage.do {
-            $0.layer.cornerRadius = 10
+            $0.layer.cornerRadius = 20
             $0.layer.masksToBounds = true
             $0.contentMode = .scaleAspectFill
         }

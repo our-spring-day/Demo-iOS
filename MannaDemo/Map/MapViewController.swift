@@ -13,14 +13,12 @@ import SwiftyJSON
 
 class MapViewController: UIViewController {
     
-    //서버에 내 uuid 입력 되면 주석처리 된걸로 써야 함
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid!)")!)
-    //    let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=3")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
     var myLocation = NMFMarker().then {
-        $0.width = 30
+        $0.width = 40
         $0.height = 40
     }
     let backButton = UIButton().then {
@@ -39,9 +37,7 @@ class MapViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
-    //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
     var markers: [NMFMarker] = [NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker(),NMFMarker()]
-    
     var tokenWithIndex: [String : Int] = ["0954A791-B5BE-4B56-8F25-07554A4D6684" : 0,
                                           "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 1,
                                           "f606564d8371e455" : 2,
@@ -55,15 +51,14 @@ class MapViewController: UIViewController {
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
-                                                              height: UIScreen.main.bounds.height/2))
+                                                              height: UIScreen.main.bounds.height * 0.6333))
     var cameraUpdateOnlyOnceFlag = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         bottomSheet.collectionView.reloadData()
         socket.connect()
-        
-        Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         attribute()
         layout()
         socket.delegate = self
@@ -105,7 +100,7 @@ class MapViewController: UIViewController {
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(view.frame.width)
             $0.height.equalTo(view.frame.height)
-            $0.centerY.equalTo(view.frame.maxY)
+            $0.top.equalTo(UIScreen.main.bounds.height * 0.6333)
         }
     }
     
@@ -139,13 +134,17 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
+        UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].latitude = myLatitude
+        UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].longitude = myLongitude
         myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
         myLocation.captionText = "나"
+        myLocation.iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].image)
         myLocation.mapView = mapView
         
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
+            bottomSheet.collectionView.reloadData()
         }
     }
 }
@@ -154,6 +153,7 @@ extension MapViewController: WebSocketDelegate {
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         print("\(data)")
     }
+    
     func websocketDidConnect(socket: WebSocketClient) {
         print("sockect Connect!")
     }
@@ -216,18 +216,16 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
             cell.backgroundColor = nil
             cell.isUserInteractionEnabled = true
         } else {
-//            cell.backgroundColor = .red
             cell.profileImage.image = #imageLiteral(resourceName: "Image-7")
             cell.isUserInteractionEnabled = false
         }
-        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: UserModel.userList[indexPath.row].latitude, lng: UserModel.userList[indexPath.row].longitude))
         cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 1.5
+        cameraUpdate.animationDuration = 1.2
         mapView.moveCamera(cameraUpdate)
     }
 }
