@@ -50,7 +50,7 @@ class MapViewController: UIViewController {
                                           "8D44FAA1-2F87-4702-9DAC-B8B15D949880" : 4,
                                           "5" : 5,
                                           "C65CDF73-8C04-4F76-A26A-AE3400FEC14B" : 6,
-                                          "00008030-001C292E2E30802E" : 7]
+                                          "69751764-A224-4923-9844-C61646743D10" : 7]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
@@ -65,7 +65,6 @@ class MapViewController: UIViewController {
         socket.connect()
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         bottomSheet.collectionView.reloadData()
-        socket.connect()
         attribute()
         layout()
         socket.delegate = self
