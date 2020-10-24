@@ -48,7 +48,7 @@ class MapViewController: UIViewController {
                                           "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
                                           "0954A791-B5BE-4B56-8F25-07554A4D6684" : 3,
                                           "8D44FAA1-2F87-4702-9DAC-B8B15D949880" : 4,
-                                          "5" : 5,
+                                          "2872483D-9E7B-46D1-A2B8-44832FE3F1AD" : 5,
                                           "C65CDF73-8C04-4F76-A26A-AE3400FEC14B" : 6,
                                           "69751764-A224-4923-9844-C61646743D10" : 7]
     var myLatitude: Double = 0
@@ -118,8 +118,6 @@ class MapViewController: UIViewController {
         view.addSubview(backButton)
         view.addSubview(information)
         view.addSubview(bottomSheet)
-        
-        
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
