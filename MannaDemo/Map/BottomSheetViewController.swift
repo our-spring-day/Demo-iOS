@@ -106,6 +106,12 @@ class BottomSheetViewController: UIView {
         } else if recognizer.state == .changed {
             //시작 될 때 저장한 거리만큼 떨어뜨려 움직임
             self.center.y = (self.center.y + recognizer.location(in: self).y) - standardY
+            
+            
+            
+            if frame.origin.y < Constant.fullViewYPosition {
+                frame.origin.y = Constant.fullViewYPosition
+            }
         } else if recognizer.state == .ended {
             self.isUserInteractionEnabled = false
             UIView.animate(withDuration: 0.3,
