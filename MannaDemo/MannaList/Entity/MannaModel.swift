@@ -14,6 +14,3 @@ class MannaModel {
         Manna(time: "asdf", name: "강남 넘어 ")
     ]
 }
-
-
-

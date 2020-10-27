@@ -232,6 +232,7 @@ extension MapViewController: CLLocationManagerDelegate {
         myLongitude = locValue.longitude
         
         if let index = tokenWithIndex[MyUUID.uuid!] {
+            
             markers[index].do {
                 $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
                 $0.captionText = "여기 로케이션"
@@ -249,6 +250,7 @@ extension MapViewController: CLLocationManagerDelegate {
                 cameraUpdateOnlyOnceFlag = false
                 bottomSheet.collectionView.reloadData()
             }
+            bottomSheet.collectionView.reloadData()
         }
     }
 }
@@ -259,10 +261,14 @@ extension MapViewController: WebSocketDelegate {
     
     func websocketDidConnect(socket: WebSocketClient) {
         print("sockect Connect!")
+        UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].state = true
+        bottomSheet.collectionView.reloadData()
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("sockect Disconnect ㅠㅠ")
+        UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].state = false
+        bottomSheet.collectionView.reloadData()
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -281,6 +287,7 @@ extension MapViewController: WebSocketDelegate {
                 deviceToken = json["deviceToken"].string
                 username = json["username"].string
             }
+            guard let token = deviceToken else { return }
             
             //타입은 무엇이고
             if let json = try? JSON(data) ["type"] {
@@ -299,10 +306,12 @@ extension MapViewController: WebSocketDelegate {
                 
             case "LEAVE" :
                 guard let name = username else { return }
+                UserModel.userList[tokenWithIndex[token]!].state = false
                 showToast(message: "\(name)님 나가셨습니다.")
                 
             case "JOIN" :
                 guard let name = username else { return }
+                UserModel.userList[tokenWithIndex[token]!].state = true
                 showToast(message: "\(name)님 접속하셨습니다.")
                 
             case .none:
@@ -311,7 +320,6 @@ extension MapViewController: WebSocketDelegate {
             case .some(_):
                 print("some")
             }
-            guard let token = deviceToken else { return }
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
@@ -334,7 +342,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
-        if UserModel.userList[indexPath.row].latitude != 0 {
+        if UserModel.userList[indexPath.row].state {
             if imageToNameFlag {
                 cell.profileImage.image = UserModel.userList[indexPath.row].nicknameImage
                 cell.backgroundColor = nil
