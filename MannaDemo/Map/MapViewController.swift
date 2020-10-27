@@ -21,7 +21,7 @@ class MapViewController: UIViewController {
         $0.height = 40
     }
     let backButton = UIButton()
-    let information = UIButton()
+    let infoButton = UIButton()
     var zoomLevel: Double = 10
     var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var markers: [NMFMarker] = []
@@ -40,6 +40,7 @@ class MapViewController: UIViewController {
                                                               width: UIScreen.main.bounds.width,
                                                               height: UIScreen.main.bounds.height * 0.55))
     var cameraUpdateOnlyOnceFlag = true
+    var imageToNameFlage = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,12 +62,13 @@ class MapViewController: UIViewController {
             $0.clipsToBounds = true
             $0.addTarget(self, action: #selector(back), for: .touchUpInside)
         }
-        information.do {
+        infoButton.do {
             $0.setImage(#imageLiteral(resourceName: "info"), for: .normal)
             $0.frame.size.width = 40
             $0.frame.size.height = 40
             $0.layer.cornerRadius = $0.frame.width / 2
             $0.clipsToBounds = true
+            $0.addTarget(self, action: #selector(info), for: .touchUpInside)
         }
         mapView.do {
             $0.frame = view.frame
@@ -89,18 +91,27 @@ class MapViewController: UIViewController {
         }
         
     }
+    @objc func back() {
+        self.dismiss(animated: true)
+    }
+    @objc func info() {
+        imageToNameFlage.toggle()
+//        markers.map { $0.iconImage = NMFOverlayImage(image: UserModel.userList[$) }
+        $0.iconImage = NMFOverlayImage(image: UIImage(named: str)!)
+        bottomSheet.collectionView.reloadData()
+    }
     @objc func didzoomInClicked() {
         zoomLevel += 1
-        var test = NMFCameraUpdate(zoomTo: zoomLevel)
-        test.animation = .easeOut
-        mapView.moveCamera(test)
+        var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
+        cameraUpadateToNewZoom.animation = .easeOut
+        mapView.moveCamera(cameraUpadateToNewZoom)
         
     }
     @objc func didzoomOutClicked() {
         zoomLevel -= 1
-        var test = NMFCameraUpdate(zoomTo: zoomLevel)
-        test.animation = .easeOut
-        mapView.moveCamera(test)
+        var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
+        cameraUpadateToNewZoom.animation = .easeOut
+        mapView.moveCamera(cameraUpadateToNewZoom)
     }
     @objc func cameraUpdateToMyLocation() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
@@ -108,19 +119,15 @@ class MapViewController: UIViewController {
         cameraUpdate.animationDuration = 1.3
         mapView.moveCamera(cameraUpdate)
     }
-    
     func layout() {
-        view.addSubview(mapView)
-        view.addSubview(backButton)
-        view.addSubview(information)
-        view.addSubview(bottomSheet)
+        [mapView, backButton, infoButton, bottomSheet].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             $0.leading.equalToSuperview().offset(22)
             $0.width.height.equalTo(40)
         }
-        information.snp.makeConstraints {
+        infoButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
@@ -134,9 +141,7 @@ class MapViewController: UIViewController {
         
     }
     
-    @objc func back() {
-        self.dismiss(animated: true)
-    }
+    
     
     @objc func emitLocation() {
         socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
@@ -165,8 +170,7 @@ class MapViewController: UIViewController {
     }
     
     func showToast(message: String) {
-        let toastLabel = UILabel()
-            .then {
+        let toastLabel = UILabel().then {
                 $0.backgroundColor = UIColor.lightGray
                 $0.textColor = UIColor.black
                 $0.textAlignment = .center
@@ -205,17 +209,21 @@ extension MapViewController: NMFMapViewCameraDelegate {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
-        myLatitude = locValue.latitude
-        myLongitude = locValue.longitude
+        
         UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].latitude = myLatitude
         UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].longitude = myLongitude
+        
+        myLatitude = locValue.latitude
+        myLongitude = locValue.longitude
         myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
         myLocation.captionText = "나"
-        myLocation.iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].image)
+        myLocation.iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].nicknameImage)
         myLocation.mapView = mapView
-        print("처음에 여기 타야돼")
+        print(locValue)
+        print("이거 타는 타이밍")
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
@@ -307,9 +315,15 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
         if UserModel.userList[indexPath.row].latitude != 0 {
-            cell.profileImage.image = UserModel.userList[indexPath.row].image
-            cell.backgroundColor = nil
-            cell.isUserInteractionEnabled = true
+            if imageToNameFlage {
+                cell.profileImage.image = UserModel.userList[indexPath.row].nicknameImage
+                cell.backgroundColor = nil
+                cell.isUserInteractionEnabled = true
+            } else {
+                cell.profileImage.image = UserModel.userList[indexPath.row].profileImage
+                cell.backgroundColor = nil
+                cell.isUserInteractionEnabled = true
+            }
         } else {
             cell.profileImage.image = #imageLiteral(resourceName: "Image-7")
             cell.isUserInteractionEnabled = false
