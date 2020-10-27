@@ -43,7 +43,7 @@ class MannaCollectionView: UICollectionView {
     func layout() {
         self.snp.makeConstraints {
             $0.width.equalTo(UIScreen.main.bounds.width * 0.8)
-            $0.height.equalTo(400)
+            $0.height.equalTo(200)
             $0.centerX.equalTo(self.snp.centerX)
         }
     }

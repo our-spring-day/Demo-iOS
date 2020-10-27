@@ -9,19 +9,20 @@ import UIKit
 import SnapKit
 
 extension BottomSheetViewController {
-    private enum State {
+    enum State {
         case partial
         case half
         case full
     }
-    private enum Constant {
-        static let halfViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.55
-        static let partialViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.8
-        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.3 
+    enum Constant {
+        static let halfViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.5
+        static let partialViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.85
+        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.05
     }
 }
 
 class BottomSheetViewController: UIView {
+    var currentState: State = .half
     var standardY = CGFloat(0)
     var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.8, height: 200))
     var backgroundView = UIImageView()
@@ -43,18 +44,40 @@ class BottomSheetViewController: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
+    
+    
     private func moveView(state: State) {
-        let yPosition = state == .partial ? Constant.partialViewYPosition : Constant.halfViewYPosition
+        
+        
+        var YPosition: CGFloat?
+        switch state {
+        case .full:
+            YPosition = Constant.fullViewYPosition
+            self.alpha = 1
+            break
+        case .half:
+            YPosition = Constant.halfViewYPosition
+            self.alpha = 0.9
+            break
+        case .partial:
+            YPosition = Constant.partialViewYPosition
+            self.alpha = 0.5
+            break
+        }
+        
         self.frame = CGRect(x: 0,
-                            y: yPosition,
+                            y: YPosition!,
                             width: self.frame.width,
                             height: self.frame.height)
-        if yPosition == Constant.partialViewYPosition {
-            self.alpha = 0.2
-        } else {
-            self.alpha = 0.8
-        }
     }
+    
+    
+    
+    
+    
+    
     
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: self)
@@ -68,23 +91,39 @@ class BottomSheetViewController: UIView {
         }
     }
     
+    
+    
+    
+    
+    
+    
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
         
         if recognizer.state == .began {
+            //터치가 시작 될 때 거리를 저장
             standardY = recognizer.location(in: self).y
         } else if recognizer.state == .changed {
+            //시작 될 때 저장한 거리만큼 떨어뜨려 움직임
             self.center.y = (self.center.y + recognizer.location(in: self).y) - standardY
-            
         } else if recognizer.state == .ended {
             self.isUserInteractionEnabled = false
             UIView.animate(withDuration: 0.3,
                            delay: 0.0,
                            options: .allowUserInteraction,
-                           animations: {
-                            let state: State = recognizer.velocity(in: self).y >= 0 ?
-                                .partial : .half
-                            self.moveView(state: state)},
+                           animations: { [self] in
+                            
+                            
+                            if self.frame.origin.y > Constant.halfViewYPosition {
+                                currentState = recognizer.velocity(in: self).y >= 0 ?
+                                    .partial : .half
+                            } else {
+                                currentState = recognizer.velocity(in: self).y >= 0 ?
+                                    .half : .full
+                            }
+                            
+                            
+                            self.moveView(state: currentState)},
                            completion: { _ in
                             self.isUserInteractionEnabled = true }
             )
@@ -153,19 +192,9 @@ class BottomSheetViewController: UIView {
             $0.top.equalToSuperview().offset(60)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-//
-//        view.widthAnchor.constraint(equalToConstant: 95).isActive = true
-//
-//        view.heightAnchor.constraint(equalToConstant: 25).isActive = true
-//
-//        view.leadingAnchor.constraint(equalTo: parent.leadingAnchor, constant: 25.11).isActive = true
-//
-//        view.topAnchor.constraint(equalTo: parent.topAnchor, constant: 120.24).isActive = true
         expectArrived.snp.makeConstraints {
-            
             $0.top.equalTo(backgroundView).offset(MannaDemo.convertHeigt(value: 33.68))
             $0.leading.equalTo(backgroundView).offset(MannaDemo.convertWidth(value: 25.11))
-            
             $0.width.equalTo(MannaDemo.convertWidth(value: 95))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 25))
         }

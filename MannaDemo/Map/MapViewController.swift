@@ -25,8 +25,9 @@ class MapViewController: UIViewController {
     var zoomLevel: Double = 10
     var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var markers: [NMFMarker] = []
+    
     var tokenWithIndex: [String : Int] = ["f606564d8371e455" : 0,
-                                          "5dcd757a5c7d4c52" : 1,
+                                          "aed64e8da3a07df4" : 1,
                                           "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
                                           "0954A791-B5BE-4B56-8F25-07554A4D6684" : 3,
                                           "8D44FAA1-2F87-4702-9DAC-B8B15D949880" : 4,
@@ -88,7 +89,6 @@ class MapViewController: UIViewController {
             $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
             $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
         }
-        
     }
     @objc func back() {
         self.dismiss(animated: true)
@@ -136,7 +136,6 @@ class MapViewController: UIViewController {
             $0.height.equalTo(view.frame.height)
             $0.top.equalTo(UIScreen.main.bounds.height * 0.55)
         }
-        
     }
     
     
@@ -281,14 +280,13 @@ extension MapViewController: WebSocketDelegate {
                 deviceToken = json["deviceToken"].string
                 username = json["username"].string
             }
-            guard let token = deviceToken else { return }
             
             //타입은 무엇이고
             if let json = try? JSON(data) ["type"] {
                 guard let temp = json.string else { return }
                 type = temp
             }
-            
+            guard let token = deviceToken else { return }
             //타입에 따른 처리
             switch type {
             
@@ -301,12 +299,14 @@ extension MapViewController: WebSocketDelegate {
             case "LEAVE" :
                 guard let name = username else { return }
                 UserModel.userList[tokenWithIndex[token]!].state = false
+                bottomSheet.collectionView.reloadData()
                 showToast(message: "\(name)님 나가셨습니다.")
                 
             case "JOIN" :
                 guard let name = username else { return }
                 UserModel.userList[tokenWithIndex[token]!].state = true
                 showToast(message: "\(name)님 접속하셨습니다.")
+                bottomSheet.collectionView.reloadData()
                 
             case .none:
                 print("none")
@@ -314,6 +314,7 @@ extension MapViewController: WebSocketDelegate {
             case .some(_):
                 print("some")
             }
+            
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
