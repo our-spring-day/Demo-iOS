@@ -23,8 +23,8 @@ class MannaCollectionView: UICollectionView {
     
     func attribute() {
         self.do {
-            $0.backgroundColor = .gray
             $0.alpha = 0.7
+            $0.backgroundColor = .white
             $0.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
             $0.isPagingEnabled = false
             $0.isScrollEnabled = false
@@ -34,7 +34,7 @@ class MannaCollectionView: UICollectionView {
             $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             $0.minimumLineSpacing = 10
             $0.minimumInteritemSpacing = 10
-            $0.itemSize = CGSize(width: 50, height: 50)
+            $0.itemSize = CGSize(width: MannaDemo.convertWidth(value: 43), height: MannaDemo.convertWidth(value: 43))
             $0.scrollDirection = .vertical
         }
         

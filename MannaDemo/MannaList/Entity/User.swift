@@ -9,20 +9,22 @@ import UIKit
 
 struct User {
     var id: String
-    var image: UIImage
+    var state: Bool
+    var profileImage: UIImage
+    var nicknameImage: UIImage
     var latitude: Double
     var longitude: Double
 }
 //var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
 class UserModel {
     static var userList: [User] = [
-        User(id: "1", image: #imageLiteral(resourceName: "우석"), latitude: 0, longitude: 0),
-        User(id: "2", image: #imageLiteral(resourceName: "연재"), latitude: 0, longitude: 0),
-        User(id: "3", image: #imageLiteral(resourceName: "상원"), latitude: 0, longitude: 0),
-        User(id: "4", image: #imageLiteral(resourceName: "재인"), latitude: 0, longitude: 0),
-        User(id: "5", image: #imageLiteral(resourceName: "효근"), latitude: 0, longitude: 0),
-        User(id: "6", image: #imageLiteral(resourceName: "규리"), latitude: 0, longitude: 0),
-        User(id: "7", image: #imageLiteral(resourceName: "종찬"), latitude: 0, longitude: 0),
-        User(id: "8", image: #imageLiteral(resourceName: "용권"), latitude: 0, longitude: 0)
+        User(id: "1", state: false, profileImage: #imageLiteral(resourceName: "Image-1"), nicknameImage: #imageLiteral(resourceName: "우석"), latitude: 0, longitude: 0),
+        User(id: "2", state: false, profileImage: #imageLiteral(resourceName: "Image-4"), nicknameImage: #imageLiteral(resourceName: "연재"), latitude: 0, longitude: 0),
+        User(id: "3", state: false, profileImage: #imageLiteral(resourceName: "Image-2"), nicknameImage: #imageLiteral(resourceName: "상원"), latitude: 0, longitude: 0),
+        User(id: "4", state: false, profileImage: #imageLiteral(resourceName: "Image"), nicknameImage: #imageLiteral(resourceName: "재인"), latitude: 0, longitude: 0),
+        User(id: "5", state: false, profileImage: #imageLiteral(resourceName: "Image-3"), nicknameImage: #imageLiteral(resourceName: "효근"), latitude: 0, longitude: 0),
+        User(id: "6", state: false, profileImage: #imageLiteral(resourceName: "Image-5"), nicknameImage: #imageLiteral(resourceName: "규리"), latitude: 0, longitude: 0),
+        User(id: "7", state: false, profileImage: #imageLiteral(resourceName: "Image-4"), nicknameImage: #imageLiteral(resourceName: "종찬"), latitude: 0, longitude: 0),
+        User(id: "8", state: false, profileImage: #imageLiteral(resourceName: "Image-2"), nicknameImage: #imageLiteral(resourceName: "용권"), latitude: 0, longitude: 0)
     ]
 }
