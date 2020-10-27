@@ -40,7 +40,7 @@ class MapViewController: UIViewController {
                                                               width: UIScreen.main.bounds.width,
                                                               height: UIScreen.main.bounds.height * 0.55))
     var cameraUpdateOnlyOnceFlag = true
-    var imageToNameFlage = true
+    var imageToNameFlag = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,10 +95,9 @@ class MapViewController: UIViewController {
         self.dismiss(animated: true)
     }
     @objc func info() {
-        imageToNameFlage.toggle()
-//        markers.map { $0.iconImage = NMFOverlayImage(image: UserModel.userList[$) }
-        $0.iconImage = NMFOverlayImage(image: UIImage(named: str)!)
+        imageToNameFlag.toggle()
         bottomSheet.collectionView.reloadData()
+        marking()
     }
     @objc func didzoomInClicked() {
         zoomLevel += 1
@@ -147,15 +146,28 @@ class MapViewController: UIViewController {
         socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
     }
     
-    func marking(marker: NMFMarker, lat: Double, Lng: Double) {
-        marker.position = NMGLatLng(lat: lat, lng: Lng)
-        marker.mapView = mapView
+    func marking() {
+        if imageToNameFlag {
+            for index in 0..<markers.count {
+                markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[index].nicknameImage)
+            }
+        } else {
+            for index in 0..<markers.count {
+                markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[index].profileImage)
+            }
+        }
+        for index in 0..<markers.count {
+            //추후에 로그인 유무로  분기 해야함
+            if UserModel.userList[index].longitude != 0 {
+                markers[index].position = NMGLatLng(lat: UserModel.userList[index].latitude, lng: UserModel.userList[index].longitude)
+                markers[index].mapView = mapView
+            }
+        }
     }
     
     func array() {
-        for str in user {
+        for user in UserModel.userList {
             let temp = NMFMarker().then {
-                $0.iconImage = NMFOverlayImage(image: UIImage(named: str)!)
                 $0.width = 40
                 $0.height = 40
             }
@@ -171,10 +183,10 @@ class MapViewController: UIViewController {
     
     func showToast(message: String) {
         let toastLabel = UILabel().then {
-                $0.backgroundColor = UIColor.lightGray
-                $0.textColor = UIColor.black
-                $0.textAlignment = .center
-            }
+            $0.backgroundColor = UIColor.lightGray
+            $0.textColor = UIColor.black
+            $0.textAlignment = .center
+        }
         view.addSubview(toastLabel)
         toastLabel.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -218,20 +230,28 @@ extension MapViewController: CLLocationManagerDelegate {
         
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-        myLocation.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-        myLocation.captionText = "나"
-        myLocation.iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].nicknameImage)
-        myLocation.mapView = mapView
-        print(locValue)
-        print("이거 타는 타이밍")
-        if cameraUpdateOnlyOnceFlag {
-            camereUpdateOnlyOnce()
-            cameraUpdateOnlyOnceFlag = false
-            bottomSheet.collectionView.reloadData()
+        
+        if let index = tokenWithIndex[MyUUID.uuid!] {
+            markers[index].do {
+                $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
+                $0.captionText = "여기 로케이션"
+                $0.mapView = mapView
+            }
+            if imageToNameFlag {
+                markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].nicknameImage)
+            } else {
+                markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].profileImage)
+            }
+            myLocation.mapView = mapView
+            
+            if cameraUpdateOnlyOnceFlag {
+                camereUpdateOnlyOnce()
+                cameraUpdateOnlyOnceFlag = false
+                bottomSheet.collectionView.reloadData()
+            }
         }
     }
 }
-
 extension MapViewController: WebSocketDelegate {
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         print("\(data)")
@@ -298,9 +318,9 @@ extension MapViewController: WebSocketDelegate {
             
             if token != MyUUID.uuid {
                 //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
-                marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
                 UserModel.userList[tokenWithIndex].latitude = lat
                 UserModel.userList[tokenWithIndex].longitude = lng
+                marking()
             }
             bottomSheet.collectionView.reloadData()
         }
@@ -315,7 +335,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
         if UserModel.userList[indexPath.row].latitude != 0 {
-            if imageToNameFlage {
+            if imageToNameFlag {
                 cell.profileImage.image = UserModel.userList[indexPath.row].nicknameImage
                 cell.backgroundColor = nil
                 cell.isUserInteractionEnabled = true
