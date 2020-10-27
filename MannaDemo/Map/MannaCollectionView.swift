@@ -23,8 +23,8 @@ class MannaCollectionView: UICollectionView {
     
     func attribute() {
         self.do {
-            $0.backgroundColor = .gray
             $0.alpha = 0.7
+            $0.backgroundColor = .white
             $0.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
             $0.isPagingEnabled = false
             $0.isScrollEnabled = false

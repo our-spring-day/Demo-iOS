@@ -230,26 +230,22 @@ extension MapViewController: CLLocationManagerDelegate {
         
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-        
         if let index = tokenWithIndex[MyUUID.uuid!] {
-            
-            markers[index].do {
-                $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-                $0.captionText = "여기 로케이션"
-                $0.mapView = mapView
+            if cameraUpdateOnlyOnceFlag {
+                camereUpdateOnlyOnce()
+                cameraUpdateOnlyOnceFlag = false
             }
             if imageToNameFlag {
                 markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].nicknameImage)
             } else {
                 markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[tokenWithIndex[MyUUID.uuid!]!].profileImage)
             }
-            myLocation.mapView = mapView
-            
-            if cameraUpdateOnlyOnceFlag {
-                camereUpdateOnlyOnce()
-                cameraUpdateOnlyOnceFlag = false
-                bottomSheet.collectionView.reloadData()
+            markers[index].do {
+                $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
+                $0.captionText = "여기 로케이션"
+                $0.mapView = mapView
             }
+            
             bottomSheet.collectionView.reloadData()
         }
     }

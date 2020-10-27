@@ -23,9 +23,11 @@ class BottomSheetViewController: UIView {
     var standardY = CGFloat(0)
     var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.8, height: 200))
     var backgroundView = UIImageView()
+    var bar = UIImageView()
     var zoomIn = UIButton()
     var zoomOut = UIButton()
     var myLocation = UIButton()
+    var expectArrived = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -92,6 +94,13 @@ class BottomSheetViewController: UIView {
             $0.clipsToBounds = true
             $0.backgroundColor = .none
         }
+        expectArrived.do {
+            $0.text = "예상 도착 순위"
+            $0.font = UIFont.boldSystemFont(ofSize: 20)
+        }
+        bar.do {
+            $0.image = #imageLiteral(resourceName: "bottomsheetbar")
+        }
         backgroundView.do {
             $0.image = #imageLiteral(resourceName: "bottomsheet")
             $0.addGestureRecognizer(gesture)
@@ -121,18 +130,20 @@ class BottomSheetViewController: UIView {
     }
     
     func layout() {
-        addSubview(backgroundView)
-        backgroundView.addSubview(collectionView)
-        addSubview(zoomIn)
-        addSubview(zoomOut)
-        addSubview(myLocation)
+        [zoomIn, zoomOut, myLocation, backgroundView].forEach { addSubview($0) }
+        [collectionView, bar, expectArrived].forEach { backgroundView.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(60)
             $0.leading.trailing.bottom.equalToSuperview()
         }
+        expectArrived.snp.makeConstraints {
+            $0.top.leading.equalTo(backgroundView).offset(30)
+            $0.width.equalTo(200)
+            $0.height.equalTo(20)
+        }
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(backgroundView.snp.top).offset(20)
+            $0.top.equalTo(expectArrived.snp.bottom)
             $0.centerX.equalTo(snp.centerX)
         }
         zoomIn.snp.makeConstraints {
@@ -149,6 +160,12 @@ class BottomSheetViewController: UIView {
             $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
             $0.trailing.equalTo(snp.trailing).offset(-15)
             $0.width.height.equalTo(30)
+        }
+        bar.snp.makeConstraints {
+            $0.top.equalTo(backgroundView.snp.top).offset(11.5)
+            $0.centerX.equalTo(self)
+            $0.width.equalTo(60)
+            $0.height.equalTo(2.94)
         }
     }
 }
