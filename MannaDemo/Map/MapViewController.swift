@@ -17,8 +17,8 @@ class MapViewController: UIViewController {
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
     var myLocation = NMFMarker().then {
-        $0.width = 40
-        $0.height = 40
+        $0.width = MannaDemo.convertWidth(value: 50)
+        $0.height = MannaDemo.convertWidth(value: 50)
     }
     let backButton = UIButton()
     let infoButton = UIButton()
@@ -52,7 +52,6 @@ class MapViewController: UIViewController {
         layout()
         socket.delegate = self
     }
-    
     func attribute() {
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
@@ -168,8 +167,8 @@ class MapViewController: UIViewController {
     func array() {
         for user in UserModel.userList {
             let temp = NMFMarker().then {
-                $0.width = 40
-                $0.height = 40
+                $0.width = MannaDemo.convertWidth(value: 50)
+                $0.height = MannaDemo.convertWidth(value: 50)
             }
             markers.append(temp)
         }
@@ -242,7 +241,6 @@ extension MapViewController: CLLocationManagerDelegate {
             }
             markers[index].do {
                 $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-                $0.captionText = "여기 로케이션"
                 $0.mapView = mapView
             }
             
@@ -295,7 +293,7 @@ extension MapViewController: WebSocketDelegate {
             switch type {
             
             case "LOCATION" :
-                if let json = try? JSON(data)["location"] {
+                if let json = try? JSON(data) ["location"] {
                     lat_ = json["latitude"].double
                     lng_ = json["longitude"].double
                 }
@@ -349,7 +347,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
                 cell.isUserInteractionEnabled = true
             }
         } else {
-            cell.profileImage.image = #imageLiteral(resourceName: "Image-7")
+            cell.profileImage.image = #imageLiteral(resourceName: "profile")
             cell.isUserInteractionEnabled = false
         }
         return cell
