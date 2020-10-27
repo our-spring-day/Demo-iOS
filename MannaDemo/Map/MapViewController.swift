@@ -20,29 +20,11 @@ class MapViewController: UIViewController {
         $0.width = 40
         $0.height = 40
     }
-    let backButton = UIButton().then {
-        $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
-        $0.frame.size.width = 40
-        $0.frame.size.height = 40
-        $0.layer.cornerRadius = $0.frame.width / 2
-        $0.clipsToBounds = true
-        $0.addTarget(self, action: #selector(back), for: .touchUpInside)
-    }
-    let information = UIButton().then {
-        $0.setImage(#imageLiteral(resourceName: "info"), for: .normal)
-        $0.frame.size.width = 40
-        $0.frame.size.height = 40
-        $0.layer.cornerRadius = $0.frame.width / 2
-        $0.clipsToBounds = true
-    }
+    let backButton = UIButton()
+    let information = UIButton()
     var zoomLevel: Double = 10
-    
-    //캡션을 달아야 하기 때문에 이 토큰이 어떤 실제 이름인지 (ex 32412rjklsdjfl -> 정재인 ) 이거를 파싱해서 주던가 아니면 내가 미리 박아버리던가
-    //    var user: [String] = ["재인", "상원", "우석", "종찬", "용권", "연재", "효근"]
     var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var markers: [NMFMarker] = []
-    
-    
     var tokenWithIndex: [String : Int] = ["f606564d8371e455" : 0,
                                           "5dcd757a5c7d4c52" : 1,
                                           "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
@@ -71,10 +53,24 @@ class MapViewController: UIViewController {
     }
     
     func attribute() {
+        backButton.do {
+            $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
+            $0.frame.size.width = 40
+            $0.frame.size.height = 40
+            $0.layer.cornerRadius = $0.frame.width / 2
+            $0.clipsToBounds = true
+            $0.addTarget(self, action: #selector(back), for: .touchUpInside)
+        }
+        information.do {
+            $0.setImage(#imageLiteral(resourceName: "info"), for: .normal)
+            $0.frame.size.width = 40
+            $0.frame.size.height = 40
+            $0.layer.cornerRadius = $0.frame.width / 2
+            $0.clipsToBounds = true
+        }
         mapView.do {
             $0.frame = view.frame
             $0.mapType = .navi
-            //            $0.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: true)
             $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
             $0.symbolScale = 0.85
         }
@@ -271,20 +267,15 @@ extension MapViewController: WebSocketDelegate {
                 if let json = try? JSON(data)["location"] {
                     lat_ = json["latitude"].double
                     lng_ = json["longitude"].double
-                    print(lat_!,lng_!)
                 }
                 
             case "LEAVE" :
                 guard let name = username else { return }
-                //이거 토스트로 띄우실?
                 showToast(message: "\(name)님 나가셨습니다.")
-                print(name, "님이 나가셨네요")
                 
             case "JOIN" :
                 guard let name = username else { return }
-                //이거 토스트로 띄우실
                 showToast(message: "\(name)님 접속하셨습니다.")
-                print(name, "님이 들어오셨네요")
                 
             case .none:
                 print("none")
@@ -298,11 +289,11 @@ extension MapViewController: WebSocketDelegate {
             guard let tokenWithIndex = tokenWithIndex[token] else { return }
             
             if token != MyUUID.uuid {
+                //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
                 marking(marker: markers[tokenWithIndex], lat: lat, Lng: lng)
                 UserModel.userList[tokenWithIndex].latitude = lat
                 UserModel.userList[tokenWithIndex].longitude = lng
             }
-            //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
             bottomSheet.collectionView.reloadData()
         }
     }

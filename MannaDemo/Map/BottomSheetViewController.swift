@@ -22,7 +22,7 @@ extension BottomSheetViewController {
 class BottomSheetViewController: UIView {
     var standardY = CGFloat(0)
     var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.8, height: 200))
-    var backgroundView = UIView()
+    var backgroundView = UIImageView()
     var zoomIn = UIButton()
     var zoomOut = UIButton()
     var myLocation = UIButton()
@@ -93,10 +93,9 @@ class BottomSheetViewController: UIView {
             $0.backgroundColor = .none
         }
         backgroundView.do {
-            $0.backgroundColor = .gray
-            $0.layer.cornerRadius = 20
-            $0.clipsToBounds = true
+            $0.image = #imageLiteral(resourceName: "bottomsheet")
             $0.addGestureRecognizer(gesture)
+            $0.isUserInteractionEnabled = true
         }
         zoomIn.do {
             $0.backgroundColor = .gray
