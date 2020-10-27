@@ -43,13 +43,8 @@ class BottomSheetViewController: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
-    
-    
+
     private func moveView(state: State) {
-        
         
         var YPosition: CGFloat?
         switch state {
@@ -73,12 +68,6 @@ class BottomSheetViewController: UIView {
                             height: self.frame.height)
     }
     
-    
-    
-    
-    
-    
-    
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: self)
         let minY = self.frame.minY
@@ -91,12 +80,6 @@ class BottomSheetViewController: UIView {
         }
     }
     
-    
-    
-    
-    
-    
-    
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
         
@@ -106,9 +89,6 @@ class BottomSheetViewController: UIView {
         } else if recognizer.state == .changed {
             //시작 될 때 저장한 거리만큼 떨어뜨려 움직임
             self.center.y = (self.center.y + recognizer.location(in: self).y) - standardY
-            
-            
-            
             if frame.origin.y < Constant.fullViewYPosition {
                 frame.origin.y = Constant.fullViewYPosition
             }
@@ -118,8 +98,6 @@ class BottomSheetViewController: UIView {
                            delay: 0.0,
                            options: .allowUserInteraction,
                            animations: { [self] in
-                            
-                            
                             if self.frame.origin.y > Constant.halfViewYPosition {
                                 currentState = recognizer.velocity(in: self).y >= 0 ?
                                     .partial : .half
@@ -127,8 +105,6 @@ class BottomSheetViewController: UIView {
                                 currentState = recognizer.velocity(in: self).y >= 0 ?
                                     .half : .full
                             }
-                            
-                            
                             self.moveView(state: currentState)},
                            completion: { _ in
                             self.isUserInteractionEnabled = true }

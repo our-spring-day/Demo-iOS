@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.2.2)
+  - lottie-ios (3.1.8)
   - NMapsMap (3.8.0)
   - SnapKit (5.0.1)
   - Socket.IO-Client-Swift (15.2.0):
@@ -11,6 +12,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - lottie-ios
   - NMapsMap
   - SnapKit
   - Socket.IO-Client-Swift
@@ -22,6 +24,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - lottie-ios
     - NMapsMap
     - SnapKit
     - Socket.IO-Client-Swift
@@ -32,6 +35,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
   NMapsMap: b3633ad688483a318be9293aeddd323a714fb08b
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
@@ -40,6 +44,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   Then: 90cd104fd951cec1980a03f57704ad8f784d4d79
 
-PODFILE CHECKSUM: b61a0d621c8d1fa17814b36fef0952c622552bb0
+PODFILE CHECKSUM: 8281d90a595acba2f12da775462d4634b9fa1ee8
 
 COCOAPODS: 1.9.1

@@ -10,6 +10,25 @@ import NMapsMap
 import CoreLocation
 import Starscream
 import SwiftyJSON
+import Lottie
+
+//let animationView = AnimationView(name:"17338-go-fix")
+//
+////메인 뷰에 삽입
+//view.addSubview(animationView)
+//animationView.frame = animationView.superview!.bounds
+//animationView.contentMode = .scaleAspectFit
+//
+////애니메이션 재생(애니메이션 재생모드 미 설정시 1회)
+//animationView.play()
+//
+////애니메이션 재생모드( .loop = 애니메이션 무한재생)
+//animationView.loopMode = .loop
+//
+////애니메이션 종료
+////animationView.pause()
+//[출처] 스위프트[Swift] - Lottie 사용법|작성자 홍군
+
 
 class MapViewController: UIViewController {
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MyUUID.uuid!)")!)
@@ -25,7 +44,8 @@ class MapViewController: UIViewController {
     var zoomLevel: Double = 10
     var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var markers: [NMFMarker] = []
-    
+    var animationView = AnimationView(name:"12670-flying-airplane")
+
     var tokenWithIndex: [String : Int] = ["f606564d8371e455" : 0,
                                           "aed64e8da3a07df4" : 1,
                                           "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
@@ -52,6 +72,21 @@ class MapViewController: UIViewController {
         attribute()
         layout()
         socket.delegate = self
+        
+        view.addSubview(animationView)
+        
+        animationView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.centerX.equalTo(bottomSheet.backgroundView)
+            $0.width.height.equalTo(75)
+        }
+        animationView.contentMode = .scaleAspectFit
+        //애니메이션 재생(애니메이션 재생모드 미 설정시 1회)
+        animationView.play()
+        //애니메이션 재생모드( .loop = 애니메이션 무한재생)
+        animationView.loopMode = .loop
+        //애니메이션 종료
+        //animationView.pause()
     }
     func attribute() {
         backButton.do {
