@@ -47,15 +47,15 @@ class MapViewController: UIViewController {
     var markers: [NMFMarker] = []
     var tokenWithMarker: [String : NMFMarker] = [:]
     var animationView = AnimationView(name:"12670-flying-airplane")
-
-//    var tokenWithIndex: [String : Int] = ["f606564d8371e455" : 0,
-//                                          "aed64e8da3a07df4" : 1,
-//                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
-//                                          "0954A791-B5BE-4B56-8F25-07554A4D6684" : 3,
-//                                          "8D44FAA1-2F87-4702-9DAC-B8B15D949880" : 4,
-//                                          "2872483D-9E7B-46D1-A2B8-44832FE3F1AD" : 5,
-//                                          "C65CDF73-8C04-4F76-A26A-AE3400FEC14B" : 6,
-//                                          "69751764-A224-4923-9844-C61646743D10" : 7]
+    
+    //    var tokenWithIndex: [String : Int] = ["f606564d8371e455" : 0,
+    //                                          "aed64e8da3a07df4" : 1,
+    //                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
+    //                                          "0954A791-B5BE-4B56-8F25-07554A4D6684" : 3,
+    //                                          "8D44FAA1-2F87-4702-9DAC-B8B15D949880" : 4,
+    //                                          "2872483D-9E7B-46D1-A2B8-44832FE3F1AD" : 5,
+    //                                          "C65CDF73-8C04-4F76-A26A-AE3400FEC14B" : 6,
+    //                                          "69751764-A224-4923-9844-C61646743D10" : 7]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
@@ -195,26 +195,22 @@ class MapViewController: UIViewController {
     }
     
     func marking() {
-//        if imageToNameFlag {
-//            for index in 0..<markers.count {
-//                markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[index].nicknameImage)
-//            }
-//        } else {
-//            for index in 0..<markers.count {
-//                markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[index].profileImage)
-//            }
-//        }
-//        for index in 0..<markers.count {
-//            //추후에 로그인 유무로  분기 해야함
-//            if UserModel.userList[index].longitude != 0 {
-//                markers[index].position = NMGLatLng(lat: UserModel.userList[index].latitude, lng: UserModel.userList[index].longitude)
-//                markers[index].mapView = mapView
-//            }
-//        }
+        
+        for key in UserModel.userList.keys {
+            if imageToNameFlag {
+                tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
+            } else {
+                tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
+            }
+            if (UserModel.userList[key]?.state)! {
+                tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
+            }
+        }
     }
     
     func array() {
-        UserModel.userList.keys.map {}
+        UserModel.userList.keys.map { tokenWithMarker[$0] = NMFMarker()}
+        
         for user in UserModel.userList {
             let temp = NMFMarker().then {
                 $0.width = MannaDemo.convertWidth(value: 50)
@@ -274,31 +270,29 @@ extension MapViewController: CLLocationManagerDelegate {
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
         
-//        UserModel.userList[tokenWithIndex[MannaDemo.myUUID!]!].latitude = myLatitude
-//        UserModel.userList[tokenWithIndex[MannaDemo.myUUID!]!].longitude = myLongitude
+        //        UserModel.userList[tokenWithIndex[MannaDemo.myUUID!]!].latitude = myLatitude
+        //        UserModel.userList[tokenWithIndex[MannaDemo.myUUID!]!].longitude = myLongitude
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
         
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
         
-        if let index = UserModel.userList[MannaDemo.myUUID!] {
-            if cameraUpdateOnlyOnceFlag {
-                camereUpdateOnlyOnce()
-                cameraUpdateOnlyOnceFlag = false
-            }
-//            if imageToNameFlag {
-//                markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!].nicknameImage)
-//            } else {
-//                markers[index].iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!].profileImage)
-//            }
-//            markers[index].do {
-//                $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-//                $0.mapView = mapView
-//            }
-//
-            bottomSheet.collectionView.reloadData()
+        if cameraUpdateOnlyOnceFlag {
+            camereUpdateOnlyOnce()
+            cameraUpdateOnlyOnceFlag = false
         }
+        if imageToNameFlag {
+            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
+        } else {
+            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
+        }
+        tokenWithMarker[MannaDemo.myUUID!]?.do {
+            $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
+            $0.mapView = mapView
+        }
+        bottomSheet.collectionView.reloadData()
+        
     }
 }
 extension MapViewController: WebSocketDelegate {
@@ -395,27 +389,27 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
-//        if UserModel.userList[indexPath.row].state {
-//            if imageToNameFlag {
-//                cell.profileImage.image = UserModel.userList[indexPath.row].nicknameImage
-//                cell.backgroundColor = nil
-//                cell.isUserInteractionEnabled = true
-//            } else {
-//                cell.profileImage.image = UserModel.userList[indexPath.row].profileImage
-//                cell.backgroundColor = nil
-//                cell.isUserInteractionEnabled = true
-//            }
-//        } else {
-//            cell.profileImage.image = #imageLiteral(resourceName: "profile")
-//            cell.isUserInteractionEnabled = false
-//        }
+//                if UserModel.userList[indexPath.row].state {
+//                    if imageToNameFlag {
+//                        cell.profileImage.image = UserModel.userList[indexPath.row].nicknameImage
+//                        cell.backgroundColor = nil
+//                        cell.isUserInteractionEnabled = true
+//                    } else {
+//                        cell.profileImage.image = UserModel.userList[indexPath.row].profileImage
+//                        cell.backgroundColor = nil
+//                        cell.isUserInteractionEnabled = true
+//                    }
+//                } else {
+//                    cell.profileImage.image = #imageLiteral(resourceName: "profile")
+//                    cell.isUserInteractionEnabled = false
+//                }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: UserModel.userList[indexPath.row].latitude, lng: UserModel.userList[indexPath.row].longitude))
-//        cameraUpdate.animation = .fly
-//        cameraUpdate.animationDuration = 1.2
-//        mapView.moveCamera(cameraUpdate)
+        //        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: UserModel.userList[indexPath.row].latitude, lng: UserModel.userList[indexPath.row].longitude))
+        //        cameraUpdate.animation = .fly
+        //        cameraUpdate.animationDuration = 1.2
+        //        mapView.moveCamera(cameraUpdate)
     }
 }
