@@ -44,7 +44,7 @@ class MapViewController: UIViewController {
     var zoomLevel: Double = 10
     var markers: [NMFMarker] = []
     var tokenWithMarker: [String : NMFMarker] = [:]
-    var userListForCollectionView = Array(UserModel.userList.values)
+    var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var animationView = AnimationView(name:"12670-flying-airplane")
     var myLatitude: Double = 0
     var myLongitude: Double = 0
@@ -68,6 +68,10 @@ class MapViewController: UIViewController {
         socket.delegate = self
         mapView.addCameraDelegate(delegate: self)
         lottieFunc()
+    }
+    func setCollcetionViewItem() {
+        userListForCollectionView = Array(UserModel.userList.values)
+        userListForCollectionView.sort { $0.state && !$1.state}
     }
     
     func lottieFunc() {
@@ -271,8 +275,7 @@ extension MapViewController: CLLocationManagerDelegate {
             $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
             $0.mapView = mapView
         }
-        
-        userListForCollectionView = Array(UserModel.userList.values)
+        setCollcetionViewItem()
         bottomSheet.collectionView.reloadData()
     }
 }
@@ -284,14 +287,16 @@ extension MapViewController: WebSocketDelegate {
     func websocketDidConnect(socket: WebSocketClient) {
         print("sockect Connect!")
         UserModel.userList[MannaDemo.myUUID!]?.state = true
-        userListForCollectionView = Array(UserModel.userList.values)
+        //        userListForCollectionView = Array(UserModel.userList.values)
+        setCollcetionViewItem()
         bottomSheet.collectionView.reloadData()
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("sockect Disconnect ㅠㅠ")
         UserModel.userList[MannaDemo.myUUID!]?.state = false
-        userListForCollectionView = Array(UserModel.userList.values)
+        //        userListForCollectionView = Array(UserModel.userList.values)
+        setCollcetionViewItem()
         bottomSheet.collectionView.reloadData()
     }
     
@@ -331,7 +336,7 @@ extension MapViewController: WebSocketDelegate {
             case "LEAVE" :
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = false
-                userListForCollectionView = Array(UserModel.userList.values)
+                setCollcetionViewItem()
                 bottomSheet.collectionView.reloadData()
                 showToast(message: "\(name)님 나가셨습니다.")
                 
@@ -339,7 +344,7 @@ extension MapViewController: WebSocketDelegate {
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = true
                 showToast(message: "\(name)님 접속하셨습니다.")
-                userListForCollectionView = Array(UserModel.userList.values)
+                setCollcetionViewItem()
                 bottomSheet.collectionView.reloadData()
                 
             case .none:
@@ -359,8 +364,7 @@ extension MapViewController: WebSocketDelegate {
                 UserModel.userList[token]?.longitude = lng
                 marking()
             }
-            
-            userListForCollectionView = Array(UserModel.userList.values)
+            setCollcetionViewItem()
             bottomSheet.collectionView.reloadData()
         }
     }
@@ -371,29 +375,31 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
         
-                if userListForCollectionView[indexPath.row].state {
-                    if imageToNameFlag {
-                        cell.profileImage.image = userListForCollectionView[indexPath.row].nicknameImage
-                        cell.backgroundColor = nil
-                        cell.isUserInteractionEnabled = true
-                    } else {
-                        cell.profileImage.image = userListForCollectionView[indexPath.row].profileImage
-                        cell.backgroundColor = nil
-                        cell.isUserInteractionEnabled = true
-                    }
-                } else {
-                    cell.profileImage.image = #imageLiteral(resourceName: "profile")
-                    cell.isUserInteractionEnabled = false
-                }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
+        let user = userListForCollectionView[indexPath.row]
+        
+        if user.state {
+            if imageToNameFlag {
+                cell.profileImage.image = user.nicknameImage
+                cell.backgroundColor = nil
+                cell.isUserInteractionEnabled = true
+            } else {
+                cell.profileImage.image = user.profileImage
+                cell.backgroundColor = nil
+                cell.isUserInteractionEnabled = true
+            }
+        } else {
+            cell.profileImage.image = #imageLiteral(resourceName: "profile")
+            cell.isUserInteractionEnabled = false
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
-                cameraUpdate.animation = .fly
-                cameraUpdate.animationDuration = 1.2
-                mapView.moveCamera(cameraUpdate)
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 1.2
+        mapView.moveCamera(cameraUpdate)
     }
 }
