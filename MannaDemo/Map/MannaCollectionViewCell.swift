@@ -10,6 +10,7 @@ import UIKit
 class MannaCollectionViewCell: UICollectionViewCell {
     static  let identifier = "cell"
     var profileImage = UIImageView()
+    var ranking =  UIImageView()
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -22,18 +23,25 @@ class MannaCollectionViewCell: UICollectionViewCell {
     }
     
     func attribute() {
-        profileImage.do {
-            $0.layer.cornerRadius = 20
-            $0.layer.masksToBounds = true
-            $0.contentMode = .scaleAspectFill
-        }
+//        profileImage.do {
+//            $0.layer.cornerRadius = 20
+//            $0.layer.masksToBounds = true
+//        }
     }
     
     func layout() {
-        addSubview(self.profileImage)
+        addSubview(profileImage)
+        addSubview(ranking)
         
         profileImage.snp.makeConstraints {
-            $0.leading.top.trailing.bottom.equalToSuperview()
+            $0.top.centerX.equalToSuperview()
+            $0.width.height.equalTo(MannaDemo.convertWidth(value: 43))
+        }
+        ranking.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(profileImage.snp.bottom)
+//            $0.top.equalTo(self.snp.top)
+            $0.width.height.equalTo(MannaDemo.convertWidth(value: 27))
         }
     }
     

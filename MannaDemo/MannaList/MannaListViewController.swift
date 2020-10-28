@@ -35,7 +35,7 @@ class MannaListViewController: UIViewController, reloadData {
         })
         attribute()
         layout()
-        print(MyUUID.uuid)
+        print(MannaDemo.myUUID)
     }
     
     func attribute() {

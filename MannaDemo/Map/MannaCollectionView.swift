@@ -34,7 +34,7 @@ class MannaCollectionView: UICollectionView {
             $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             $0.minimumLineSpacing = 10
             $0.minimumInteritemSpacing = 10
-            $0.itemSize = CGSize(width: MannaDemo.convertWidth(value: 43), height: MannaDemo.convertWidth(value: 43))
+            $0.itemSize = CGSize(width: MannaDemo.convertWidth(value: 50), height: MannaDemo.convertWidth(value: 70))
             $0.scrollDirection = .vertical
         }
         
