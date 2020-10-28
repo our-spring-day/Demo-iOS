@@ -13,6 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let url = "http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/user"
     var window: UIWindow?
 
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         if let windowScene = scene as? UIWindowScene {

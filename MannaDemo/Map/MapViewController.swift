@@ -63,18 +63,26 @@ class MapViewController: UIViewController {
     var cameraUpdateOnlyOnceFlag = true
     var imageToNameFlag = true
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         array()
-        socket.connect()
+        if socket.isConnected == false {
+            socket.connect()
+        }
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         bottomSheet.collectionView.reloadData()
         attribute()
         layout()
         socket.delegate = self
+        mapView.addCameraDelegate(delegate: self)
+        lottieFunc()
         
+    }
+    
+    func lottieFunc() {
         view.addSubview(animationView)
-        
         animationView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.centerX.equalTo(bottomSheet.backgroundView)
@@ -88,6 +96,7 @@ class MapViewController: UIViewController {
         //애니메이션 종료
         //animationView.pause()
     }
+    
     func attribute() {
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
@@ -125,14 +134,17 @@ class MapViewController: UIViewController {
             $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
         }
     }
+    
     @objc func back() {
         self.dismiss(animated: true)
     }
+    
     @objc func info() {
         imageToNameFlag.toggle()
         bottomSheet.collectionView.reloadData()
         marking()
     }
+    
     @objc func didzoomInClicked() {
         zoomLevel += 1
         var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
@@ -140,18 +152,21 @@ class MapViewController: UIViewController {
         mapView.moveCamera(cameraUpadateToNewZoom)
         
     }
+    
     @objc func didzoomOutClicked() {
         zoomLevel -= 1
         var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
         cameraUpadateToNewZoom.animation = .easeOut
         mapView.moveCamera(cameraUpadateToNewZoom)
     }
+    
     @objc func cameraUpdateToMyLocation() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         cameraUpdate.animation = .fly
         cameraUpdate.animationDuration = 1.3
         mapView.moveCamera(cameraUpdate)
     }
+    
     func layout() {
         [mapView, backButton, infoButton, bottomSheet].forEach { view.addSubview($0) }
         
@@ -364,6 +379,10 @@ extension MapViewController: WebSocketDelegate {
         }
     }
 }
+
+//extension MapViewController: NMFMapViewCameraDelegate {
+//
+//}
 
 extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
