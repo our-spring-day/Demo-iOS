@@ -42,20 +42,10 @@ class MapViewController: UIViewController {
     let backButton = UIButton()
     let infoButton = UIButton()
     var zoomLevel: Double = 10
-    var user: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
-    
     var markers: [NMFMarker] = []
     var tokenWithMarker: [String : NMFMarker] = [:]
+    var userListForCollectionView = Array(UserModel.userList.values)
     var animationView = AnimationView(name:"12670-flying-airplane")
-    
-    //    var tokenWithIndex: [String : Int] = ["f606564d8371e455" : 0,
-    //                                          "aed64e8da3a07df4" : 1,
-    //                                          "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : 2,
-    //                                          "0954A791-B5BE-4B56-8F25-07554A4D6684" : 3,
-    //                                          "8D44FAA1-2F87-4702-9DAC-B8B15D949880" : 4,
-    //                                          "2872483D-9E7B-46D1-A2B8-44832FE3F1AD" : 5,
-    //                                          "C65CDF73-8C04-4F76-A26A-AE3400FEC14B" : 6,
-    //                                          "69751764-A224-4923-9844-C61646743D10" : 7]
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
@@ -64,8 +54,6 @@ class MapViewController: UIViewController {
                                                               height: UIScreen.main.bounds.height * 0.55))
     var cameraUpdateOnlyOnceFlag = true
     var imageToNameFlag = true
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,11 +78,8 @@ class MapViewController: UIViewController {
             $0.width.height.equalTo(75)
         }
         animationView.contentMode = .scaleAspectFit
-        //애니메이션 재생(애니메이션 재생모드 미 설정시 1회)
         animationView.play()
-        //애니메이션 재생모드( .loop = 애니메이션 무한재생)
         animationView.loopMode = .loop
-        //애니메이션 종료
         //animationView.pause()
     }
     
@@ -188,8 +173,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    
-    
     @objc func emitLocation() {
         socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
     }
@@ -204,6 +187,7 @@ class MapViewController: UIViewController {
             }
             if (UserModel.userList[key]?.state)! {
                 tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
+                tokenWithMarker[key]?.mapView = mapView
             }
         }
     }
@@ -211,12 +195,9 @@ class MapViewController: UIViewController {
     func array() {
         UserModel.userList.keys.map { tokenWithMarker[$0] = NMFMarker()}
         
-        for user in UserModel.userList {
-            let temp = NMFMarker().then {
-                $0.width = MannaDemo.convertWidth(value: 50)
-                $0.height = MannaDemo.convertWidth(value: 50)
-            }
-            markers.append(temp)
+        for marker in tokenWithMarker.values {
+            marker.width = MannaDemo.convertWidth(value: 50)
+            marker.height = MannaDemo.convertWidth(value: 50)
         }
     }
     
@@ -266,12 +247,9 @@ extension MapViewController: NMFMapViewCameraDelegate {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
         
-        //        UserModel.userList[tokenWithIndex[MannaDemo.myUUID!]!].latitude = myLatitude
-        //        UserModel.userList[tokenWithIndex[MannaDemo.myUUID!]!].longitude = myLongitude
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
         
@@ -282,17 +260,20 @@ extension MapViewController: CLLocationManagerDelegate {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
         }
+        
         if imageToNameFlag {
             tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
         } else {
             tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
         }
+        
         tokenWithMarker[MannaDemo.myUUID!]?.do {
             $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
             $0.mapView = mapView
         }
-        bottomSheet.collectionView.reloadData()
         
+        userListForCollectionView = Array(UserModel.userList.values)
+        bottomSheet.collectionView.reloadData()
     }
 }
 extension MapViewController: WebSocketDelegate {
@@ -303,12 +284,14 @@ extension MapViewController: WebSocketDelegate {
     func websocketDidConnect(socket: WebSocketClient) {
         print("sockect Connect!")
         UserModel.userList[MannaDemo.myUUID!]?.state = true
+        userListForCollectionView = Array(UserModel.userList.values)
         bottomSheet.collectionView.reloadData()
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("sockect Disconnect ㅠㅠ")
         UserModel.userList[MannaDemo.myUUID!]?.state = false
+        userListForCollectionView = Array(UserModel.userList.values)
         bottomSheet.collectionView.reloadData()
     }
     
@@ -342,11 +325,13 @@ extension MapViewController: WebSocketDelegate {
                 if let json = try? JSON(data) ["location"] {
                     lat_ = json["latitude"].double
                     lng_ = json["longitude"].double
+                    UserModel.userList[token]?.state = true
                 }
                 
             case "LEAVE" :
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = false
+                userListForCollectionView = Array(UserModel.userList.values)
                 bottomSheet.collectionView.reloadData()
                 showToast(message: "\(name)님 나가셨습니다.")
                 
@@ -354,6 +339,7 @@ extension MapViewController: WebSocketDelegate {
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = true
                 showToast(message: "\(name)님 접속하셨습니다.")
+                userListForCollectionView = Array(UserModel.userList.values)
                 bottomSheet.collectionView.reloadData()
                 
             case .none:
@@ -369,47 +355,45 @@ extension MapViewController: WebSocketDelegate {
             
             if token != MannaDemo.myUUID {
                 //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
-                user.latitude = lat
-                user.longitude = lng
+                UserModel.userList[token]?.latitude = lat
+                UserModel.userList[token]?.longitude = lng
                 marking()
             }
+            
+            userListForCollectionView = Array(UserModel.userList.values)
             bottomSheet.collectionView.reloadData()
         }
     }
 }
-
-//extension MapViewController: NMFMapViewCameraDelegate {
-//
-//}
-
 extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return UserModel.userList.count
+        return userListForCollectionView.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
-//                if UserModel.userList[indexPath.row].state {
-//                    if imageToNameFlag {
-//                        cell.profileImage.image = UserModel.userList[indexPath.row].nicknameImage
-//                        cell.backgroundColor = nil
-//                        cell.isUserInteractionEnabled = true
-//                    } else {
-//                        cell.profileImage.image = UserModel.userList[indexPath.row].profileImage
-//                        cell.backgroundColor = nil
-//                        cell.isUserInteractionEnabled = true
-//                    }
-//                } else {
-//                    cell.profileImage.image = #imageLiteral(resourceName: "profile")
-//                    cell.isUserInteractionEnabled = false
-//                }
+        
+                if userListForCollectionView[indexPath.row].state {
+                    if imageToNameFlag {
+                        cell.profileImage.image = userListForCollectionView[indexPath.row].nicknameImage
+                        cell.backgroundColor = nil
+                        cell.isUserInteractionEnabled = true
+                    } else {
+                        cell.profileImage.image = userListForCollectionView[indexPath.row].profileImage
+                        cell.backgroundColor = nil
+                        cell.isUserInteractionEnabled = true
+                    }
+                } else {
+                    cell.profileImage.image = #imageLiteral(resourceName: "profile")
+                    cell.isUserInteractionEnabled = false
+                }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: UserModel.userList[indexPath.row].latitude, lng: UserModel.userList[indexPath.row].longitude))
-        //        cameraUpdate.animation = .fly
-        //        cameraUpdate.animationDuration = 1.2
-        //        mapView.moveCamera(cameraUpdate)
+                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
+                cameraUpdate.animation = .fly
+                cameraUpdate.animationDuration = 1.2
+                mapView.moveCamera(cameraUpdate)
     }
 }
