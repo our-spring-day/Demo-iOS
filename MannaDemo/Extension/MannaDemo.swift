@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
 
 class MannaDemo {
     static let screenSize = UIScreen.main.bounds
+    
+    static var myUUID = KeychainWrapper.standard.string(forKey: "device_id")
     
     static func convertHeigt(value: CGFloat) -> CGFloat{
         return screenSize.height * (value / 812)

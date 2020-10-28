@@ -17,7 +17,6 @@
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
 		CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */; };
 		CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */; };
-		CC2500B72541F09D00D630D8 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2500B62541F09D00D630D8 /* UUID.swift */; };
 		CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC41A0862548157C00C0E762 /* MannaDemo.swift */; };
 		CC41A0A32548448800C0E762 /* 12670-flying-airplane.json in Resources */ = {isa = PBXBuildFile; fileRef = CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */; };
 		CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845A2540231A00441445 /* AppDelegate.swift */; };
@@ -46,7 +45,6 @@
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionView.swift; sourceTree = "<group>"; };
 		CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionViewCell.swift; sourceTree = "<group>"; };
-		CC2500B62541F09D00D630D8 /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
 		CC41A0862548157C00C0E762 /* MannaDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaDemo.swift; sourceTree = "<group>"; };
 		CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "12670-flying-airplane.json"; sourceTree = "<group>"; };
 		CC8B84572540231900441445 /* MannaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MannaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +104,7 @@
 		A515563725404C5700487BEF /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				CCF3BC532540444600C7F718 /* Entity */,
 				A515563825404C9500487BEF /* MapViewController.swift */,
 				CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */,
 				CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */,
@@ -135,7 +134,6 @@
 		CC2500B52541F04300D630D8 /* singletone */ = {
 			isa = PBXGroup;
 			children = (
-				CC2500B62541F09D00D630D8 /* UUID.swift */,
 				A549EDD32543510900EC65E3 /* ShowToast.swift */,
 			);
 			path = singletone;
@@ -191,7 +189,6 @@
 		CCE752492540288F008E0BA1 /* MannaList */ = {
 			isa = PBXGroup;
 			children = (
-				CCF3BC532540444600C7F718 /* Entity */,
 				CCE7525725402DCF008E0BA1 /* Component */,
 				CCE75253254028FE008E0BA1 /* MannaListViewController.swift */,
 				CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */,
@@ -332,7 +329,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC2500B72541F09D00D630D8 /* UUID.swift in Sources */,
 				A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */,
 				A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */,
 				A5D48F252542AE3B00399462 /* UserView.swift in Sources */,
