@@ -58,6 +58,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         array()
+        didMarkerClicked()
         if socket.isConnected == false {
             socket.connect()
         }
@@ -100,8 +101,9 @@ class MapViewController: UIViewController {
             $0.setImage(#imageLiteral(resourceName: "info"), for: .normal)
             $0.frame.size.width = 40
             $0.frame.size.height = 40
+            $0.contentMode = .scaleAspectFill
             $0.layer.cornerRadius = $0.frame.width / 2
-            $0.clipsToBounds = true
+            $0.layer.masksToBounds = true
             $0.addTarget(self, action: #selector(info), for: .touchUpInside)
         }
         mapView.do {
@@ -109,6 +111,8 @@ class MapViewController: UIViewController {
             $0.mapType = .navi
             $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
             $0.symbolScale = 0.85
+            $0.logoInteractionEnabled = false
+            $0.logoAlign = NMFLogoAlign(rawValue: 10)!
         }
         locationManager.do {
             $0.delegate = self
@@ -133,6 +137,10 @@ class MapViewController: UIViewController {
         imageToNameFlag.toggle()
         bottomSheet.collectionView.reloadData()
         marking()
+        
+        //이부분 네이버 맵 로고 없애고 메뉴만들어주면 됩니다~
+//        mapView.showLegalNotice()
+//        mapView.showOpenSourceLicense()
     }
     
     @objc func didzoomInClicked() {
@@ -192,6 +200,22 @@ class MapViewController: UIViewController {
             if (UserModel.userList[key]?.state)! {
                 tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
                 tokenWithMarker[key]?.mapView = mapView
+            }
+        }
+    }
+    
+    func didMarkerClicked() {
+        tokenWithMarker.keys.map { key in
+            tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
+                mapView.zoomLevel = 10
+                let lat = UserModel.userList[key]?.latitude
+                let lng = UserModel.userList[key]?.longitude
+                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat!, lng: lng!))
+                cameraUpdate.animation = .fly
+                cameraUpdate.animationDuration = 0.8
+                mapView.moveCamera(cameraUpdate)
+                 
+                return true
             }
         }
     }
