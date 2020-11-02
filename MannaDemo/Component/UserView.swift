@@ -21,9 +21,6 @@ class UserView: UIView {
     
     func attribute() {
         backgroundColor = .darkGray
-//        self.do {
-//            $0.layer.cornerRadius = 15
-//        }
         title.do {
             $0.text = self.text
             $0.textAlignment = .center
