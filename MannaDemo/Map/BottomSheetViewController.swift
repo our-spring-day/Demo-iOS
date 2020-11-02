@@ -133,10 +133,11 @@ class BottomSheetViewController: UIView {
             $0.isUserInteractionEnabled = true
         }
         zoomIn.do {
-            $0.backgroundColor = .gray
-            $0.setTitle("+", for: .normal)
-            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-            $0.layer.cornerRadius = 5
+//            $0.backgroundColor = .gray
+//            $0.setTitle("+", for: .normal)
+            $0.setImage(#imageLiteral(resourceName: "Chat"), for: .normal)
+//            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+//            $0.layer.cornerRadius = 30
             $0.layer.masksToBounds = true
         }
         zoomOut.do {
@@ -187,7 +188,7 @@ class BottomSheetViewController: UIView {
         zoomIn.snp.makeConstraints {
             $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
             $0.leading.equalTo(snp.leading).offset(15)
-            $0.width.height.equalTo(30)
+            $0.width.height.equalTo(40)
         }
         zoomOut.snp.makeConstraints {
             $0.bottom.equalTo(backgroundView.snp.top).offset(-20)

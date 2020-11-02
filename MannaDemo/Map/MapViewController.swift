@@ -16,43 +16,62 @@ class MapViewController: UIViewController {
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
+    var tokenWithMarker: [String : NMFMarker] = [:]
     let mapView = NMFMapView()
-    var cameraUpdateOnlyOnceFlag = true
     let backButton = UIButton()
     let infoButton = UIButton()
-    var zoomLevel: Double = 10
-    var tokenWithMarker: [String : NMFMarker] = [:]
-    var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var animationView = AnimationView(name:"12670-flying-airplane")
-    var myLatitude: Double = 0
-    var myLongitude: Double = 0
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
                                                               height: UIScreen.main.bounds.height * 0.55))
-    
+    var cameraUpdateOnlyOnceFlag = true
+    var myLatitude: Double = 0
+    var myLongitude: Double = 0
+    var zoomLevel: Double = 10
+    var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var imageToNameFlag = true
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if cameraUpdateOnlyOnceFlag {
+            camereUpdateOnlyOnce()
+            cameraUpdateOnlyOnceFlag = false
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if socket.isConnected == false {
             socket.connect()
         }
+        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         array()
         didMarkerClicked()
-        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
-        bottomSheet.collectionView.reloadData()
         attribute()
         layout()
-        socket.delegate = self
-        mapView.addCameraDelegate(delegate: self)
         lottieFunc()
+        bottomSheet.collectionView.reloadData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        if cameraUpdateOnlyOnceFlag {
-            camereUpdateOnlyOnce()
-            cameraUpdateOnlyOnceFlag = false
+    func array() {
+        UserModel.userList.keys.map { tokenWithMarker[$0] = NMFMarker()}
+        for marker in tokenWithMarker.values {
+            marker.width = MannaDemo.convertWidth(value: 5)
+            marker.height = MannaDemo.convertWidth(value: 5)
+        }
+    }
+    
+    func didMarkerClicked() {
+        tokenWithMarker.keys.map { key in
+            tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
+                let lat = UserModel.userList[key]?.latitude
+                let lng = UserModel.userList[key]?.longitude
+                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat!, lng: lng!))
+                cameraUpdate.animation = .easeOut
+                cameraUpdate.animationDuration = 0.3
+                mapView.moveCamera(cameraUpdate)
+                return true
+            }
         }
     }
     
@@ -75,6 +94,9 @@ class MapViewController: UIViewController {
     }
     
     func attribute() {
+        socket.do {
+            $0.delegate = self
+        }
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
             $0.frame.size.width = 40
@@ -94,11 +116,11 @@ class MapViewController: UIViewController {
         }
         mapView.do {
             $0.frame = view.frame
+            $0.addCameraDelegate(delegate: self)
             $0.mapType = .navi
             $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
             $0.symbolScale = 0.85
             $0.logoInteractionEnabled = false
-            $0.logoAlign = NMFLogoAlign(rawValue: 10)!
             $0.maxZoomLevel = 18
         }
         locationManager.do {
@@ -124,7 +146,6 @@ class MapViewController: UIViewController {
         imageToNameFlag.toggle()
         bottomSheet.collectionView.reloadData()
         marking()
-        
         //이부분 네이버 맵 로고 없애고 메뉴만들어주면 됩니다~
         //        mapView.showLegalNotice()
         //        mapView.showOpenSourceLicense()
@@ -177,7 +198,6 @@ class MapViewController: UIViewController {
     }
     
     func marking() {
-        
         for key in UserModel.userList.keys {
             if imageToNameFlag {
                 tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
@@ -190,34 +210,10 @@ class MapViewController: UIViewController {
             }
         }
     }
-    
-    func didMarkerClicked() {
-        tokenWithMarker.keys.map { key in
-            tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
-                let lat = UserModel.userList[key]?.latitude
-                let lng = UserModel.userList[key]?.longitude
-                let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat!, lng: lng!))
-                cameraUpdate.animation = .easeOut
-                cameraUpdate.animationDuration = 0.3
-                mapView.moveCamera(cameraUpdate)
-                
-                return true
-            }
-        }
-    }
-    
-    func array() {
-        UserModel.userList.keys.map { tokenWithMarker[$0] = NMFMarker()}
-        
-        for marker in tokenWithMarker.values {
-            marker.width = MannaDemo.convertWidth(value: 5)
-            marker.height = MannaDemo.convertWidth(value: 5)
-        }
-    }
-    
+
     func camereUpdateOnlyOnce() {
-        mapView.zoomLevel = 10
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        mapView.zoomLevel = 10
         mapView.moveCamera(cameraUpdate)
     }
     
@@ -235,7 +231,6 @@ class MapViewController: UIViewController {
             $0.widthAnchor.constraint(equalToConstant: 170).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 45).isActive = true
         }
-        
         toastLabel.do {
             $0.text = "\(message)"
             $0.font = UIFont.boldSystemFont(ofSize: 15)
@@ -243,7 +238,6 @@ class MapViewController: UIViewController {
             $0.layer.cornerRadius = 15
             $0.clipsToBounds = true
         }
-        
         UIView.animate(withDuration: 1.5) {
             toastLabel.alpha = 0.0
         } completion: { _ in
@@ -289,10 +283,8 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
-        
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-        
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
         
@@ -407,6 +399,30 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
         let user = userListForCollectionView[indexPath.row]
+        
+        let userListCount =  userListForCollectionView.filter { $0.state == true }.count
+        
+//        for i in 0..<userListCount {
+//
+//        }
+        
+        if userListCount == 1 {
+            if indexPath.row == 0 {
+                cell.ranking.image = #imageLiteral(resourceName: "🥇")
+            } else {
+                cell.ranking.image = UIImage()
+            }
+        }
+        
+//        if indexPath.row == 0 {
+//            cell.ranking.image = #imageLiteral(resourceName: "🥇")
+//        } else if indexPath.row == 1 {
+//            cell.ranking.image = #imageLiteral(resourceName: "🥈")
+//        } else if indexPath.row == 2 {
+//            cell.ranking.image = #imageLiteral(resourceName: "🥉")
+//        } else {
+//            cell.ranking.image = UIImage()
+//        }
         
         if user.state {
             if imageToNameFlag {
