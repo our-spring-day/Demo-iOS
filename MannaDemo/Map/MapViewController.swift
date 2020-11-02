@@ -20,6 +20,7 @@ class MapViewController: UIViewController {
     let mapView = NMFMapView()
     let backButton = UIButton()
     let infoButton = UIButton()
+    let multipartPath = NMFMultipartPath()
     var animationView = AnimationView(name:"12670-flying-airplane")
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
@@ -70,12 +71,16 @@ class MapViewController: UIViewController {
                 cameraUpdate.animation = .easeOut
                 cameraUpdate.animationDuration = 0.3
                 mapView.moveCamera(cameraUpdate)
-                
                 //여기있슴
-                
-                
-                
-                
+                PathAPI.getPath(lat: lat!, lng: lng!) { result in
+                    multipartPath.lineParts = [
+                        NMGLineString(points: result)
+                    ]
+                    multipartPath.colorParts = [
+                        NMFPathColor(color: UIColor.red, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
+                    ]
+                    multipartPath.mapView = mapView
+                }
                 return true
             }
         }
