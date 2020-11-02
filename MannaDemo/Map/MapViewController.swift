@@ -21,6 +21,7 @@ class MapViewController: UIViewController {
     let backButton = UIButton()
     let infoButton = UIButton()
     var timerView = UIView()
+    var hourglassView = UIImageView()
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
@@ -139,6 +140,9 @@ class MapViewController: UIViewController {
             $0.layer.borderWidth = 0.5
             $0.layer.borderColor = UIColor.gray.cgColor
         }
+        hourglassView.do {
+            $0.image = #imageLiteral(resourceName: "hourglass")
+        }
     }
     
     @objc func back() {
@@ -176,7 +180,8 @@ class MapViewController: UIViewController {
     }
     
     func layout() {
-        [mapView, backButton, infoButton, bottomSheet, timerView].forEach { view.addSubview($0) }
+        [mapView, backButton, infoButton, bottomSheet, timerView, hourglassView].forEach { view.addSubview($0) }
+//        timerView.addSubview(hourglassView)
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -196,9 +201,16 @@ class MapViewController: UIViewController {
         }
         timerView.snp.makeConstraints {
             $0.centerX.equalTo(view)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertHeigt(value: 42.03))
+//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertHeigt(value: 42.03))
+            $0.centerY.equalTo(backButton)
             $0.width.equalTo(MannaDemo.convertWidth(value: 122))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 42))
+        }
+        hourglassView.snp.makeConstraints {
+            $0.centerY.equalTo(backButton.snp.centerY)
+            $0.leading.equalTo(timerView.snp.leading).offset(MannaDemo.convertWidth(value: 15))
+            $0.width.equalTo(MannaDemo.convertHeigt(value: 25))
+            $0.height.equalTo(MannaDemo.convertWidth(value: 20))
         }
     }
     
