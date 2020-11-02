@@ -70,6 +70,12 @@ class MapViewController: UIViewController {
                 cameraUpdate.animation = .easeOut
                 cameraUpdate.animationDuration = 0.3
                 mapView.moveCamera(cameraUpdate)
+                
+                //여기있슴
+                
+                
+                
+                
                 return true
             }
         }
