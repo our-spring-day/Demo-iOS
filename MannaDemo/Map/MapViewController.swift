@@ -32,6 +32,7 @@ class MapViewController: UIViewController {
     var zoomLevel: Double = 10
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var imageToNameFlag = true
+    var bottomTabView = BottomTabView()
     
     override func viewDidAppear(_ animated: Bool) {
         if cameraUpdateOnlyOnceFlag {
@@ -143,6 +144,9 @@ class MapViewController: UIViewController {
         hourglassView.do {
             $0.image = #imageLiteral(resourceName: "hourglass")
         }
+        bottomTabView.do {
+            $0.backgroundColor = .white
+        }
     }
     
     @objc func back() {
@@ -180,8 +184,7 @@ class MapViewController: UIViewController {
     }
     
     func layout() {
-        [mapView, backButton, infoButton, bottomSheet, timerView, hourglassView].forEach { view.addSubview($0) }
-//        timerView.addSubview(hourglassView)
+        [mapView, backButton, infoButton, bottomSheet, timerView, hourglassView, bottomTabView].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -211,6 +214,10 @@ class MapViewController: UIViewController {
             $0.leading.equalTo(timerView.snp.leading).offset(MannaDemo.convertWidth(value: 15))
             $0.width.equalTo(MannaDemo.convertHeigt(value: 25))
             $0.height.equalTo(MannaDemo.convertWidth(value: 20))
+        }
+        bottomTabView.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalTo(view)
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 70))
         }
     }
     

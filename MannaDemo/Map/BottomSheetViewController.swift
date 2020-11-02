@@ -36,6 +36,7 @@ class BottomSheetViewController: UIView {
     var remmainingTime = UILabel()
     var animationView = AnimationView(name:"12670-flying-airplane")
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
@@ -149,11 +150,7 @@ class BottomSheetViewController: UIView {
             $0.isUserInteractionEnabled = true
         }
         zoomIn.do {
-//            $0.backgroundColor = .gray
-//            $0.setTitle("+", for: .normal)
-            $0.setImage(#imageLiteral(resourceName: "Chat"), for: .normal)
-//            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-//            $0.layer.cornerRadius = 30
+            $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
             $0.layer.masksToBounds = true
         }
         zoomOut.do {

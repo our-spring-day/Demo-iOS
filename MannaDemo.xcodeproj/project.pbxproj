@@ -19,6 +19,7 @@
 		CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */; };
 		CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC41A0862548157C00C0E762 /* MannaDemo.swift */; };
 		CC41A0A32548448800C0E762 /* 12670-flying-airplane.json in Resources */ = {isa = PBXBuildFile; fileRef = CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */; };
+		CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748311255058A2006C1E02 /* BottomTabView.swift */; };
 		CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845A2540231A00441445 /* AppDelegate.swift */; };
 		CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845C2540231A00441445 /* SceneDelegate.swift */; };
 		CC8B845F2540231A00441445 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845E2540231A00441445 /* ViewController.swift */; };
@@ -47,6 +48,7 @@
 		CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionViewCell.swift; sourceTree = "<group>"; };
 		CC41A0862548157C00C0E762 /* MannaDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaDemo.swift; sourceTree = "<group>"; };
 		CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "12670-flying-airplane.json"; sourceTree = "<group>"; };
+		CC748311255058A2006C1E02 /* BottomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTabView.swift; sourceTree = "<group>"; };
 		CC8B84572540231900441445 /* MannaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MannaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC8B845A2540231A00441445 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC8B845C2540231A00441445 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */,
 				CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */,
 				CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */,
+				CC748311255058A2006C1E02 /* BottomTabView.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
 				A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
+				CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */,
 				CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */,
 				CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */,
 				A515563925404C9500487BEF /* MapViewController.swift in Sources */,
