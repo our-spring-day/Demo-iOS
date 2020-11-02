@@ -72,6 +72,10 @@ class MapViewController: UIViewController {
                 mapView.moveCamera(cameraUpdate)
                 
                 //여기있슴
+//                UserModel.userList[key]?.latitude
+//                UserModel.userList[key]?.longitude
+
+//                임의 좌표 두개
                 
                 
                 
@@ -405,30 +409,23 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
         let user = userListForCollectionView[indexPath.row]
-        
         let userListCount =  userListForCollectionView.filter { $0.state == true }.count
         
-//        for i in 0..<userListCount {
-//
-//        }
-        
-        if userListCount == 1 {
-            if indexPath.row == 0 {
-                cell.ranking.image = #imageLiteral(resourceName: "🥇")
+        if indexPath.row == 0 {
+            cell.ranking.image = #imageLiteral(resourceName: "🥇")
+        } else if indexPath.row ==  userListCount - 1 && indexPath.row != 0 {
+            cell.ranking.image = #imageLiteral(resourceName: "☠️")
+        } else if userListCount > 2 {
+            if indexPath.row == 1 {
+                cell.ranking.image = #imageLiteral(resourceName: "🥈")
+            } else if indexPath.row == 2 {
+                cell.ranking.image = #imageLiteral(resourceName: "🥉")
             } else {
                 cell.ranking.image = UIImage()
             }
+        } else {
+            cell.ranking.image = UIImage()
         }
-        
-//        if indexPath.row == 0 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥇")
-//        } else if indexPath.row == 1 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥈")
-//        } else if indexPath.row == 2 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥉")
-//        } else {
-//            cell.ranking.image = UIImage()
-//        }
         
         if user.state {
             if imageToNameFlag {
