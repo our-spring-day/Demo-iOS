@@ -20,11 +20,11 @@ class MapViewController: UIViewController {
     let mapView = NMFMapView()
     let backButton = UIButton()
     let infoButton = UIButton()
-    var animationView = AnimationView(name:"12670-flying-airplane")
+    var timerView = UIView()
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
-                                                              height: UIScreen.main.bounds.height * 0.55))
+                                                              height: UIScreen.main.bounds.height * 0.5))
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
     var myLongitude: Double = 0
@@ -49,7 +49,6 @@ class MapViewController: UIViewController {
         didMarkerClicked()
         attribute()
         layout()
-        lottieFunc()
         bottomSheet.collectionView.reloadData()
     }
     
@@ -88,19 +87,6 @@ class MapViewController: UIViewController {
     func setCollcetionViewItem() {
         userListForCollectionView = Array(UserModel.userList.values)
         userListForCollectionView.sort { $0.state && !$1.state}
-    }
-    
-    func lottieFunc() {
-        view.addSubview(animationView)
-        animationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.centerX.equalTo(bottomSheet.backgroundView)
-            $0.width.height.equalTo(75)
-        }
-        animationView.contentMode = .scaleAspectFit
-        animationView.play()
-        animationView.loopMode = .loop
-        //animationView.pause()
     }
     
     func attribute() {
@@ -146,6 +132,13 @@ class MapViewController: UIViewController {
             $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
             $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
         }
+        timerView.do {
+            $0.backgroundColor = .white
+            $0.layer.cornerRadius = 20
+            $0.layer.masksToBounds = true
+            $0.layer.borderWidth = 0.5
+            $0.layer.borderColor = UIColor.gray.cgColor
+        }
     }
     
     @objc func back() {
@@ -183,7 +176,7 @@ class MapViewController: UIViewController {
     }
     
     func layout() {
-        [mapView, backButton, infoButton, bottomSheet].forEach { view.addSubview($0) }
+        [mapView, backButton, infoButton, bottomSheet, timerView].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -199,7 +192,13 @@ class MapViewController: UIViewController {
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(view.frame.width)
             $0.height.equalTo(view.frame.height)
-            $0.top.equalTo(UIScreen.main.bounds.height * 0.55)
+            $0.top.equalTo(UIScreen.main.bounds.height * 0.5)
+        }
+        timerView.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertHeigt(value: 42.03))
+            $0.width.equalTo(MannaDemo.convertWidth(value: 122))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 42))
         }
     }
     
@@ -445,9 +444,11 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
-        cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 1.2
-        mapView.moveCamera(cameraUpdate)
+        if userListForCollectionView[indexPath.row].latitude != 0 && userListForCollectionView[indexPath.row].longitude != 0 {
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
+            cameraUpdate.animation = .fly
+            cameraUpdate.animationDuration = 1.2
+            mapView.moveCamera(cameraUpdate)
+        }
     }
 }

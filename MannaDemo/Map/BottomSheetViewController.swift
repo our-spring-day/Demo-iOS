@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Lottie
 
 extension BottomSheetViewController {
     enum State {
@@ -33,15 +34,30 @@ class BottomSheetViewController: UIView {
     var expectArrived = UILabel()
     var remainingTimeLabel = UILabel()
     var remmainingTime = UILabel()
+    var animationView = AnimationView(name:"12670-flying-airplane")
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         attribute()
         layout()
+        lottieFunc()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func lottieFunc() {
+        backgroundView.addSubview(animationView)
+        animationView.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom).offset(-10)
+            $0.centerX.equalTo(backgroundView)
+            $0.width.height.equalTo(75)
+        }
+        animationView.contentMode = .scaleAspectFit
+        animationView.play()
+        animationView.loopMode = .loop
+        //animationView.pause()
     }
 
     private func moveView(state: State) {
