@@ -12,37 +12,15 @@ import Starscream
 import SwiftyJSON
 import Lottie
 
-//let animationView = AnimationView(name:"17338-go-fix")
-//
-////메인 뷰에 삽입
-//view.addSubview(animationView)
-//animationView.frame = animationView.superview!.bounds
-//animationView.contentMode = .scaleAspectFit
-//
-////애니메이션 재생(애니메이션 재생모드 미 설정시 1회)
-//animationView.play()
-//
-////애니메이션 재생모드( .loop = 애니메이션 무한재생)
-//animationView.loopMode = .loop
-//
-////애니메이션 종료
-////animationView.pause()
-//[출처] 스위프트[Swift] - Lottie 사용법|작성자 홍군
-
-
 class MapViewController: UIViewController {
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     let mapView = NMFMapView()
-    var myLocation = NMFMarker().then {
-        $0.width = MannaDemo.convertWidth(value: 50)
-        $0.height = MannaDemo.convertWidth(value: 50)
-    }
+    var cameraUpdateOnlyOnceFlag = true
     let backButton = UIButton()
     let infoButton = UIButton()
     var zoomLevel: Double = 10
-    var markers: [NMFMarker] = []
     var tokenWithMarker: [String : NMFMarker] = [:]
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var animationView = AnimationView(name:"12670-flying-airplane")
@@ -52,16 +30,16 @@ class MapViewController: UIViewController {
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
                                                               height: UIScreen.main.bounds.height * 0.55))
-    var cameraUpdateOnlyOnceFlag = true
+    
     var imageToNameFlag = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        array()
-        didMarkerClicked()
         if socket.isConnected == false {
             socket.connect()
         }
+        array()
+        didMarkerClicked()
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         bottomSheet.collectionView.reloadData()
         attribute()
@@ -70,6 +48,14 @@ class MapViewController: UIViewController {
         mapView.addCameraDelegate(delegate: self)
         lottieFunc()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if cameraUpdateOnlyOnceFlag {
+            camereUpdateOnlyOnce()
+            cameraUpdateOnlyOnceFlag = false
+        }
+    }
+    
     func setCollcetionViewItem() {
         userListForCollectionView = Array(UserModel.userList.values)
         userListForCollectionView.sort { $0.state && !$1.state}
@@ -113,6 +99,7 @@ class MapViewController: UIViewController {
             $0.symbolScale = 0.85
             $0.logoInteractionEnabled = false
             $0.logoAlign = NMFLogoAlign(rawValue: 10)!
+            $0.maxZoomLevel = 18
         }
         locationManager.do {
             $0.delegate = self
@@ -139,8 +126,8 @@ class MapViewController: UIViewController {
         marking()
         
         //이부분 네이버 맵 로고 없애고 메뉴만들어주면 됩니다~
-//        mapView.showLegalNotice()
-//        mapView.showOpenSourceLicense()
+        //        mapView.showLegalNotice()
+        //        mapView.showOpenSourceLicense()
     }
     
     @objc func didzoomInClicked() {
@@ -207,14 +194,13 @@ class MapViewController: UIViewController {
     func didMarkerClicked() {
         tokenWithMarker.keys.map { key in
             tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
-                mapView.zoomLevel = 10
                 let lat = UserModel.userList[key]?.latitude
                 let lng = UserModel.userList[key]?.longitude
                 let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat!, lng: lng!))
-                cameraUpdate.animation = .fly
-                cameraUpdate.animationDuration = 0.8
+                cameraUpdate.animation = .easeOut
+                cameraUpdate.animationDuration = 0.3
                 mapView.moveCamera(cameraUpdate)
-                 
+                
                 return true
             }
         }
@@ -224,8 +210,8 @@ class MapViewController: UIViewController {
         UserModel.userList.keys.map { tokenWithMarker[$0] = NMFMarker()}
         
         for marker in tokenWithMarker.values {
-            marker.width = MannaDemo.convertWidth(value: 50)
-            marker.height = MannaDemo.convertWidth(value: 50)
+            marker.width = MannaDemo.convertWidth(value: 5)
+            marker.height = MannaDemo.convertWidth(value: 5)
         }
     }
     
@@ -264,12 +250,38 @@ class MapViewController: UIViewController {
             toastLabel.removeFromSuperview()
         }
     }
-    
 }
 
-
 extension MapViewController: NMFMapViewCameraDelegate {
+    func zoomLinearEquation(zoomLevel: Double) -> CGFloat{
+        return  CGFloat(-(25/3) * zoomLevel + 175)
+    }
     
+    func markerResizeByZoomLevel() {
+        if mapView.zoomLevel > 15 {
+            tokenWithMarker.map { (key, marker) in
+                marker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
+                marker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
+                marker.mapView = mapView
+            }
+        } else {
+            tokenWithMarker.map { (key, marker) in
+                marker.width = MannaDemo.convertWidth(value: 50)
+                marker.height = MannaDemo.convertWidth(value: 50)
+                marker.mapView = mapView
+            }
+        }
+    }
+    
+    func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
+        markerResizeByZoomLevel()
+    }
+    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+        markerResizeByZoomLevel()
+    }
+    func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
+        markerResizeByZoomLevel()
+    }
 }
 
 extension MapViewController: CLLocationManagerDelegate {
@@ -283,11 +295,6 @@ extension MapViewController: CLLocationManagerDelegate {
         
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
-        
-        if cameraUpdateOnlyOnceFlag {
-            camereUpdateOnlyOnce()
-            cameraUpdateOnlyOnceFlag = false
-        }
         
         if imageToNameFlag {
             tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
@@ -311,7 +318,6 @@ extension MapViewController: WebSocketDelegate {
     func websocketDidConnect(socket: WebSocketClient) {
         print("sockect Connect!")
         UserModel.userList[MannaDemo.myUUID!]?.state = true
-        //        userListForCollectionView = Array(UserModel.userList.values)
         setCollcetionViewItem()
         bottomSheet.collectionView.reloadData()
     }
@@ -319,7 +325,6 @@ extension MapViewController: WebSocketDelegate {
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("sockect Disconnect ㅠㅠ")
         UserModel.userList[MannaDemo.myUUID!]?.state = false
-        //        userListForCollectionView = Array(UserModel.userList.values)
         setCollcetionViewItem()
         bottomSheet.collectionView.reloadData()
     }
