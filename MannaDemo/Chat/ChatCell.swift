@@ -25,14 +25,20 @@ class ChatCell: UITableViewCell {
             message.textColor = chatMessage.isIncoming ? .black : .white
             message.text = chatMessage.text
             
-            userName.text = chatMessage.isIncoming ? "수야" : ""
-            userImage.image = chatMessage.isIncoming ? UIImage(named: "Rectangle") : nil
+            userName.text = chatMessage.isIncoming ? chatMessage.user : ""
+            userImage.image = chatMessage.isIncoming ? UIImage(named: chatMessage.user) : nil
             
             if chatMessage.isIncoming {
                 leadingConstraints.isActive = true
                 trailingConstraints.isActive = false
-                receiveTopConstraints.isActive = true
-                sendTopConstraints.isActive = false
+                if chatMessage.sendState {
+                    receiveTopConstraints.isActive = false
+                    sendTopConstraints.isActive = true
+                    userImage.isHidden = true
+                } else{
+                    receiveTopConstraints.isActive = true
+                    sendTopConstraints.isActive = false
+                }
             } else {
                 leadingConstraints.isActive = false
                 trailingConstraints.isActive = true
@@ -54,7 +60,7 @@ class ChatCell: UITableViewCell {
         userName.do {
             $0.textColor = UIColor.appColor(.chatName)
             $0.textAlignment = .center
-            $0.font = UIFont.systemFont(ofSize: 10)
+            $0.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         }
         userImage.do {
             $0.layer.cornerRadius = 11
@@ -83,7 +89,7 @@ class ChatCell: UITableViewCell {
         }
         userName.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.topAnchor.constraint(equalTo: topAnchor, constant: 1).isActive = true
+            $0.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
             $0.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 5).isActive = true
         }
         message.do {
@@ -105,10 +111,10 @@ class ChatCell: UITableViewCell {
         trailingConstraints = message.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32)
         trailingConstraints.isActive = true
         
-        receiveTopConstraints = message.topAnchor.constraint(equalTo: userImage.centerYAnchor, constant: 15)
+        receiveTopConstraints = message.topAnchor.constraint(equalTo: userImage.centerYAnchor, constant: 14)
         receiveTopConstraints.isActive = true
         
-        sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 15)
+        sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 10)
         sendTopConstraints.isActive = true
     }
     
