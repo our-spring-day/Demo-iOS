@@ -8,10 +8,11 @@
 import UIKit
 
 class ChatViewController: UIViewController {
-    var button = UIButton()
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-            self.view.backgroundColor = .red
+            
     }
 }

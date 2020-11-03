@@ -130,11 +130,14 @@ class MapViewController: UIViewController {
             $0.textColor = UIColor.black
             $0.textAlignment = .center
             $0.alpha = 0
+            $0.layer.cornerRadius = 10
+            $0.layer.masksToBounds = true
         }
         bottomSheet.do {
             $0.runningTimeController.collectionView.delegate = self
             $0.runningTimeController.collectionView.dataSource = self
             $0.parentView = self.view
+            $0.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: view.frame.width, height: view.frame.height)
         }
         timerView.do {
             $0.backgroundColor = .white
@@ -155,7 +158,7 @@ class MapViewController: UIViewController {
     }
     
     func layout() {
-        [mapView, backButton, toastLabel, infoButton, timerView, hourglassView, bottomSheet.view, bottomTabView].forEach { view.addSubview($0) }
+        [mapView, backButton, infoButton, timerView, hourglassView, bottomSheet.view, bottomTabView, toastLabel].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -166,18 +169,6 @@ class MapViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
-        }
-        bottomSheet.view.snp.makeConstraints {
-            $0.centerX.equalTo(view.snp.centerX)
-            $0.width.equalTo(view.frame.width)
-            $0.height.equalTo(view.frame.height)
-            if bottomSheet.currentState == .full {
-                $0.top.equalTo(UIScreen.main.bounds.height * 0.05)
-            } else if bottomSheet.currentState == .half {
-                $0.top.equalTo(UIScreen.main.bounds.height * 0.5)
-            } else {
-                $0.top.equalTo(UIScreen.main.bounds.height * 0.75)
-            }
         }
         toastLabel.snp.makeConstraints {
             $0.centerX.equalTo(view)
@@ -271,6 +262,7 @@ class MapViewController: UIViewController {
     
     func showToast(message: String) {
         self.toastLabel.text = message
+//        self.toastLabel.text = "떨어지는메세지들"
         self.toastLabel.alpha = 1
         UIView.animate(withDuration: 1.5) {
             self.toastLabel.alpha = 0
