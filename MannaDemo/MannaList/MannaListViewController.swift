@@ -19,6 +19,7 @@ protocol reloadData {
 class MannaListViewController: UIViewController, reloadData {
     
     var createMannaButton: UIBarButtonItem?
+    var pushChat: UIBarButtonItem?
     let tableView = UITableView()
     let refreshControl = UIRefreshControl()
     
@@ -40,10 +41,11 @@ class MannaListViewController: UIViewController, reloadData {
     
     func attribute() {
         createMannaButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createMannaButtonAction(_:)))
+        pushChat = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(pushChatView))
         self.do {
             $0.title = "Manna List"
             $0.navigationController?.navigationBar.prefersLargeTitles = true
-            $0.navigationItem.rightBarButtonItem = createMannaButton
+            $0.navigationItem.rightBarButtonItems = [createMannaButton!, pushChat!]
         }
         tableView.do {
             $0.register(MannaListTableViewCell.self, forCellReuseIdentifier: MannaListTableViewCell.id)
@@ -64,6 +66,10 @@ class MannaListViewController: UIViewController, reloadData {
     }
     
     
+    @objc func pushChatView() {
+        let view = ChatViewController()
+        navigationController?.pushViewController(view, animated: false)
+    }
     
     @objc func createMannaButtonAction(_ sender: UIBarButtonItem) {
         

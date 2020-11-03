@@ -15,17 +15,8 @@ class ViewController: UIViewController {
         $0.frame.size = CGSize(width: 100, height: 100)
         $0.backgroundColor = .red
     }
-//    let marker3 = UIImageView().then {
-//        $0.backgroundColor = .lightGray
-//        $0.layer.cornerRadius = 15
-//    }
-//    let name = UILabel().then {
-//        $0.textColor = .black
-//        $0.textAlignment = .center
-//        $0.text = "셋"
-//    }
+
     let imageView = UIImageView()
-//    let imageView2 = UIImageView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +58,7 @@ class ViewController: UIViewController {
 //        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
 //        imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
 //        imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-//
+
 //        KeychainWrapper.standard.removeObject(forKey: "device_id")
     }
     
