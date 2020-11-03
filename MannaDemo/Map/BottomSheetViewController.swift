@@ -17,8 +17,8 @@ extension BottomSheetViewController {
     }
     enum Constant {
         static let halfViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.5
-        static let partialViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.75
-        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.05
+        static let partialViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.64
+        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.00
     }
 }
 
@@ -153,7 +153,7 @@ class BottomSheetViewController: UIViewController {
             $0.top.equalTo(backgroundView.snp.top).offset(11.5)
             $0.centerX.equalTo(self.view)
             $0.width.equalTo(MannaDemo.convertWidth(value: 60))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 2.99))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 5))
         }
     }
 }

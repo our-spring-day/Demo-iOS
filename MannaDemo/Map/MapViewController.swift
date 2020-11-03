@@ -190,7 +190,7 @@ class MapViewController: UIViewController {
         }
         bottomTabView.snp.makeConstraints {
             $0.bottom.leading.trailing.equalTo(view)
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 70))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: MannaDemo.convertHeigt(value: 85)))
         }
     }
     
@@ -200,19 +200,25 @@ class MapViewController: UIViewController {
             self.bottomSheet.chatViewController.view.isHidden = false
             self.bottomSheet.runningTimeController.view.isHidden = true
             self.bottomSheet.rankingViewController.view.isHidden = true
-//            bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.7, width: view.frame.width, height: bottomSheet.view.frame.height)
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
+            }
             break
         case 1:
             self.bottomSheet.chatViewController.view.isHidden = true
             self.bottomSheet.runningTimeController.view.isHidden = false
             self.bottomSheet.rankingViewController.view.isHidden = true
-//            bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.7, width: view.frame.width, height: bottomSheet.view.frame.height)
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
+            }
             break
         case 2:
             self.bottomSheet.chatViewController.view.isHidden = true
             self.bottomSheet.runningTimeController.view.isHidden = true
             self.bottomSheet.rankingViewController.view.isHidden = false
-//            bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.7, width: view.frame.width, height: bottomSheet.view.frame.height)
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
+            }
             break
         default:
             break
@@ -262,7 +268,6 @@ class MapViewController: UIViewController {
     
     func showToast(message: String) {
         self.toastLabel.text = message
-//        self.toastLabel.text = "떨어지는메세지들"
         self.toastLabel.alpha = 1
         UIView.animate(withDuration: 1.5) {
             self.toastLabel.alpha = 0
