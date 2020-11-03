@@ -25,7 +25,6 @@ class UserView: UIView {
             $0.text = self.text
             $0.textAlignment = .center
             $0.textColor = .white
-//            $0.font = $0.font.withSize(20)
             $0.font = UIFont.boldSystemFont(ofSize: 20)
         }
     }

@@ -10,10 +10,25 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
+    let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
+    var userImage: [UIImage] = []
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        for name in userName {
+            let image = UserView(text: name).then({
+                $0.layer.cornerRadius = 30
+            })
+            let renderImage = image.asImage()
+            userImage.append(renderImage)
+        }
+        print(userImage)
+        var count = 0
+        for key in UserModel.userList.keys {
+            UserModel.userList[key]?.nicknameImage = userImage[count]
+            count += 1
+        }
+        
         return true
     }
 

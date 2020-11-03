@@ -13,6 +13,8 @@ import SwiftyJSON
 import Lottie
 
 class MapViewController: UIViewController {
+    let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
+    var userImage: [UIImage] = []
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
@@ -34,14 +36,17 @@ class MapViewController: UIViewController {
     var imageToNameFlag = true
     
     override func viewDidAppear(_ animated: Bool) {
+        
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
         }
     }
     
+    // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkedLocation()
         if socket.isConnected == false {
             socket.connect()
         }
@@ -59,6 +64,23 @@ class MapViewController: UIViewController {
         for marker in tokenWithMarker.values {
             marker.width = MannaDemo.convertWidth(value: 5)
             marker.height = MannaDemo.convertWidth(value: 5)
+        }
+    }
+    func renderImage() {
+        for name in userName {
+            let image = UserView(text: name).then({
+                $0.layer.cornerRadius = 30
+            })
+            let renderImage = image.asImage()
+            userImage.append(renderImage)
+        }
+    }
+    
+    func nicknameImageSet() {
+        var count = 0
+        for key in UserModel.userList.keys {
+            UserModel.userList[key]?.nicknameImage = userImage[count]
+            count += 1
         }
     }
     
@@ -215,19 +237,47 @@ class MapViewController: UIViewController {
             } else {
                 tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
             }
+            
+            
+            
             if (UserModel.userList[key]?.state)! {
                 tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
                 tokenWithMarker[key]?.mapView = mapView
             }
         }
     }
-
+    
     func camereUpdateOnlyOnce() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         mapView.zoomLevel = 10
         mapView.moveCamera(cameraUpdate)
     }
     
+    func checkedLocation() {
+        let status = CLLocationManager.authorizationStatus()
+        print(status)
+        if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
+            let alter = UIAlertController(title: "위치권한 설정이 '안함'으로 되어있습니다.", message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.", preferredStyle: UIAlertController.Style.alert)
+            let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default){
+                (action: UIAlertAction) in
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
+                } else {
+                    UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
+                }
+            }
+            let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive){
+                (action: UIAlertAction) in
+                exit(0)
+            }
+            alter.addAction(logNoAction)
+            alter.addAction(logOkAction)
+            self.present(alter, animated: true, completion: nil)
+        }
+    }
+    
+    
+    // MARK: 토스트메세지
     func showToast(message: String) {
         let toastLabel = UILabel().then {
             $0.backgroundColor = UIColor.lightGray
@@ -311,6 +361,28 @@ extension MapViewController: CLLocationManagerDelegate {
         }
         setCollcetionViewItem()
         bottomSheet.collectionView.reloadData()
+    }
+    
+    // MARK: 위치권한 다시 받는곳
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        if status != CLAuthorizationStatus.authorizedAlways {
+            //위치권한 거부되있을 경우
+                let alter = UIAlertController(title: "위치권한 설정을 항상으로 해주셔야 합니다.", message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.", preferredStyle: UIAlertController.Style.alert)
+                let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default) {
+                    (action: UIAlertAction) in
+                    
+                    UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
+                    
+                }
+                let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive){
+                    (action: UIAlertAction) in
+                    exit(0)
+                }
+                alter.addAction(logNoAction)
+                alter.addAction(logOkAction)
+                self.present(alter, animated: true, completion: nil)
+        }
     }
 }
 extension MapViewController: WebSocketDelegate {
@@ -413,9 +485,9 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         
         let userListCount =  userListForCollectionView.filter { $0.state == true }.count
         
-//        for i in 0..<userListCount {
-//
-//        }
+        //        for i in 0..<userListCount {
+        //
+        //        }
         
         if userListCount == 1 {
             if indexPath.row == 0 {
@@ -425,15 +497,15 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
             }
         }
         
-//        if indexPath.row == 0 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥇")
-//        } else if indexPath.row == 1 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥈")
-//        } else if indexPath.row == 2 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥉")
-//        } else {
-//            cell.ranking.image = UIImage()
-//        }
+        //        if indexPath.row == 0 {
+        //            cell.ranking.image = #imageLiteral(resourceName: "🥇")
+        //        } else if indexPath.row == 1 {
+        //            cell.ranking.image = #imageLiteral(resourceName: "🥈")
+        //        } else if indexPath.row == 2 {
+        //            cell.ranking.image = #imageLiteral(resourceName: "🥉")
+        //        } else {
+        //            cell.ranking.image = UIImage()
+        //        }
         
         if user.state {
             if imageToNameFlag {

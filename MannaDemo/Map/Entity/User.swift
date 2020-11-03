@@ -18,7 +18,7 @@ struct User {
     var ranking: Int
 }
 
-class UserModel {
+struct UserModel {
     static var userList: [String : User] = [
         "f606564d8371e455" : User(id: "1", state: false, profileImage: #imageLiteral(resourceName: "Image-1"), nicknameImage: #imageLiteral(resourceName: "우석"), latitude: 0, longitude: 0, remainDistance: 100, ranking: 0),
         "aed64e8da3a07df4" : User(id: "2", state: false, profileImage: #imageLiteral(resourceName: "Image-4"), nicknameImage: #imageLiteral(resourceName: "연재"), latitude: 0, longitude: 0, remainDistance: 100, ranking: 0),
