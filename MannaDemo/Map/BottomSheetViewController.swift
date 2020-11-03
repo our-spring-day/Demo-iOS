@@ -17,12 +17,13 @@ extension BottomSheetViewController {
     }
     enum Constant {
         static let halfViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.5
-        static let partialViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.85
+        static let partialViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.75
         static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.05
     }
 }
 
 class BottomSheetViewController: UIViewController {
+    var parentView: UIView?
     var currentState: State = .half
     var standardY = CGFloat(0)
     var backgroundView = UIImageView()
@@ -40,7 +41,6 @@ class BottomSheetViewController: UIViewController {
     }
 
     private func moveView(state: State) {
-        
         var YPosition: CGFloat?
         switch state {
         case .full:
@@ -56,7 +56,7 @@ class BottomSheetViewController: UIViewController {
             self.view.alpha = 1
             break
         }
-        
+        print(self.currentState)
         self.view.frame = CGRect(x: 0,
                             y: YPosition!,
                             width: self.view.frame.width,
@@ -88,8 +88,9 @@ class BottomSheetViewController: UIViewController {
                 view.frame.origin.y = Constant.fullViewYPosition
             }
         } else if recognizer.state == .ended {
-            self.view.isUserInteractionEnabled = false
-            UIView.animate(withDuration: 0.3,
+//            self.parentView?.isUserInteractionEnabled = false
+//            self.view.isUserInteractionEnabled = false
+            UIView.animate(withDuration: 0.2,
                            delay: 0.0,
                            options: .allowUserInteraction,
                            animations: { [self] in
@@ -102,7 +103,9 @@ class BottomSheetViewController: UIViewController {
                             }
                             self.moveView(state: currentState)},
                            completion: { _ in
-                            self.view.isUserInteractionEnabled = true }
+//                            self.view.isUserInteractionEnabled = true
+//                            self.parentView?.isUserInteractionEnabled = true
+                           }
             )
         }
     }

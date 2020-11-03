@@ -29,6 +29,7 @@ class MapViewController: UIViewController {
     var zoomLevel: Double = 10
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var imageToNameFlag = true
+    var toastLabel = UILabel()
     var bottomTabView = BottomTabView()
     
     override func viewDidAppear(_ animated: Bool) {
@@ -124,12 +125,16 @@ class MapViewController: UIViewController {
             $0.desiredAccuracy = kCLLocationAccuracyBest
             $0.startUpdatingLocation()
         }
+        toastLabel.do {
+            $0.backgroundColor = UIColor.lightGray
+            $0.textColor = UIColor.black
+            $0.textAlignment = .center
+            $0.alpha = 0
+        }
         bottomSheet.do {
             $0.runningTimeController.collectionView.delegate = self
             $0.runningTimeController.collectionView.dataSource = self
-//            $0.zoomIn.addTarget(self, action: #selector(didzoomInClicked), for: .touchUpInside)
-//            $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
-//            $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
+            $0.parentView = self.view
         }
         timerView.do {
             $0.backgroundColor = .white
@@ -148,63 +153,9 @@ class MapViewController: UIViewController {
             $0.ranking.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
         }
     }
-    @objc func didClickecBottomTabButton(_ sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            self.bottomSheet.chatViewController.view.isHidden = false
-            self.bottomSheet.runningTimeController.view.isHidden = true
-            self.bottomSheet.rankingViewController.view.isHidden = true
-            break
-        case 1:
-            self.bottomSheet.chatViewController.view.isHidden = true
-            self.bottomSheet.runningTimeController.view.isHidden = false
-            self.bottomSheet.rankingViewController.view.isHidden = true
-            break
-        case 2:
-            self.bottomSheet.chatViewController.view.isHidden = true
-            self.bottomSheet.runningTimeController.view.isHidden = true
-            self.bottomSheet.rankingViewController.view.isHidden = false
-            break
-        default:
-            break
-        }
-    }
-    @objc func back() {
-        self.dismiss(animated: true)
-    }
-    
-    @objc func info() {
-        imageToNameFlag.toggle()
-        bottomSheet.runningTimeController.collectionView.reloadData()
-        marking()
-        //이부분 네이버 맵 로고 없애고 메뉴만들어주면 됩니다~
-        //        mapView.showLegalNotice()
-        //        mapView.showOpenSourceLicense()
-    }
-    
-    @objc func didzoomInClicked() {
-        zoomLevel += 1
-        var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
-        cameraUpadateToNewZoom.animation = .easeOut
-        mapView.moveCamera(cameraUpadateToNewZoom)
-    }
-    
-    @objc func didzoomOutClicked() {
-        zoomLevel -= 1
-        var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
-        cameraUpadateToNewZoom.animation = .easeOut
-        mapView.moveCamera(cameraUpadateToNewZoom)
-    }
-    
-    @objc func cameraUpdateToMyLocation() {
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-        cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 1.3
-        mapView.moveCamera(cameraUpdate)
-    }
     
     func layout() {
-        [mapView, backButton, infoButton, timerView, hourglassView, bottomSheet.view, bottomTabView].forEach { view.addSubview($0) }
+        [mapView, backButton, toastLabel, infoButton, timerView, hourglassView, bottomSheet.view, bottomTabView].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -220,11 +171,22 @@ class MapViewController: UIViewController {
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(view.frame.width)
             $0.height.equalTo(view.frame.height)
-            $0.top.equalTo(UIScreen.main.bounds.height * 0.5)
+            if bottomSheet.currentState == .full {
+                $0.top.equalTo(UIScreen.main.bounds.height * 0.05)
+            } else if bottomSheet.currentState == .half {
+                $0.top.equalTo(UIScreen.main.bounds.height * 0.5)
+            } else {
+                $0.top.equalTo(UIScreen.main.bounds.height * 0.75)
+            }
+        }
+        toastLabel.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.centerY.equalTo(view).offset(-100)
+            $0.width.equalTo(MannaDemo.convertWidth(value: 200))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 50))
         }
         timerView.snp.makeConstraints {
             $0.centerX.equalTo(view)
-            //            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertHeigt(value: 42.03))
             $0.centerY.equalTo(backButton)
             $0.width.equalTo(MannaDemo.convertWidth(value: 122))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 42))
@@ -239,6 +201,48 @@ class MapViewController: UIViewController {
             $0.bottom.leading.trailing.equalTo(view)
             $0.height.equalTo(MannaDemo.convertHeigt(value: 70))
         }
+    }
+    
+    @objc func didClickecBottomTabButton(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            self.bottomSheet.chatViewController.view.isHidden = false
+            self.bottomSheet.runningTimeController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = true
+//            bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.7, width: view.frame.width, height: bottomSheet.view.frame.height)
+            break
+        case 1:
+            self.bottomSheet.chatViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = false
+            self.bottomSheet.rankingViewController.view.isHidden = true
+//            bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.7, width: view.frame.width, height: bottomSheet.view.frame.height)
+            break
+        case 2:
+            self.bottomSheet.chatViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = false
+//            bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.7, width: view.frame.width, height: bottomSheet.view.frame.height)
+            break
+        default:
+            break
+        }
+    }
+    
+    @objc func back() {
+        self.dismiss(animated: true)
+    }
+    
+    @objc func info() {
+        imageToNameFlag.toggle()
+        bottomSheet.runningTimeController.collectionView.reloadData()
+        marking()
+    }
+    
+    @objc func cameraUpdateToMyLocation() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 1.3
+        mapView.moveCamera(cameraUpdate)
     }
     
     @objc func emitLocation() {
@@ -266,30 +270,11 @@ class MapViewController: UIViewController {
     }
     
     func showToast(message: String) {
-        let toastLabel = UILabel().then {
-            $0.backgroundColor = UIColor.lightGray
-            $0.textColor = UIColor.black
-            $0.textAlignment = .center
-        }
-        view.addSubview(toastLabel)
-        toastLabel.do {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-            $0.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100).isActive = true
-            $0.widthAnchor.constraint(equalToConstant: 170).isActive = true
-            $0.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        }
-        toastLabel.do {
-            $0.text = "\(message)"
-            $0.font = UIFont.boldSystemFont(ofSize: 15)
-            $0.alpha = 1.0
-            $0.layer.cornerRadius = 15
-            $0.clipsToBounds = true
-        }
+        self.toastLabel.text = message
+        self.toastLabel.alpha = 1
         UIView.animate(withDuration: 1.5) {
-            toastLabel.alpha = 0.0
+            self.toastLabel.alpha = 0
         } completion: { _ in
-            toastLabel.removeFromSuperview()
         }
     }
 }
@@ -327,29 +312,19 @@ extension MapViewController: NMFMapViewCameraDelegate {
 }
 
 extension MapViewController: CLLocationManagerDelegate {
-    
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        
-        
-        
-        
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
-        
         if imageToNameFlag {
             tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
         } else {
             tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
         }
-        
         tokenWithMarker[MannaDemo.myUUID!]?.do {
             $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
             $0.mapView = mapView
