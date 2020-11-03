@@ -28,14 +28,12 @@ class BottomSheetViewController: UIViewController {
     var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.8, height: 200))
     var backgroundView = UIImageView()
     var bar = UIImageView()
-    var zoomIn = UIButton()
-    var zoomOut = UIButton()
-    var myLocation = UIButton()
     var expectArrived = UILabel()
     var remainingTimeLabel = UILabel()
     var remmainingTime = UILabel()
     var animationView = AnimationView(name:"12670-flying-airplane")
     var chatViewController = ChatViewController()
+    var runningTimeController = RunningTimeViewController()
     var rankingViewController = RankingViewViewController()
     
     
@@ -147,24 +145,13 @@ class BottomSheetViewController: UIViewController {
             $0.addGestureRecognizer(gesture)
             $0.isUserInteractionEnabled = true
         }
-        zoomIn.do {
-            $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
-            $0.layer.masksToBounds = true
-        }
-        zoomOut.do {
-            $0.backgroundColor = .gray
-            $0.setTitle("-", for: .normal)
-            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-            $0.layer.cornerRadius = 5
-            $0.layer.masksToBounds = true
-        }
-        myLocation.do {
-            $0.backgroundColor = .gray
-            $0.setTitle("o", for: .normal)
-            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-            $0.layer.cornerRadius = 5
-            $0.layer.masksToBounds = true
-        }
+//        myLocation.do {
+//            $0.backgroundColor = .gray
+//            $0.setTitle("o", for: .normal)
+//            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+//            $0.layer.cornerRadius = 5
+//            $0.layer.masksToBounds = true
+//        }
         remainingTimeLabel.do {
             $0.text = "남은 시간"
             $0.font = UIFont(name: "NotoSansKR-Medium", size: 12)
@@ -179,23 +166,31 @@ class BottomSheetViewController: UIViewController {
     }
     
     func layout() {
-        [zoomIn, zoomOut, myLocation, backgroundView].forEach { view.addSubview($0) }
+        [myLocation, backgroundView].forEach { view.addSubview($0) }
         [collectionView, bar, expectArrived, remainingTimeLabel, remmainingTime].forEach { backgroundView.addSubview($0) }
         
-        addChild(chatViewController)
-        backgroundView.addSubview(chatViewController.view)
-        chatViewController.view.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(view)
+        [chatViewController, runningTimeController, rankingViewController].forEach {
+            addChild($0)
+            backgroundView.addSubview($0.view)
+            $0.view.snp.makeConstraints {
+                $0.top.leading.trailing.bottom.equalTo(backgroundView)
+            }
+            $0.didMove(toParent: self)
         }
-        chatViewController.didMove(toParent: self)
         
-        
-        addChild(rankingViewController)
-        backgroundView.addSubview(rankingViewController.view)
-        rankingViewController.view.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalTo(view)
-        }
-        rankingViewController.didMove(toParent: self)
+////        addChild(chatViewController)
+//        backgroundView.addSubview(chatViewController.view)
+//        chatViewController.view.snp.makeConstraints {
+//            $0.top.leading.trailing.bottom.equalTo(backgroundView)
+//        }
+//        chatViewController.didMove(toParent: self)
+//        
+////        addChild(rankingViewController)
+//        backgroundView.addSubview(rankingViewController.view)
+//        rankingViewController.view.snp.makeConstraints {
+//            $0.top.leading.trailing.bottom.equalTo(backgroundView)
+//        }
+//        rankingViewController.didMove(toParent: self)
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(60)
@@ -211,21 +206,11 @@ class BottomSheetViewController: UIViewController {
             $0.top.equalTo(expectArrived.snp.bottom).offset(MannaDemo.convertHeigt(value: 22.26))
             $0.centerX.equalTo(view.snp.centerX)
         }
-        zoomIn.snp.makeConstraints {
-            $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
-            $0.leading.equalTo(view.snp.leading).offset(15)
-            $0.width.height.equalTo(40)
-        }
-        zoomOut.snp.makeConstraints {
-            $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
-            $0.leading.equalTo(zoomIn.snp.trailing).offset(15)
-            $0.width.height.equalTo(30)
-        }
-        myLocation.snp.makeConstraints {
-            $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
-            $0.trailing.equalTo(view.snp.trailing).offset(-15)
-            $0.width.height.equalTo(30)
-        }
+//        myLocation.snp.makeConstraints {
+//            $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
+//            $0.trailing.equalTo(view.snp.trailing).offset(-15)
+//            $0.width.height.equalTo(30)
+//        }
         bar.snp.makeConstraints {
             $0.top.equalTo(backgroundView.snp.top).offset(11.5)
             $0.centerX.equalTo(self.view)

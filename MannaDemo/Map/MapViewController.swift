@@ -70,10 +70,10 @@ class MapViewController: UIViewController {
                 mapView.moveCamera(cameraUpdate)
                 
                 //여기있슴
-//                UserModel.userList[key]?.latitude
-//                UserModel.userList[key]?.longitude
-
-//                임의 좌표 두개
+                //                UserModel.userList[key]?.latitude
+                //                UserModel.userList[key]?.longitude
+                
+                //                임의 좌표 두개
                 
                 
                 
@@ -127,8 +127,8 @@ class MapViewController: UIViewController {
         bottomSheet.do {
             $0.collectionView.delegate = self
             $0.collectionView.dataSource = self
-            $0.zoomIn.addTarget(self, action: #selector(didzoomInClicked), for: .touchUpInside)
-            $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
+//            $0.zoomIn.addTarget(self, action: #selector(didzoomInClicked), for: .touchUpInside)
+//            $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
             $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
         }
         timerView.do {
@@ -143,19 +143,32 @@ class MapViewController: UIViewController {
         }
         bottomTabView.do {
             $0.backgroundColor = .white
-            $0.chat.addTarget(self, action: #selector(didClickedChatButton), for: .touchUpInside)
-            $0.ranking.addTarget(self, action: #selector(didClickedRankingButton), for: .touchUpInside)
+            $0.chat.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
+            $0.runningTime.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
+            $0.ranking.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
         }
     }
-    @objc func didClickedChatButton() {
-        bottomSheet.rankingViewController.view.alpha = 0
-        bottomSheet.chatViewController.view.alpha = 1
+    @objc func didClickecBottomTabButton(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            self.bottomSheet.chatViewController.view.isHidden = false
+            self.bottomSheet.runningTimeController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = true
+            break
+        case 1:
+            self.bottomSheet.chatViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = false
+            self.bottomSheet.rankingViewController.view.isHidden = true
+            break
+        case 2:
+            self.bottomSheet.chatViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = false
+            break
+        default:
+            break
+        }
     }
-    @objc func didClickedRankingButton() {
-        bottomSheet.rankingViewController.view.alpha = 1
-        bottomSheet.chatViewController.view.alpha = 0
-    }
-    
     @objc func back() {
         self.dismiss(animated: true)
     }
@@ -192,7 +205,7 @@ class MapViewController: UIViewController {
     
     func layout() {
         [mapView, backButton, infoButton, timerView, hourglassView, bottomSheet.view, bottomTabView].forEach { view.addSubview($0) }
-
+        
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             $0.leading.equalToSuperview().offset(22)
@@ -211,7 +224,7 @@ class MapViewController: UIViewController {
         }
         timerView.snp.makeConstraints {
             $0.centerX.equalTo(view)
-//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertHeigt(value: 42.03))
+            //            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertHeigt(value: 42.03))
             $0.centerY.equalTo(backButton)
             $0.width.equalTo(MannaDemo.convertWidth(value: 122))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 42))
@@ -245,7 +258,7 @@ class MapViewController: UIViewController {
             }
         }
     }
-
+    
     func camereUpdateOnlyOnce() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         mapView.zoomLevel = 10

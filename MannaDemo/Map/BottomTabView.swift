@@ -15,7 +15,7 @@ enum state {
 }
 class BottomTabView: UIView {
     var chat = UIButton()
-    var transit = UIButton()
+    var runningTime = UIButton()
     var ranking = UIButton()
     var indicatorView = UIView()
     var state: state = .transit
@@ -33,14 +33,17 @@ class BottomTabView: UIView {
             $0.bringSubviewToFront(indicatorView)
         }
         chat.do {
+            $0.tag = 0
             $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
             $0.addTarget(self, action: #selector(didChatButtonClicked), for: .touchUpInside)
         }
-        transit.do {
+        runningTime.do {
+            $0.tag = 1
             $0.setImage(#imageLiteral(resourceName: "bus"), for: .normal)
             $0.addTarget(self, action: #selector(didTransitButtonClicked), for: .touchUpInside)
         }
         ranking.do {
+            $0.tag = 2
             $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
             $0.addTarget(self, action: #selector(didRankingButtonClicked), for: .touchUpInside)
         }
@@ -52,14 +55,14 @@ class BottomTabView: UIView {
     }
     
     func layout() {
-        [chat, transit, ranking, indicatorView].forEach { addSubview($0) }
+        [chat, runningTime, ranking, indicatorView].forEach { addSubview($0) }
         
         chat.snp.makeConstraints {
             $0.leading.equalTo(self).offset(MannaDemo.convertWidth(value: 40))
             $0.bottom.equalTo(self).offset(-MannaDemo.convertHeigt(value: 33))
             $0.width.height.equalTo(MannaDemo.convertWidth(value: 20))
         }
-        transit.snp.makeConstraints {
+        runningTime.snp.makeConstraints {
             $0.centerX.equalTo(self)
             $0.bottom.equalTo(self).offset(-MannaDemo.convertHeigt(value: 33))
             $0.width.height.equalTo(MannaDemo.convertWidth(value: 24))
@@ -72,7 +75,7 @@ class BottomTabView: UIView {
         indicatorView.snp.makeConstraints {
             $0.width.equalTo(MannaDemo.convertWidth(value: 32))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
-            $0.centerX.equalTo(transit)
+            $0.centerX.equalTo(runningTime)
             $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
         }
     }
@@ -96,7 +99,7 @@ class BottomTabView: UIView {
             self.indicatorView.snp.remakeConstraints {
                 $0.width.equalTo(MannaDemo.convertWidth(value: 32))
                 $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
-                $0.centerX.equalTo(self.transit)
+                $0.centerX.equalTo(self.runningTime)
                 $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
             }
             self.layoutIfNeeded()
