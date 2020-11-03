@@ -25,13 +25,9 @@ extension BottomSheetViewController {
 class BottomSheetViewController: UIViewController {
     var currentState: State = .half
     var standardY = CGFloat(0)
-    var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.8, height: 200))
     var backgroundView = UIImageView()
     var bar = UIImageView()
-    var expectArrived = UILabel()
-    var remainingTimeLabel = UILabel()
-    var remmainingTime = UILabel()
-    var animationView = AnimationView(name:"12670-flying-airplane")
+    
     var chatViewController = ChatViewController()
     var runningTimeController = RunningTimeViewController()
     var rankingViewController = RankingViewViewController()
@@ -41,20 +37,6 @@ class BottomSheetViewController: UIViewController {
         super.viewDidLoad()
         attribute()
         layout()
-        lottieFunc()
-    }
-    
-    func lottieFunc() {
-        backgroundView.addSubview(animationView)
-        animationView.snp.makeConstraints {
-            $0.top.equalTo(collectionView.snp.bottom).offset(-10)
-            $0.centerX.equalTo(backgroundView)
-            $0.width.height.equalTo(75)
-        }
-        animationView.contentMode = .scaleAspectFit
-        animationView.play()
-        animationView.loopMode = .loop
-        //animationView.pause()
     }
 
     private func moveView(state: State) {
@@ -67,11 +49,11 @@ class BottomSheetViewController: UIViewController {
             break
         case .half:
             YPosition = Constant.halfViewYPosition
-            self.view.alpha = 0.9
+            self.view.alpha = 1
             break
         case .partial:
             YPosition = Constant.partialViewYPosition
-            self.view.alpha = 0.5
+            self.view.alpha = 1
             break
         }
         
@@ -132,44 +114,23 @@ class BottomSheetViewController: UIViewController {
             $0.view.clipsToBounds = true
             $0.view.backgroundColor = .none
         }
-        expectArrived.do {
-            $0.text = "예상 도착 순위"
-            $0.font = UIFont(name: "NotoSansKR-Medium", size: 17)
-            $0.textColor = .black
-        }
         bar.do {
             $0.image = #imageLiteral(resourceName: "bottomsheetbar")
         }
         backgroundView.do {
             $0.image = #imageLiteral(resourceName: "bottomsheet")
+            $0.layer.cornerRadius = 20
+            $0.clipsToBounds = true
             $0.addGestureRecognizer(gesture)
             $0.isUserInteractionEnabled = true
-        }
-//        myLocation.do {
-//            $0.backgroundColor = .gray
-//            $0.setTitle("o", for: .normal)
-//            $0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-//            $0.layer.cornerRadius = 5
-//            $0.layer.masksToBounds = true
-//        }
-        remainingTimeLabel.do {
-            $0.text = "남은 시간"
-            $0.font = UIFont(name: "NotoSansKR-Medium", size: 12)
-            $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
-            $0.attributedText = NSMutableAttributedString(string: "남은시간", attributes: [NSAttributedString.Key.kern: -1])
-        }
-        remmainingTime.do {
-            $0.text = "50:12"
-            $0.font = UIFont(name: "NotoSansKR-Medium", size: 17)
-            $0.textColor = UIColor(named: "keyColor")
         }
     }
     
     func layout() {
-        [myLocation, backgroundView].forEach { view.addSubview($0) }
-        [collectionView, bar, expectArrived, remainingTimeLabel, remmainingTime].forEach { backgroundView.addSubview($0) }
+        [backgroundView].forEach { view.addSubview($0) }
+        [bar].forEach { backgroundView.addSubview($0) }
         
-        [chatViewController, runningTimeController, rankingViewController].forEach {
+        [chatViewController, rankingViewController, runningTimeController].forEach {
             addChild($0)
             backgroundView.addSubview($0.view)
             $0.view.snp.makeConstraints {
@@ -178,56 +139,18 @@ class BottomSheetViewController: UIViewController {
             $0.didMove(toParent: self)
         }
         
-////        addChild(chatViewController)
-//        backgroundView.addSubview(chatViewController.view)
-//        chatViewController.view.snp.makeConstraints {
-//            $0.top.leading.trailing.bottom.equalTo(backgroundView)
-//        }
-//        chatViewController.didMove(toParent: self)
-//        
-////        addChild(rankingViewController)
-//        backgroundView.addSubview(rankingViewController.view)
-//        rankingViewController.view.snp.makeConstraints {
-//            $0.top.leading.trailing.bottom.equalTo(backgroundView)
-//        }
-//        rankingViewController.didMove(toParent: self)
+        chatViewController.view.isHidden = true
+        rankingViewController.view.isHidden = true
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(60)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-        expectArrived.snp.makeConstraints {
-            $0.top.equalTo(backgroundView).offset(MannaDemo.convertHeigt(value: 33.68))
-            $0.leading.equalTo(backgroundView).offset(MannaDemo.convertWidth(value: 25.11))
-            $0.width.equalTo(MannaDemo.convertWidth(value: 95))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 25))
-        }
-        collectionView.snp.makeConstraints {
-            $0.top.equalTo(expectArrived.snp.bottom).offset(MannaDemo.convertHeigt(value: 22.26))
-            $0.centerX.equalTo(view.snp.centerX)
-        }
-//        myLocation.snp.makeConstraints {
-//            $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
-//            $0.trailing.equalTo(view.snp.trailing).offset(-15)
-//            $0.width.height.equalTo(30)
-//        }
         bar.snp.makeConstraints {
             $0.top.equalTo(backgroundView.snp.top).offset(11.5)
             $0.centerX.equalTo(self.view)
             $0.width.equalTo(MannaDemo.convertWidth(value: 60))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 2.99))
-        }
-        remainingTimeLabel.snp.makeConstraints {
-            $0.centerY.equalTo(expectArrived.snp.centerY)
-            $0.trailing.equalTo(backgroundView.snp.trailing).offset(-MannaDemo.convertWidth(value: 72.75))
-            $0.width.equalTo(MannaDemo.convertWidth(value: 55))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 20))
-        }
-        remmainingTime.snp.makeConstraints {
-            $0.centerY.equalTo(expectArrived.snp.centerY)
-            $0.leading.equalTo(remainingTimeLabel.snp.trailing).offset(MannaDemo.convertWidth(value: 2.06))
-            $0.width.equalTo(MannaDemo.convertWidth(value: 47))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 25))
         }
     }
 }

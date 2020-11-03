@@ -48,7 +48,7 @@ class MapViewController: UIViewController {
         didMarkerClicked()
         attribute()
         layout()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func array() {
@@ -125,11 +125,11 @@ class MapViewController: UIViewController {
             $0.startUpdatingLocation()
         }
         bottomSheet.do {
-            $0.collectionView.delegate = self
-            $0.collectionView.dataSource = self
+            $0.runningTimeController.collectionView.delegate = self
+            $0.runningTimeController.collectionView.dataSource = self
 //            $0.zoomIn.addTarget(self, action: #selector(didzoomInClicked), for: .touchUpInside)
 //            $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
-            $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
+//            $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
         }
         timerView.do {
             $0.backgroundColor = .white
@@ -175,7 +175,7 @@ class MapViewController: UIViewController {
     
     @objc func info() {
         imageToNameFlag.toggle()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
         marking()
         //이부분 네이버 맵 로고 없애고 메뉴만들어주면 됩니다~
         //        mapView.showLegalNotice()
@@ -327,8 +327,16 @@ extension MapViewController: NMFMapViewCameraDelegate {
 }
 
 extension MapViewController: CLLocationManagerDelegate {
+    
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        
+        
+        
+        
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
         myLatitude = locValue.latitude
@@ -347,7 +355,7 @@ extension MapViewController: CLLocationManagerDelegate {
             $0.mapView = mapView
         }
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
 }
 extension MapViewController: WebSocketDelegate {
@@ -359,14 +367,14 @@ extension MapViewController: WebSocketDelegate {
         print("sockect Connect!")
         UserModel.userList[MannaDemo.myUUID!]?.state = true
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("sockect Disconnect ㅠㅠ")
         UserModel.userList[MannaDemo.myUUID!]?.state = false
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -406,7 +414,7 @@ extension MapViewController: WebSocketDelegate {
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = false
                 setCollcetionViewItem()
-                bottomSheet.collectionView.reloadData()
+                bottomSheet.runningTimeController.collectionView.reloadData()
                 showToast(message: "\(name)님 나가셨습니다.")
                 
             case "JOIN" :
@@ -414,7 +422,7 @@ extension MapViewController: WebSocketDelegate {
                 UserModel.userList[token]?.state = true
                 showToast(message: "\(name)님 접속하셨습니다.")
                 setCollcetionViewItem()
-                bottomSheet.collectionView.reloadData()
+                bottomSheet.runningTimeController.collectionView.reloadData()
                 
             case .none:
                 print("none")
@@ -434,7 +442,7 @@ extension MapViewController: WebSocketDelegate {
                 marking()
             }
             setCollcetionViewItem()
-            bottomSheet.collectionView.reloadData()
+            bottomSheet.runningTimeController.collectionView.reloadData()
         }
     }
 }
