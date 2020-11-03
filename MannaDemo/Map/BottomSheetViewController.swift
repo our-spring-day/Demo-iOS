@@ -22,7 +22,7 @@ extension BottomSheetViewController {
     }
 }
 
-class BottomSheetViewController: UIView {
+class BottomSheetViewController: UIViewController {
     var currentState: State = .half
     var standardY = CGFloat(0)
     var collectionView = MannaCollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width * 0.8, height: 200))
@@ -37,15 +37,11 @@ class BottomSheetViewController: UIView {
     var animationView = AnimationView(name:"12670-flying-airplane")
     
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         attribute()
         layout()
         lottieFunc()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     func lottieFunc() {
@@ -67,33 +63,33 @@ class BottomSheetViewController: UIView {
         switch state {
         case .full:
             YPosition = Constant.fullViewYPosition
-            self.alpha = 1
+            self.view.alpha = 1
             break
         case .half:
             YPosition = Constant.halfViewYPosition
-            self.alpha = 0.9
+            self.view.alpha = 0.9
             break
         case .partial:
             YPosition = Constant.partialViewYPosition
-            self.alpha = 0.5
+            self.view.alpha = 0.5
             break
         }
         
-        self.frame = CGRect(x: 0,
+        self.view.frame = CGRect(x: 0,
                             y: YPosition!,
-                            width: self.frame.width,
-                            height: self.frame.height)
+                            width: self.view.frame.width,
+                            height: self.view.frame.height)
     }
     
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
-        let translation = recognizer.translation(in: self)
-        let minY = self.frame.minY
+        let translation = recognizer.translation(in: self.view)
+        let minY = self.view.frame.minY
         if (minY + translation.y >= Constant.halfViewYPosition) && (minY + translation.y <= Constant.partialViewYPosition) {
-            self.frame = CGRect(x: 0,
+            self.view.frame = CGRect(x: 0,
                                 y: minY,
-                                width: self.frame.width,
-                                height: self.frame.height)
-            recognizer.setTranslation(CGPoint.zero, in: self)
+                                width: self.view.frame.width,
+                                height: self.view.frame.height)
+            recognizer.setTranslation(CGPoint.zero, in: self.view)
         }
     }
     
@@ -102,29 +98,29 @@ class BottomSheetViewController: UIView {
         
         if recognizer.state == .began {
             //터치가 시작 될 때 거리를 저장
-            standardY = recognizer.location(in: self).y
+            standardY = recognizer.location(in: self.view).y
         } else if recognizer.state == .changed {
             //시작 될 때 저장한 거리만큼 떨어뜨려 움직임
-            self.center.y = (self.center.y + recognizer.location(in: self).y) - standardY
-            if frame.origin.y < Constant.fullViewYPosition {
-                frame.origin.y = Constant.fullViewYPosition
+            self.view.center.y = (self.view.center.y + recognizer.location(in: self.view).y) - standardY
+            if view.frame.origin.y < Constant.fullViewYPosition {
+                view.frame.origin.y = Constant.fullViewYPosition
             }
         } else if recognizer.state == .ended {
-            self.isUserInteractionEnabled = false
+            self.view.isUserInteractionEnabled = false
             UIView.animate(withDuration: 0.3,
                            delay: 0.0,
                            options: .allowUserInteraction,
                            animations: { [self] in
-                            if self.frame.origin.y > Constant.halfViewYPosition {
-                                currentState = recognizer.velocity(in: self).y >= 0 ?
+                            if self.view.frame.origin.y > Constant.halfViewYPosition {
+                                currentState = recognizer.velocity(in: self.view).y >= 0 ?
                                     .partial : .half
                             } else {
-                                currentState = recognizer.velocity(in: self).y >= 0 ?
+                                currentState = recognizer.velocity(in: self.view).y >= 0 ?
                                     .half : .full
                             }
                             self.moveView(state: currentState)},
                            completion: { _ in
-                            self.isUserInteractionEnabled = true }
+                            self.view.isUserInteractionEnabled = true }
             )
         }
     }
@@ -132,9 +128,9 @@ class BottomSheetViewController: UIView {
     func attribute() {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture))
         self.do {
-            $0.layer.cornerRadius = 20
-            $0.clipsToBounds = true
-            $0.backgroundColor = .none
+            $0.view.layer.cornerRadius = 20
+            $0.view.clipsToBounds = true
+            $0.view.backgroundColor = .none
         }
         expectArrived.do {
             $0.text = "예상 도착 순위"
@@ -181,7 +177,7 @@ class BottomSheetViewController: UIView {
     }
     
     func layout() {
-        [zoomIn, zoomOut, myLocation, backgroundView].forEach { addSubview($0) }
+        [zoomIn, zoomOut, myLocation, backgroundView].forEach { view.addSubview($0) }
         [collectionView, bar, expectArrived, remainingTimeLabel, remmainingTime].forEach { backgroundView.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
@@ -196,11 +192,11 @@ class BottomSheetViewController: UIView {
         }
         collectionView.snp.makeConstraints {
             $0.top.equalTo(expectArrived.snp.bottom).offset(MannaDemo.convertHeigt(value: 22.26))
-            $0.centerX.equalTo(snp.centerX)
+            $0.centerX.equalTo(view.snp.centerX)
         }
         zoomIn.snp.makeConstraints {
             $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
-            $0.leading.equalTo(snp.leading).offset(15)
+            $0.leading.equalTo(view.snp.leading).offset(15)
             $0.width.height.equalTo(40)
         }
         zoomOut.snp.makeConstraints {
@@ -210,12 +206,12 @@ class BottomSheetViewController: UIView {
         }
         myLocation.snp.makeConstraints {
             $0.bottom.equalTo(backgroundView.snp.top).offset(-20)
-            $0.trailing.equalTo(snp.trailing).offset(-15)
+            $0.trailing.equalTo(view.snp.trailing).offset(-15)
             $0.width.height.equalTo(30)
         }
         bar.snp.makeConstraints {
             $0.top.equalTo(backgroundView.snp.top).offset(11.5)
-            $0.centerX.equalTo(self)
+            $0.centerX.equalTo(self.view)
             $0.width.equalTo(MannaDemo.convertWidth(value: 60))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 2.99))
         }

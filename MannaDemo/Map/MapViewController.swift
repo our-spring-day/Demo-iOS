@@ -22,10 +22,7 @@ class MapViewController: UIViewController {
     let infoButton = UIButton()
     var timerView = UIView()
     var hourglassView = UIImageView()
-    var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
-                                                              y: 0,
-                                                              width: UIScreen.main.bounds.width,
-                                                              height: UIScreen.main.bounds.height * 0.5))
+    var bottomSheet = BottomSheetViewController()
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
     var myLongitude: Double = 0
@@ -184,8 +181,8 @@ class MapViewController: UIViewController {
     }
     
     func layout() {
-        [mapView, backButton, infoButton, bottomSheet, timerView, hourglassView, bottomTabView].forEach { view.addSubview($0) }
-        
+        [mapView, backButton, infoButton, timerView, hourglassView, bottomSheet.view, bottomTabView].forEach { view.addSubview($0) }
+
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             $0.leading.equalToSuperview().offset(22)
@@ -196,7 +193,7 @@ class MapViewController: UIViewController {
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
         }
-        bottomSheet.snp.makeConstraints {
+        bottomSheet.view.snp.makeConstraints {
             $0.centerX.equalTo(view.snp.centerX)
             $0.width.equalTo(view.frame.width)
             $0.height.equalTo(view.frame.height)
