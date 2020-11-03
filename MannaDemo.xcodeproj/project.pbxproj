@@ -23,6 +23,7 @@
 		CC74831525511F0C006C1E02 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831425511F0C006C1E02 /* ChatViewController.swift */; };
 		CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748318255124FB006C1E02 /* RankingViewViewController.swift */; };
 		CC74831C25513098006C1E02 /* RunningTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831B25513098006C1E02 /* RunningTimeViewController.swift */; };
+		CC74832C255164E7006C1E02 /* tempViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74832B255164E7006C1E02 /* tempViewController.swift */; };
 		CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845A2540231A00441445 /* AppDelegate.swift */; };
 		CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845C2540231A00441445 /* SceneDelegate.swift */; };
 		CC8B845F2540231A00441445 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845E2540231A00441445 /* ViewController.swift */; };
@@ -55,6 +56,7 @@
 		CC74831425511F0C006C1E02 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		CC748318255124FB006C1E02 /* RankingViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewViewController.swift; sourceTree = "<group>"; };
 		CC74831B25513098006C1E02 /* RunningTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningTimeViewController.swift; sourceTree = "<group>"; };
+		CC74832B255164E7006C1E02 /* tempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tempViewController.swift; sourceTree = "<group>"; };
 		CC8B84572540231900441445 /* MannaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MannaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC8B845A2540231A00441445 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC8B845C2540231A00441445 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				CC74831425511F0C006C1E02 /* ChatViewController.swift */,
 				CC74831B25513098006C1E02 /* RunningTimeViewController.swift */,
 				CC748318255124FB006C1E02 /* RankingViewViewController.swift */,
+				CC74832B255164E7006C1E02 /* tempViewController.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC74832C255164E7006C1E02 /* tempViewController.swift in Sources */,
 				A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */,
 				A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */,
 				A5D48F252542AE3B00399462 /* UserView.swift in Sources */,
