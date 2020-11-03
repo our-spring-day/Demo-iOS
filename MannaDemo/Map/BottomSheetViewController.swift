@@ -35,6 +35,8 @@ class BottomSheetViewController: UIViewController {
     var remainingTimeLabel = UILabel()
     var remmainingTime = UILabel()
     var animationView = AnimationView(name:"12670-flying-airplane")
+    var chatViewController = ChatViewController()
+    var rankingViewController = RankingViewViewController()
     
     
     override func viewDidLoad() {
@@ -179,6 +181,21 @@ class BottomSheetViewController: UIViewController {
     func layout() {
         [zoomIn, zoomOut, myLocation, backgroundView].forEach { view.addSubview($0) }
         [collectionView, bar, expectArrived, remainingTimeLabel, remmainingTime].forEach { backgroundView.addSubview($0) }
+        
+        addChild(chatViewController)
+        backgroundView.addSubview(chatViewController.view)
+        chatViewController.view.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view)
+        }
+        chatViewController.didMove(toParent: self)
+        
+        
+        addChild(rankingViewController)
+        backgroundView.addSubview(rankingViewController.view)
+        rankingViewController.view.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalTo(view)
+        }
+        rankingViewController.didMove(toParent: self)
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(60)

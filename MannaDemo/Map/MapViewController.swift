@@ -143,7 +143,17 @@ class MapViewController: UIViewController {
         }
         bottomTabView.do {
             $0.backgroundColor = .white
+            $0.chat.addTarget(self, action: #selector(didClickedChatButton), for: .touchUpInside)
+            $0.ranking.addTarget(self, action: #selector(didClickedRankingButton), for: .touchUpInside)
         }
+    }
+    @objc func didClickedChatButton() {
+        bottomSheet.rankingViewController.view.alpha = 0
+        bottomSheet.chatViewController.view.alpha = 1
+    }
+    @objc func didClickedRankingButton() {
+        bottomSheet.rankingViewController.view.alpha = 1
+        bottomSheet.chatViewController.view.alpha = 0
     }
     
     @objc func back() {
