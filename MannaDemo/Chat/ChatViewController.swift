@@ -47,6 +47,7 @@ class ChatViewController: UIViewController {
             $0.separatorStyle = .none
             $0.backgroundColor = .white
         }
+        messageInput.textInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
     func layout() {
@@ -69,7 +70,7 @@ class ChatViewController: UIViewController {
     }
     
     
-    // MARK: tableView tap hide keyboard action
+    // MARK: TableView tap hide keyboard action
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -78,6 +79,20 @@ class ChatViewController: UIViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    // MARK: EditingChanged TextField
+    @objc func textFieldDidChange() {
+        let textCount = messageInput.textInput.text?.count
+        
+        guard let count = textCount else { return }
+        
+        if count > 0 {
+            messageInput.sendButton.backgroundColor = UIColor.appColor(.sendMessage)
+        } else {
+            messageInput.sendButton.backgroundColor = UIColor.appColor(.messageSendButton)
+        }
+     
     }
 }
 
