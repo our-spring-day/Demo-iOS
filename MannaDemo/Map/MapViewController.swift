@@ -12,7 +12,15 @@ import Starscream
 import SwiftyJSON
 import Lottie
 
+protocol test {
+    var chatView: UIView? { get set}
+}
+extension MapViewController: test {
+
+}
 class MapViewController: UIViewController {
+    var chatView: UIView?
+    
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
@@ -20,18 +28,41 @@ class MapViewController: UIViewController {
     let mapView = NMFMapView()
     let backButton = UIButton()
     let infoButton = UIButton()
+<<<<<<< HEAD
+    var timerView = UIView()
+    var timeLabel = UILabel()
+    var bottomSheet = BottomSheetViewController()
+=======
     let multipartPath = NMFMultipartPath()
     var animationView = AnimationView(name:"12670-flying-airplane")
     var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
                                                               y: 0,
                                                               width: UIScreen.main.bounds.width,
                                                               height: UIScreen.main.bounds.height * 0.55))
+>>>>>>> master
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var zoomLevel: Double = 10
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var imageToNameFlag = true
+    var toastLabel = UILabel()
+    var bottomTabView = BottomTabView()
+    lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
+    
+    
+    
+    @objc func testGestureFunc() {
+        let view = tempViewController()
+        view.transitioningDelegate = bottomSheet.chatViewController
+        bottomSheet.chatViewController.view.alpha = 0.3
+        UIView.animate(withDuration: 0, delay: 0.8) {
+            self.bottomSheet.chatViewController.view.alpha = 1
+        }
+        present(view, animated: true)
+        self.view.bringSubviewToFront(bottomTabView)
+        bottomTabView.bringSubviewToFront(self.view)
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         if cameraUpdateOnlyOnceFlag {
@@ -42,6 +73,7 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        chatView = bottomSheet.chatViewController.backgroundView
         if socket.isConnected == false {
             socket.connect()
         }
@@ -50,8 +82,7 @@ class MapViewController: UIViewController {
         didMarkerClicked()
         attribute()
         layout()
-        lottieFunc()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func array() {
@@ -72,6 +103,16 @@ class MapViewController: UIViewController {
                 cameraUpdate.animationDuration = 0.3
                 mapView.moveCamera(cameraUpdate)
                 //여기있슴
+<<<<<<< HEAD
+                //                UserModel.userList[key]?.latitude
+                //                UserModel.userList[key]?.longitude
+                
+                //                임의 좌표 두개
+                
+                
+                
+                
+=======
                 PathAPI.getPath(lat: lat!, lng: lng!) { result in
                     multipartPath.lineParts = [
                         NMGLineString(points: result)
@@ -81,6 +122,7 @@ class MapViewController: UIViewController {
                     ]
                     multipartPath.mapView = mapView
                 }
+>>>>>>> master
                 return true
             }
         }
@@ -89,19 +131,6 @@ class MapViewController: UIViewController {
     func setCollcetionViewItem() {
         userListForCollectionView = Array(UserModel.userList.values)
         userListForCollectionView.sort { $0.state && !$1.state}
-    }
-    
-    func lottieFunc() {
-        view.addSubview(animationView)
-        animationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.centerX.equalTo(bottomSheet.backgroundView)
-            $0.width.height.equalTo(75)
-        }
-        animationView.contentMode = .scaleAspectFit
-        animationView.play()
-        animationView.loopMode = .loop
-        //animationView.pause()
     }
     
     func attribute() {
@@ -140,51 +169,41 @@ class MapViewController: UIViewController {
             $0.desiredAccuracy = kCLLocationAccuracyBest
             $0.startUpdatingLocation()
         }
+        toastLabel.do {
+            $0.backgroundColor = UIColor.lightGray
+            $0.textColor = UIColor.black
+            $0.textAlignment = .center
+            $0.alpha = 0
+            $0.layer.cornerRadius = 10
+            $0.layer.masksToBounds = true
+        }
         bottomSheet.do {
-            $0.collectionView.delegate = self
-            $0.collectionView.dataSource = self
-            $0.zoomIn.addTarget(self, action: #selector(didzoomInClicked), for: .touchUpInside)
-            $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
-            $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
+            $0.runningTimeController.collectionView.delegate = self
+            $0.runningTimeController.collectionView.dataSource = self
+            $0.parentView = self.view
+            $0.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: view.frame.width, height: view.frame.height)
+            $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
+        }
+        timerView.do {
+            $0.backgroundColor = UIColor(named: "keyColor")
+            $0.layer.cornerRadius = 20
+            $0.layer.masksToBounds = true
+        }
+        timeLabel.do {
+            $0.textAlignment = .center
+            $0.font = UIFont(name: "SFProDisplay-Medium", size: 17)
+            $0.text = "59 : 59 : 59"
+        }
+        bottomTabView.do {
+            $0.backgroundColor = .white
+            $0.chat.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
+            $0.runningTime.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
+            $0.ranking.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
         }
     }
     
-    @objc func back() {
-        self.dismiss(animated: true)
-    }
-    
-    @objc func info() {
-        imageToNameFlag.toggle()
-        bottomSheet.collectionView.reloadData()
-        marking()
-        //이부분 네이버 맵 로고 없애고 메뉴만들어주면 됩니다~
-        //        mapView.showLegalNotice()
-        //        mapView.showOpenSourceLicense()
-    }
-    
-    @objc func didzoomInClicked() {
-        zoomLevel += 1
-        var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
-        cameraUpadateToNewZoom.animation = .easeOut
-        mapView.moveCamera(cameraUpadateToNewZoom)
-    }
-    
-    @objc func didzoomOutClicked() {
-        zoomLevel -= 1
-        var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
-        cameraUpadateToNewZoom.animation = .easeOut
-        mapView.moveCamera(cameraUpadateToNewZoom)
-    }
-    
-    @objc func cameraUpdateToMyLocation() {
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-        cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 1.3
-        mapView.moveCamera(cameraUpdate)
-    }
-    
     func layout() {
-        [mapView, backButton, infoButton, bottomSheet].forEach { view.addSubview($0) }
+        [mapView, backButton, infoButton, timerView, bottomSheet.view, bottomTabView, toastLabel, timeLabel].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -196,12 +215,75 @@ class MapViewController: UIViewController {
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
         }
-        bottomSheet.snp.makeConstraints {
-            $0.centerX.equalTo(view.snp.centerX)
-            $0.width.equalTo(view.frame.width)
-            $0.height.equalTo(view.frame.height)
-            $0.top.equalTo(UIScreen.main.bounds.height * 0.55)
+        toastLabel.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.centerY.equalTo(view).offset(-100)
+            $0.width.equalTo(MannaDemo.convertWidth(value: 200))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 50))
         }
+        timerView.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.centerY.equalTo(backButton)
+            $0.width.equalTo(MannaDemo.convertWidth(value: 130))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
+        }
+        timeLabel.snp.makeConstraints {
+            $0.centerX.centerY.equalTo(timerView)
+            $0.width.equalTo(MannaDemo.convertWidth(value: 90))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
+        }
+        bottomTabView.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalTo(view)
+            $0.height.equalTo(MannaDemo.convertHeigt(value: MannaDemo.convertHeigt(value: 85)))
+        }
+    }
+    
+    @objc func didClickecBottomTabButton(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            self.bottomSheet.chatViewController.view.isHidden = false
+            self.bottomSheet.runningTimeController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = true
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
+            }
+            break
+        case 1:
+            self.bottomSheet.chatViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = false
+            self.bottomSheet.rankingViewController.view.isHidden = true
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
+            }
+            break
+        case 2:
+            self.bottomSheet.chatViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = false
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
+            }
+            break
+        default:
+            break
+        }
+    }
+    
+    @objc func back() {
+        self.dismiss(animated: true)
+    }
+    
+    @objc func info() {
+        imageToNameFlag.toggle()
+        bottomSheet.runningTimeController.collectionView.reloadData()
+        marking()
+    }
+    
+    @objc func cameraUpdateToMyLocation() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 1.3
+        mapView.moveCamera(cameraUpdate)
     }
     
     @objc func emitLocation() {
@@ -221,7 +303,7 @@ class MapViewController: UIViewController {
             }
         }
     }
-
+    
     func camereUpdateOnlyOnce() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         mapView.zoomLevel = 10
@@ -229,30 +311,11 @@ class MapViewController: UIViewController {
     }
     
     func showToast(message: String) {
-        let toastLabel = UILabel().then {
-            $0.backgroundColor = UIColor.lightGray
-            $0.textColor = UIColor.black
-            $0.textAlignment = .center
-        }
-        view.addSubview(toastLabel)
-        toastLabel.do {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-            $0.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100).isActive = true
-            $0.widthAnchor.constraint(equalToConstant: 170).isActive = true
-            $0.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        }
-        toastLabel.do {
-            $0.text = "\(message)"
-            $0.font = UIFont.boldSystemFont(ofSize: 15)
-            $0.alpha = 1.0
-            $0.layer.cornerRadius = 15
-            $0.clipsToBounds = true
-        }
+        self.toastLabel.text = message
+        self.toastLabel.alpha = 1
         UIView.animate(withDuration: 1.5) {
-            toastLabel.alpha = 0.0
+            self.toastLabel.alpha = 0
         } completion: { _ in
-            toastLabel.removeFromSuperview()
         }
     }
 }
@@ -298,19 +361,17 @@ extension MapViewController: CLLocationManagerDelegate {
         myLongitude = locValue.longitude
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
-        
         if imageToNameFlag {
             tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
         } else {
             tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
         }
-        
         tokenWithMarker[MannaDemo.myUUID!]?.do {
             $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
             $0.mapView = mapView
         }
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
 }
 extension MapViewController: WebSocketDelegate {
@@ -322,14 +383,14 @@ extension MapViewController: WebSocketDelegate {
         print("sockect Connect!")
         UserModel.userList[MannaDemo.myUUID!]?.state = true
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("sockect Disconnect ㅠㅠ")
         UserModel.userList[MannaDemo.myUUID!]?.state = false
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -369,7 +430,7 @@ extension MapViewController: WebSocketDelegate {
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = false
                 setCollcetionViewItem()
-                bottomSheet.collectionView.reloadData()
+                bottomSheet.runningTimeController.collectionView.reloadData()
                 showToast(message: "\(name)님 나가셨습니다.")
                 
             case "JOIN" :
@@ -377,7 +438,7 @@ extension MapViewController: WebSocketDelegate {
                 UserModel.userList[token]?.state = true
                 showToast(message: "\(name)님 접속하셨습니다.")
                 setCollcetionViewItem()
-                bottomSheet.collectionView.reloadData()
+                bottomSheet.runningTimeController.collectionView.reloadData()
                 
             case .none:
                 print("none")
@@ -388,7 +449,7 @@ extension MapViewController: WebSocketDelegate {
             
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
-            guard var user = UserModel.userList[token] else { return }
+            guard UserModel.userList[token] != nil else { return }
             
             if token != MannaDemo.myUUID {
                 //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
@@ -397,7 +458,7 @@ extension MapViewController: WebSocketDelegate {
                 marking()
             }
             setCollcetionViewItem()
-            bottomSheet.collectionView.reloadData()
+            bottomSheet.runningTimeController.collectionView.reloadData()
         }
     }
 }
@@ -410,30 +471,23 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
         let user = userListForCollectionView[indexPath.row]
-        
         let userListCount =  userListForCollectionView.filter { $0.state == true }.count
         
-//        for i in 0..<userListCount {
-//
-//        }
-        
-        if userListCount == 1 {
-            if indexPath.row == 0 {
-                cell.ranking.image = #imageLiteral(resourceName: "🥇")
+        if indexPath.row == 0 {
+            cell.ranking.image = #imageLiteral(resourceName: "🥇")
+        } else if indexPath.row ==  userListCount - 1 && indexPath.row != 0 {
+            cell.ranking.image = #imageLiteral(resourceName: "☠️")
+        } else if userListCount > 2 {
+            if indexPath.row == 1 {
+                cell.ranking.image = #imageLiteral(resourceName: "🥈")
+            } else if indexPath.row == 2 {
+                cell.ranking.image = #imageLiteral(resourceName: "🥉")
             } else {
                 cell.ranking.image = UIImage()
             }
+        } else {
+            cell.ranking.image = UIImage()
         }
-        
-//        if indexPath.row == 0 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥇")
-//        } else if indexPath.row == 1 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥈")
-//        } else if indexPath.row == 2 {
-//            cell.ranking.image = #imageLiteral(resourceName: "🥉")
-//        } else {
-//            cell.ranking.image = UIImage()
-//        }
         
         if user.state {
             if imageToNameFlag {
@@ -453,9 +507,11 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
-        cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 1.2
-        mapView.moveCamera(cameraUpdate)
+        if userListForCollectionView[indexPath.row].latitude != 0 && userListForCollectionView[indexPath.row].longitude != 0 {
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
+            cameraUpdate.animation = .fly
+            cameraUpdate.animationDuration = 1.2
+            mapView.moveCamera(cameraUpdate)
+        }
     }
 }

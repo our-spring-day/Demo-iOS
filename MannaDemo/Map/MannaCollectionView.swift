@@ -37,7 +37,6 @@ class MannaCollectionView: UICollectionView {
             $0.itemSize = CGSize(width: MannaDemo.convertWidth(value: 50), height: MannaDemo.convertWidth(value: 70))
             $0.scrollDirection = .vertical
         }
-        
     }
     
     func layout() {
