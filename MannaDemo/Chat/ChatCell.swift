@@ -49,6 +49,10 @@ class ChatCell: UITableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        userImage.isHidden = false
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = .white
