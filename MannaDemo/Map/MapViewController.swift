@@ -28,9 +28,18 @@ class MapViewController: UIViewController {
     let mapView = NMFMapView()
     let backButton = UIButton()
     let infoButton = UIButton()
+<<<<<<< HEAD
     var timerView = UIView()
     var timeLabel = UILabel()
     var bottomSheet = BottomSheetViewController()
+=======
+    let multipartPath = NMFMultipartPath()
+    var animationView = AnimationView(name:"12670-flying-airplane")
+    var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
+                                                              y: 0,
+                                                              width: UIScreen.main.bounds.width,
+                                                              height: UIScreen.main.bounds.height * 0.55))
+>>>>>>> master
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
     var myLongitude: Double = 0
@@ -93,8 +102,8 @@ class MapViewController: UIViewController {
                 cameraUpdate.animation = .easeOut
                 cameraUpdate.animationDuration = 0.3
                 mapView.moveCamera(cameraUpdate)
-                
                 //여기있슴
+<<<<<<< HEAD
                 //                UserModel.userList[key]?.latitude
                 //                UserModel.userList[key]?.longitude
                 
@@ -103,6 +112,17 @@ class MapViewController: UIViewController {
                 
                 
                 
+=======
+                PathAPI.getPath(lat: lat!, lng: lng!) { result in
+                    multipartPath.lineParts = [
+                        NMGLineString(points: result)
+                    ]
+                    multipartPath.colorParts = [
+                        NMFPathColor(color: UIColor.red, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
+                    ]
+                    multipartPath.mapView = mapView
+                }
+>>>>>>> master
                 return true
             }
         }

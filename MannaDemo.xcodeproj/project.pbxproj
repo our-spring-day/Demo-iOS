@@ -11,6 +11,7 @@
 		A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5155631254029BE00487BEF /* RegisterUserViewController.swift */; };
 		A515563925404C9500487BEF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A515563825404C9500487BEF /* MapViewController.swift */; };
 		A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A549EDD32543510900EC65E3 /* ShowToast.swift */; };
+		A5822B15255022C50085B55A /* PathAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5822B14255022C50085B55A /* PathAPI.swift */; };
 		A5D48F1A2542A60F00399462 /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F192542A60F00399462 /* Marker.swift */; };
 		A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F202542AD9B00399462 /* UIView+Ext.swift */; };
 		A5D48F252542AE3B00399462 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F242542AE3B00399462 /* UserView.swift */; };
@@ -44,6 +45,7 @@
 		A5155631254029BE00487BEF /* RegisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserViewController.swift; sourceTree = "<group>"; };
 		A515563825404C9500487BEF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A549EDD32543510900EC65E3 /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
+		A5822B14255022C50085B55A /* PathAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathAPI.swift; sourceTree = "<group>"; };
 		A5D48F192542A60F00399462 /* Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
 		A5D48F202542AD9B00399462 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		A5D48F242542AE3B00399462 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				CCF3BC542540446500C7F718 /* Manna.swift */,
 				CCF3BC58254046BA00C7F718 /* MannaModel.swift */,
 				CCEC0F0D2541D9330028B497 /* User.swift */,
+				A5822B14255022C50085B55A /* PathAPI.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 				A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */,
 				A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */,
 				A5D48F252542AE3B00399462 /* UserView.swift in Sources */,
+				A5822B15255022C50085B55A /* PathAPI.swift in Sources */,
 				CCF3BC552540446500C7F718 /* Manna.swift in Sources */,
 				CCF3BC59254046BA00C7F718 /* MannaModel.swift in Sources */,
 				CC74831C25513098006C1E02 /* RunningTimeViewController.swift in Sources */,
