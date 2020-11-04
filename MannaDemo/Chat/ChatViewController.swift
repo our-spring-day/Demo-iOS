@@ -32,7 +32,7 @@ class ChatViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
+        hideKeyboardWhenTappedAround()
         attirbute()
         layout()
     }
@@ -65,6 +65,18 @@ class ChatViewController: UIViewController {
             $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 60)).isActive = true
         }
     }
+    
+    
+    // MARK: tableView tap hide keyboard action
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
@@ -94,6 +106,10 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    @objc func hideKeyboard() {
+        chatView.endEditing(true)
+    }
 }
 
 extension ChatViewController: UITextFieldDelegate {
@@ -102,6 +118,12 @@ extension ChatViewController: UITextFieldDelegate {
     }
     
     @objc func keyboardWillHide(_ sender: Notification) {
-        self.view.frame.origin.y = 0
+        UIView.animate(withDuration: 0.3) {
+            self.view.frame.origin.y = 0
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+        self.view.endEditing(true)
     }
 }
