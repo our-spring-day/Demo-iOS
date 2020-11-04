@@ -8,7 +8,9 @@
 import UIKit
 
 class ChatViewController: UIViewController {
+    var messageInput = ChatMessageView()
     let chatView = UITableView()
+    
     var chatMessage: [ChatMessage] =
         [ChatMessage(user: "짱구", text: "새키얌", isIncoming: true, sendState: false),
          ChatMessage(user: "짱구", text: "우리는 오늘 부자전에 가서 전이랑 제육볶음이랑 오지게 처묵처묵 할껀데 님들은 오실마실??", isIncoming: true, sendState: false),
@@ -18,8 +20,8 @@ class ChatViewController: UIViewController {
          ChatMessage(user: "기영", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false),
          ChatMessage(user: "찬이", text: "새키얌", isIncoming: true, sendState: false),
          ChatMessage(user: "찬이", text: "우리는 오늘 부자전에 가서 전이랑 제육볶음이랑 오지게 처묵처묵 할껀데 님들은 오실마실??", isIncoming: true, sendState: false),
-         ChatMessage(user: "돼지", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: false, sendState: false),
-         ChatMessage(user: "돼지", text: "우리는 오늘 부자전에 가서 전이랑 제육볶음이랑 오지게 처묵처묵 할껀데 님들은 오실마실??", isIncoming: false, sendState: false),
+         ChatMessage(user: "상원", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: false, sendState: false),
+         ChatMessage(user: "상원", text: "우리는 오늘 부자전에 가서 전이랑 제육볶음이랑 오지게 처묵처묵 할껀데 님들은 오실마실??", isIncoming: false, sendState: false),
          ChatMessage(user: "돼지", text: "야야야 자냐?? 일어나 새키얌", isIncoming: true, sendState: false),
          ChatMessage(user: "돼지", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false)]
     
@@ -42,12 +44,20 @@ class ChatViewController: UIViewController {
     
     func layout() {
         view.addSubview(chatView)
+        view.addSubview(messageInput)
         chatView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            $0.bottomAnchor.constraint(equalTo: messageInput.topAnchor, constant: 3).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        }
+        messageInput.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+            $0.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 60)).isActive = true
         }
     }
 }
@@ -59,7 +69,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatView.dequeueReusableCell(withIdentifier: ChatCell.cellID, for: indexPath) as! ChatCell
-        
+    
         cell.selectionStyle = .none
         var message = chatMessage[indexPath.row]
         if indexPath.row > 0 {
