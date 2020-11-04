@@ -21,7 +21,6 @@ class ChatViewController: UIViewController {
         UIView.animate(withDuration: 0, delay: 0.5) {
             self.backgroundView.alpha = 1
         }
-        
         let newView = tempViewController()
         newView.transitioningDelegate = self
         present(newView, animated: true)
@@ -29,6 +28,9 @@ class ChatViewController: UIViewController {
     func attribute() {
         
         backgroundView.do {
+            $0.layer.cornerRadius = 20
+            $0.layer.masksToBounds = true
+            $0.backgroundColor = .red
             $0.addGestureRecognizer(tapGesture)
             $0.isUserInteractionEnabled = true
         }
@@ -58,10 +60,11 @@ class ChatViewController: UIViewController {
         [backgroundView].forEach {view.addSubview($0)}
         [profileImageView, nameLabel, contentLabel].forEach { backgroundView.addSubview($0) }
         
+        view.backgroundColor = .none
         backgroundView.snp.makeConstraints {
             $0.top.equalTo(view).offset(MannaDemo.convertHeigt(value: 26.63))
-            $0.width.equalTo(view).offset(-100)
-            $0.height.equalTo(view)
+            $0.width.equalTo(view).offset(-20)
+            $0.height.equalTo(100)
             $0.centerX.equalTo(view)
         }
         profileImageView.snp.makeConstraints {
@@ -116,6 +119,7 @@ class  SomeTransitionManager : UIPercentDrivenInteractiveTransition , UIViewCont
         let containerView = transitionContext.containerView
         originFrame = (transitionContext.viewController(forKey: .from) as! test).chatView!.frame
         print(originFrame)
+        originFrame.origin.y = originFrame.origin.y + UIScreen.main.bounds.height * 0.64
         //to View 는 띄워질 뷰컨의 뷰
         //to View = UIDropShadowView
         let toView = transitionContext.view(forKey: .to)!
@@ -157,7 +161,6 @@ class  SomeTransitionManager : UIPercentDrivenInteractiveTransition , UIViewCont
             recipeView.transform = self.presenting ? .identity : scaleTransform
             recipeView.center = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
             recipeView.layer.cornerRadius = !self.presenting ? 20.0 : 0.0
-
           },completion: { retult in
             transitionContext.completeTransition(retult)
           }

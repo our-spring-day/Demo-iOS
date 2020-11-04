@@ -14,6 +14,10 @@ class tempViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+//        view.do {
+//            $0.layer.cornerRadius = 20
+//            $0.layer.masksToBounds = true
+//        }
         backgroundView.do {
             $0.image = #imageLiteral(resourceName: "bottomsheet")
         }

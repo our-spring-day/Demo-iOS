@@ -64,7 +64,7 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        chatView = bottomSheet.view
+        chatView = bottomSheet.chatViewController.backgroundView
         if socket.isConnected == false {
             socket.connect()
         }
