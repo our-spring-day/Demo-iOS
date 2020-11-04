@@ -192,6 +192,12 @@ class MapViewController: UIViewController {
     @objc func didCameraStateButtonClicked() {
         if cameraState.currentImage == UIImage(named: "forest") {
             cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
+            let position = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+            position.animation = .easeOut
+            position.animationDuration = 0.5
+            let zoom = NMFCameraUpdate(zoomTo: 15)
+            zoom.animationDuration = 0.5
+            [zoom, position].forEach { mapView.moveCamera($0) }
         } else {
             cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
         }
