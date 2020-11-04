@@ -28,6 +28,11 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        messageInput.textInput.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
         attirbute()
         layout()
     }
@@ -88,5 +93,15 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         cell.chatMessage = message
         
         return cell
+    }
+}
+
+extension ChatViewController: UITextFieldDelegate {
+    @objc func keyboardWillShow(_ sender: Notification) {
+        self.view.frame.origin.y = -245
+    }
+    
+    @objc func keyboardWillHide(_ sender: Notification) {
+        self.view.frame.origin.y = 0
     }
 }

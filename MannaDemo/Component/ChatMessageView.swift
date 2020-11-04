@@ -44,7 +44,7 @@ class ChatMessageView: UIView {
         textInput.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: topAnchor,
-                                    constant: MannaDemo.convertHeigt(value: 10)).isActive = true
+                                    constant: MannaDemo.convertHeigt(value: 5)).isActive = true
             $0.leadingAnchor.constraint(equalTo: leadingAnchor,
                                         constant: MannaDemo.convertWidth(value: 10)).isActive = true
             $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 298)).isActive = true
@@ -53,7 +53,7 @@ class ChatMessageView: UIView {
         sendButton.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: topAnchor,
-                                    constant: MannaDemo.convertHeigt(value: 10)).isActive = true
+                                    constant: MannaDemo.convertHeigt(value: 5)).isActive = true
             $0.leadingAnchor.constraint(equalTo: textInput.trailingAnchor,
                                         constant: MannaDemo.convertWidth(value: 11)).isActive = true
             $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 40)).isActive = true
