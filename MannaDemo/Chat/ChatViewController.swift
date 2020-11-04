@@ -28,6 +28,7 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
+        
         messageInput.textInput.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
@@ -35,6 +36,7 @@ class ChatViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         attirbute()
         layout()
+        scrollBottom()
     }
     
     func attirbute() {
@@ -107,8 +109,11 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    @objc func hideKeyboard() {
-        chatView.endEditing(true)
+    func scrollBottom() {
+        DispatchQueue.main.async {
+            let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
+            self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        }
     }
 }
 
