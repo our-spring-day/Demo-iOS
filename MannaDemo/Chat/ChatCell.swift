@@ -23,7 +23,6 @@ class ChatCell: UITableViewCell {
         didSet {
             background.backgroundColor = chatMessage.isIncoming ? UIColor.appColor(.receiveMessage) : UIColor.appColor(.sendMessage)
             message.textColor = chatMessage.isIncoming ? .black : .white
-            message.text = chatMessage.text
             
             userName.text = chatMessage.isIncoming ? chatMessage.user : ""
             userImage.image = chatMessage.isIncoming ? UIImage(named: chatMessage.user) : nil
@@ -46,6 +45,7 @@ class ChatCell: UITableViewCell {
                 sendTopConstraints.isActive = true
                 userImage.isHidden = true
             }
+            
         }
     }
     
@@ -61,6 +61,8 @@ class ChatCell: UITableViewCell {
     }
     
     func attirbute() {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 4
         userName.do {
             $0.textColor = UIColor.appColor(.chatName)
             $0.textAlignment = .center
@@ -72,9 +74,10 @@ class ChatCell: UITableViewCell {
         message.do {
             $0.textColor = .black
             $0.numberOfLines = 0
+            $0.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+            $0.setLineSpacing(lineSpacing: 10)
         }
         background.do {
-            $0.backgroundColor = #colorLiteral(red: 0.9294117647, green: 0.9294117647, blue: 1, alpha: 1)
             $0.layer.cornerRadius = 9
         }
     }

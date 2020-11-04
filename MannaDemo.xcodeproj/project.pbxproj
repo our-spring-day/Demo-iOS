@@ -12,6 +12,7 @@
 		A515563925404C9500487BEF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A515563825404C9500487BEF /* MapViewController.swift */; };
 		A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E22552752F00ACD946 /* ChatMessageView.swift */; };
 		A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E52552803000ACD946 /* UITextField+Ext.swift */; };
+		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
 		A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A549EDD32543510900EC65E3 /* ShowToast.swift */; };
 		A5822B15255022C50085B55A /* PathAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5822B14255022C50085B55A /* PathAPI.swift */; };
 		A5A0F05A25514A0900A11EEF /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05925514A0900A11EEF /* ChatViewController.swift */; };
@@ -47,6 +48,7 @@
 		A515563825404C9500487BEF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
+		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
 		A549EDD32543510900EC65E3 /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
 		A5822B14255022C50085B55A /* PathAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathAPI.swift; sourceTree = "<group>"; };
 		A5A0F05925514A0900A11EEF /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				CC41A0862548157C00C0E762 /* MannaDemo.swift */,
 				A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */,
 				A53817E52552803000ACD946 /* UITextField+Ext.swift */,
+				A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 				A5A0F05D25514A1400A11EEF /* ChatCell.swift in Sources */,
 				A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
+				A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */,
 				A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */,
 				CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */,
 				CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */,

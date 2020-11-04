@@ -16,6 +16,7 @@ class ChatMessageView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 1, alpha: 0.8927119007)
         attribute()
         layout()
     }
@@ -27,6 +28,7 @@ class ChatMessageView: UIView {
             $0.layer.cornerRadius = 20
             $0.layer.borderWidth = 1
             $0.layer.borderColor = #colorLiteral(red: 0.8549019608, green: 0.8549019608, blue: 0.8549019608, alpha: 1)
+            $0.backgroundColor = .white
             $0.addLeftPadding()
         }
         sendButton.do {
