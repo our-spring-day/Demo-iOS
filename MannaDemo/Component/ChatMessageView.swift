@@ -10,7 +10,9 @@ import UIKit
 class ChatMessageView: UIView {
     
     lazy var textInput = UITextField()
-    lazy var sendButton = UIButton()
+    lazy var sendButton = UIButton(frame: CGRect(x: 0, y: 0,
+                                                 width: MannaDemo.convertWidth(value: 40),
+                                                 height: MannaDemo.convertHeigt(value: 40)))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,8 +30,11 @@ class ChatMessageView: UIView {
             $0.addLeftPadding()
         }
         sendButton.do {
+            $0.setImage(UIImage(named: "finger"), for: .normal)
+            $0.imageEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
             $0.backgroundColor = UIColor.appColor(.messageSendButton)
-            $0.layer.cornerRadius = 40
+            $0.layer.cornerRadius = $0.frame.size.width/2
+            $0.clipsToBounds = true
         }
     }
     
