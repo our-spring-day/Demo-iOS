@@ -122,8 +122,8 @@ class BottomSheetViewController: UIViewController {
         }
         backgroundView.do {
             $0.image = #imageLiteral(resourceName: "bottomsheet")
-            $0.layer.cornerRadius = 20
-            $0.clipsToBounds = true
+//            $0.layer.cornerRadius = 20
+//            $0.clipsToBounds = true
             $0.addGestureRecognizer(gesture)
             $0.isUserInteractionEnabled = true
         }

@@ -12,7 +12,15 @@ import Starscream
 import SwiftyJSON
 import Lottie
 
+protocol test {
+    var chatView: UIView? { get set}
+}
+extension MapViewController: test {
+
+}
 class MapViewController: UIViewController {
+    var chatView: UIView?
+    
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
     var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
@@ -31,6 +39,21 @@ class MapViewController: UIViewController {
     var imageToNameFlag = true
     var toastLabel = UILabel()
     var bottomTabView = BottomTabView()
+    lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
+    
+    @objc func testGestureFunc() {
+        let view = tempViewController()
+        view.transitioningDelegate = bottomSheet.chatViewController
+        bottomSheet.chatViewController.view.alpha = 0.3
+        UIView.animate(withDuration: 0, delay: 0.8) {
+            self.bottomSheet.chatViewController.view.alpha = 1
+        }
+
+        
+        present(view, animated: true)
+        self.view.bringSubviewToFront(bottomTabView)
+        bottomTabView.bringSubviewToFront(self.view)
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         if cameraUpdateOnlyOnceFlag {
@@ -41,6 +64,7 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        chatView = bottomSheet.view
         if socket.isConnected == false {
             socket.connect()
         }
@@ -138,6 +162,7 @@ class MapViewController: UIViewController {
             $0.runningTimeController.collectionView.dataSource = self
             $0.parentView = self.view
             $0.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: view.frame.width, height: view.frame.height)
+            $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
         }
         timerView.do {
             $0.backgroundColor = .white
@@ -405,7 +430,7 @@ extension MapViewController: WebSocketDelegate {
             
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
-            guard var user = UserModel.userList[token] else { return }
+            guard UserModel.userList[token] != nil else { return }
             
             if token != MannaDemo.myUUID {
                 //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장

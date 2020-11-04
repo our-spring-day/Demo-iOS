@@ -17,11 +17,17 @@ class ChatViewController: UIViewController {
     lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapMessage))
     
     @objc func tapMessage() {
+        backgroundView.alpha = 0.5
+        UIView.animate(withDuration: 0, delay: 0.5) {
+            self.backgroundView.alpha = 1
+        }
+        
         let newView = tempViewController()
         newView.transitioningDelegate = self
         present(newView, animated: true)
     }
     func attribute() {
+        
         backgroundView.do {
             $0.addGestureRecognizer(tapGesture)
             $0.isUserInteractionEnabled = true
@@ -54,7 +60,7 @@ class ChatViewController: UIViewController {
         
         backgroundView.snp.makeConstraints {
             $0.top.equalTo(view).offset(MannaDemo.convertHeigt(value: 26.63))
-            $0.width.equalTo(view)
+            $0.width.equalTo(view).offset(-100)
             $0.height.equalTo(view)
             $0.centerX.equalTo(view)
         }
@@ -75,14 +81,18 @@ class ChatViewController: UIViewController {
             $0.width.equalTo(MannaDemo.convertWidth(value: 252))
             $0.height.equalTo(MannaDemo.convertWidth(value: 50))
         }
+        print(backgroundView.bounds)
     }
 }
 extension ChatViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
+        //return nil 이면 기본 present
+        //transitioning 객체가 들어있다면 그 친구를 애니메이션 객체로 사용한다 뭐 그런 느낌
         return transitionManager
     }
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        transitionManager.presenting = false
         return nil
     }
 }
@@ -90,17 +100,8 @@ extension ChatViewController: UIViewControllerTransitioningDelegate {
 class  SomeTransitionManager : UIPercentDrivenInteractiveTransition , UIViewControllerAnimatedTransitioning {
     var duration2 = 0.8
     var presenting = true
-    var originFrame = CGRect(x:  50, y:  UIScreen.main.bounds.height * 0.8, width: 0, height: 100)
-}
-
-extension SomeTransitionManager: UIViewControllerTransitioningDelegate{
-
-    private func animationController(fortPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            return self
-        }
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            return self
-        }
+    var originFrame = CGRect.zero
+    
     func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
             return nil
         }
@@ -111,35 +112,34 @@ extension SomeTransitionManager: UIViewControllerTransitioningDelegate{
         return duration2
     }
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        
-        
+        //여기서는 현재뷰컨과 들어올 뷰컨 둘다 접근 가능함
         let containerView = transitionContext.containerView
-        
+        originFrame = (transitionContext.viewController(forKey: .from) as! test).chatView!.frame
+        print(originFrame)
         //to View 는 띄워질 뷰컨의 뷰
+        //to View = UIDropShadowView
         let toView = transitionContext.view(forKey: .to)!
-        
+        //recipeView = toView
         let recipeView = presenting ? toView : transitionContext.view(forKey: .from)!
-        
+        //initialFrame = originFrame
         let initialFrame = presenting ? originFrame : recipeView.frame
-        
+        //finalFrame = recipeView.frame
         let finalFrame = presenting ? recipeView.frame : originFrame
-
         let xScaleFactor = presenting ?
-          initialFrame.width / finalFrame.width :
+            (initialFrame.width) / finalFrame.width :
           finalFrame.width / initialFrame.width
-
         let yScaleFactor = presenting ?
-          initialFrame.height / finalFrame.height :
+            initialFrame.height / finalFrame.height :
           finalFrame.height / initialFrame.height
         
         let scaleTransform = CGAffineTransform(scaleX: xScaleFactor, y: yScaleFactor)
-
         if presenting {
           recipeView.transform = scaleTransform
-            
+
           recipeView.center = CGPoint(
             x: initialFrame.midX,
             y: initialFrame.midY)
+            
           recipeView.clipsToBounds = true
         }
         recipeView.layer.cornerRadius = presenting ? 20.0 : 0.0
@@ -151,18 +151,18 @@ extension SomeTransitionManager: UIViewControllerTransitioningDelegate{
         UIView.animate(
           withDuration: duration2,
           delay:0.0,
-          usingSpringWithDamping: 0.5,
-          initialSpringVelocity: 0.2,
+          usingSpringWithDamping: 1,
+            initialSpringVelocity: 0,
           animations: {
             recipeView.transform = self.presenting ? .identity : scaleTransform
             recipeView.center = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
             recipeView.layer.cornerRadius = !self.presenting ? 20.0 : 0.0
+
           },completion: { retult in
             transitionContext.completeTransition(retult)
           }
         )
     }
 }
-
 
 
