@@ -88,15 +88,14 @@ class ChatViewController: UIViewController {
 }
 extension ChatViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        transitionManager.presenting = true
+//        transitionManager.presenting = true
         //return nil 이면 기본 present
         //transitioning 객체가 들어있다면 그 친구를 애니메이션 객체로 사용한다 뭐 그런 느낌
         return transitionManager
     }
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        transitionManager.presenting = false
-        
-        return transitionManager
+//        transitionManager.presenting = false
+        return nil
     }
 }
 
