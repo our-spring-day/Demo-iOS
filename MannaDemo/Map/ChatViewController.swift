@@ -30,7 +30,6 @@ class ChatViewController: UIViewController {
         backgroundView.do {
             $0.layer.cornerRadius = 20
             $0.layer.masksToBounds = true
-            $0.backgroundColor = .red
             $0.addGestureRecognizer(tapGesture)
             $0.isUserInteractionEnabled = true
         }
@@ -89,14 +88,15 @@ class ChatViewController: UIViewController {
 }
 extension ChatViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        
+        transitionManager.presenting = true
         //return nil 이면 기본 present
         //transitioning 객체가 들어있다면 그 친구를 애니메이션 객체로 사용한다 뭐 그런 느낌
         return transitionManager
     }
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//        transitionManager.presenting = false
-        return nil
+        transitionManager.presenting = false
+        
+        return transitionManager
     }
 }
 
@@ -117,39 +117,50 @@ class  SomeTransitionManager : UIPercentDrivenInteractiveTransition , UIViewCont
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         //여기서는 현재뷰컨과 들어올 뷰컨 둘다 접근 가능함
         let containerView = transitionContext.containerView
-        originFrame = (transitionContext.viewController(forKey: .from) as! test).chatView!.frame
-        print(originFrame)
+        originFrame = presenting ? (transitionContext.viewController(forKey: .from) as! test).chatView!.frame : transitionContext.viewController(forKey: .from)!.view.frame
         originFrame.origin.y = originFrame.origin.y + UIScreen.main.bounds.height * 0.64
-        //to View 는 띄워질 뷰컨의 뷰
-        //to View = UIDropShadowView
-        let toView = transitionContext.view(forKey: .to)!
-        //recipeView = toView
-        let recipeView = presenting ? toView : transitionContext.view(forKey: .from)!
-        //initialFrame = originFrame
+        
+        
+        
+//        transitionContext.view(forKey: .to)
+//        transitionContext.viewController(forKey: .to)!.view
+//        transitionContext.view(forKey: .from)
+//        transitionContext.viewController(forKey: .from).view
+        
+        let toView = presenting ? transitionContext.view(forKey: .to)! : transitionContext.viewController(forKey: .to)?.view!
+        let recipeView = presenting ? toView! : transitionContext.view(forKey: .from)!
+
         let initialFrame = presenting ? originFrame : recipeView.frame
-        //finalFrame = recipeView.frame
         let finalFrame = presenting ? recipeView.frame : originFrame
-        let xScaleFactor = presenting ?
-            (initialFrame.width) / finalFrame.width :
-          finalFrame.width / initialFrame.width
-        let yScaleFactor = presenting ?
-            initialFrame.height / finalFrame.height :
-          finalFrame.height / initialFrame.height
+        
+        print(initialFrame)
+        print(finalFrame)
+        let xScaleFactor = presenting ? (initialFrame.width) / finalFrame.width : finalFrame.width / initialFrame.width
+        let yScaleFactor = presenting ? initialFrame.height / finalFrame.height : finalFrame.height / initialFrame.height
+        
+        
+        
         
         let scaleTransform = CGAffineTransform(scaleX: xScaleFactor, y: yScaleFactor)
+        
+        
         if presenting {
+            
           recipeView.transform = scaleTransform
 
           recipeView.center = CGPoint(
+            
             x: initialFrame.midX,
             y: initialFrame.midY)
             
           recipeView.clipsToBounds = true
+            
         }
+        
         recipeView.layer.cornerRadius = presenting ? 20.0 : 0.0
         recipeView.layer.masksToBounds = true
         
-        containerView.addSubview(toView)
+        containerView.addSubview(toView!)
         containerView.bringSubviewToFront(recipeView)
 
         UIView.animate(
@@ -165,6 +176,8 @@ class  SomeTransitionManager : UIPercentDrivenInteractiveTransition , UIViewCont
             transitionContext.completeTransition(retult)
           }
         )
+        transitionContext.viewController(forKey: .to)!.view.layer.mask = nil
+        transitionContext.view(forKey: .to)?.layer.mask = nil
     }
 }
 

@@ -29,7 +29,7 @@ class MapViewController: UIViewController {
     let backButton = UIButton()
     let infoButton = UIButton()
     var timerView = UIView()
-    var hourglassView = UIImageView()
+    var timeLabel = UILabel()
     var bottomSheet = BottomSheetViewController()
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
@@ -41,6 +41,8 @@ class MapViewController: UIViewController {
     var bottomTabView = BottomTabView()
     lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
     
+    
+    
     @objc func testGestureFunc() {
         let view = tempViewController()
         view.transitioningDelegate = bottomSheet.chatViewController
@@ -48,8 +50,6 @@ class MapViewController: UIViewController {
         UIView.animate(withDuration: 0, delay: 0.8) {
             self.bottomSheet.chatViewController.view.alpha = 1
         }
-
-        
         present(view, animated: true)
         self.view.bringSubviewToFront(bottomTabView)
         bottomTabView.bringSubviewToFront(self.view)
@@ -165,14 +165,14 @@ class MapViewController: UIViewController {
             $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
         }
         timerView.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = UIColor(named: "keyColor")
             $0.layer.cornerRadius = 20
             $0.layer.masksToBounds = true
-            $0.layer.borderWidth = 0.5
-            $0.layer.borderColor = UIColor.gray.cgColor
         }
-        hourglassView.do {
-            $0.image = #imageLiteral(resourceName: "hourglass")
+        timeLabel.do {
+            $0.textAlignment = .center
+            $0.font = UIFont(name: "SFProDisplay-Medium", size: 17)
+            $0.text = "59 : 59 : 59"
         }
         bottomTabView.do {
             $0.backgroundColor = .white
@@ -183,7 +183,7 @@ class MapViewController: UIViewController {
     }
     
     func layout() {
-        [mapView, backButton, infoButton, timerView, hourglassView, bottomSheet.view, bottomTabView, toastLabel].forEach { view.addSubview($0) }
+        [mapView, backButton, infoButton, timerView, bottomSheet.view, bottomTabView, toastLabel, timeLabel].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -204,14 +204,13 @@ class MapViewController: UIViewController {
         timerView.snp.makeConstraints {
             $0.centerX.equalTo(view)
             $0.centerY.equalTo(backButton)
-            $0.width.equalTo(MannaDemo.convertWidth(value: 122))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 42))
+            $0.width.equalTo(MannaDemo.convertWidth(value: 130))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
         }
-        hourglassView.snp.makeConstraints {
-            $0.centerY.equalTo(backButton.snp.centerY)
-            $0.leading.equalTo(timerView.snp.leading).offset(MannaDemo.convertWidth(value: 15))
-            $0.width.equalTo(MannaDemo.convertHeigt(value: 25))
-            $0.height.equalTo(MannaDemo.convertWidth(value: 20))
+        timeLabel.snp.makeConstraints {
+            $0.centerX.centerY.equalTo(timerView)
+            $0.width.equalTo(MannaDemo.convertWidth(value: 90))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
         }
         bottomTabView.snp.makeConstraints {
             $0.bottom.leading.trailing.equalTo(view)
