@@ -33,7 +33,6 @@ class MapViewController: UIViewController {
     var bottomSheet = BottomSheetViewController()
     let multipartPath = NMFMultipartPath()
     var animationView = AnimationView(name:"12670-flying-airplane")
-//    var bottomSheet = BottomSheetViewController()
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
     var myLongitude: Double = 0
@@ -41,6 +40,7 @@ class MapViewController: UIViewController {
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var imageToNameFlag = true
     var toastLabel = UILabel()
+    var cameraState = UIButton()
     var bottomTabView = BottomTabView()
     lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
     
@@ -182,10 +182,23 @@ class MapViewController: UIViewController {
             $0.runningTime.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
             $0.ranking.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
         }
+        cameraState.do {
+            $0.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
+            $0.addTarget(self, action: #selector(didCameraStateButtonClicked), for: .touchUpInside)
+            $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+        }
+    }
+    
+    @objc func didCameraStateButtonClicked() {
+        if cameraState.currentImage == UIImage(named: "forest") {
+            cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
+        } else {
+            cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
+        }
     }
     
     func layout() {
-        [mapView, backButton, infoButton, timerView, bottomSheet.view, bottomTabView, toastLabel, timeLabel].forEach { view.addSubview($0) }
+        [mapView, backButton, infoButton, timerView, bottomSheet.view, bottomTabView, toastLabel, timeLabel, cameraState].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -193,7 +206,7 @@ class MapViewController: UIViewController {
             $0.width.height.equalTo(40)
         }
         infoButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            $0.top.equalTo(cameraState.snp.bottom).offset(100)
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
         }
@@ -217,6 +230,11 @@ class MapViewController: UIViewController {
         bottomTabView.snp.makeConstraints {
             $0.bottom.leading.trailing.equalTo(view)
             $0.height.equalTo(MannaDemo.convertHeigt(value: MannaDemo.convertHeigt(value: 85)))
+        }
+        cameraState.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            $0.trailing.equalToSuperview().offset(-22)
+            $0.width.height.equalTo(40)
         }
     }
     
