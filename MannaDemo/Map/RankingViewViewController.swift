@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import Lottie
 
 class RankingViewViewController: UIViewController {
     
     var guide = UILabel()
+    var animationView = AnimationView(name:"12670-flying-airplane")
+    
     override func viewDidLoad() {
         guide.do {
             $0.font = UIFont.boldSystemFont(ofSize: 20)
@@ -26,5 +29,18 @@ class RankingViewViewController: UIViewController {
             $0.width.equalTo(200)
             $0.height.equalTo(100)
         }
+        lottieFunc()
+    }
+    func lottieFunc() {
+        view.addSubview(animationView)
+        animationView.snp.makeConstraints {
+            $0.top.equalTo(view.snp.top).offset(50)
+            $0.centerX.equalTo(view)
+            $0.width.height.equalTo(75)
+        }
+        animationView.contentMode = .scaleAspectFit
+        animationView.play()
+        animationView.loopMode = .loop
+        //animationView.pause()
     }
 }
