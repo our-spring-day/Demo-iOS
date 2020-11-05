@@ -321,7 +321,8 @@ class MapViewController: UIViewController{
                     break
                 } else {
                     trueCount = 0
-                    mapView.zoomLevel -= 0.3                }
+                    mapView.zoomLevel -= 0.05
+                }
             }
             print(mapView.zoomLevel)
             mapView.moveCamera(cameraUpdate)
@@ -420,17 +421,16 @@ class MapViewController: UIViewController{
                 break
             }
             let user = UserModel.userList[key]
+            
             if imageToNameFlag {
-                if user!.networkValidTime > 10 {
+                if user!.networkValidTime > 60 {
                     //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage)
-                    print(user)
-                    print(user!.networkValidTime)
                 } else {
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
                 }
             } else {
-                if user!.networkValidTime > 10 {
+                if user!.networkValidTime > 60 {
                     //여결이 끊겼을 때 사진프로필 + 끊긴 이미지
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage)
                 } else {
@@ -470,7 +470,7 @@ class MapViewController: UIViewController{
     @objc func timeChecker() {
         UserModel.userList.keys.forEach {
             if UserModel.userList[$0]?.state == true {
-                UserModel.userList[$0]?.networkValidTime += 0
+                UserModel.userList[$0]?.networkValidTime += 1
             }
         }
         let state = UIApplication.shared.applicationState
