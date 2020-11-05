@@ -56,7 +56,6 @@ class BottomSheetViewController: UIViewController {
             self.view.alpha = 1
             break
         }
-        print(self.currentState)
         self.view.frame = CGRect(x: 0,
                                  y: YPosition!,
                                  width: self.view.frame.width,

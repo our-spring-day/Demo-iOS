@@ -34,12 +34,12 @@ class TimerView: UIView {
         let second = secondFormatter.string(from: Date())
         
         hourLabel.text = "\((Int(hour)!) - Int(hour)!)"
-        minuteLabel.text = "\(40 - Int(minute)!)"
+        minuteLabel.text = "\(20 - Int(minute)!)"
         secondLabel.text = "\(60 - Int(second)!)"
         
-        if (40 - Int(minute)!) > 10 && (40 - Int(minute)!) < 20 {
+        if (20 - Int(minute)!) > 10 && (20 - Int(minute)!) < 20 {
             self.backgroundColor = UIColor(named: "20minute")
-        } else if (40 - Int(minute)!) <= 10 {
+        } else if (20 - Int(minute)!) <= 10 {
             self.backgroundColor = UIColor(named: "10minute")
         } else {
             self.backgroundColor = UIColor(named: "keyColor")
@@ -63,6 +63,8 @@ class TimerView: UIView {
         }
         [colon1,conlon2].forEach {
             $0.text = ":"
+            $0.textAlignment = .center
+            $0.textColor = .white
         }
     }
     

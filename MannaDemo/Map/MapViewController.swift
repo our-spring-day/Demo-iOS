@@ -165,7 +165,7 @@ class MapViewController: UIViewController {
             $0.height.equalTo(MannaDemo.convertHeigt(value: MannaDemo.convertHeigt(value: 85)))
         }
         myLocationButton.snp.makeConstraints {
-            $0.top.equalTo(cameraState.snp.bottom).offset(22)
+            $0.top.equalTo(cameraState.snp.bottom).offset(11)
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
         }
@@ -286,6 +286,11 @@ class MapViewController: UIViewController {
             imageToNameFlag.toggle()
             bottomSheet.runningTimeController.collectionView.reloadData()
             marking()
+            if bottomTabView.runningTime.currentImage == #imageLiteral(resourceName: "man") {
+                bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "women"), for: .normal)
+            } else {
+                bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "man"), for: .normal)
+            }
             UIView.animate(withDuration: 0.15) {
                 self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
             }
