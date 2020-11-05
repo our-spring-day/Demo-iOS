@@ -17,7 +17,6 @@ class tempViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         backgroundView.do {
-//            $0.image = #imageLiteral(resourceName: "bottomsheet")
             $0.isUserInteractionEnabled = true
         }
         bar.do {

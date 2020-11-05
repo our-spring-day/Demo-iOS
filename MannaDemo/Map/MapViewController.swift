@@ -280,14 +280,32 @@ class MapViewController: UIViewController {
     @objc func testGestureFunc() {
         let view = ChattingViewController()
         view.transitioningDelegate = bottomSheet.chatViewController
-        UIView.animate(withDuration: 0.15) {
-            self.bottomSheet.chatViewController.view.alpha = 0.1
-            self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.2, width: self.view.frame.width, height: self.view.frame.height)
-        }
-        UIView.animate(withDuration: 0, delay: 0.8) {
-            self.bottomSheet.chatViewController.view.alpha = 1
+        
+        let xScaleFactor = bottomSheet.view.frame.width / self.view.frame.width
+        let yScaleFactor = bottomSheet.view.frame.height / self.view.frame.height
+        
+        let scaleTransform = CGAffineTransform(scaleX: xScaleFactor, y: yScaleFactor)
+        bottomSheet.view.transform = scaleTransform
+
+        bottomSheet.view.center = CGPoint(
+            x:  bottomSheet.view.frame.midX,
+            y:  bottomSheet.view.frame.midY)
+            
+        bottomSheet.view.clipsToBounds = true
+        UIView.animate(
+            withDuration: 0.8,
+          delay:0.0725,
+            usingSpringWithDamping: 0.5,
+            initialSpringVelocity: 1,
+            animations: { [self] in
+            bottomSheet.view.alpha = 0.3
+            self.bottomSheet.view.center = CGPoint(x: self.view.frame.midX, y: self.view.frame.midY)
+            self.bottomSheet.view.layer.cornerRadius = 20.0
+          },completion: { _ in
             self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
-        }
+            self.bottomSheet.view.alpha = 1
+          }
+        )
         present(view, animated: true)
         self.view.bringSubviewToFront(bottomTabView)
         bottomTabView.bringSubviewToFront(self.view)
@@ -416,271 +434,11 @@ class MapViewController: UIViewController {
     }
     
 }
-extension MapViewController: NMFMapViewCameraDelegate {
-    func zoomLinearEquation(zoomLevel: Double) -> CGFloat{
-        return  CGFloat(-(25/3) * zoomLevel + 175)
-    }
-    
-    func markerResizeByZoomLevel() {
-        if mapView.zoomLevel > 15 {
-            tokenWithMarker.map { (key, marker) in
-                marker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
-                marker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
-                
-                goalMarker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
-                goalMarker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
-                
-                marker.mapView = mapView
-                goalMarker.mapView = mapView
-            }
-        } else {
-            tokenWithMarker.map { (key, marker) in
-                marker.width = MannaDemo.convertWidth(value: 50)
-                marker.height = MannaDemo.convertWidth(value: 50)
-                
-                goalMarker.width = MannaDemo.convertWidth(value: 50)
-                goalMarker.height = MannaDemo.convertWidth(value: 50)
-                
-                goalMarker.mapView = mapView
-                marker.mapView = mapView
-            }
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        myLocationButton.isHidden = false
-        UIView.animate(withDuration: 0.5) {
-            self.myLocationButton.alpha = 1
-        }
-    }
-    
-    func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
-        print("will")
-        markerResizeByZoomLevel()
-    }
-    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
-        print("end")
-        markerResizeByZoomLevel()
-    }
-    func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
-        print("change")
-        markerResizeByZoomLevel()
-    }
-}
 
-extension MapViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.showsBackgroundLocationIndicator = true
-        myLatitude = locValue.latitude
-        myLongitude = locValue.longitude
-        UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
-        UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
-        socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
-        print("쏜다")
-        
-        //        if imageToNameFlag {
-        //            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
-        //        } else {
-        //            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
-        //        }
-        //        tokenWithMarker[MannaDemo.myUUID!]?.do {
-        //            $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-        //            $0.mapView = mapView
-        //        }
-        setCollcetionViewItem()
-        bottomSheet.runningTimeController.collectionView.reloadData()
-    }
-    
-    // MARK: 위치권한 다시 받는곳
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
-        if status != CLAuthorizationStatus.authorizedAlways {
-            //위치권한 거부되있을 경우
-            let alter = UIAlertController(title: "위치권한 설정을 항상으로 해주셔야 합니다.", message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.", preferredStyle: UIAlertController.Style.alert)
-            let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default) {
-                (action: UIAlertAction) in
-                
-                UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
-                
-            }
-            let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive){
-                (action: UIAlertAction) in
-                exit(0)
-            }
-            alter.addAction(logNoAction)
-            alter.addAction(logOkAction)
-            self.present(alter, animated: true, completion: nil)
-        }
-    }
-}
 
-extension MapViewController: WebSocketDelegate {
-    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        print("\(data)")
-    }
-    
-    func websocketDidConnect(socket: WebSocketClient) {
-        print("sockect Connect!")
-        UserModel.userList[MannaDemo.myUUID!]?.state = true
-        setCollcetionViewItem()
-        bottomSheet.runningTimeController.collectionView.reloadData()
-    }
-    
-    func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        print("sockect Disconnect ㅠㅠ")
-        UserModel.userList[MannaDemo.myUUID!]?.state = false
-        setCollcetionViewItem()
-        bottomSheet.runningTimeController.collectionView.reloadData()
-    }
-    
-    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        
-        var type: String?
-        var deviceToken: String?
-        var username: String?
-        var lat_: Double?
-        var lng_: Double?
-        let json = text
-        
-        if let data = json.data(using: .utf8) {
-            
-            //누가 보냈는지
-            if let json = try? JSON(data) ["sender"] {
-                deviceToken = json["deviceToken"].string
-                username = json["username"].string
-            }
-            
-            //타입은 무엇이고
-            if let json = try? JSON(data) ["type"] {
-                guard let temp = json.string else { return }
-                type = temp
-            }
-            guard let token = deviceToken else { return }
-            //타입에 따른 처리
-            switch type {
-            
-            case "LOCATION" :
-                if let json = try? JSON(data) ["location"] {
-                    lat_ = json["latitude"].double
-                    lng_ = json["longitude"].double
-                    UserModel.userList[token]?.state = true
-                }
-                
-            case "LEAVE" :
-                
-                guard let name = username else { return }
-                //                UserModel.userList[token]?.state = false
-                UserModel.userList[token]?.networkValidTime = 11
-                marking()
-                setCollcetionViewItem()
-                bottomSheet.runningTimeController.collectionView.reloadData()
-                showToast(message: "\(name)님 나가셨습니다.")
-                
-            case "JOIN" :
-                guard let name = username else { return }
-                UserModel.userList[token]?.state = true
-                UserModel.userList[token]?.networkValidTime = 0
-                marking()
-                showToast(message: "\(name)님 접속하셨습니다.")
-                setCollcetionViewItem()
-                bottomSheet.runningTimeController.collectionView.reloadData()
-                
-            case .none:
-                print("none")
-                
-            case .some(_):
-                print("some")
-            }
-            
-            guard let lat = lat_ else { return }
-            guard let lng = lng_ else { return }
-            guard UserModel.userList[token] != nil else { return }
-            
-            UserModel.userList[token]?.networkValidTime = 0
-            if token != MannaDemo.myUUID {
-                //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
-                UserModel.userList[token]?.latitude = lat
-                UserModel.userList[token]?.longitude = lng
-            }
-            setCollcetionViewItem()
-            bottomSheet.runningTimeController.collectionView.reloadData()
-        }
-    }
-}
 
-extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return userListForCollectionView.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
-        let user = userListForCollectionView[indexPath.row]
-        let userListCount =  userListForCollectionView.filter { $0.state == true }.count
-        
-        if indexPath.row == 0 {
-            cell.ranking.image = #imageLiteral(resourceName: "🥇")
-        } else if indexPath.row ==  userListCount - 1 && indexPath.row != 0 {
-            cell.ranking.image = #imageLiteral(resourceName: "☠️")
-        } else if userListCount > 2 {
-            if indexPath.row == 1 {
-                cell.ranking.image = #imageLiteral(resourceName: "🥈")
-            } else if indexPath.row == 2 {
-                cell.ranking.image = #imageLiteral(resourceName: "🥉")
-            } else {
-                cell.ranking.image = UIImage()
-            }
-        } else {
-            cell.ranking.image = UIImage()
-        }
-        
-        if user.state {
-            if imageToNameFlag {
-                if user.networkValidTime > 10 {
-                    cell.profileImage.image = user.disconnectProfileImage
-                } else {
-                    cell.profileImage.image = user.nicknameImage
-                    cell.backgroundColor = nil
-                    cell.isUserInteractionEnabled = true
-                }
-            } else {
-                if user.networkValidTime > 10 {
-                    cell.profileImage.image = user.disconnectProfileImage
-                } else {
-                    cell.profileImage.image = user.profileImage
-                    cell.backgroundColor = nil
-                    cell.isUserInteractionEnabled = true
-                }
-            }
-        } else {
-            cell.profileImage.image = #imageLiteral(resourceName: "Image-6")
-            cell.isUserInteractionEnabled = false
-        }
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if userListForCollectionView[indexPath.row].latitude != 0 && userListForCollectionView[indexPath.row].longitude != 0 {
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude,
-                                                                   lng: userListForCollectionView[indexPath.row].longitude))
-            
-            cameraUpdate.animation = .fly
-            cameraUpdate.animationDuration = 1.2
-            mapView.moveCamera(cameraUpdate)
-            PathAPI.getPath(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude) { result in
-                self.multipartPath.lineParts = [
-                    NMGLineString(points: result)
-                ]
-                self.multipartPath.colorParts = [
-                    NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
-                ]
-                self.multipartPath.mapView = self.mapView
-            }
-        }
-    }
-}
+
+
+
+
 
