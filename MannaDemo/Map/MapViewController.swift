@@ -342,7 +342,6 @@ class MapViewController: UIViewController {
                 } else {
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
                 }
-                
             }
             if (UserModel.userList[key]?.state)! {
                 tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
@@ -558,13 +557,22 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         
         if user.state {
             if imageToNameFlag {
-                cell.profileImage.image = user.nicknameImage
-                cell.backgroundColor = nil
-                cell.isUserInteractionEnabled = true
+                if user.networkValidTime > 60 {
+                    //                    cell.profileImage.image = user.
+                    //                    이름이미지 + 끊겼을 때 이미지
+                } else {
+                    cell.profileImage.image = user.nicknameImage
+                    cell.backgroundColor = nil
+                    cell.isUserInteractionEnabled = true
+                }
             } else {
-                cell.profileImage.image = user.profileImage
-                cell.backgroundColor = nil
-                cell.isUserInteractionEnabled = true
+                if user.networkValidTime > 60 {
+                    //                    사진이미지 + 끊겼을 때 이미지
+                } else {
+                    cell.profileImage.image = user.profileImage
+                    cell.backgroundColor = nil
+                    cell.isUserInteractionEnabled = true
+                }
             }
         } else {
             cell.profileImage.image = #imageLiteral(resourceName: "profile")
