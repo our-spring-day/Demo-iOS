@@ -22,7 +22,6 @@ class MapViewController: UIViewController {
     var chatView: UIView?
     
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
-    var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     var tokenWithMarker: [String : NMFMarker] = [:]
     let mapView = NMFMapView()
@@ -45,6 +44,7 @@ class MapViewController: UIViewController {
     var myLocationButton = UIButton()
     lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
     var cameraStateFlag = true
+//    lazy var locationOverlay = mapView.locationOverlay
     
     
     
@@ -74,7 +74,7 @@ class MapViewController: UIViewController {
         if socket.isConnected == false {
             socket.connect()
         }
-        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
+//        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
         array()
@@ -82,6 +82,7 @@ class MapViewController: UIViewController {
         attribute()
         layout()
         bottomSheet.runningTimeController.collectionView.reloadData()
+//        locationOverlay.icon = NMFOverlayImage(image: #imageLiteral(resourceName: "Image-2"))
     }
     
     func array() {
@@ -149,6 +150,11 @@ class MapViewController: UIViewController {
             $0.symbolScale = 0.85
             $0.logoInteractionEnabled = false
             $0.maxZoomLevel = 18
+            $0.positionMode = .direction
+        }
+        mapView.locationOverlay.do {
+            //왱 ㅏㄴ되는거야 이거..
+            $0.icon = NMFOverlayImage(image: #imageLiteral(resourceName: "overlay"))
         }
         locationManager.do {
             $0.delegate = self
@@ -199,32 +205,24 @@ class MapViewController: UIViewController {
         }
     }
     @objc func didMyLocationButtonClicked() {
-        //        cameraStateFlag = true
         self.myLocationButton.alpha = 0
         myLocationButton.isHidden = true
-        
-        print("mylocafunc")
-        let position = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-        position.animation = .easeOut
-        position.animationDuration = 0.5
+        mapView.positionMode = .direction
         let zoom = NMFCameraUpdate(zoomTo: 15)
         zoom.animationDuration = 0.5
-        [zoom, position].forEach { mapView.moveCamera($0) }
+        [zoom].forEach { mapView.moveCamera($0) }
     }
     
     @objc func didCameraStateButtonClicked() {
-        //        cameraStateFlag = true
         self.myLocationButton.alpha = 0
         myLocationButton.isHidden = true
-        print("camarabuton")
+        
         if cameraState.currentImage == UIImage(named: "forest") {
             cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
-            let position = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-            position.animation = .easeOut
-            position.animationDuration = 0.5
+            mapView.positionMode = .direction
             let zoom = NMFCameraUpdate(zoomTo: 15)
             zoom.animationDuration = 0.5
-            [zoom, position].forEach { mapView.moveCamera($0) }
+            [zoom].forEach { mapView.moveCamera($0) }
         } else {
             cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
         }
@@ -324,12 +322,15 @@ class MapViewController: UIViewController {
         mapView.moveCamera(cameraUpdate)
     }
     
-    @objc func emitLocation() {
-        socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
-    }
+//    @objc func emitLocation() {
+//        socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
+//    }
     
     @objc func marking() {
         for key in UserModel.userList.keys {
+            if key == MannaDemo.myUUID {
+                break
+            }
             let user = UserModel.userList[key]
             if imageToNameFlag {
                 if user!.networkValidTime > 10 {
@@ -431,15 +432,18 @@ extension MapViewController: CLLocationManagerDelegate {
         myLongitude = locValue.longitude
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
-        if imageToNameFlag {
-            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
-        } else {
-            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
-        }
-        tokenWithMarker[MannaDemo.myUUID!]?.do {
-            $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-            $0.mapView = mapView
-        }
+        socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
+        print("쏜다")
+        
+//        if imageToNameFlag {
+//            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
+//        } else {
+//            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
+//        }
+//        tokenWithMarker[MannaDemo.myUUID!]?.do {
+//            $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
+//            $0.mapView = mapView
+//        }
         setCollcetionViewItem()
         bottomSheet.runningTimeController.collectionView.reloadData()
     }
