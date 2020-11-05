@@ -20,14 +20,12 @@ extension MapViewController: test {
 }
 class MapViewController: UIViewController {
     var chatView: UIView?
-    
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
     var locationManager = CLLocationManager()
     var tokenWithMarker: [String : NMFMarker] = [:]
     let mapView = NMFMapView()
     let backButton = UIButton()
-    var timerView = UIView()
-    var timeLabel = UILabel()
+    var timerView = TimerView()
     var bottomSheet = BottomSheetViewController()
     let multipartPath = NMFMultipartPath()
     var animationView = AnimationView(name:"12670-flying-airplane")
@@ -43,7 +41,7 @@ class MapViewController: UIViewController {
     var myLocationButton = UIButton()
     lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
     var cameraStateFlag = true
-    
+    var goalMarker = NMFMarker()
    
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,9 +61,9 @@ class MapViewController: UIViewController {
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
         array()
+        layout()
         didMarkerClicked()
         attribute()
-        layout()
         bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
@@ -80,6 +78,7 @@ class MapViewController: UIViewController {
             $0.layer.cornerRadius = $0.frame.width / 2
             $0.clipsToBounds = true
             $0.addTarget(self, action: #selector(back), for: .touchUpInside)
+//            $0.dropShadow()
         }
         mapView.do {
             $0.frame = view.frame
@@ -92,7 +91,6 @@ class MapViewController: UIViewController {
             $0.positionMode = .direction
         }
         mapView.locationOverlay.do {
-            //왱 ㅏㄴ되는거야 이거..
             $0.icon = NMFOverlayImage(image: #imageLiteral(resourceName: "overlay"))
         }
         locationManager.do {
@@ -116,16 +114,6 @@ class MapViewController: UIViewController {
             $0.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: view.frame.width, height: view.frame.height)
             $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
         }
-        timerView.do {
-            $0.backgroundColor = UIColor(named: "keyColor")
-            $0.layer.cornerRadius = 20
-            $0.layer.masksToBounds = true
-        }
-        timeLabel.do {
-            $0.textAlignment = .center
-            $0.font = UIFont(name: "SFProDisplay-Medium", size: 17)
-            $0.text = "59 : 59 : 59"
-        }
         bottomTabView.do {
             $0.backgroundColor = .white
             $0.chat.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
@@ -136,16 +124,24 @@ class MapViewController: UIViewController {
             $0.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
             $0.addTarget(self, action: #selector(didCameraStateButtonClicked), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+            $0.dropShadow()
         }
         myLocationButton.do {
             $0.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
             $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
         }
+        goalMarker.do {
+            $0.iconImage = NMFOverlayImage(image: #imageLiteral(resourceName: "goal"))
+            $0.height = MannaDemo.convertWidth(value: 48)
+            $0.width = MannaDemo.convertWidth(value: 48)
+            $0.position = NMGLatLng(lat: 37.475427, lng: 126.980378)
+            $0.mapView = mapView
+        }
     }
     
     func layout() {
-        [mapView, cameraState, myLocationButton, backButton, timerView, timeLabel, bottomSheet.view, bottomTabView, toastLabel, ].forEach { view.addSubview($0) }
+        [mapView, cameraState, myLocationButton, backButton, timerView, bottomSheet.view, bottomTabView, toastLabel, ].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -162,11 +158,6 @@ class MapViewController: UIViewController {
             $0.centerX.equalTo(view)
             $0.centerY.equalTo(backButton)
             $0.width.equalTo(MannaDemo.convertWidth(value: 130))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
-        }
-        timeLabel.snp.makeConstraints {
-            $0.centerX.centerY.equalTo(timerView)
-            $0.width.equalTo(MannaDemo.convertWidth(value: 90))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
         }
         bottomTabView.snp.makeConstraints {
@@ -263,9 +254,13 @@ class MapViewController: UIViewController {
     @objc func testGestureFunc() {
         let view = tempViewController()
         view.transitioningDelegate = bottomSheet.chatViewController
-        bottomSheet.chatViewController.view.alpha = 0.3
+        UIView.animate(withDuration: 0.15) {
+            self.bottomSheet.chatViewController.view.alpha = 0.1
+            self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.2, width: self.view.frame.width, height: self.view.frame.height)
+        }
         UIView.animate(withDuration: 0, delay: 0.8) {
             self.bottomSheet.chatViewController.view.alpha = 1
+            self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
         }
         present(view, animated: true)
         self.view.bringSubviewToFront(bottomTabView)
@@ -351,11 +346,18 @@ class MapViewController: UIViewController {
     }
     
     @objc func timeChecker() {
+        
         UserModel.userList.keys.forEach {
             if UserModel.userList[$0]?.state == true {
                 UserModel.userList[$0]?.networkValidTime += 1
             }
         }
+        let state = UIApplication.shared.applicationState
+                if state == .background {
+                    bottomSheet.rankingViewController.animationView.pause()
+                }else if state == .active {
+                    bottomSheet.rankingViewController.animationView.play()
+                }
     }
 }
 

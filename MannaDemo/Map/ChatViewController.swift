@@ -165,8 +165,8 @@ class  SomeTransitionManager : UIPercentDrivenInteractiveTransition , UIViewCont
         UIView.animate(
           withDuration: duration2,
           delay:0.0,
-          usingSpringWithDamping: 1,
-            initialSpringVelocity: 0,
+            usingSpringWithDamping: 0.5,
+            initialSpringVelocity: 1,
           animations: {
             recipeView.transform = self.presenting ? .identity : scaleTransform
             recipeView.center = CGPoint(x: finalFrame.midX, y: finalFrame.midY)

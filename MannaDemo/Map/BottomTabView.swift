@@ -65,7 +65,7 @@ class BottomTabView: UIView {
         runningTime.snp.makeConstraints {
             $0.centerX.equalTo(self)
             $0.bottom.equalTo(self).offset(-MannaDemo.convertHeigt(value: 33))
-            $0.width.height.equalTo(MannaDemo.convertWidth(value: 24))
+            $0.width.height.equalTo(MannaDemo.convertWidth(value: 26))
         }
         ranking.snp.makeConstraints {
             $0.trailing.equalTo(self).offset(-MannaDemo.convertWidth(value: 40))
