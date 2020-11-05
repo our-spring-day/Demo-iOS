@@ -9,12 +9,27 @@ import UIKit
 
 class ChatViewController: UIViewController {
     var messageInput = ChatMessageView()
-    let insets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+    let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     let chatView = UITableView()
-    let height = UIApplication.shared.keyWindow?.safeAreaInsets.bottom
-
-    var accView: UIView!
-    
+    let textField = UITextField().then {
+        $0.textColor = .black
+        $0.attributedPlaceholder = .init(string: "메세지 입력", attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.chatName)])
+        $0.layer.cornerRadius = 20
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = #colorLiteral(red: 0.8549019608, green: 0.8549019608, blue: 0.8549019608, alpha: 1)
+        $0.backgroundColor = .white
+        $0.addLeftPadding()
+    }
+    lazy var sendButton = UIButton(frame: CGRect(x: 0, y: 0,
+                                                 width: MannaDemo.convertWidth(value: 40),
+                                                 height: MannaDemo.convertHeigt(value: 40)))
+        .then {
+            $0.setImage(UIImage(named: "finger"), for: .normal)
+            $0.imageEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
+            $0.backgroundColor = UIColor.appColor(.messageSendButton)
+            $0.layer.cornerRadius = $0.frame.size.width/2
+            $0.clipsToBounds = true
+        }
     
     var chatMessage: [ChatMessage] =
         [ChatMessage(user: "짱구", text: "이번주 토요일 더포도 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", isIncoming: true, sendState: false),
@@ -30,44 +45,56 @@ class ChatViewController: UIViewController {
          ChatMessage(user: "상원", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", isIncoming: false, sendState: false),
          ChatMessage(user: "돼지", text: "우리는 오늘 놀러갈거에요!!", isIncoming: true, sendState: false),
          ChatMessage(user: "돼지", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false)]
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
     
-    override var canResignFirstResponder: Bool {
-        return true
-    }
+    // MARK: inputAccessroyView init
     
+    var accView: UIView!
+    override var canBecomeFirstResponder: Bool { return true }
     override var inputAccessoryView: UIView? {
-//        get {
-            let window = UIApplication.shared.keyWindow
-            let height = window?.safeAreaInsets.bottom
+        if accView == nil {
+            
+            accView = CustomView()
+            accView.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 0.845515839)
+            
+            textField.borderStyle = .roundedRect
 
-            if accView == nil {
-                accView = UIView()
-                let chat = ChatMessageView()
-                accView.backgroundColor = .none
-
-                accView.addSubview(chat)
-                accView.autoresizingMask = .flexibleHeight
-                chat.do {
-                    $0.translatesAutoresizingMaskIntoConstraints = false
-                    $0.leadingAnchor.constraint(equalTo: accView.leadingAnchor).isActive = true
-                    $0.trailingAnchor.constraint(equalTo: accView.trailingAnchor).isActive = true
-                    $0.topAnchor.constraint(equalTo: accView.topAnchor).isActive = true
-                    $0.bottomAnchor.constraint(equalTo: accView.layoutMarginsGuide.bottomAnchor, constant: height!).isActive = true
-                }
+            accView.addSubview(textField)
+            accView.addSubview(sendButton)
+            accView.autoresizingMask = .flexibleHeight
+            textField.do {
+                $0.translatesAutoresizingMaskIntoConstraints = false
+                $0.leadingAnchor.constraint(equalTo: accView.leadingAnchor, constant: MannaDemo.convertWidth(value: 13)).isActive = true
+                $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 304)).isActive = true
+                $0.topAnchor.constraint(equalTo: accView.topAnchor).isActive = true
+                $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 43)).isActive = true
+                $0.bottomAnchor.constraint(equalTo:accView.layoutMarginsGuide.bottomAnchor).isActive = true
             }
-            return accView
-//        }
+            sendButton.do {
+                $0.translatesAutoresizingMaskIntoConstraints = false
+                $0.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 10).isActive = true
+                $0.topAnchor.constraint(equalTo: accView.topAnchor).isActive = true
+                $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 43)).isActive = true
+                $0.bottomAnchor.constraint(equalTo:accView.layoutMarginsGuide.bottomAnchor).isActive = true
+            }
+        }
+        return accView
     }
-   
     
+    // MARK: CustomView
+    class CustomView: UIView {
+        // this is needed so that the inputAccesoryView is properly sized from the auto layout constraints
+        // actual value is not important
 
+        override var intrinsicContentSize: CGSize {
+            return CGSize.zero
+        }
+    }
+    
+    // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        messageInput.textInput.delegate = self
-       
+        textField.delegate = self
+        
         hideKeyboardWhenTappedAround()
         attirbute()
         layout()
@@ -78,6 +105,7 @@ class ChatViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    // MARK: viewWillDisappear removeObserver
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
@@ -88,7 +116,7 @@ class ChatViewController: UIViewController {
         appearance.configureWithTransparentBackground()
         self.do {
             $0.title = "설정"
-            $0.view.backgroundColor = .blue
+            $0.view.backgroundColor = .white
             $0.navigationController?.navigationBar.standardAppearance = appearance
         }
         chatView.do {
@@ -97,33 +125,21 @@ class ChatViewController: UIViewController {
             $0.register(ChatCell.self, forCellReuseIdentifier: ChatCell.cellID)
             $0.separatorStyle = .none
             $0.backgroundColor = .white
-            //            $0.contentInset = insets
+            $0.keyboardDismissMode = .interactive
         }
-        messageInput.backgroundColor = .red
-        messageInput.sendButton.addTarget(self, action: #selector(test), for: .touchUpInside)
-        messageInput.textInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        sendButton.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
-    @objc func test() {
-        chatView.reloadData()
-    }
+    
+    // MARK: chatView Layout
     func layout() {
         view.addSubview(chatView)
-//        view.addSubview(messageInput)
         chatView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -MannaDemo.convertHeigt(value: 51)).isActive = true
+            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -MannaDemo.convertHeigt(value: 43)).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         }
-//        messageInput.do {
-//            $0.translatesAutoresizingMaskIntoConstraints = false
-//            $0.topAnchor.constraint(equalTo: chatView.bottomAnchor).isActive = true
-//            $0.trailingAnchor.constraint(equalTo: chatView.trailingAnchor).isActive = true
-//            $0.leadingAnchor.constraint(equalTo: chatView.leadingAnchor).isActive = true
-//            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-//            //            $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 51)).isActive = true
-//        }
     }
     
     // MARK: TableView tap hide keyboard action
@@ -139,14 +155,14 @@ class ChatViewController: UIViewController {
     
     // MARK: EditingChanged TextField
     @objc func textFieldDidChange() {
-        let textCount = messageInput.textInput.text?.count
+        let textCount = textField.text?.count
         
         guard let count = textCount else { return }
         
         if count > 0 {
-            messageInput.sendButton.backgroundColor = UIColor.appColor(.sendMessage)
+            sendButton.backgroundColor = UIColor.appColor(.sendMessage)
         } else {
-            messageInput.sendButton.backgroundColor = UIColor.appColor(.messageSendButton)
+            sendButton.backgroundColor = UIColor.appColor(.messageSendButton)
         }
     }
 }
@@ -174,7 +190,6 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
                 message.sendState = false
             }
         }
-        print(message)
         cell.chatMessage = message
         
         return cell
@@ -197,32 +212,17 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension ChatViewController: UITextFieldDelegate {
-//    func hadleKeyboard(notification: NSNotification) {
-//        let key = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
-//        print(key)
-//    }
     @objc func keyboardWillShow(_ sender: Notification) {
-        
-        accView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
-//        view.setNeedsLayout()
-        view.layoutIfNeeded()
-        
-//        if let keyboardFrame: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-//            let keybaordRectangle = keyboardFrame.cgRectValue
-//            let keyboardHeight = keybaordRectangle.height
-//            chatView.frame.origin.y -= keyboardHeight
-//        }
-        //        let key = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue
-        //        print(key.cgRectValue.height)
+        if let keyboardSize = (sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            chatView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+           }
     }
     
     @objc func keyboardWillHide(_ sender: Notification) {
         UIView.animate(withDuration: 0.3) {
-//            if let keyboardFrame: NSValue = sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-//                let keybaordRectangle = keyboardFrame.cgRectValue
-//                let keyboardHeight = keybaordRectangle.height
-//                self.chatView.frame.origin.y += keyboardHeight
-//            }
+            if let keyboardSize = (sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                self.chatView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            }
         }
     }
     
