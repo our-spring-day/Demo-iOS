@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChatViewController: UIViewController {
+class ChattingViewController: UIViewController {
     var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -165,7 +165,7 @@ class ChatViewController: UIViewController {
     }
 }
 
-extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
+extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chatMessage.count
     }
@@ -209,7 +209,7 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension ChatViewController: UITextFieldDelegate {
+extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillShow(sender: Notification) {
         
         if keyboardShown == false {

@@ -36,7 +36,7 @@ class BottomTabView: UIView {
         }
         chat.do {
             $0.tag = 0
-            $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
+            $0.setImage(#imageLiteral(resourceName: "Chat"), for: .normal)
             $0.addTarget(self, action: #selector(didChatButtonClicked), for: .touchUpInside)
             
             $0.imageEdgeInsets = UIEdgeInsets(top: insetAtt, left: insetAtt, bottom: insetAtt, right: insetAtt)

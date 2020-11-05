@@ -15,7 +15,7 @@
 		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
 		A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A549EDD32543510900EC65E3 /* ShowToast.swift */; };
 		A5822B15255022C50085B55A /* PathAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5822B14255022C50085B55A /* PathAPI.swift */; };
-		A5A0F05A25514A0900A11EEF /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05925514A0900A11EEF /* ChatViewController.swift */; };
+		A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05925514A0900A11EEF /* ChattingViewController.swift */; };
 		A5A0F05D25514A1400A11EEF /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05C25514A1400A11EEF /* ChatCell.swift */; };
 		A5A0F0602551593300A11EEF /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */; };
 		A5A0F06325515C1900A11EEF /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F06225515C1900A11EEF /* ChatMessage.swift */; };
@@ -57,7 +57,7 @@
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
 		A549EDD32543510900EC65E3 /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
 		A5822B14255022C50085B55A /* PathAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathAPI.swift; sourceTree = "<group>"; };
-		A5A0F05925514A0900A11EEF /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		A5A0F05925514A0900A11EEF /* ChattingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewController.swift; sourceTree = "<group>"; };
 		A5A0F05C25514A1400A11EEF /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		A5A0F06225515C1900A11EEF /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
@@ -150,7 +150,7 @@
 		A5A0F058255149DE00A11EEF /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				A5A0F05925514A0900A11EEF /* ChatViewController.swift */,
+				A5A0F05925514A0900A11EEF /* ChattingViewController.swift */,
 				A5A0F05C25514A1400A11EEF /* ChatCell.swift */,
 			);
 			path = Chat;
@@ -394,7 +394,7 @@
 				A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */,
 				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
 				A5A0F0602551593300A11EEF /* UIColor+Ext.swift in Sources */,
-				A5A0F05A25514A0900A11EEF /* ChatViewController.swift in Sources */,
+				A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */,
 				CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */,
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
 				A5A0F05D25514A1400A11EEF /* ChatCell.swift in Sources */,

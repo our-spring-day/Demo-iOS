@@ -66,7 +66,7 @@ class MannaListViewController: UIViewController, reloadData {
     
     
     @objc func pushChatView() {
-        let view = ChatViewController()
+        let view = ChattingViewController()
         navigationController?.pushViewController(view, animated: true)
     }
     
