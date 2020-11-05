@@ -82,6 +82,7 @@ class TimerView: UIView {
         }
         secondLabel.snp.makeConstraints {
             $0.leading.equalTo(minuteLabel.snp.trailing).offset(5)
+            $0.centerY.equalToSuperview()
             $0.width.height.equalTo(40)
         }
         colon1.snp.makeConstraints {

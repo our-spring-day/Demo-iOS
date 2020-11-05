@@ -32,7 +32,7 @@ class RunningTimeViewController: UIViewController {
         expectArrived.snp.makeConstraints {
             $0.top.equalTo(view).offset(MannaDemo.convertHeigt(value: 33.68))
             $0.leading.equalTo(view).offset(MannaDemo.convertWidth(value: 25.11))
-            $0.width.equalTo(MannaDemo.convertWidth(value: 95))
+            $0.width.equalTo(MannaDemo.convertWidth(value: 200))
             $0.height.equalTo(MannaDemo.convertHeigt(value: 25))
         }
         collectionView.snp.makeConstraints {

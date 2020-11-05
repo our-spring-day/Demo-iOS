@@ -111,7 +111,7 @@ class MapViewController: UIViewController {
             $0.runningTimeController.collectionView.delegate = self
             $0.runningTimeController.collectionView.dataSource = self
             $0.parentView = self.view
-            $0.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: view.frame.width, height: view.frame.height)
+            $0.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: view.frame.width, height: view.frame.height)
             $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
         }
         bottomTabView.do {
@@ -193,12 +193,13 @@ class MapViewController: UIViewController {
                 cameraUpdate.animation = .easeOut
                 cameraUpdate.animationDuration = 0.3
                 mapView.moveCamera(cameraUpdate)
+                
                 PathAPI.getPath(lat: lat!, lng: lng!) { result in
                     multipartPath.lineParts = [
                         NMGLineString(points: result)
                     ]
                     multipartPath.colorParts = [
-                        NMFPathColor(color: UIColor.red, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
+                        NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
                     ]
                     multipartPath.mapView = mapView
                 }
@@ -231,6 +232,7 @@ class MapViewController: UIViewController {
         self.myLocationButton.alpha = 0
         myLocationButton.isHidden = true
         mapView.positionMode = .direction
+        multipartPath.mapView = nil
         let zoom = NMFCameraUpdate(zoomTo: 15)
         zoom.animationDuration = 0.5
         [zoom].forEach { mapView.moveCamera($0) }
@@ -274,7 +276,7 @@ class MapViewController: UIViewController {
             self.bottomSheet.rankingViewController.view.isHidden = true
             self.bottomSheet.runningTimeController.view.isHidden = true
             UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 525), width: self.view.frame.width, height: self.view.frame.height)
             }
             break
         case 1:
@@ -292,7 +294,7 @@ class MapViewController: UIViewController {
                 bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "man"), for: .normal)
             }
             UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: self.view.frame.width, height: self.view.frame.height)
             }
             break
         case 2:
@@ -300,7 +302,7 @@ class MapViewController: UIViewController {
             self.bottomSheet.rankingViewController.view.isHidden = true
             self.bottomSheet.runningTimeController.view.isHidden = false
             UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: self.view.frame.width, height: self.view.frame.height)
             }
             break
         default:
@@ -376,12 +378,22 @@ extension MapViewController: NMFMapViewCameraDelegate {
             tokenWithMarker.map { (key, marker) in
                 marker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
                 marker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
+                
+                goalMarker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
+                goalMarker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
+                
                 marker.mapView = mapView
+                goalMarker.mapView = mapView
             }
         } else {
             tokenWithMarker.map { (key, marker) in
                 marker.width = MannaDemo.convertWidth(value: 50)
                 marker.height = MannaDemo.convertWidth(value: 50)
+                
+                goalMarker.width = MannaDemo.convertWidth(value: 50)
+                goalMarker.height = MannaDemo.convertWidth(value: 50)
+                
+                goalMarker.mapView = mapView
                 marker.mapView = mapView
             }
         }
@@ -581,11 +593,23 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         if userListForCollectionView[indexPath.row].latitude != 0 && userListForCollectionView[indexPath.row].longitude != 0 {
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude,
+                                                                   lng: userListForCollectionView[indexPath.row].longitude))
+            
             cameraUpdate.animation = .fly
             cameraUpdate.animationDuration = 1.2
             mapView.moveCamera(cameraUpdate)
+            PathAPI.getPath(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude) { result in
+                self.multipartPath.lineParts = [
+                    NMGLineString(points: result)
+                ]
+                self.multipartPath.colorParts = [
+                    NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
+                ]
+                self.multipartPath.mapView = self.mapView
+            }
         }
     }
 }
