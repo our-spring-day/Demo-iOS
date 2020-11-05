@@ -25,6 +25,7 @@
 		CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748318255124FB006C1E02 /* RankingViewViewController.swift */; };
 		CC74831C25513098006C1E02 /* RunningTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831B25513098006C1E02 /* RunningTimeViewController.swift */; };
 		CC74832C255164E7006C1E02 /* tempViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74832B255164E7006C1E02 /* tempViewController.swift */; };
+		CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B2225540BAD00063790 /* TimerView.swift */; };
 		CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845A2540231A00441445 /* AppDelegate.swift */; };
 		CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845C2540231A00441445 /* SceneDelegate.swift */; };
 		CC8B845F2540231A00441445 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845E2540231A00441445 /* ViewController.swift */; };
@@ -59,6 +60,7 @@
 		CC748318255124FB006C1E02 /* RankingViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewViewController.swift; sourceTree = "<group>"; };
 		CC74831B25513098006C1E02 /* RunningTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningTimeViewController.swift; sourceTree = "<group>"; };
 		CC74832B255164E7006C1E02 /* tempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tempViewController.swift; sourceTree = "<group>"; };
+		CC8A0B2225540BAD00063790 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		CC8B84572540231900441445 /* MannaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MannaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC8B845A2540231A00441445 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC8B845C2540231A00441445 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				CC74831B25513098006C1E02 /* RunningTimeViewController.swift */,
 				CC748318255124FB006C1E02 /* RankingViewViewController.swift */,
 				CC74832B255164E7006C1E02 /* tempViewController.swift */,
+				CC8A0B2225540BAD00063790 /* TimerView.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -365,6 +368,7 @@
 				CC74831525511F0C006C1E02 /* ChatViewController.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
 				CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */,
+				CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */,
 				CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */,
 				CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */,
 				CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */,

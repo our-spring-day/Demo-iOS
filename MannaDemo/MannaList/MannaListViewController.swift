@@ -21,7 +21,6 @@ class MannaListViewController: UIViewController, reloadData {
     var createMannaButton: UIBarButtonItem?
     let tableView = UITableView()
     let refreshControl = UIRefreshControl()
-    
     func reloadData() {
         tableView.reloadData()
     }

@@ -62,7 +62,7 @@ class ChatViewController: UIViewController {
         view.backgroundColor = .none
         backgroundView.snp.makeConstraints {
             $0.top.equalTo(view).offset(MannaDemo.convertHeigt(value: 26.63))
-            $0.width.equalTo(view).offset(-20)
+            $0.width.equalTo(view)
             $0.height.equalTo(100)
             $0.centerX.equalTo(view)
         }
@@ -165,8 +165,8 @@ class  SomeTransitionManager : UIPercentDrivenInteractiveTransition , UIViewCont
         UIView.animate(
           withDuration: duration2,
           delay:0.0,
-          usingSpringWithDamping: 1,
-            initialSpringVelocity: 0,
+            usingSpringWithDamping: 0.5,
+            initialSpringVelocity: 1,
           animations: {
             recipeView.transform = self.presenting ? .identity : scaleTransform
             recipeView.center = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
