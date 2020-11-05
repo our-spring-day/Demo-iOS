@@ -8,6 +8,7 @@
 import UIKit
 
 class ChatViewController: UIViewController {
+    var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     let chatView = UITableView()
@@ -57,7 +58,7 @@ class ChatViewController: UIViewController {
             accView.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 0.845515839)
             
             textField.borderStyle = .roundedRect
-
+            
             accView.addSubview(textField)
             accView.addSubview(sendButton)
             accView.autoresizingMask = .flexibleHeight
@@ -67,14 +68,14 @@ class ChatViewController: UIViewController {
                 $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 304)).isActive = true
                 $0.topAnchor.constraint(equalTo: accView.topAnchor).isActive = true
                 $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 43)).isActive = true
-                $0.bottomAnchor.constraint(equalTo:accView.layoutMarginsGuide.bottomAnchor).isActive = true
+                $0.bottomAnchor.constraint(equalTo:accView.layoutMarginsGuide.bottomAnchor, constant: -3).isActive = true
             }
             sendButton.do {
                 $0.translatesAutoresizingMaskIntoConstraints = false
                 $0.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 10).isActive = true
                 $0.topAnchor.constraint(equalTo: accView.topAnchor).isActive = true
                 $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 43)).isActive = true
-                $0.bottomAnchor.constraint(equalTo:accView.layoutMarginsGuide.bottomAnchor).isActive = true
+                $0.bottomAnchor.constraint(equalTo:accView.layoutMarginsGuide.bottomAnchor, constant: -3).isActive = true
             }
         }
         return accView
@@ -84,7 +85,7 @@ class ChatViewController: UIViewController {
     class CustomView: UIView {
         // this is needed so that the inputAccesoryView is properly sized from the auto layout constraints
         // actual value is not important
-
+        
         override var intrinsicContentSize: CGSize {
             return CGSize.zero
         }
@@ -93,22 +94,19 @@ class ChatViewController: UIViewController {
     // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        textField.delegate = self
-        
         hideKeyboardWhenTappedAround()
         attirbute()
         layout()
         scrollBottom()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // MARK: viewWillDisappear removeObserver
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func attirbute() {
@@ -196,13 +194,13 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.panGestureRecognizer.location(in: view.superview).y > 520 {
-            //            print("여기에여")
-        } else {
-            //            print("아니에여")
-        }
-        
+//        if scrollView.panGestureRecognizer.location(in: view.superview).y > 480 && keyboardShown == true {
+//            view.frame.origin.y = scrollView.panGestureRecognizer.location(in: view.superview).y
+//        }
+//
+//        print(scrollView.panGestureRecognizer.location(in: view.superview).y)
     }
+    
     func scrollBottom() {
         DispatchQueue.main.async {
             let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
@@ -212,18 +210,19 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension ChatViewController: UITextFieldDelegate {
-    @objc func keyboardWillShow(_ sender: Notification) {
-        if let keyboardSize = (sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            chatView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-           }
+    @objc func keyboardWillShow(sender: Notification) {
+        
+        if keyboardShown == false {
+            view.frame.origin.y = -(MannaDemo.convertHeigt(value: 258))
+            keyboardShown = true
+        } else {
+            keyboardShown = false
+        }
     }
     
-    @objc func keyboardWillHide(_ sender: Notification) {
-        UIView.animate(withDuration: 0.3) {
-            if let keyboardSize = (sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                self.chatView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            }
-        }
+    @objc func keyboardWillHide(sender: Notification) {
+        print("ff")
+        view.frame.origin.y = 0
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
