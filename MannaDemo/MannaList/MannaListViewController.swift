@@ -19,6 +19,7 @@ protocol reloadData {
 class MannaListViewController: UIViewController, reloadData {
     
     var createMannaButton: UIBarButtonItem?
+    var pushChat: UIBarButtonItem?
     let tableView = UITableView()
     let refreshControl = UIRefreshControl()
     func reloadData() {
@@ -39,10 +40,11 @@ class MannaListViewController: UIViewController, reloadData {
     
     func attribute() {
         createMannaButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createMannaButtonAction(_:)))
+        pushChat = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(pushChatView))
         self.do {
-            $0.title = "Manna List"
+            $0.title = "Test"
             $0.navigationController?.navigationBar.prefersLargeTitles = true
-            $0.navigationItem.rightBarButtonItem = createMannaButton
+            $0.navigationItem.rightBarButtonItems = [createMannaButton!, pushChat!]
         }
         tableView.do {
             $0.register(MannaListTableViewCell.self, forCellReuseIdentifier: MannaListTableViewCell.id)
@@ -63,6 +65,10 @@ class MannaListViewController: UIViewController, reloadData {
     }
     
     
+    @objc func pushChatView() {
+        let view = ChattingViewController()
+        navigationController?.pushViewController(view, animated: true)
+    }
     
     @objc func createMannaButtonAction(_ sender: UIBarButtonItem) {
         
@@ -118,7 +124,6 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
         if MannaModel.model.count > 0 {
             cell.title.text = MannaModel.model[indexPath.row].name
         }
-//        cell.title.text = "비어있는 데이터"
         return cell
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

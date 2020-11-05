@@ -18,7 +18,10 @@ protocol test {
 extension MapViewController: test {
     
 }
+
 class MapViewController: UIViewController {
+    let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
+    var userImage: [UIImage] = []
     var chatView: UIView?
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
     var locationManager = CLLocationManager()
@@ -42,17 +45,20 @@ class MapViewController: UIViewController {
     lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
     var cameraStateFlag = true
     var goalMarker = NMFMarker()
-   
+    
     
     override func viewDidAppear(_ animated: Bool) {
+        
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
         }
     }
     
+    // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkedLocation()
         chatView = bottomSheet.chatViewController.backgroundView
         myLocationButton.isHidden = true
         if socket.isConnected == false {
@@ -78,7 +84,7 @@ class MapViewController: UIViewController {
             $0.layer.cornerRadius = $0.frame.width / 2
             $0.clipsToBounds = true
             $0.addTarget(self, action: #selector(back), for: .touchUpInside)
-//            $0.dropShadow()
+            //            $0.dropShadow()
         }
         mapView.do {
             $0.frame = view.frame
@@ -184,6 +190,24 @@ class MapViewController: UIViewController {
         }
     }
     
+    func renderImage() {
+        for name in userName {
+            let image = UserView(text: name).then({
+                $0.layer.cornerRadius = 30
+            })
+            let renderImage = image.asImage()
+            userImage.append(renderImage)
+        }
+    }
+    
+    func nicknameImageSet() {
+        var count = 0
+        for key in UserModel.userList.keys {
+            UserModel.userList[key]?.nicknameImage = userImage[count]
+            count += 1
+        }
+    }
+    
     func didMarkerClicked() {
         tokenWithMarker.keys.map { key in
             tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
@@ -254,7 +278,7 @@ class MapViewController: UIViewController {
     }
     
     @objc func testGestureFunc() {
-        let view = tempViewController()
+        let view = ChattingViewController()
         view.transitioningDelegate = bottomSheet.chatViewController
         UIView.animate(withDuration: 0.15) {
             self.bottomSheet.chatViewController.view.alpha = 0.1
@@ -344,30 +368,54 @@ class MapViewController: UIViewController {
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
                 }
             }
+            
+            
+            
             if (UserModel.userList[key]?.state)! {
                 tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
                 tokenWithMarker[key]?.mapView = mapView
             }
         }
-        bottomSheet.runningTimeController.collectionView.reloadData()
+    }
+    
+    func checkedLocation() {
+        let status = CLLocationManager.authorizationStatus()
+        print(status)
+        if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
+            let alter = UIAlertController(title: "위치권한 설정이 '안함'으로 되어있습니다.", message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.", preferredStyle: UIAlertController.Style.alert)
+            let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default){
+                (action: UIAlertAction) in
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
+                } else {
+                    UIApplication.shared.openURL(NSURL(string: UIApplication.openSettingsURLString)! as URL)
+                }
+            }
+            let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive){
+                (action: UIAlertAction) in
+                exit(0)
+            }
+            alter.addAction(logNoAction)
+            alter.addAction(logOkAction)
+            self.present(alter, animated: true, completion: nil)
+        }
     }
     
     @objc func timeChecker() {
-        
         UserModel.userList.keys.forEach {
             if UserModel.userList[$0]?.state == true {
                 UserModel.userList[$0]?.networkValidTime += 1
             }
         }
         let state = UIApplication.shared.applicationState
-                if state == .background {
-                    bottomSheet.rankingViewController.animationView.pause()
-                }else if state == .active {
-                    bottomSheet.rankingViewController.animationView.play()
-                }
+        if state == .background {
+            bottomSheet.rankingViewController.animationView.pause()
+        }else if state == .active {
+            bottomSheet.rankingViewController.animationView.play()
+        }
     }
+    
 }
-
 extension MapViewController: NMFMapViewCameraDelegate {
     func zoomLinearEquation(zoomLevel: Double) -> CGFloat{
         return  CGFloat(-(25/3) * zoomLevel + 175)
@@ -432,17 +480,39 @@ extension MapViewController: CLLocationManagerDelegate {
         socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
         print("쏜다")
         
-//        if imageToNameFlag {
-//            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
-//        } else {
-//            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
-//        }
-//        tokenWithMarker[MannaDemo.myUUID!]?.do {
-//            $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-//            $0.mapView = mapView
-//        }
+        //        if imageToNameFlag {
+        //            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
+        //        } else {
+        //            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
+        //        }
+        //        tokenWithMarker[MannaDemo.myUUID!]?.do {
+        //            $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
+        //            $0.mapView = mapView
+        //        }
         setCollcetionViewItem()
         bottomSheet.runningTimeController.collectionView.reloadData()
+    }
+    
+    // MARK: 위치권한 다시 받는곳
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        if status != CLAuthorizationStatus.authorizedAlways {
+            //위치권한 거부되있을 경우
+            let alter = UIAlertController(title: "위치권한 설정을 항상으로 해주셔야 합니다.", message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.", preferredStyle: UIAlertController.Style.alert)
+            let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default) {
+                (action: UIAlertAction) in
+                
+                UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
+                
+            }
+            let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive){
+                (action: UIAlertAction) in
+                exit(0)
+            }
+            alter.addAction(logNoAction)
+            alter.addAction(logOkAction)
+            self.present(alter, animated: true, completion: nil)
+        }
     }
 }
 
@@ -501,7 +571,7 @@ extension MapViewController: WebSocketDelegate {
             case "LEAVE" :
                 
                 guard let name = username else { return }
-//                UserModel.userList[token]?.state = false
+                //                UserModel.userList[token]?.state = false
                 UserModel.userList[token]?.networkValidTime = 11
                 marking()
                 setCollcetionViewItem()
@@ -613,3 +683,4 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         }
     }
 }
+

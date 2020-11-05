@@ -9,19 +9,9 @@ import UIKit
 
 extension UIView {
     func asImage() -> UIImage {
-        //        let renderer = UIGraphicsImageRenderer(size: self.bounds.size)
-        //        let image = renderer.image { _ in
-        //            self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
-        //        }
-        //        UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
-        ////        drawHierarchy(in: bounds, afterScreenUpdates: true)
-        //        let image = UIGraphicsGetImageFromCurrentImageContext()
-        //        return image
-        //    }
-        
         let renderer = UIGraphicsImageRenderer(bounds: bounds)
-        return renderer.image {
-            layer.render(in: $0.cgContext)
+        return renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
         }
     }
     func makeImageFrom(_ desiredView: UIView) -> UIImage {

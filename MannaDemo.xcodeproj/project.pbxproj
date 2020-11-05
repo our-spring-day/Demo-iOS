@@ -10,8 +10,15 @@
 		8E7C8A978621D2D74141175E /* Pods_MannaDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746C721A3B03AF62EF85DC20 /* Pods_MannaDemo.framework */; };
 		A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5155631254029BE00487BEF /* RegisterUserViewController.swift */; };
 		A515563925404C9500487BEF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A515563825404C9500487BEF /* MapViewController.swift */; };
+		A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E22552752F00ACD946 /* ChatMessageView.swift */; };
+		A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E52552803000ACD946 /* UITextField+Ext.swift */; };
+		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
 		A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A549EDD32543510900EC65E3 /* ShowToast.swift */; };
 		A5822B15255022C50085B55A /* PathAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5822B14255022C50085B55A /* PathAPI.swift */; };
+		A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05925514A0900A11EEF /* ChattingViewController.swift */; };
+		A5A0F05D25514A1400A11EEF /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05C25514A1400A11EEF /* ChatCell.swift */; };
+		A5A0F0602551593300A11EEF /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */; };
+		A5A0F06325515C1900A11EEF /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F06225515C1900A11EEF /* ChatMessage.swift */; };
 		A5D48F1A2542A60F00399462 /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F192542A60F00399462 /* Marker.swift */; };
 		A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F202542AD9B00399462 /* UIView+Ext.swift */; };
 		A5D48F252542AE3B00399462 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F242542AE3B00399462 /* UserView.swift */; };
@@ -45,8 +52,15 @@
 		746C721A3B03AF62EF85DC20 /* Pods_MannaDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MannaDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5155631254029BE00487BEF /* RegisterUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterUserViewController.swift; sourceTree = "<group>"; };
 		A515563825404C9500487BEF /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
+		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
+		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
 		A549EDD32543510900EC65E3 /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
 		A5822B14255022C50085B55A /* PathAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathAPI.swift; sourceTree = "<group>"; };
+		A5A0F05925514A0900A11EEF /* ChattingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewController.swift; sourceTree = "<group>"; };
+		A5A0F05C25514A1400A11EEF /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
+		A5A0F06225515C1900A11EEF /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		A5D48F192542A60F00399462 /* Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
 		A5D48F202542AD9B00399462 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		A5D48F242542AE3B00399462 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
@@ -133,11 +147,21 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		A5A0F058255149DE00A11EEF /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				A5A0F05925514A0900A11EEF /* ChattingViewController.swift */,
+				A5A0F05C25514A1400A11EEF /* ChatCell.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		A5D48F182542A5FB00399462 /* Component */ = {
 			isa = PBXGroup;
 			children = (
 				A5D48F192542A60F00399462 /* Marker.swift */,
 				A5D48F242542AE3B00399462 /* UserView.swift */,
+				A53817E22552752F00ACD946 /* ChatMessageView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -147,6 +171,9 @@
 			children = (
 				A5D48F202542AD9B00399462 /* UIView+Ext.swift */,
 				CC41A0862548157C00C0E762 /* MannaDemo.swift */,
+				A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */,
+				A53817E52552803000ACD946 /* UITextField+Ext.swift */,
+				A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -196,6 +223,7 @@
 				CCE752492540288F008E0BA1 /* MannaList */,
 				A515562B2540290600487BEF /* RegisterUser */,
 				CC8B845A2540231A00441445 /* AppDelegate.swift */,
+				A5A0F058255149DE00A11EEF /* Chat */,
 				CC8B845C2540231A00441445 /* SceneDelegate.swift */,
 				CC8B845E2540231A00441445 /* ViewController.swift */,
 				CC8B84602540231A00441445 /* Main.storyboard */,
@@ -231,6 +259,7 @@
 				CCF3BC58254046BA00C7F718 /* MannaModel.swift */,
 				CCEC0F0D2541D9330028B497 /* User.swift */,
 				A5822B14255022C50085B55A /* PathAPI.swift */,
+				A5A0F06225515C1900A11EEF /* ChatMessage.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -361,12 +390,19 @@
 				CC8B845F2540231A00441445 /* ViewController.swift in Sources */,
 				CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */,
 				CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */,
+				A5A0F06325515C1900A11EEF /* ChatMessage.swift in Sources */,
+				A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */,
 				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
+				A5A0F0602551593300A11EEF /* UIColor+Ext.swift in Sources */,
+				A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */,
 				CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */,
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
+				A5A0F05D25514A1400A11EEF /* ChatCell.swift in Sources */,
 				A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */,
 				CC74831525511F0C006C1E02 /* ChatViewController.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
+				A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */,
+				A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */,
 				CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */,
 				CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */,
 				CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */,
