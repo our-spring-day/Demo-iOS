@@ -274,8 +274,57 @@ class MapViewController: UIViewController{
             [zoom].forEach { mapView.moveCamera($0) }
         } else {
             cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
-            print(mapView.projection.latlngBounds(fromViewBounds: self.view.frame).hasPoint(goalMarker.position))
             
+            var minLatLng = NMGLatLng(lat: 150, lng: 150)
+            var maxLatLng = NMGLatLng(lat: 0, lng: 0)
+            
+            
+            UserModel.userList.keys.forEach {
+                guard (UserModel.userList[$0]!.state = true) != nil else { return }
+                if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
+                    if minLatLng.lat > UserModel.userList[$0]!.latitude {
+                        minLatLng.lat = UserModel.userList[$0]!.latitude
+                    }
+                    if minLatLng.lng > UserModel.userList[$0]!.longitude {
+                        
+                        minLatLng.lng = UserModel.userList[$0]!.longitude
+                    }
+                    if maxLatLng.lat < UserModel.userList[$0]!.latitude {
+                        maxLatLng.lat = UserModel.userList[$0]!.latitude
+                    }
+                    if maxLatLng.lng < UserModel.userList[$0]!.longitude {
+                        maxLatLng.lng = UserModel.userList[$0]!.longitude
+                    }
+                }
+            }
+            
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
+            mapView.moveCamera(cameraUpdate)
+            
+            
+            mapView.zoomLevel = 18
+            while mapView.zoomLevel > 1 {
+                var count = UserModel.userList.count
+                var trueCount = 0
+                UserModel.userList.keys.forEach {
+                    
+                    let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
+//                    print(NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).hasPoint(targetPoint))
+//                    print(mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)))
+//                    print(mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0)))
+                    if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
+                        trueCount += 1
+                    }
+                }
+                print(trueCount)
+                if trueCount == count {
+                    break
+                } else {
+                    trueCount = 0
+                    mapView.zoomLevel -= 0.3                }
+            }
+            print(mapView.zoomLevel)
+            mapView.moveCamera(cameraUpdate)
         }
     }
     
@@ -388,9 +437,6 @@ class MapViewController: UIViewController{
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
                 }
             }
-            
-            
-            
             if (UserModel.userList[key]?.state)! {
                 tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
                 tokenWithMarker[key]?.mapView = mapView
@@ -424,7 +470,7 @@ class MapViewController: UIViewController{
     @objc func timeChecker() {
         UserModel.userList.keys.forEach {
             if UserModel.userList[$0]?.state == true {
-                UserModel.userList[$0]?.networkValidTime += 1
+                UserModel.userList[$0]?.networkValidTime += 0
             }
         }
         let state = UIApplication.shared.applicationState
