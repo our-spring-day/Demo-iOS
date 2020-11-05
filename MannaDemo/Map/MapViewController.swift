@@ -353,6 +353,7 @@ class MapViewController: UIViewController {
                 tokenWithMarker[key]?.mapView = mapView
             }
         }
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func camereUpdateOnlyOnce() {
@@ -499,6 +500,8 @@ extension MapViewController: WebSocketDelegate {
                 
                 guard let name = username else { return }
 //                UserModel.userList[token]?.state = false
+                UserModel.userList[token]?.networkValidTime = 11
+                marking()
                 setCollcetionViewItem()
                 bottomSheet.runningTimeController.collectionView.reloadData()
                 showToast(message: "\(name)님 나가셨습니다.")
@@ -506,6 +509,8 @@ extension MapViewController: WebSocketDelegate {
             case "JOIN" :
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = true
+                UserModel.userList[token]?.networkValidTime = 0
+                marking()
                 showToast(message: "\(name)님 접속하셨습니다.")
                 setCollcetionViewItem()
                 bottomSheet.runningTimeController.collectionView.reloadData()
@@ -561,9 +566,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         
         if user.state {
             if imageToNameFlag {
-                if user.networkValidTime > 60 {
-                    //                    cell.profileImage.image = user.
-                    //                    이름이미지 + 끊겼을 때 이미지
+                if user.networkValidTime > 10 {
                     cell.profileImage.image = user.disconnectProfileImage
                 } else {
                     cell.profileImage.image = user.nicknameImage
@@ -571,8 +574,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
                     cell.isUserInteractionEnabled = true
                 }
             } else {
-                if user.networkValidTime > 60 {
-                    //                    사진이미지 + 끊겼을 때 이미지
+                if user.networkValidTime > 10 {
                     cell.profileImage.image = user.disconnectProfileImage
                 } else {
                     cell.profileImage.image = user.profileImage
@@ -581,7 +583,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
                 }
             }
         } else {
-            cell.profileImage.image = #imageLiteral(resourceName: "profile")
+            cell.profileImage.image = #imageLiteral(resourceName: "Image-6")
             cell.isUserInteractionEnabled = false
         }
         return cell
