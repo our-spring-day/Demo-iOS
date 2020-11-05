@@ -16,7 +16,7 @@ protocol test {
     var chatView: UIView? { get set}
 }
 extension MapViewController: test {
-
+    
 }
 class MapViewController: UIViewController {
     var chatView: UIView?
@@ -42,7 +42,9 @@ class MapViewController: UIViewController {
     var toastLabel = UILabel()
     var cameraState = UIButton()
     var bottomTabView = BottomTabView()
+    var myLocationButton = UIButton()
     lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
+    var cameraStateFlag = true
     
     
     
@@ -68,6 +70,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         chatView = bottomSheet.chatViewController.backgroundView
+        myLocationButton.isHidden = true
         if socket.isConnected == false {
             socket.connect()
         }
@@ -187,9 +190,31 @@ class MapViewController: UIViewController {
             $0.addTarget(self, action: #selector(didCameraStateButtonClicked), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
         }
+        myLocationButton.do {
+            $0.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
+            $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
+            $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+        }
+    }
+    @objc func didMyLocationButtonClicked() {
+        //        cameraStateFlag = true
+        self.myLocationButton.alpha = 0
+        myLocationButton.isHidden = true
+        
+        print("mylocafunc")
+        let position = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        position.animation = .easeOut
+        position.animationDuration = 0.5
+        let zoom = NMFCameraUpdate(zoomTo: 15)
+        zoom.animationDuration = 0.5
+        [zoom, position].forEach { mapView.moveCamera($0) }
     }
     
     @objc func didCameraStateButtonClicked() {
+        //        cameraStateFlag = true
+        self.myLocationButton.alpha = 0
+        myLocationButton.isHidden = true
+        print("camarabuton")
         if cameraState.currentImage == UIImage(named: "forest") {
             cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
             let position = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
@@ -204,7 +229,7 @@ class MapViewController: UIViewController {
     }
     
     func layout() {
-        [mapView, backButton, infoButton, timerView, bottomSheet.view, bottomTabView, toastLabel, timeLabel, cameraState].forEach { view.addSubview($0) }
+        [mapView, backButton, infoButton, timerView, bottomSheet.view, bottomTabView, toastLabel, timeLabel, cameraState, myLocationButton].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -237,6 +262,11 @@ class MapViewController: UIViewController {
             $0.bottom.leading.trailing.equalTo(view)
             $0.height.equalTo(MannaDemo.convertHeigt(value: MannaDemo.convertHeigt(value: 85)))
         }
+        myLocationButton.snp.makeConstraints {
+            $0.top.equalTo(cameraState.snp.bottom).offset(22)
+            $0.trailing.equalToSuperview().offset(-22)
+            $0.width.height.equalTo(40)
+        }
         cameraState.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             $0.trailing.equalToSuperview().offset(-22)
@@ -248,24 +278,24 @@ class MapViewController: UIViewController {
         switch sender.tag {
         case 0:
             self.bottomSheet.chatViewController.view.isHidden = false
-            self.bottomSheet.runningTimeController.view.isHidden = true
             self.bottomSheet.rankingViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = true
             UIView.animate(withDuration: 0.15) {
                 self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
             }
             break
         case 1:
             self.bottomSheet.chatViewController.view.isHidden = true
-            self.bottomSheet.runningTimeController.view.isHidden = false
-            self.bottomSheet.rankingViewController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = false
+            self.bottomSheet.runningTimeController.view.isHidden = true
             UIView.animate(withDuration: 0.15) {
                 self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
             }
             break
         case 2:
             self.bottomSheet.chatViewController.view.isHidden = true
-            self.bottomSheet.runningTimeController.view.isHidden = true
-            self.bottomSheet.rankingViewController.view.isHidden = false
+            self.bottomSheet.rankingViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = false
             UIView.animate(withDuration: 0.15) {
                 self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.5, width: self.view.frame.width, height: self.view.frame.height)
             }
@@ -347,13 +377,23 @@ extension MapViewController: NMFMapViewCameraDelegate {
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        myLocationButton.isHidden = false
+        UIView.animate(withDuration: 0.5) {
+            self.myLocationButton.alpha = 1
+        }
+    }
+    
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
+        print("will")
         markerResizeByZoomLevel()
     }
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+        print("end")
         markerResizeByZoomLevel()
     }
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
+        print("change")
         markerResizeByZoomLevel()
     }
 }

@@ -62,7 +62,7 @@ class ChatViewController: UIViewController {
         view.backgroundColor = .none
         backgroundView.snp.makeConstraints {
             $0.top.equalTo(view).offset(MannaDemo.convertHeigt(value: 26.63))
-            $0.width.equalTo(view).offset(-20)
+            $0.width.equalTo(view)
             $0.height.equalTo(100)
             $0.centerX.equalTo(view)
         }

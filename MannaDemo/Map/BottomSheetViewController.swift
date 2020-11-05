@@ -39,7 +39,7 @@ class BottomSheetViewController: UIViewController {
         attribute()
         layout()
     }
-
+    
     private func moveView(state: State) {
         var YPosition: CGFloat?
         switch state {
@@ -58,9 +58,9 @@ class BottomSheetViewController: UIViewController {
         }
         print(self.currentState)
         self.view.frame = CGRect(x: 0,
-                            y: YPosition!,
-                            width: self.view.frame.width,
-                            height: self.view.frame.height)
+                                 y: YPosition!,
+                                 width: self.view.frame.width,
+                                 height: self.view.frame.height)
     }
     
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
@@ -68,9 +68,9 @@ class BottomSheetViewController: UIViewController {
         let minY = self.view.frame.minY
         if (minY + translation.y >= Constant.halfViewYPosition) && (minY + translation.y <= Constant.partialViewYPosition) {
             self.view.frame = CGRect(x: 0,
-                                y: minY,
-                                width: self.view.frame.width,
-                                height: self.view.frame.height)
+                                     y: minY,
+                                     width: self.view.frame.width,
+                                     height: self.view.frame.height)
             recognizer.setTranslation(CGPoint.zero, in: self.view)
         }
     }
@@ -88,8 +88,8 @@ class BottomSheetViewController: UIViewController {
                 view.frame.origin.y = Constant.fullViewYPosition
             }
         } else if recognizer.state == .ended {
-//            self.parentView?.isUserInteractionEnabled = false
-//            self.view.isUserInteractionEnabled = false
+            //            self.parentView?.isUserInteractionEnabled = false
+            //            self.view.isUserInteractionEnabled = false
             UIView.animate(withDuration: 0.2,
                            delay: 0.0,
                            options: .allowUserInteraction,
@@ -103,8 +103,8 @@ class BottomSheetViewController: UIViewController {
                             }
                             self.moveView(state: currentState)},
                            completion: { _ in
-//                            self.view.isUserInteractionEnabled = true
-//                            self.parentView?.isUserInteractionEnabled = true
+                            //                            self.view.isUserInteractionEnabled = true
+                            //                            self.parentView?.isUserInteractionEnabled = true
                            }
             )
         }
@@ -131,7 +131,7 @@ class BottomSheetViewController: UIViewController {
         [backgroundView].forEach { view.addSubview($0) }
         [bar].forEach { backgroundView.addSubview($0) }
         
-        [chatViewController, rankingViewController, runningTimeController].forEach {
+        [chatViewController, runningTimeController, rankingViewController].forEach {
             addChild($0)
             backgroundView.addSubview($0.view)
             $0.view.snp.makeConstraints {
@@ -139,9 +139,8 @@ class BottomSheetViewController: UIViewController {
             }
             $0.didMove(toParent: self)
         }
-        
+        runningTimeController.view.isHidden = true
         chatViewController.view.isHidden = true
-        rankingViewController.view.isHidden = true
         
         backgroundView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(60)
