@@ -12,28 +12,39 @@ import Starscream
 import SwiftyJSON
 import Lottie
 
+protocol test {
+    var chatView: UIView? { get set}
+}
+extension MapViewController: test {
+    
+}
 class MapViewController: UIViewController {
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
+    var chatView: UIView?
     let socket = WebSocket(url: URL(string: "ws://ec2-54-180-125-3.ap-northeast-2.compute.amazonaws.com:40008/ws?token=\(MannaDemo.myUUID!)")!)
-    var locationOverlay = NMFMapView().locationOverlay
     var locationManager = CLLocationManager()
     var tokenWithMarker: [String : NMFMarker] = [:]
     let mapView = NMFMapView()
     let backButton = UIButton()
-    let infoButton = UIButton()
+    var timerView = TimerView()
+    var bottomSheet = BottomSheetViewController()
     let multipartPath = NMFMultipartPath()
     var animationView = AnimationView(name:"12670-flying-airplane")
-    var bottomSheet = BottomSheetViewController(frame: CGRect(x: 0,
-                                                              y: 0,
-                                                              width: UIScreen.main.bounds.width,
-                                                              height: UIScreen.main.bounds.height * 0.55))
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
     var myLongitude: Double = 0
     var zoomLevel: Double = 10
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
     var imageToNameFlag = true
+    var toastLabel = UILabel()
+    var cameraState = UIButton()
+    var bottomTabView = BottomTabView()
+    var myLocationButton = UIButton()
+    lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
+    var cameraStateFlag = true
+    var goalMarker = NMFMarker()
+   
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -47,16 +58,127 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         checkedLocation()
+        chatView = bottomSheet.chatViewController.backgroundView
+        myLocationButton.isHidden = true
         if socket.isConnected == false {
             socket.connect()
         }
-        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
         array()
+        layout()
         didMarkerClicked()
         attribute()
-        layout()
-        lottieFunc()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
+    }
+    
+    func attribute() {
+        socket.do {
+            $0.delegate = self
+        }
+        backButton.do {
+            $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
+            $0.frame.size.width = 40
+            $0.frame.size.height = 40
+            $0.layer.cornerRadius = $0.frame.width / 2
+            $0.clipsToBounds = true
+            $0.addTarget(self, action: #selector(back), for: .touchUpInside)
+//            $0.dropShadow()
+        }
+        mapView.do {
+            $0.frame = view.frame
+            $0.addCameraDelegate(delegate: self)
+            $0.mapType = .navi
+            $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
+            $0.symbolScale = 0.85
+            $0.logoInteractionEnabled = false
+            $0.maxZoomLevel = 18
+            $0.positionMode = .direction
+        }
+        mapView.locationOverlay.do {
+            $0.icon = NMFOverlayImage(image: #imageLiteral(resourceName: "overlay"))
+        }
+        locationManager.do {
+            $0.delegate = self
+            $0.requestWhenInUseAuthorization()
+            $0.desiredAccuracy = kCLLocationAccuracyBest
+            $0.startUpdatingLocation()
+        }
+        toastLabel.do {
+            $0.backgroundColor = UIColor.lightGray
+            $0.textColor = UIColor.black
+            $0.textAlignment = .center
+            $0.alpha = 0
+            $0.layer.cornerRadius = 10
+            $0.layer.masksToBounds = true
+        }
+        bottomSheet.do {
+            $0.runningTimeController.collectionView.delegate = self
+            $0.runningTimeController.collectionView.dataSource = self
+            $0.parentView = self.view
+            $0.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: view.frame.width, height: view.frame.height)
+            $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
+        }
+        bottomTabView.do {
+            $0.backgroundColor = .white
+            $0.chat.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
+            $0.runningTime.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
+            $0.ranking.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
+        }
+        cameraState.do {
+            $0.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
+            $0.addTarget(self, action: #selector(didCameraStateButtonClicked), for: .touchUpInside)
+            $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+            $0.dropShadow()
+        }
+        myLocationButton.do {
+            $0.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
+            $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
+            $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+        }
+        goalMarker.do {
+            $0.iconImage = NMFOverlayImage(image: #imageLiteral(resourceName: "goal"))
+            $0.height = MannaDemo.convertWidth(value: 48)
+            $0.width = MannaDemo.convertWidth(value: 48)
+            $0.position = NMGLatLng(lat: 37.475427, lng: 126.980378)
+            $0.mapView = mapView
+        }
+    }
+    
+    func layout() {
+        [mapView, cameraState, myLocationButton, backButton, timerView, bottomSheet.view, bottomTabView, toastLabel, ].forEach { view.addSubview($0) }
+        
+        backButton.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            $0.leading.equalToSuperview().offset(22)
+            $0.width.height.equalTo(40)
+        }
+        toastLabel.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.centerY.equalTo(view).offset(-100)
+            $0.width.equalTo(MannaDemo.convertWidth(value: 200))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 50))
+        }
+        timerView.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.centerY.equalTo(backButton)
+            $0.width.equalTo(MannaDemo.convertWidth(value: 130))
+            $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
+        }
+        bottomTabView.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalTo(view)
+            $0.height.equalTo(MannaDemo.convertHeigt(value: MannaDemo.convertHeigt(value: 85)))
+        }
+        myLocationButton.snp.makeConstraints {
+            $0.top.equalTo(cameraState.snp.bottom).offset(11)
+            $0.trailing.equalToSuperview().offset(-22)
+            $0.width.height.equalTo(40)
+        }
+        cameraState.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            $0.trailing.equalToSuperview().offset(-22)
+            $0.width.height.equalTo(40)
+        }
     }
     
     func array() {
@@ -93,13 +215,13 @@ class MapViewController: UIViewController {
                 cameraUpdate.animation = .easeOut
                 cameraUpdate.animationDuration = 0.3
                 mapView.moveCamera(cameraUpdate)
-                //여기있슴
+                
                 PathAPI.getPath(lat: lat!, lng: lng!) { result in
                     multipartPath.lineParts = [
                         NMGLineString(points: result)
                     ]
                     multipartPath.colorParts = [
-                        NMFPathColor(color: UIColor.red, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
+                        NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
                     ]
                     multipartPath.mapView = mapView
                 }
@@ -113,89 +235,105 @@ class MapViewController: UIViewController {
         userListForCollectionView.sort { $0.state && !$1.state}
     }
     
-    func lottieFunc() {
-        view.addSubview(animationView)
-        animationView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.centerX.equalTo(bottomSheet.backgroundView)
-            $0.width.height.equalTo(75)
-        }
-        animationView.contentMode = .scaleAspectFit
-        animationView.play()
-        animationView.loopMode = .loop
-        //animationView.pause()
+    func camereUpdateOnlyOnce() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        mapView.zoomLevel = 10
+        mapView.moveCamera(cameraUpdate)
     }
     
-    func attribute() {
-        socket.do {
-            $0.delegate = self
+    func showToast(message: String) {
+        self.toastLabel.text = message
+        self.toastLabel.alpha = 1
+        UIView.animate(withDuration: 1.5) {
+            self.toastLabel.alpha = 0
+        } completion: { _ in
         }
-        backButton.do {
-            $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
-            $0.frame.size.width = 40
-            $0.frame.size.height = 40
-            $0.layer.cornerRadius = $0.frame.width / 2
-            $0.clipsToBounds = true
-            $0.addTarget(self, action: #selector(back), for: .touchUpInside)
+    }
+    
+    @objc func didMyLocationButtonClicked() {
+        self.myLocationButton.alpha = 0
+        myLocationButton.isHidden = true
+        mapView.positionMode = .direction
+        multipartPath.mapView = nil
+        let zoom = NMFCameraUpdate(zoomTo: 15)
+        zoom.animationDuration = 0.5
+        [zoom].forEach { mapView.moveCamera($0) }
+    }
+    
+    @objc func didCameraStateButtonClicked() {
+        self.myLocationButton.alpha = 0
+        myLocationButton.isHidden = true
+        
+        if cameraState.currentImage == UIImage(named: "forest") {
+            cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
+            mapView.positionMode = .direction
+            let zoom = NMFCameraUpdate(zoomTo: 15)
+            zoom.animationDuration = 0.5
+            [zoom].forEach { mapView.moveCamera($0) }
+        } else {
+            cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
         }
-        infoButton.do {
-            $0.setImage(#imageLiteral(resourceName: "info"), for: .normal)
-            $0.frame.size.width = 40
-            $0.frame.size.height = 40
-            $0.contentMode = .scaleAspectFill
-            $0.layer.cornerRadius = $0.frame.width / 2
-            $0.layer.masksToBounds = true
-            $0.addTarget(self, action: #selector(info), for: .touchUpInside)
+    }
+    
+    @objc func testGestureFunc() {
+        let view = tempViewController()
+        view.transitioningDelegate = bottomSheet.chatViewController
+        UIView.animate(withDuration: 0.15) {
+            self.bottomSheet.chatViewController.view.alpha = 0.1
+            self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.2, width: self.view.frame.width, height: self.view.frame.height)
         }
-        mapView.do {
-            $0.frame = view.frame
-            $0.addCameraDelegate(delegate: self)
-            $0.mapType = .navi
-            $0.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
-            $0.symbolScale = 0.85
-            $0.logoInteractionEnabled = false
-            $0.maxZoomLevel = 18
+        UIView.animate(withDuration: 0, delay: 0.8) {
+            self.bottomSheet.chatViewController.view.alpha = 1
+            self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
         }
-        locationManager.do {
-            $0.delegate = self
-            $0.requestWhenInUseAuthorization()
-            $0.desiredAccuracy = kCLLocationAccuracyBest
-            $0.startUpdatingLocation()
-        }
-        bottomSheet.do {
-            $0.collectionView.delegate = self
-            $0.collectionView.dataSource = self
-            $0.zoomIn.addTarget(self, action: #selector(didzoomInClicked), for: .touchUpInside)
-            $0.zoomOut.addTarget(self, action: #selector(didzoomOutClicked), for: .touchUpInside)
-            $0.myLocation.addTarget(self, action: #selector(cameraUpdateToMyLocation), for: .touchUpInside)
+        present(view, animated: true)
+        self.view.bringSubviewToFront(bottomTabView)
+        bottomTabView.bringSubviewToFront(self.view)
+    }
+    
+    @objc func didClickecBottomTabButton(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            self.bottomSheet.chatViewController.view.isHidden = false
+            self.bottomSheet.rankingViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = true
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 525), width: self.view.frame.width, height: self.view.frame.height)
+            }
+            break
+        case 1:
+            self.bottomSheet.chatViewController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = false
+            self.bottomSheet.runningTimeController.view.isHidden = true
+            
+            //임시!! 토글
+            imageToNameFlag.toggle()
+            bottomSheet.runningTimeController.collectionView.reloadData()
+            marking()
+            if bottomTabView.runningTime.currentImage == #imageLiteral(resourceName: "man") {
+                bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "women"), for: .normal)
+            } else {
+                bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "man"), for: .normal)
+            }
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: self.view.frame.width, height: self.view.frame.height)
+            }
+            break
+        case 2:
+            self.bottomSheet.chatViewController.view.isHidden = true
+            self.bottomSheet.rankingViewController.view.isHidden = true
+            self.bottomSheet.runningTimeController.view.isHidden = false
+            UIView.animate(withDuration: 0.15) {
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: self.view.frame.width, height: self.view.frame.height)
+            }
+            break
+        default:
+            break
         }
     }
     
     @objc func back() {
         self.dismiss(animated: true)
-    }
-    
-    @objc func info() {
-        imageToNameFlag.toggle()
-        bottomSheet.collectionView.reloadData()
-        marking()
-        //이부분 네이버 맵 로고 없애고 메뉴만들어주면 됩니다~
-        //        mapView.showLegalNotice()
-        //        mapView.showOpenSourceLicense()
-    }
-    
-    @objc func didzoomInClicked() {
-        zoomLevel += 1
-        var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
-        cameraUpadateToNewZoom.animation = .easeOut
-        mapView.moveCamera(cameraUpadateToNewZoom)
-    }
-    
-    @objc func didzoomOutClicked() {
-        zoomLevel -= 1
-        var cameraUpadateToNewZoom = NMFCameraUpdate(zoomTo: zoomLevel)
-        cameraUpadateToNewZoom.animation = .easeOut
-        mapView.moveCamera(cameraUpadateToNewZoom)
     }
     
     @objc func cameraUpdateToMyLocation() {
@@ -205,37 +343,28 @@ class MapViewController: UIViewController {
         mapView.moveCamera(cameraUpdate)
     }
     
-    func layout() {
-        [mapView, backButton, infoButton, bottomSheet].forEach { view.addSubview($0) }
-        
-        backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
-            $0.leading.equalToSuperview().offset(22)
-            $0.width.height.equalTo(40)
-        }
-        infoButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
-            $0.trailing.equalToSuperview().offset(-22)
-            $0.width.height.equalTo(40)
-        }
-        bottomSheet.snp.makeConstraints {
-            $0.centerX.equalTo(view.snp.centerX)
-            $0.width.equalTo(view.frame.width)
-            $0.height.equalTo(view.frame.height)
-            $0.top.equalTo(UIScreen.main.bounds.height * 0.55)
-        }
-    }
-    
-    @objc func emitLocation() {
-        socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
-    }
-    
-    func marking() {
+    @objc func marking() {
         for key in UserModel.userList.keys {
+            if key == MannaDemo.myUUID {
+                break
+            }
+            let user = UserModel.userList[key]
             if imageToNameFlag {
-                tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
+                if user!.networkValidTime > 10 {
+                    //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage)
+                    print(user)
+                    print(user!.networkValidTime)
+                } else {
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
+                }
             } else {
-                tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
+                if user!.networkValidTime > 10 {
+                    //여결이 끊겼을 때 사진프로필 + 끊긴 이미지
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage)
+                } else {
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
+                }
             }
             
             
@@ -303,7 +432,22 @@ class MapViewController: UIViewController {
             toastLabel.alpha = 0.0
         } completion: { _ in
             toastLabel.removeFromSuperview()
+        bottomSheet.runningTimeController.collectionView.reloadData()
+    }
+    
+    @objc func timeChecker() {
+        
+        UserModel.userList.keys.forEach {
+            if UserModel.userList[$0]?.state == true {
+                UserModel.userList[$0]?.networkValidTime += 1
+            }
         }
+        let state = UIApplication.shared.applicationState
+                if state == .background {
+                    bottomSheet.rankingViewController.animationView.pause()
+                }else if state == .active {
+                    bottomSheet.rankingViewController.animationView.play()
+                }
     }
 }
 
@@ -317,24 +461,44 @@ extension MapViewController: NMFMapViewCameraDelegate {
             tokenWithMarker.map { (key, marker) in
                 marker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
                 marker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
+                
+                goalMarker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
+                goalMarker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
+                
                 marker.mapView = mapView
+                goalMarker.mapView = mapView
             }
         } else {
             tokenWithMarker.map { (key, marker) in
                 marker.width = MannaDemo.convertWidth(value: 50)
                 marker.height = MannaDemo.convertWidth(value: 50)
+                
+                goalMarker.width = MannaDemo.convertWidth(value: 50)
+                goalMarker.height = MannaDemo.convertWidth(value: 50)
+                
+                goalMarker.mapView = mapView
                 marker.mapView = mapView
             }
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        myLocationButton.isHidden = false
+        UIView.animate(withDuration: 0.5) {
+            self.myLocationButton.alpha = 1
+        }
+    }
+    
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
+        print("will")
         markerResizeByZoomLevel()
     }
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+        print("end")
         markerResizeByZoomLevel()
     }
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
+        print("change")
         markerResizeByZoomLevel()
     }
 }
@@ -348,19 +512,20 @@ extension MapViewController: CLLocationManagerDelegate {
         myLongitude = locValue.longitude
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
+        socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
+        print("쏜다")
         
-        if imageToNameFlag {
-            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
-        } else {
-            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
-        }
-        
-        tokenWithMarker[MannaDemo.myUUID!]?.do {
-            $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
-            $0.mapView = mapView
-        }
+//        if imageToNameFlag {
+//            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.nicknameImage)
+//        } else {
+//            tokenWithMarker[MannaDemo.myUUID!]?.iconImage = NMFOverlayImage(image: UserModel.userList[MannaDemo.myUUID!]!.profileImage)
+//        }
+//        tokenWithMarker[MannaDemo.myUUID!]?.do {
+//            $0.position = NMGLatLng(lat: myLatitude, lng: myLongitude)
+//            $0.mapView = mapView
+//        }
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     // MARK: 위치권한 다시 받는곳
@@ -385,6 +550,7 @@ extension MapViewController: CLLocationManagerDelegate {
         }
     }
 }
+
 extension MapViewController: WebSocketDelegate {
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         print("\(data)")
@@ -394,14 +560,14 @@ extension MapViewController: WebSocketDelegate {
         print("sockect Connect!")
         UserModel.userList[MannaDemo.myUUID!]?.state = true
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         print("sockect Disconnect ㅠㅠ")
         UserModel.userList[MannaDemo.myUUID!]?.state = false
         setCollcetionViewItem()
-        bottomSheet.collectionView.reloadData()
+        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
@@ -438,18 +604,23 @@ extension MapViewController: WebSocketDelegate {
                 }
                 
             case "LEAVE" :
+                
                 guard let name = username else { return }
-                UserModel.userList[token]?.state = false
+//                UserModel.userList[token]?.state = false
+                UserModel.userList[token]?.networkValidTime = 11
+                marking()
                 setCollcetionViewItem()
-                bottomSheet.collectionView.reloadData()
+                bottomSheet.runningTimeController.collectionView.reloadData()
                 showToast(message: "\(name)님 나가셨습니다.")
                 
             case "JOIN" :
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = true
+                UserModel.userList[token]?.networkValidTime = 0
+                marking()
                 showToast(message: "\(name)님 접속하셨습니다.")
                 setCollcetionViewItem()
-                bottomSheet.collectionView.reloadData()
+                bottomSheet.runningTimeController.collectionView.reloadData()
                 
             case .none:
                 print("none")
@@ -460,19 +631,20 @@ extension MapViewController: WebSocketDelegate {
             
             guard let lat = lat_ else { return }
             guard let lng = lng_ else { return }
-            guard var user = UserModel.userList[token] else { return }
+            guard UserModel.userList[token] != nil else { return }
             
+            UserModel.userList[token]?.networkValidTime = 0
             if token != MannaDemo.myUUID {
                 //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
                 UserModel.userList[token]?.latitude = lat
                 UserModel.userList[token]?.longitude = lng
-                marking()
             }
             setCollcetionViewItem()
-            bottomSheet.collectionView.reloadData()
+            bottomSheet.runningTimeController.collectionView.reloadData()
         }
     }
 }
+
 extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return userListForCollectionView.count
@@ -482,52 +654,67 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannaCollectionViewCell.identifier, for: indexPath) as! MannaCollectionViewCell
         let user = userListForCollectionView[indexPath.row]
-        
         let userListCount =  userListForCollectionView.filter { $0.state == true }.count
         
-        //        for i in 0..<userListCount {
-        //
-        //        }
-        
-        if userListCount == 1 {
-            if indexPath.row == 0 {
-                cell.ranking.image = #imageLiteral(resourceName: "🥇")
+        if indexPath.row == 0 {
+            cell.ranking.image = #imageLiteral(resourceName: "🥇")
+        } else if indexPath.row ==  userListCount - 1 && indexPath.row != 0 {
+            cell.ranking.image = #imageLiteral(resourceName: "☠️")
+        } else if userListCount > 2 {
+            if indexPath.row == 1 {
+                cell.ranking.image = #imageLiteral(resourceName: "🥈")
+            } else if indexPath.row == 2 {
+                cell.ranking.image = #imageLiteral(resourceName: "🥉")
             } else {
                 cell.ranking.image = UIImage()
             }
+        } else {
+            cell.ranking.image = UIImage()
         }
-        
-        //        if indexPath.row == 0 {
-        //            cell.ranking.image = #imageLiteral(resourceName: "🥇")
-        //        } else if indexPath.row == 1 {
-        //            cell.ranking.image = #imageLiteral(resourceName: "🥈")
-        //        } else if indexPath.row == 2 {
-        //            cell.ranking.image = #imageLiteral(resourceName: "🥉")
-        //        } else {
-        //            cell.ranking.image = UIImage()
-        //        }
         
         if user.state {
             if imageToNameFlag {
-                cell.profileImage.image = user.nicknameImage
-                cell.backgroundColor = nil
-                cell.isUserInteractionEnabled = true
+                if user.networkValidTime > 10 {
+                    cell.profileImage.image = user.disconnectProfileImage
+                } else {
+                    cell.profileImage.image = user.nicknameImage
+                    cell.backgroundColor = nil
+                    cell.isUserInteractionEnabled = true
+                }
             } else {
-                cell.profileImage.image = user.profileImage
-                cell.backgroundColor = nil
-                cell.isUserInteractionEnabled = true
+                if user.networkValidTime > 10 {
+                    cell.profileImage.image = user.disconnectProfileImage
+                } else {
+                    cell.profileImage.image = user.profileImage
+                    cell.backgroundColor = nil
+                    cell.isUserInteractionEnabled = true
+                }
             }
         } else {
-            cell.profileImage.image = #imageLiteral(resourceName: "profile")
+            cell.profileImage.image = #imageLiteral(resourceName: "Image-6")
             cell.isUserInteractionEnabled = false
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude))
-        cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 1.2
-        mapView.moveCamera(cameraUpdate)
+        
+        if userListForCollectionView[indexPath.row].latitude != 0 && userListForCollectionView[indexPath.row].longitude != 0 {
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude,
+                                                                   lng: userListForCollectionView[indexPath.row].longitude))
+            
+            cameraUpdate.animation = .fly
+            cameraUpdate.animationDuration = 1.2
+            mapView.moveCamera(cameraUpdate)
+            PathAPI.getPath(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude) { result in
+                self.multipartPath.lineParts = [
+                    NMGLineString(points: result)
+                ]
+                self.multipartPath.colorParts = [
+                    NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
+                ]
+                self.multipartPath.mapView = self.mapView
+            }
+        }
     }
 }

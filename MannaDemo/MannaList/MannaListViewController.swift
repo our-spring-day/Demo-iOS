@@ -22,7 +22,6 @@ class MannaListViewController: UIViewController, reloadData {
     var pushChat: UIBarButtonItem?
     let tableView = UITableView()
     let refreshControl = UIRefreshControl()
-    
     func reloadData() {
         tableView.reloadData()
     }
