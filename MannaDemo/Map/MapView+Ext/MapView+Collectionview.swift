@@ -65,13 +65,12 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         if userListForCollectionView[indexPath.row].latitude != 0 && userListForCollectionView[indexPath.row].longitude != 0 {
             let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userListForCollectionView[indexPath.row].latitude,
                                                                    lng: userListForCollectionView[indexPath.row].longitude))
-            
             cameraUpdate.animation = .fly
             cameraUpdate.animationDuration = 1.2
             mapView.moveCamera(cameraUpdate)
             PathAPI.getPath(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude) { result in
                 self.multipartPath.lineParts = [
-                    NMGLineString(points: result)
+                    NMGLineString(points: result.path)
                 ]
                 self.multipartPath.colorParts = [
                     NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)

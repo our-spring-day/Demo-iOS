@@ -19,7 +19,7 @@ extension MapViewController: test {
     
 }
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController{
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
     var chatView: UIView?
@@ -220,7 +220,7 @@ class MapViewController: UIViewController {
                 
                 PathAPI.getPath(lat: lat!, lng: lng!) { result in
                     multipartPath.lineParts = [
-                        NMGLineString(points: result)
+                        NMGLineString(points: result.path)
                     ]
                     multipartPath.colorParts = [
                         NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
@@ -274,6 +274,8 @@ class MapViewController: UIViewController {
             [zoom].forEach { mapView.moveCamera($0) }
         } else {
             cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
+            print(mapView.projection.latlngBounds(fromViewBounds: self.view.frame).hasPoint(goalMarker.position))
+            
         }
     }
     

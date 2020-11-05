@@ -22,6 +22,7 @@
 		A5D48F1A2542A60F00399462 /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F192542A60F00399462 /* Marker.swift */; };
 		A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F202542AD9B00399462 /* UIView+Ext.swift */; };
 		A5D48F252542AE3B00399462 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F242542AE3B00399462 /* UserView.swift */; };
+		CC107739255464D300908D71 /* TravelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC107738255464D300908D71 /* TravelData.swift */; };
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
 		CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */; };
 		CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */; };
@@ -68,6 +69,7 @@
 		A5D48F192542A60F00399462 /* Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
 		A5D48F202542AD9B00399462 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		A5D48F242542AE3B00399462 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		CC107738255464D300908D71 /* TravelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelData.swift; sourceTree = "<group>"; };
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionView.swift; sourceTree = "<group>"; };
 		CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -141,17 +143,9 @@
 			isa = PBXGroup;
 			children = (
 				CC8A0B5C2554606F00063790 /* MapView+Ext */,
+				CC8A0B672554616200063790 /* Component */,
 				CCF3BC532540444600C7F718 /* Entity */,
 				A515563825404C9500487BEF /* MapViewController.swift */,
-				CC748311255058A2006C1E02 /* BottomTabView.swift */,
-				CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */,
-				CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */,
-				CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */,
-				CC74831425511F0C006C1E02 /* ChatViewController.swift */,
-				CC74831B25513098006C1E02 /* RunningTimeViewController.swift */,
-				CC748318255124FB006C1E02 /* RankingViewViewController.swift */,
-				CC74832B255164E7006C1E02 /* tempViewController.swift */,
-				CC8A0B2225540BAD00063790 /* TimerView.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -212,6 +206,22 @@
 				CC8A0B642554611B00063790 /* MapView+Collectionview.swift */,
 			);
 			path = "MapView+Ext";
+			sourceTree = "<group>";
+		};
+		CC8A0B672554616200063790 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				CC748311255058A2006C1E02 /* BottomTabView.swift */,
+				CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */,
+				CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */,
+				CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */,
+				CC74831425511F0C006C1E02 /* ChatViewController.swift */,
+				CC74831B25513098006C1E02 /* RunningTimeViewController.swift */,
+				CC748318255124FB006C1E02 /* RankingViewViewController.swift */,
+				CC74832B255164E7006C1E02 /* tempViewController.swift */,
+				CC8A0B2225540BAD00063790 /* TimerView.swift */,
+			);
+			path = Component;
 			sourceTree = "<group>";
 		};
 		CC8B844E2540231900441445 = {
@@ -280,6 +290,7 @@
 				CCEC0F0D2541D9330028B497 /* User.swift */,
 				A5822B14255022C50085B55A /* PathAPI.swift */,
 				A5A0F06225515C1900A11EEF /* ChatMessage.swift */,
+				CC107738255464D300908D71 /* TravelData.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -412,6 +423,7 @@
 				CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */,
 				A5A0F06325515C1900A11EEF /* ChatMessage.swift in Sources */,
 				A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */,
+				CC107739255464D300908D71 /* TravelData.swift in Sources */,
 				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
 				A5A0F0602551593300A11EEF /* UIColor+Ext.swift in Sources */,
 				A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */,

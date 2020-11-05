@@ -47,15 +47,13 @@ extension MapViewController: NMFMapViewCameraDelegate {
     }
     
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
-        print("will")
         markerResizeByZoomLevel()
+        print(mapView.projection.latlngBounds(fromViewBounds: self.view.frame).hasPoint(goalMarker.position))
     }
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
-        print("end")
         markerResizeByZoomLevel()
     }
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
-        print("change")
         markerResizeByZoomLevel()
     }
 }

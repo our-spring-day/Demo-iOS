@@ -18,7 +18,6 @@ extension MapViewController: CLLocationManagerDelegate {
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
         socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
-        print("쏜다")
         setCollcetionViewItem()
         bottomSheet.runningTimeController.collectionView.reloadData()
     }
