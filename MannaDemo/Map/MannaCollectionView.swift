@@ -26,8 +26,7 @@ class MannaCollectionView: UICollectionView {
             $0.alpha = 0.7
             $0.backgroundColor = .white
             $0.register(MannaCollectionViewCell.self, forCellWithReuseIdentifier: MannaCollectionViewCell.identifier)
-            $0.isPagingEnabled = false
-            $0.isScrollEnabled = false
+            $0.isPagingEnabled = true
             $0.showsHorizontalScrollIndicator = false
         }
         layoutValue.do {
@@ -35,14 +34,14 @@ class MannaCollectionView: UICollectionView {
             $0.minimumLineSpacing = 10
             $0.minimumInteritemSpacing = 10
             $0.itemSize = CGSize(width: MannaDemo.convertWidth(value: 50), height: MannaDemo.convertWidth(value: 70))
-            $0.scrollDirection = .vertical
+            $0.scrollDirection = .horizontal
         }
     }
     
     func layout() {
         self.snp.makeConstraints {
-            $0.width.equalTo(UIScreen.main.bounds.width * 0.8)
-            $0.height.equalTo(200)
+            $0.width.equalTo(UIScreen.main.bounds.width)
+            $0.height.equalTo(100)
             $0.centerX.equalTo(self.snp.centerX)
         }
     }

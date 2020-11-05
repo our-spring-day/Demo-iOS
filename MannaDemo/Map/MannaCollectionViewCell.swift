@@ -23,10 +23,6 @@ class MannaCollectionViewCell: UICollectionViewCell {
     }
     
     func attribute() {
-//        profileImage.do {
-//            $0.layer.cornerRadius = 20
-//            $0.layer.masksToBounds = true
-//        }
     }
     
     func layout() {
@@ -40,7 +36,6 @@ class MannaCollectionViewCell: UICollectionViewCell {
         ranking.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(profileImage.snp.bottom)
-//            $0.top.equalTo(self.snp.top)
             $0.width.height.equalTo(MannaDemo.convertWidth(value: 27))
         }
     }
