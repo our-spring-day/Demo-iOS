@@ -24,6 +24,7 @@ class ChatCell: UITableViewCell {
             background.backgroundColor = chatMessage.isIncoming ? UIColor.appColor(.receiveMessage) : UIColor.appColor(.sendMessage)
             message.textColor = chatMessage.isIncoming ? .black : .white
             
+            message.text = chatMessage.text
             userName.text = chatMessage.isIncoming ? chatMessage.user : ""
             userImage.image = chatMessage.isIncoming ? UIImage(named: chatMessage.user) : nil
             
@@ -45,12 +46,14 @@ class ChatCell: UITableViewCell {
                 sendTopConstraints.isActive = true
                 userImage.isHidden = true
             }
-            
         }
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         userImage.isHidden = false
+        userName.text?.removeAll()
+        message.text?.removeAll()
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -101,7 +104,7 @@ class ChatCell: UITableViewCell {
         }
         message.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -21).isActive = true
+            $0.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15).isActive = true
             $0.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
         }
         background.do {
@@ -121,7 +124,7 @@ class ChatCell: UITableViewCell {
         receiveTopConstraints = message.topAnchor.constraint(equalTo: userImage.centerYAnchor, constant: 14)
         receiveTopConstraints.isActive = true
         
-        sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 10)
+        sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 15)
         sendTopConstraints.isActive = true
     }
     

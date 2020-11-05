@@ -43,7 +43,7 @@ class MannaListViewController: UIViewController, reloadData {
         createMannaButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createMannaButtonAction(_:)))
         pushChat = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(pushChatView))
         self.do {
-            $0.title = "Manna List"
+            $0.title = "Test"
             $0.navigationController?.navigationBar.prefersLargeTitles = true
             $0.navigationItem.rightBarButtonItems = [createMannaButton!, pushChat!]
         }
@@ -125,7 +125,6 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
         if MannaModel.model.count > 0 {
             cell.title.text = MannaModel.model[indexPath.row].name
         }
-//        cell.title.text = "비어있는 데이터"
         return cell
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
