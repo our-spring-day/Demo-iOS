@@ -75,6 +75,7 @@ class MapViewController: UIViewController {
             socket.connect()
         }
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
         array()
         didMarkerClicked()
         attribute()
@@ -328,10 +329,20 @@ class MapViewController: UIViewController {
     
     func marking() {
         for key in UserModel.userList.keys {
+            let user = UserModel.userList[key]
             if imageToNameFlag {
-                tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
+                if user!.networkValidTime > 60 {
+                    //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
+                } else {
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
+                }
             } else {
-                tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
+                if user!.networkValidTime > 60 {
+                    //여결이 끊겼을 때 사진프로필 + 끊긴 이미지
+                } else {
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
+                }
+                
             }
             if (UserModel.userList[key]?.state)! {
                 tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
@@ -352,6 +363,14 @@ class MapViewController: UIViewController {
         UIView.animate(withDuration: 1.5) {
             self.toastLabel.alpha = 0
         } completion: { _ in
+        }
+    }
+    
+    @objc func timeChecker() {
+        UserModel.userList.keys.forEach {
+            if UserModel.userList[$0]?.state == true {
+                UserModel.userList[$0]?.networkValidTime += 1
+            }
         }
     }
 }
@@ -473,6 +492,7 @@ extension MapViewController: WebSocketDelegate {
                 }
                 
             case "LEAVE" :
+                
                 guard let name = username else { return }
                 UserModel.userList[token]?.state = false
                 setCollcetionViewItem()
@@ -497,6 +517,7 @@ extension MapViewController: WebSocketDelegate {
             guard let lng = lng_ else { return }
             guard UserModel.userList[token] != nil else { return }
             
+            UserModel.userList[token]?.networkValidTime = 0
             if token != MannaDemo.myUUID {
                 //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
                 UserModel.userList[token]?.latitude = lat
