@@ -76,6 +76,7 @@ class MapViewController: UIViewController {
         }
         Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(emitLocation), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
         array()
         didMarkerClicked()
         attribute()
@@ -327,18 +328,22 @@ class MapViewController: UIViewController {
         socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
     }
     
-    func marking() {
+    @objc func marking() {
         for key in UserModel.userList.keys {
             let user = UserModel.userList[key]
             if imageToNameFlag {
-                if user!.networkValidTime > 60 {
+                if user!.networkValidTime > 10 {
                     //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage)
+                    print(user)
+                    print(user!.networkValidTime)
                 } else {
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
                 }
             } else {
-                if user!.networkValidTime > 60 {
+                if user!.networkValidTime > 10 {
                     //여결이 끊겼을 때 사진프로필 + 끊긴 이미지
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage)
                 } else {
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
                 }
@@ -493,7 +498,7 @@ extension MapViewController: WebSocketDelegate {
             case "LEAVE" :
                 
                 guard let name = username else { return }
-                UserModel.userList[token]?.state = false
+//                UserModel.userList[token]?.state = false
                 setCollcetionViewItem()
                 bottomSheet.runningTimeController.collectionView.reloadData()
                 showToast(message: "\(name)님 나가셨습니다.")
@@ -521,7 +526,6 @@ extension MapViewController: WebSocketDelegate {
                 //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
                 UserModel.userList[token]?.latitude = lat
                 UserModel.userList[token]?.longitude = lng
-                marking()
             }
             setCollcetionViewItem()
             bottomSheet.runningTimeController.collectionView.reloadData()
@@ -560,6 +564,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
                 if user.networkValidTime > 60 {
                     //                    cell.profileImage.image = user.
                     //                    이름이미지 + 끊겼을 때 이미지
+                    cell.profileImage.image = user.disconnectProfileImage
                 } else {
                     cell.profileImage.image = user.nicknameImage
                     cell.backgroundColor = nil
@@ -568,6 +573,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
             } else {
                 if user.networkValidTime > 60 {
                     //                    사진이미지 + 끊겼을 때 이미지
+                    cell.profileImage.image = user.disconnectProfileImage
                 } else {
                     cell.profileImage.image = user.profileImage
                     cell.backgroundColor = nil
