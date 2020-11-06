@@ -65,7 +65,7 @@ class MapViewController: UIViewController{
             socket.connect()
         }
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
-        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
         array()
         layout()
         didMarkerClicked()
@@ -128,14 +128,16 @@ class MapViewController: UIViewController{
         }
         cameraState.do {
             $0.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
-            $0.addTarget(self, action: #selector(didCameraStateButtonClicked), for: .touchUpInside)
+            $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+            $0.tag = 1
             $0.dropShadow()
         }
         myLocationButton.do {
             $0.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
             $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+            $0.tag = 2
         }
         goalMarker.do {
             $0.iconImage = NMFOverlayImage(image: #imageLiteral(resourceName: "goal"))
@@ -260,79 +262,82 @@ class MapViewController: UIViewController{
     }
     
     //MARK: 내위치 카메라 세팅
-    @objc func didMyLocationButtonClicked() {
-        marking()
+    func toMyLocation() {
         self.myLocationButton.alpha = 0
         myLocationButton.isHidden = true
         mapView.positionMode = .direction
         multipartPath.mapView = nil
-        let zoom = NMFCameraUpdate(zoomTo: 15)
+        let zoom = NMFCameraUpdate(zoomTo: 16)
+        zoom.animation = .easeOut
         zoom.animationDuration = 0.5
         [zoom].forEach { mapView.moveCamera($0) }
     }
     
-    //MARK: 내위치 카메라 세팅
-    @objc func cameraUpdateToMyLocation() {
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-        cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 1.3
+    func toWholeLocation() {
+        var minLatLng = NMGLatLng(lat: 150, lng: 150)
+        var maxLatLng = NMGLatLng(lat: 0, lng: 0)
+        var resultZoomLevel: Double = 0
+        UserModel.userList.keys.forEach {
+            guard (UserModel.userList[$0]!.state = true) != nil else { return }
+            if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
+                if minLatLng.lat > UserModel.userList[$0]!.latitude {
+                    minLatLng.lat = UserModel.userList[$0]!.latitude
+                }
+                if minLatLng.lng > UserModel.userList[$0]!.longitude {
+                    
+                    minLatLng.lng = UserModel.userList[$0]!.longitude
+                }
+                if maxLatLng.lat < UserModel.userList[$0]!.latitude {
+                    maxLatLng.lat = UserModel.userList[$0]!.latitude
+                }
+                if maxLatLng.lng < UserModel.userList[$0]!.longitude {
+                    maxLatLng.lng = UserModel.userList[$0]!.longitude
+                }
+            }
+        }
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
+        var zoomInit = NMFCameraUpdate(zoomTo: 18)
         mapView.moveCamera(cameraUpdate)
+        mapView.moveCamera(zoomInit)
+        
+        while mapView.zoomLevel > 1 {
+            let count = UserModel.userList.count
+            var trueCount = 0
+            UserModel.userList.keys.forEach {
+                let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
+                if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
+                    trueCount += 1
+                }
+            }
+            if trueCount == count {
+                break
+            } else {
+                trueCount = 0
+                mapView.zoomLevel -= 0.05
+            }
+        }
+        
+        resultZoomLevel =  mapView.zoomLevel-0.2
+        var zoom = NMFCameraUpdate(zoomTo: resultZoomLevel)
+        zoom.animation = .easeOut
+        zoom.animationDuration = 0.5
+        mapView.moveCamera(cameraUpdate)
+        mapView.moveCamera(zoom)
     }
     
-    //MARK: 내위치 고정, 팀원 모두 위치 고정
-    @objc func didCameraStateButtonClicked() {
+    @objc func didMyLocationButtonClicked(_ sender: UIButton) {
         self.myLocationButton.alpha = 0
         myLocationButton.isHidden = true
+        bottomSheet.view.isHidden = true
+        bottomTabView.isHidden = true
+        
         if cameraState.currentImage == UIImage(named: "forest") {
-            cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
-            mapView.positionMode = .direction
-            let zoom = NMFCameraUpdate(zoomTo: 15)
-            zoom.animationDuration = 0.5
-            [zoom].forEach { mapView.moveCamera($0) }
-        } else {
-            cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
-            var minLatLng = NMGLatLng(lat: 150, lng: 150)
-            var maxLatLng = NMGLatLng(lat: 0, lng: 0)
-            UserModel.userList.keys.forEach {
-                guard (UserModel.userList[$0]!.state = true) != nil else { return }
-                if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
-                    if minLatLng.lat > UserModel.userList[$0]!.latitude {
-                        minLatLng.lat = UserModel.userList[$0]!.latitude
-                    }
-                    if minLatLng.lng > UserModel.userList[$0]!.longitude {
-                        
-                        minLatLng.lng = UserModel.userList[$0]!.longitude
-                    }
-                    if maxLatLng.lat < UserModel.userList[$0]!.latitude {
-                        maxLatLng.lat = UserModel.userList[$0]!.latitude
-                    }
-                    if maxLatLng.lng < UserModel.userList[$0]!.longitude {
-                        maxLatLng.lng = UserModel.userList[$0]!.longitude
-                    }
-                }
-            }
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
-            mapView.moveCamera(cameraUpdate)
-            mapView.zoomLevel = 18
+            sender.tag == 1 ? cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal) : nil
+            sender.tag == 1 ? toMyLocation() : toWholeLocation()
             
-            while mapView.zoomLevel > 1 {
-                let count = UserModel.userList.count
-                var trueCount = 0
-                UserModel.userList.keys.forEach {
-                    let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
-                    if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
-                        trueCount += 1
-                    }
-                }
-                if trueCount == count {
-                    break
-                } else {
-                    trueCount = 0
-                    mapView.zoomLevel -= 0.05
-                }
-            }
-            mapView.zoomLevel -= 1
-            mapView.moveCamera(cameraUpdate)
+        } else {
+            sender.tag == 1 ? cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal) : nil
+            sender.tag == 1 ? toWholeLocation() : toMyLocation()
         }
     }
     
@@ -418,15 +423,10 @@ class MapViewController: UIViewController{
         self.dismiss(animated: true)
     }
     
-    
     //MARK: 마커 전체 세팅
     @objc func marking() {
         for key in UserModel.userList.keys {
-            if key == MannaDemo.myUUID {
-                break
-            }
             let user = UserModel.userList[key]
-            
             if imageToNameFlag {
                 if user!.networkValidTime > 60 {
                     //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
@@ -443,9 +443,10 @@ class MapViewController: UIViewController{
                 }
             }
             if (UserModel.userList[key]?.state)! {
-                print(key)
-                tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
-                tokenWithMarker[key]?.mapView = mapView
+                if key != MannaDemo.myUUID {
+                    tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
+                    tokenWithMarker[key]?.mapView = mapView
+                }
             }
         }
     }
