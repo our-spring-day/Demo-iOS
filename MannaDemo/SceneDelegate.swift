@@ -19,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let mainView = MapViewController()
+    
             let registerView = RegisterUserViewController()
 
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {
@@ -40,11 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                             }
                     }
                 }
-                let navigationView = UINavigationController(rootViewController: mainView)
-                window.rootViewController = navigationView
-            }
-//            let mapView = ViewController()
-//            window.rootViewController = mapView
+                window.rootViewController = mainView
             self.window = window
             window.makeKeyAndVisible()
         }

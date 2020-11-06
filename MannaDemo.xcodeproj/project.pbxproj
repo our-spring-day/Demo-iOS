@@ -34,6 +34,7 @@
 		CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748318255124FB006C1E02 /* RankingViewViewController.swift */; };
 		CC74831C25513098006C1E02 /* RunningTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831B25513098006C1E02 /* RunningTimeViewController.swift */; };
 		CC74832C255164E7006C1E02 /* tempViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74832B255164E7006C1E02 /* tempViewController.swift */; };
+		CC79E4AE2555B4DE001C726F /* SocketData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC79E4AD2555B4DE001C726F /* SocketData.swift */; };
 		CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B2225540BAD00063790 /* TimerView.swift */; };
 		CC8A0B5A2554605F00063790 /* MapView+NaverMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B592554605F00063790 /* MapView+NaverMap.swift */; };
 		CC8A0B5E2554609B00063790 /* MapView+CLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B5D2554609B00063790 /* MapView+CLocation.swift */; };
@@ -82,6 +83,7 @@
 		CC748318255124FB006C1E02 /* RankingViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewViewController.swift; sourceTree = "<group>"; };
 		CC74831B25513098006C1E02 /* RunningTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningTimeViewController.swift; sourceTree = "<group>"; };
 		CC74832B255164E7006C1E02 /* tempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tempViewController.swift; sourceTree = "<group>"; };
+		CC79E4AD2555B4DE001C726F /* SocketData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketData.swift; sourceTree = "<group>"; };
 		CC8A0B2225540BAD00063790 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		CC8A0B592554605F00063790 /* MapView+NaverMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+NaverMap.swift"; sourceTree = "<group>"; };
 		CC8A0B5D2554609B00063790 /* MapView+CLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+CLocation.swift"; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				A5822B14255022C50085B55A /* PathAPI.swift */,
 				A5A0F06225515C1900A11EEF /* ChatMessage.swift */,
 				CC107738255464D300908D71 /* TravelData.swift */,
+				CC79E4AD2555B4DE001C726F /* SocketData.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				A5A0F06325515C1900A11EEF /* ChatMessage.swift in Sources */,
 				A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */,
 				CC107739255464D300908D71 /* TravelData.swift in Sources */,
+				CC79E4AE2555B4DE001C726F /* SocketData.swift in Sources */,
 				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
 				A5A0F0602551593300A11EEF /* UIColor+Ext.swift in Sources */,
 				A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */,

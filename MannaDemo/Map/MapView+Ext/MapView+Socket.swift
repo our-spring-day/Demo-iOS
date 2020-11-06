@@ -62,13 +62,7 @@ import SwiftyJSON
 //                
 //            case "LEAVE" :
 //                
-//                guard let name = username else { return }
-//                //                UserModel.userList[token]?.state = false
-//                UserModel.userList[token]?.networkValidTime = 61
-//                marking()
-//                setCollcetionViewItem()
-//                bottomSheet.runningTimeController.collectionView.reloadData()
-//                showToast(message: "\(name)님 나가셨습니다.")
+//               
 //                
 //            case "JOIN" :
 //                guard let name = username else { return }

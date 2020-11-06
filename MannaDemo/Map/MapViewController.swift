@@ -26,11 +26,8 @@ class MapViewController: UIViewController{
     var chatView: UIView?
     
     var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":"96f35135-390f-496c-af00-cdb3a4104550"])])
-    
     var locationSocket: SocketIOClient!
     var chatSocket: SocketIOClient!
-    
-    
     var locationManager = CLLocationManager()
     var tokenWithMarker: [String : NMFMarker] = [:]
     let mapView = NMFMapView()
@@ -70,6 +67,7 @@ class MapViewController: UIViewController{
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
@@ -77,21 +75,77 @@ class MapViewController: UIViewController{
         locationSocket.connect()
         chatSocket.connect()
         
-        
-        locationSocket.on("location") { (array, ack) in
-            print(array)
+        locationSocket.on("locationConnect") { (array, ack) in
+            UserModel.userList[MannaDemo.myUUID!]?.state = true
+            self.setCollcetionViewItem()
+            self.bottomSheet.runningTimeController.collectionView.reloadData()
         }
-        
-        
-        
-        
-        
-        
-        
+        locationSocket.on("location") { (array, ack) in
+            var _: String?
+            var deviceToken: String?
+            var username: String?
+            var lat_: Double?
+            var lng_: Double?
+            let json = JSON(array)
+            
+            if let data = json[0].string?.data(using: .utf8) {
+                if let json = try? JSON(data) {
+                    let temp = "\(json)".data(using: .utf8)
+                    let result: SocketData = try! JSONDecoder().decode(SocketData.self, from: temp!)
+                    
+                    
+                    deviceToken = result.sender.deviceToken
+                    username = result.sender.username
+                    guard let token = deviceToken else { return }
+                    
+                    switch result.type {
+                    
+                    case "LOCATION":
+                        lat_ = result.location?.latitude
+                        lng_ = result.location?.longitude
+                        UserModel.userList[token]?.state = true
+                        
+                        break
+                    case "JOIN":
+                        guard let name = username else { return }
+                        UserModel.userList[token]?.state = true
+                        UserModel.userList[token]?.networkValidTime = 0
+                        self.marking()
+                        self.showToast(message: "\(name)님 접속하셨습니다.")
+                        self.setCollcetionViewItem()
+                        self.bottomSheet.runningTimeController.collectionView.reloadData()
+                        break
+                        
+                    case "LEAVE":
+                        guard let name = username else { return }
+                       UserModel.userList[token]?.networkValidTime = 61
+                        self.marking()
+                        self.setCollcetionViewItem()
+                        self.bottomSheet.runningTimeController.collectionView.reloadData()
+                        self.showToast(message: "\(name)님 나가셨습니다.")
+                        break
+                        
+                    default:
+                        break
+                    }
+                    
+                    guard let lat = lat_ else { return }
+                    guard let lng = lng_ else { return }
+                    guard UserModel.userList[token] != nil else { return }
+                    UserModel.userList[token]?.networkValidTime = 0
+                    if token != MannaDemo.myUUID {
+                        
+                        UserModel.userList[token]?.latitude = lat
+                        UserModel.userList[token]?.longitude = lng
+                    }
+                    self.setCollcetionViewItem()
+                    self.bottomSheet.runningTimeController.collectionView.reloadData()
+                }
+            }
+            
+        }
         chatView = bottomSheet.chatViewController.backgroundView
         myLocationButton.isHidden = true
-
-        
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
@@ -105,9 +159,9 @@ class MapViewController: UIViewController{
     }
     
     func attribute() {
-//        socket.do {
-//            $0.delegate = self
-//        }
+        //        socket.do {
+        //            $0.delegate = self
+        //        }
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
             $0.frame.size.width = 40
@@ -242,11 +296,11 @@ class MapViewController: UIViewController{
     
     //MARK: 닉네임 이미지 셋
     func nicknameImageSet() {
-        var count = 0
-//        for key in UserModel.userList.keys {
-//            UserModel.userList[key]?.nicknameImage = userImage[count]
-//            count += 1
-//        }
+        _ = 0
+        //        for key in UserModel.userList.keys {
+        //            UserModel.userList[key]?.nicknameImage = userImage[count]
+        //            count += 1
+        //        }
     }
     
     //MARK: 마커 클릭 이벤트
@@ -301,64 +355,66 @@ class MapViewController: UIViewController{
     @objc func toMyLocation() {
         
         if cameraTrakingToggleFlag && cameraTrakingModeFlag {
-            var moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
-//            moveCameraWithZoomAndPosition.animation = .easeOut
-//            moveCameraWithZoomAndPosition.animationDuration = 0.2
+            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
             mapView.moveCamera(moveCameraWithZoomAndPosition)
         }
     }
     
     @objc func toWholeLocation() {
         if cameraTrakingToggleFlag && cameraTrakingModeFlag == false {
-            var minLatLng = NMGLatLng(lat: 150, lng: 150)
-            var maxLatLng = NMGLatLng(lat: 0, lng: 0)
+            let minLatLng = NMGLatLng(lat: 150, lng: 150)
+            let maxLatLng = NMGLatLng(lat: 0, lng: 0)
             var resultZoomLevel: Double = 0
             
             UserModel.userList.keys.forEach {
-                guard (UserModel.userList[$0]!.state = true) != nil else { return }
-                if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
-                    if minLatLng.lat > UserModel.userList[$0]!.latitude {
-                        minLatLng.lat = UserModel.userList[$0]!.latitude
-                    }
-                    if minLatLng.lng > UserModel.userList[$0]!.longitude {
-                        
-                        minLatLng.lng = UserModel.userList[$0]!.longitude
-                    }
-                    if maxLatLng.lat < UserModel.userList[$0]!.latitude {
-                        maxLatLng.lat = UserModel.userList[$0]!.latitude
-                    }
-                    if maxLatLng.lng < UserModel.userList[$0]!.longitude {
-                        maxLatLng.lng = UserModel.userList[$0]!.longitude
+                if UserModel.userList[$0]?.state == true{
+                    if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
+                        if minLatLng.lat > UserModel.userList[$0]!.latitude {
+                            minLatLng.lat = UserModel.userList[$0]!.latitude
+                        }
+                        if minLatLng.lng > UserModel.userList[$0]!.longitude {
+                            
+                            minLatLng.lng = UserModel.userList[$0]!.longitude
+                        }
+                        if maxLatLng.lat < UserModel.userList[$0]!.latitude {
+                            maxLatLng.lat = UserModel.userList[$0]!.latitude
+                        }
+                        if maxLatLng.lng < UserModel.userList[$0]!.longitude {
+                            maxLatLng.lng = UserModel.userList[$0]!.longitude
+                        }
                     }
                 }
             }
+            
             let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
-            var zoomInit = NMFCameraUpdate(zoomTo: 18)
+            let zoomInit = NMFCameraUpdate(zoomTo: 18)
             mapView.moveCamera(cameraUpdate)
             mapView.moveCamera(zoomInit)
             
             while mapView.zoomLevel > 1 {
-                let count = UserModel.userList.count
+                let count = UserModel.userList.values.filter{ $0.state == true }.count
                 var trueCount = 0
                 UserModel.userList.keys.forEach {
-                    let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
-                    if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
-                        trueCount += 1
+                    if UserModel.userList[$0]?.state == true && UserModel.userList[$0]?.latitude != 0 && UserModel.userList[$0]?.longitude != 0 {
+                        print(UserModel.userList[$0]?.state)
+                        let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
+                        if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
+                            trueCount += 1
+                        }
                     }
                 }
-                if trueCount == count {
-                    break
-                } else {
+                if trueCount == count { break } else {
                     trueCount = 0
                     mapView.zoomLevel -= 0.05
                 }
             }
+            
             resultZoomLevel =  mapView.zoomLevel - 0.2
-            var moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center, zoomTo: resultZoomLevel)
-//            if cameraTrakingModeFlag == false {
-//                moveCameraWithZoomAndPosition.animation = .easeOut
-//                moveCameraWithZoomAndPosition.animationDuration = 0.2
-//            }
+            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center, zoomTo: resultZoomLevel)
+            //            if cameraTrakingModeFlag == false {
+            //                moveCameraWithZoomAndPosition.animation = .easeOut
+            //                moveCameraWithZoomAndPosition.animationDuration = 0.2
+            //            }
             mapView.moveCamera(moveCameraWithZoomAndPosition)
         }
     }
@@ -509,95 +565,3 @@ class MapViewController: UIViewController{
         }
     }   
 }
-//extension MapViewController: WebSocketDelegate {
-//    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-//        print("\(data)")
-//    }
-//
-//    func websocketDidConnect(socket: WebSocketClient) {
-//        print("sockect Connect!")
-//        UserModel.userList[MannaDemo.myUUID!]?.state = true
-//        setCollcetionViewItem()
-//        bottomSheet.runningTimeController.collectionView.reloadData()
-//    }
-//
-//    func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-//        print("sockect Disconnect ㅠㅠ")
-//        UserModel.userList[MannaDemo.myUUID!]?.state = false
-//        setCollcetionViewItem()
-//        bottomSheet.runningTimeController.collectionView.reloadData()
-//    }
-//
-//    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-//        var type: String?
-//        var deviceToken: String?
-//        var username: String?
-//        var lat_: Double?
-//        var lng_: Double?
-//        let json = text
-//
-//        if let data = json.data(using: .utf8) {
-//
-//            //누가 보냈는지
-//            if let json = try? JSON(data) ["sender"] {
-//                deviceToken = json["deviceToken"].string
-//                username = json["username"].string
-//            }
-//
-//            //타입은 무엇이고
-//            if let json = try? JSON(data) ["type"] {
-//                guard let temp = json.string else { return }
-//                type = temp
-//            }
-//            guard let token = deviceToken else { return }
-//            //타입에 따른 처리
-//            switch type {
-//
-//            case "LOCATION" :
-//                if let json = try? JSON(data) ["location"] {
-//                    lat_ = json["latitude"].double
-//                    lng_ = json["longitude"].double
-//                    UserModel.userList[token]?.state = true
-//                }
-//
-//            case "LEAVE" :
-//
-//                guard let name = username else { return }
-//                //                UserModel.userList[token]?.state = false
-//                UserModel.userList[token]?.networkValidTime = 61
-//                marking()
-//                setCollcetionViewItem()
-//                bottomSheet.runningTimeController.collectionView.reloadData()
-//                showToast(message: "\(name)님 나가셨습니다.")
-//
-//            case "JOIN" :
-//                guard let name = username else { return }
-//                UserModel.userList[token]?.state = true
-//                UserModel.userList[token]?.networkValidTime = 0
-//                marking()
-//                showToast(message: "\(name)님 접속하셨습니다.")
-//                setCollcetionViewItem()
-//                bottomSheet.runningTimeController.collectionView.reloadData()
-//
-//            case .none:
-//                print("none")
-//
-//            case .some(_):
-//                print("some")
-//            }
-//
-//            guard let lat = lat_ else { return }
-//            guard let lng = lng_ else { return }
-//            guard UserModel.userList[token] != nil else { return }
-//
-//            UserModel.userList[token]?.networkValidTime = 0
-//            if token != MannaDemo.myUUID {
-//                //마커로 이동하기 위해 저장 멤버의 가장 최근 위치 저장
-//                UserModel.userList[token]?.latitude = lat
-//                UserModel.userList[token]?.longitude = lng
-//            }
-//            setCollcetionViewItem()
-//            bottomSheet.runningTimeController.collectionView.reloadData()
-//        }
-//    }
-//}
