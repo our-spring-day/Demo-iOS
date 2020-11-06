@@ -48,7 +48,7 @@ class MapViewController: UIViewController{
     var goalMarker = NMFMarker()
     var tempToggleButton = UIButton()
     var disconnectToggleFlag = false
-//    var
+    
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
@@ -266,15 +266,17 @@ class MapViewController: UIViewController{
     
     //MARK: 내위치 카메라 세팅
     func toMyLocation() {
-        mapView.positionMode = .direction
-        let zoom = NMFCameraUpdate(zoomTo: 16)
-        [zoom, NMFCameraUpdate(heading: 0)].forEach { mapView.moveCamera($0) }
+        var moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
+        moveCameraWithZoomAndPosition.animation = .easeOut
+        moveCameraWithZoomAndPosition.animationDuration = 0.2
+        mapView.moveCamera(moveCameraWithZoomAndPosition)
     }
     
     func toWholeLocation() {
         var minLatLng = NMGLatLng(lat: 150, lng: 150)
         var maxLatLng = NMGLatLng(lat: 0, lng: 0)
         var resultZoomLevel: Double = 0
+        
         UserModel.userList.keys.forEach {
             guard (UserModel.userList[$0]!.state = true) != nil else { return }
             if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
@@ -314,10 +316,11 @@ class MapViewController: UIViewController{
                 mapView.zoomLevel -= 0.05
             }
         }
-        
         resultZoomLevel =  mapView.zoomLevel - 0.2
-        var zoom = NMFCameraUpdate(zoomTo: resultZoomLevel)
-        [cameraUpdate, zoom, NMFCameraUpdate(heading: 0)].forEach { mapView.moveCamera($0) }
+        var moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center, zoomTo: resultZoomLevel)
+        moveCameraWithZoomAndPosition.animation = .easeOut
+        moveCameraWithZoomAndPosition.animationDuration = 0.2
+        mapView.moveCamera(moveCameraWithZoomAndPosition)
     }
     
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
