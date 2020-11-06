@@ -37,7 +37,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
         
         if user.state {
             if imageToNameFlag {
-                if user.networkValidTime > 10 {
+                if user.networkValidTime > 60 {
                     cell.profileImage.image = user.disconnectProfileImage
                 } else {
                     cell.profileImage.image = user.nicknameImage
@@ -45,7 +45,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
                     cell.isUserInteractionEnabled = true
                 }
             } else {
-                if user.networkValidTime > 10 {
+                if user.networkValidTime > 60 {
                     cell.profileImage.image = user.disconnectProfileImage
                 } else {
                     cell.profileImage.image = user.profileImage

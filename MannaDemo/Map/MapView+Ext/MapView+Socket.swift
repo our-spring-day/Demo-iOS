@@ -65,7 +65,7 @@ extension MapViewController: WebSocketDelegate {
                 
                 guard let name = username else { return }
                 //                UserModel.userList[token]?.state = false
-                UserModel.userList[token]?.networkValidTime = 11
+                UserModel.userList[token]?.networkValidTime = 61
                 marking()
                 setCollcetionViewItem()
                 bottomSheet.runningTimeController.collectionView.reloadData()

@@ -46,7 +46,7 @@ class MapViewController: UIViewController{
     var cameraStateFlag = true
     var goalMarker = NMFMarker()
     
-    
+    // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
         if cameraUpdateOnlyOnceFlag {
@@ -182,6 +182,7 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 마커 생성
     func array() {
         UserModel.userList.keys.map { tokenWithMarker[$0] = NMFMarker()}
         for marker in tokenWithMarker.values {
@@ -190,6 +191,7 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 렌더링 이미지
     func renderImage() {
         for name in userName {
             let image = UserView(text: name).then({
@@ -200,6 +202,7 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 닉네임 이미지 셋
     func nicknameImageSet() {
         var count = 0
         for key in UserModel.userList.keys {
@@ -208,6 +211,7 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 마커 클릭 이벤트
     func didMarkerClicked() {
         tokenWithMarker.keys.map { key in
             tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
@@ -232,17 +236,20 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 컬렉션 뷰 아이템 세팅
     func setCollcetionViewItem() {
         userListForCollectionView = Array(UserModel.userList.values)
         userListForCollectionView.sort { $0.state && !$1.state}
     }
     
+    //MARK: init 카메라 세팅
     func camereUpdateOnlyOnce() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         mapView.zoomLevel = 10
         mapView.moveCamera(cameraUpdate)
     }
     
+    //MARK: 토스트 메세지
     func showToast(message: String) {
         self.toastLabel.text = message
         self.toastLabel.alpha = 1
@@ -252,7 +259,9 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 내위치 카메라 세팅
     @objc func didMyLocationButtonClicked() {
+        marking()
         self.myLocationButton.alpha = 0
         myLocationButton.isHidden = true
         mapView.positionMode = .direction
@@ -262,10 +271,18 @@ class MapViewController: UIViewController{
         [zoom].forEach { mapView.moveCamera($0) }
     }
     
+    //MARK: 내위치 카메라 세팅
+    @objc func cameraUpdateToMyLocation() {
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
+        cameraUpdate.animation = .fly
+        cameraUpdate.animationDuration = 1.3
+        mapView.moveCamera(cameraUpdate)
+    }
+    
+    //MARK: 내위치 고정, 팀원 모두 위치 고정
     @objc func didCameraStateButtonClicked() {
         self.myLocationButton.alpha = 0
         myLocationButton.isHidden = true
-        
         if cameraState.currentImage == UIImage(named: "forest") {
             cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
             mapView.positionMode = .direction
@@ -274,11 +291,8 @@ class MapViewController: UIViewController{
             [zoom].forEach { mapView.moveCamera($0) }
         } else {
             cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
-            
             var minLatLng = NMGLatLng(lat: 150, lng: 150)
             var maxLatLng = NMGLatLng(lat: 0, lng: 0)
-            
-            
             UserModel.userList.keys.forEach {
                 guard (UserModel.userList[$0]!.state = true) != nil else { return }
                 if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
@@ -297,26 +311,19 @@ class MapViewController: UIViewController{
                     }
                 }
             }
-            
             let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
             mapView.moveCamera(cameraUpdate)
-            
-            
             mapView.zoomLevel = 18
+            
             while mapView.zoomLevel > 1 {
-                var count = UserModel.userList.count
+                let count = UserModel.userList.count
                 var trueCount = 0
                 UserModel.userList.keys.forEach {
-                    
                     let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
-//                    print(NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).hasPoint(targetPoint))
-//                    print(mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)))
-//                    print(mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0)))
                     if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
                         trueCount += 1
                     }
                 }
-                print(trueCount)
                 if trueCount == count {
                     break
                 } else {
@@ -324,45 +331,47 @@ class MapViewController: UIViewController{
                     mapView.zoomLevel -= 0.05
                 }
             }
-            print(mapView.zoomLevel)
+            mapView.zoomLevel -= 1
             mapView.moveCamera(cameraUpdate)
         }
     }
     
+    //MARK: 채팅창 클릭
     @objc func testGestureFunc() {
         let view = ChattingViewController()
-        view.transitioningDelegate = bottomSheet.chatViewController
+//        view.transitioningDelegate = bottomSheet.chatViewController
         
-        let xScaleFactor = bottomSheet.view.frame.width / self.view.frame.width
-        let yScaleFactor = bottomSheet.view.frame.height / self.view.frame.height
-        
-        let scaleTransform = CGAffineTransform(scaleX: xScaleFactor, y: yScaleFactor)
-        bottomSheet.view.transform = scaleTransform
-
-        bottomSheet.view.center = CGPoint(
-            x:  bottomSheet.view.frame.midX,
-            y:  bottomSheet.view.frame.midY)
-            
-        bottomSheet.view.clipsToBounds = true
-        UIView.animate(
-            withDuration: 0.8,
-          delay:0.0725,
-            usingSpringWithDamping: 0.5,
-            initialSpringVelocity: 1,
-            animations: { [self] in
-            bottomSheet.view.alpha = 0.3
-            self.bottomSheet.view.center = CGPoint(x: self.view.frame.midX, y: self.view.frame.midY)
-            self.bottomSheet.view.layer.cornerRadius = 20.0
-          },completion: { _ in
-            self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
-            self.bottomSheet.view.alpha = 1
-          }
-        )
+//        let xScaleFactor = bottomSheet.view.frame.width / self.view.frame.width
+//        let yScaleFactor = bottomSheet.view.frame.height / self.view.frame.height
+//
+//        let scaleTransform = CGAffineTransform(scaleX: xScaleFactor, y: yScaleFactor)
+//        bottomSheet.view.transform = scaleTransform
+//
+//        bottomSheet.view.center = CGPoint(
+//            x:  bottomSheet.view.frame.midX,
+//            y:  bottomSheet.view.frame.midY)
+//
+//        bottomSheet.view.clipsToBounds = true
+//        UIView.animate(
+//            withDuration: 0.8,
+//          delay:0.0725,
+//            usingSpringWithDamping: 1,
+//            initialSpringVelocity: 1,
+//            animations: { [self] in
+//            bottomSheet.view.alpha = 0.3
+//            self.bottomSheet.view.center = CGPoint(x: self.view.frame.midX, y: self.view.frame.midY)
+//            self.bottomSheet.view.layer.cornerRadius = 20.0
+//          },completion: { _ in
+//            self.bottomSheet.view.frame = CGRect(x: 0, y: UIScreen.main.bounds.height * 0.64, width: self.view.frame.width, height: self.view.frame.height)
+//            self.bottomSheet.view.alpha = 1
+//          }
+//        )
         present(view, animated: true)
         self.view.bringSubviewToFront(bottomTabView)
         bottomTabView.bringSubviewToFront(self.view)
     }
     
+    //MARK: 바텀탭 버튼 클릭
     @objc func didClickecBottomTabButton(_ sender: UIButton) {
         switch sender.tag {
         case 0:
@@ -404,17 +413,13 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 뒤로가기
     @objc func back() {
         self.dismiss(animated: true)
     }
     
-    @objc func cameraUpdateToMyLocation() {
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-        cameraUpdate.animation = .fly
-        cameraUpdate.animationDuration = 1.3
-        mapView.moveCamera(cameraUpdate)
-    }
     
+    //MARK: 마커 전체 세팅
     @objc func marking() {
         for key in UserModel.userList.keys {
             if key == MannaDemo.myUUID {
@@ -438,15 +443,17 @@ class MapViewController: UIViewController{
                 }
             }
             if (UserModel.userList[key]?.state)! {
+                print(key)
                 tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
                 tokenWithMarker[key]?.mapView = mapView
             }
         }
     }
     
+    //MARK: 위치권한 확인
     func checkedLocation() {
         let status = CLLocationManager.authorizationStatus()
-        print(status)
+        
         if status == CLAuthorizationStatus.denied || status == CLAuthorizationStatus.restricted {
             let alter = UIAlertController(title: "위치권한 설정이 '안함'으로 되어있습니다.", message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.", preferredStyle: UIAlertController.Style.alert)
             let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default){
@@ -467,6 +474,7 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 사용자상태 처리
     @objc func timeChecker() {
         UserModel.userList.keys.forEach {
             if UserModel.userList[$0]?.state == true {
