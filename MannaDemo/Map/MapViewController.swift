@@ -43,9 +43,12 @@ class MapViewController: UIViewController{
     var bottomTabView = BottomTabView()
     var myLocationButton = UIButton()
     lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
+    lazy var tempToggleGesture = UITapGestureRecognizer(target: self, action: #selector(didtempToggleButtonClicked))
     var cameraStateFlag = true
     var goalMarker = NMFMarker()
-    
+    var tempToggleButton = UIButton()
+    var disconnectToggleFlag = false
+//    var
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
@@ -84,7 +87,6 @@ class MapViewController: UIViewController{
             $0.layer.cornerRadius = $0.frame.width / 2
             $0.clipsToBounds = true
             $0.addTarget(self, action: #selector(back), for: .touchUpInside)
-            //            $0.dropShadow()
         }
         mapView.do {
             $0.frame = view.frame
@@ -119,6 +121,7 @@ class MapViewController: UIViewController{
             $0.parentView = self.view
             $0.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: view.frame.width, height: view.frame.height)
             $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
+            $0.rankingViewController.animationView.addGestureRecognizer(tempToggleGesture)
         }
         bottomTabView.do {
             $0.backgroundColor = .white
@@ -149,7 +152,7 @@ class MapViewController: UIViewController{
     }
     
     func layout() {
-        [mapView, cameraState, myLocationButton, backButton, timerView, bottomSheet.view, bottomTabView, toastLabel, ].forEach { view.addSubview($0) }
+        [mapView, cameraState, myLocationButton, backButton, timerView, bottomSheet.view, bottomTabView, toastLabel].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -207,10 +210,10 @@ class MapViewController: UIViewController{
     //MARK: 닉네임 이미지 셋
     func nicknameImageSet() {
         var count = 0
-        for key in UserModel.userList.keys {
-            UserModel.userList[key]?.nicknameImage = userImage[count]
-            count += 1
-        }
+//        for key in UserModel.userList.keys {
+//            UserModel.userList[key]?.nicknameImage = userImage[count]
+//            count += 1
+//        }
     }
     
     //MARK: 마커 클릭 이벤트
@@ -263,14 +266,9 @@ class MapViewController: UIViewController{
     
     //MARK: 내위치 카메라 세팅
     func toMyLocation() {
-        self.myLocationButton.alpha = 0
-        myLocationButton.isHidden = true
         mapView.positionMode = .direction
-        multipartPath.mapView = nil
         let zoom = NMFCameraUpdate(zoomTo: 16)
-        zoom.animation = .easeOut
-        zoom.animationDuration = 0.5
-        [zoom].forEach { mapView.moveCamera($0) }
+        [zoom, NMFCameraUpdate(heading: 0)].forEach { mapView.moveCamera($0) }
     }
     
     func toWholeLocation() {
@@ -317,20 +315,17 @@ class MapViewController: UIViewController{
             }
         }
         
-        resultZoomLevel =  mapView.zoomLevel-0.2
+        resultZoomLevel =  mapView.zoomLevel - 0.2
         var zoom = NMFCameraUpdate(zoomTo: resultZoomLevel)
-        zoom.animation = .easeOut
-        zoom.animationDuration = 0.5
-        mapView.moveCamera(cameraUpdate)
-        mapView.moveCamera(zoom)
+        [cameraUpdate, zoom, NMFCameraUpdate(heading: 0)].forEach { mapView.moveCamera($0) }
     }
     
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
-        self.myLocationButton.alpha = 0
-        myLocationButton.isHidden = true
-        bottomSheet.view.isHidden = true
-        bottomTabView.isHidden = true
-        
+        multipartPath.mapView = nil
+        [myLocationButton, bottomSheet.view, bottomTabView].forEach {
+            $0?.alpha = 0
+            $0?.isHidden = true
+        }
         if cameraState.currentImage == UIImage(named: "forest") {
             sender.tag == 1 ? cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal) : nil
             sender.tag == 1 ? toMyLocation() : toWholeLocation()
@@ -376,6 +371,13 @@ class MapViewController: UIViewController{
         bottomTabView.bringSubviewToFront(self.view)
     }
     
+    //MARK: 임시 토글 버튼 액션
+    @objc func didtempToggleButtonClicked() {
+        imageToNameFlag.toggle()
+        marking()
+        bottomSheet.runningTimeController.collectionView.reloadData()
+    }
+    
     //MARK: 바텀탭 버튼 클릭
     @objc func didClickecBottomTabButton(_ sender: UIButton) {
         switch sender.tag {
@@ -392,10 +394,7 @@ class MapViewController: UIViewController{
             self.bottomSheet.rankingViewController.view.isHidden = false
             self.bottomSheet.runningTimeController.view.isHidden = true
             
-            //임시!! 토글
-            imageToNameFlag.toggle()
-            bottomSheet.runningTimeController.collectionView.reloadData()
-            marking()
+            disconnectToggleFlag.toggle()
             if bottomTabView.runningTime.currentImage == #imageLiteral(resourceName: "man") {
                 bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "women"), for: .normal)
             } else {
@@ -430,14 +429,14 @@ class MapViewController: UIViewController{
             if imageToNameFlag {
                 if user!.networkValidTime > 60 {
                     //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
-                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage)
+                    tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: UserModel.userList[key]!.anotherdisconnectProfileImage)
                 } else {
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.nicknameImage)
                 }
             } else {
                 if user!.networkValidTime > 60 {
                     //여결이 끊겼을 때 사진프로필 + 끊긴 이미지
-                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage)
+                    tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: UserModel.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: UserModel.userList[key]!.anotherdisconnectProfileImage)
                 } else {
                     tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: UserModel.userList[key]!.profileImage)
                 }
@@ -488,14 +487,5 @@ class MapViewController: UIViewController{
         }else if state == .active {
             bottomSheet.rankingViewController.animationView.play()
         }
-    }
-    
+    }   
 }
-
-
-
-
-
-
-
-

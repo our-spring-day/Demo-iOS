@@ -24,10 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         print(userImage)
         var count = 0
-        for key in UserModel.userList.keys {
-            UserModel.userList[key]?.nicknameImage = userImage[count]
-            count += 1
-        }
+//        for key in UserModel.userList.keys {
+//            UserModel.userList[key]?.nicknameImage = userImage[count]
+//            count += 1
+//        }
         
         return true
     }
