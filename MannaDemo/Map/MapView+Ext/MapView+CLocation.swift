@@ -17,7 +17,7 @@ extension MapViewController: CLLocationManagerDelegate {
         myLongitude = locValue.longitude
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
-        socket.write(string: "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
+        locationSocket.emit("location", "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
         setCollcetionViewItem()
         bottomSheet.runningTimeController.collectionView.reloadData()
     }
@@ -30,9 +30,7 @@ extension MapViewController: CLLocationManagerDelegate {
             let alter = UIAlertController(title: "위치권한 설정을 항상으로 해주셔야 합니다.", message: "앱 설정 화면으로 가시겠습니까? \n '아니오'를 선택하시면 앱이 종료됩니다.", preferredStyle: UIAlertController.Style.alert)
             let logOkAction = UIAlertAction(title: "네", style: UIAlertAction.Style.default) {
                 (action: UIAlertAction) in
-                
                 UIApplication.shared.open(NSURL(string:UIApplication.openSettingsURLString)! as URL)
-                
             }
             let logNoAction = UIAlertAction(title: "아니오", style: UIAlertAction.Style.destructive){
                 (action: UIAlertAction) in
