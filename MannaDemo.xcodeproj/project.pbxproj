@@ -13,6 +13,7 @@
 		A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E22552752F00ACD946 /* ChatMessageView.swift */; };
 		A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E52552803000ACD946 /* UITextField+Ext.swift */; };
 		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
+		A543EAF52555C5A7005363B8 /* SocketMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A543EAF42555C5A7005363B8 /* SocketMessage.swift */; };
 		A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A549EDD32543510900EC65E3 /* ShowToast.swift */; };
 		A5822B15255022C50085B55A /* PathAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5822B14255022C50085B55A /* PathAPI.swift */; };
 		A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05925514A0900A11EEF /* ChattingViewController.swift */; };
@@ -62,6 +63,7 @@
 		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
+		A543EAF42555C5A7005363B8 /* SocketMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketMessage.swift; sourceTree = "<group>"; };
 		A549EDD32543510900EC65E3 /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
 		A5822B14255022C50085B55A /* PathAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathAPI.swift; sourceTree = "<group>"; };
 		A5A0F05925514A0900A11EEF /* ChattingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewController.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				A5A0F06225515C1900A11EEF /* ChatMessage.swift */,
 				CC107738255464D300908D71 /* TravelData.swift */,
 				CC79E4AD2555B4DE001C726F /* SocketData.swift */,
+				A543EAF42555C5A7005363B8 /* SocketMessage.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -443,6 +446,7 @@
 				A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */,
 				CC74831525511F0C006C1E02 /* ChatViewController.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
+				A543EAF52555C5A7005363B8 /* SocketMessage.swift in Sources */,
 				A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */,
 				CC8A0B62255460EC00063790 /* MapView+Socket.swift in Sources */,
 				A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */,

@@ -80,6 +80,95 @@ class MapViewController: UIViewController{
             self.setCollcetionViewItem()
             self.bottomSheet.runningTimeController.collectionView.reloadData()
         }
+        
+        chatSocket.on("chat") { (array, ack) in
+            
+            let json = JSON(array)
+            guard let test = json[0].string?.data(using: .utf8) else { return }
+            guard let jsonData = try? JSON(test) else { return }
+            guard let temp = "\(jsonData)".data(using: .utf8) else { return }
+            let result: SocketMessage = try! JSONDecoder().decode(SocketMessage.self, from: temp)
+            print(result.sender.username)
+            print(result)
+            if result.message != nil {
+                switch result.sender.username {
+                    case "우석":
+                        if let message = result.message?.message {
+                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                            print(incoming)
+                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                            ChattingViewController.shared.chatMessage.append(message)
+                        }
+                        break
+                    case "연재":
+                        if let message = result.message?.message {
+                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                            print(incoming)
+                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                            ChattingViewController.shared.chatMessage.append(message)
+                        }
+                        break
+                    case "상원":
+                        if let message = result.message?.message {
+                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                            print(incoming)
+                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                            ChattingViewController.shared.chatMessage.append(message)
+                        }
+                        break
+                    case "재인":
+                        if let message = result.message?.message {
+                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                            print(incoming)
+                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                            ChattingViewController.shared.chatMessage.append(message)
+                        }
+                        break
+                    case "효근":
+                        if let message = result.message?.message {
+                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                            print(incoming)
+                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                            ChattingViewController.shared.chatMessage.append(message)
+                            
+                        }
+                        break
+                    case "규리":
+                        if let message = result.message?.message {
+                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                            print(incoming)
+                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                            ChattingViewController.shared.chatMessage.append(message)
+                            
+                        }
+                        break
+                    case "종찬":
+                        if let message = result.message?.message {
+                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                            print(incoming)
+                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                            ChattingViewController.shared.chatMessage.append(message)
+                        }
+                        break
+                    case "용권":
+                        if let message = result.message?.message {
+                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                            print(incoming)
+                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                            ChattingViewController.shared.chatMessage.append(message)
+                        }
+                        break
+                    default:
+                        break
+                }
+                
+                print(ChattingViewController.shared.chatMessage)
+                
+            }
+            
+            ChattingViewController.shared.chatView.reloadData()
+        }
+        
         locationSocket.on("location") { (array, ack) in
             var _: String?
             var deviceToken: String?
@@ -157,11 +246,21 @@ class MapViewController: UIViewController{
         attribute()
         bottomSheet.runningTimeController.collectionView.reloadData()
     }
+    @objc func sendMessage() {
+        guard let text = ChattingViewController.shared.textField.text else { return }
+        chatSocket.emit("chat", "\(text)")
+        ChattingViewController.shared.scrollBottom()
+    }
     
+    // MARK: Attribute
     func attribute() {
         //        socket.do {
         //            $0.delegate = self
         //        }
+        
+        ChattingViewController.shared.sendButton.do {
+            $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
+        }
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
             $0.frame.size.width = 40
@@ -440,7 +539,8 @@ class MapViewController: UIViewController{
     
     //MARK: 채팅창 클릭
     @objc func testGestureFunc() {
-        let view = ChattingViewController()
+//        let view = ChattingViewController()
+        let view = ChattingViewController.shared
         present(view, animated: true)
         self.view.bringSubviewToFront(bottomTabView)
         bottomTabView.bringSubviewToFront(self.view)

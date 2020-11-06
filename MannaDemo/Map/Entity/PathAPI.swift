@@ -15,7 +15,7 @@ class PathAPI {
         var marker = [NMGLatLng]()
         var duration: Int
         var distance: Double
-        let path = "https://dev.virtualearth.net/REST/V1/Routes/Transit?wp.0=\(lat),\(lng)&wp.1=37.475427,126.980378&timeType=Departure&dateTime=1:30:00AM&output=json&routePathOutput=Points&key=AhK9OnM_5KQLKHrjgCesEyiRMP0nx_Koby3ufRW__-l46f8aB6D4GFmMz7M6sgtO"
+        let path = "https://dev.virtualearth.net/REST/V1/Routes/Transit?wp.0=\(lat),\(lng)&wp.1=37.475427,126.980378&timeType=Departure&dateTime=12:30:00PM&output=json&routePathOutput=Points&key=AhK9OnM_5KQLKHrjgCesEyiRMP0nx_Koby3ufRW__-l46f8aB6D4GFmMz7M6sgtO"
         AF.request(path).response { response in
             switch response.result {
                 case .success(let value):

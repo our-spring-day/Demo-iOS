@@ -8,6 +8,7 @@
 import UIKit
 
 class ChattingViewController: UIViewController {
+    static let shared = ChattingViewController()
     var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -97,7 +98,7 @@ class ChattingViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         attirbute()
         layout()
-        scrollBottom()
+//        scrollBottom()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -221,7 +222,6 @@ extension ChattingViewController: UITextFieldDelegate {
     }
     
     @objc func keyboardWillHide(sender: Notification) {
-        print("ff")
         view.frame.origin.y = 0
     }
     
