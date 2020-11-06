@@ -250,6 +250,7 @@ class MapViewController: UIViewController{
         guard let text = ChattingViewController.shared.textField.text else { return }
         chatSocket.emit("chat", "\(text)")
         ChattingViewController.shared.scrollBottom()
+        ChattingViewController.shared.textField.text = ""
     }
     
     // MARK: Attribute
