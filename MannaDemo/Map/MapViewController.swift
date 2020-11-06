@@ -8,7 +8,6 @@
 import UIKit
 import NMapsMap
 import CoreLocation
-//import Starscream
 import SwiftyJSON
 import Lottie
 import SocketIO
@@ -80,6 +79,7 @@ class MapViewController: UIViewController{
             self.setCollcetionViewItem()
             self.bottomSheet.runningTimeController.collectionView.reloadData()
         }
+        
         locationSocket.on("location") { (array, ack) in
             var _: String?
             var deviceToken: String?
@@ -134,9 +134,12 @@ class MapViewController: UIViewController{
                     guard UserModel.userList[token] != nil else { return }
                     UserModel.userList[token]?.networkValidTime = 0
                     if token != MannaDemo.myUUID {
-                        
                         UserModel.userList[token]?.latitude = lat
                         UserModel.userList[token]?.longitude = lng
+                        PathAPI.getPath(lat: lat_!, lng: lng_!) { (result) in
+                            UserModel.userList[token]?.remainDistance = result.distance
+                            UserModel.userList[token]?.remainTime = result.duration
+                        }
                     }
                     self.setCollcetionViewItem()
                     self.bottomSheet.runningTimeController.collectionView.reloadData()
@@ -332,6 +335,7 @@ class MapViewController: UIViewController{
     func setCollcetionViewItem() {
         userListForCollectionView = Array(UserModel.userList.values)
         userListForCollectionView.sort { $0.state && !$1.state}
+        userListForCollectionView.sort { $0.remainTime < $1.remainTime }
     }
     
     //MARK: init 카메라 세팅
@@ -360,6 +364,7 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 모두의 위치 카메라 세팅
     @objc func toWholeLocation() {
         if cameraTrakingToggleFlag && cameraTrakingModeFlag == false {
             let minLatLng = NMGLatLng(lat: 150, lng: 150)
@@ -396,7 +401,6 @@ class MapViewController: UIViewController{
                 var trueCount = 0
                 UserModel.userList.keys.forEach {
                     if UserModel.userList[$0]?.state == true && UserModel.userList[$0]?.latitude != 0 && UserModel.userList[$0]?.longitude != 0 {
-                        print(UserModel.userList[$0]?.state)
                         let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
                         if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
                             trueCount += 1
@@ -409,12 +413,8 @@ class MapViewController: UIViewController{
                 }
             }
             
-            resultZoomLevel =  mapView.zoomLevel - 0.2
+            resultZoomLevel =  mapView.zoomLevel - 0.4
             let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center, zoomTo: resultZoomLevel)
-            //            if cameraTrakingModeFlag == false {
-            //                moveCameraWithZoomAndPosition.animation = .easeOut
-            //                moveCameraWithZoomAndPosition.animationDuration = 0.2
-            //            }
             mapView.moveCamera(moveCameraWithZoomAndPosition)
         }
     }

@@ -14,23 +14,23 @@ class ChatViewController: UIViewController {
     var contentLabel = UILabel()
     var paragraphStyle = NSMutableParagraphStyle()
 //    let transitionManager = SomeTransitionManager()
-    lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapMessage))
-    
-    @objc func tapMessage() {
-        backgroundView.alpha = 0.5
-        UIView.animate(withDuration: 0, delay: 0.5) {
-            self.backgroundView.alpha = 1
-        }
-        let newView = tempViewController()
-//        newView.transitioningDelegate = self
-        present(newView, animated: true)
-    }
+//    lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapMessage))
+//
+//    @objc func tapMessage() {
+//        backgroundView.alpha = 0.5
+//        UIView.animate(withDuration: 0, delay: 0.5) {
+//            self.backgroundView.alpha = 1
+//        }
+//        let newView = tempViewController()
+////        newView.transitioningDelegate = self
+//        present(newView, animated: true)
+//    }
     func attribute() {
         
         backgroundView.do {
             $0.layer.cornerRadius = 20
             $0.layer.masksToBounds = true
-            $0.addGestureRecognizer(tapGesture)
+            
             $0.isUserInteractionEnabled = true
         }
         profileImageView.do {
