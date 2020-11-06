@@ -48,6 +48,8 @@ class MapViewController: UIViewController{
     var goalMarker = NMFMarker()
     var tempToggleButton = UIButton()
     var disconnectToggleFlag = false
+    var cameraTrakingToggleFlag = true
+    var cameraTrakingModeFlag = true
     
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
@@ -69,6 +71,8 @@ class MapViewController: UIViewController{
         }
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(toWholeLocation), userInfo: nil, repeats: true)
         array()
         layout()
         didMarkerClicked()
@@ -130,7 +134,7 @@ class MapViewController: UIViewController{
             $0.ranking.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
         }
         cameraState.do {
-            $0.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
+            $0.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
             $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
             $0.tag = 1
@@ -265,75 +269,82 @@ class MapViewController: UIViewController{
     }
     
     //MARK: 내위치 카메라 세팅
-    func toMyLocation() {
-        var moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
-        moveCameraWithZoomAndPosition.animation = .easeOut
-        moveCameraWithZoomAndPosition.animationDuration = 0.2
-        mapView.moveCamera(moveCameraWithZoomAndPosition)
+    @objc func toMyLocation() {
+        if cameraTrakingToggleFlag && cameraTrakingModeFlag {
+            var moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
+            moveCameraWithZoomAndPosition.animation = .easeOut
+            moveCameraWithZoomAndPosition.animationDuration = 0.2
+            mapView.moveCamera(moveCameraWithZoomAndPosition)
+        }
     }
     
-    func toWholeLocation() {
-        var minLatLng = NMGLatLng(lat: 150, lng: 150)
-        var maxLatLng = NMGLatLng(lat: 0, lng: 0)
-        var resultZoomLevel: Double = 0
-        
-        UserModel.userList.keys.forEach {
-            guard (UserModel.userList[$0]!.state = true) != nil else { return }
-            if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
-                if minLatLng.lat > UserModel.userList[$0]!.latitude {
-                    minLatLng.lat = UserModel.userList[$0]!.latitude
-                }
-                if minLatLng.lng > UserModel.userList[$0]!.longitude {
-                    
-                    minLatLng.lng = UserModel.userList[$0]!.longitude
-                }
-                if maxLatLng.lat < UserModel.userList[$0]!.latitude {
-                    maxLatLng.lat = UserModel.userList[$0]!.latitude
-                }
-                if maxLatLng.lng < UserModel.userList[$0]!.longitude {
-                    maxLatLng.lng = UserModel.userList[$0]!.longitude
-                }
-            }
-        }
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
-        var zoomInit = NMFCameraUpdate(zoomTo: 18)
-        mapView.moveCamera(cameraUpdate)
-        mapView.moveCamera(zoomInit)
-        
-        while mapView.zoomLevel > 1 {
-            let count = UserModel.userList.count
-            var trueCount = 0
+    @objc func toWholeLocation() {
+        if cameraTrakingToggleFlag && cameraTrakingModeFlag == false {
+            var minLatLng = NMGLatLng(lat: 150, lng: 150)
+            var maxLatLng = NMGLatLng(lat: 0, lng: 0)
+            var resultZoomLevel: Double = 0
+            
             UserModel.userList.keys.forEach {
-                let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
-                if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
-                    trueCount += 1
+                guard (UserModel.userList[$0]!.state = true) != nil else { return }
+                if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
+                    if minLatLng.lat > UserModel.userList[$0]!.latitude {
+                        minLatLng.lat = UserModel.userList[$0]!.latitude
+                    }
+                    if minLatLng.lng > UserModel.userList[$0]!.longitude {
+                        
+                        minLatLng.lng = UserModel.userList[$0]!.longitude
+                    }
+                    if maxLatLng.lat < UserModel.userList[$0]!.latitude {
+                        maxLatLng.lat = UserModel.userList[$0]!.latitude
+                    }
+                    if maxLatLng.lng < UserModel.userList[$0]!.longitude {
+                        maxLatLng.lng = UserModel.userList[$0]!.longitude
+                    }
                 }
             }
-            if trueCount == count {
-                break
-            } else {
-                trueCount = 0
-                mapView.zoomLevel -= 0.05
+            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
+            var zoomInit = NMFCameraUpdate(zoomTo: 18)
+            mapView.moveCamera(cameraUpdate)
+            mapView.moveCamera(zoomInit)
+            
+            while mapView.zoomLevel > 1 {
+                let count = UserModel.userList.count
+                var trueCount = 0
+                UserModel.userList.keys.forEach {
+                    let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
+                    if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
+                        trueCount += 1
+                    }
+                }
+                if trueCount == count {
+                    break
+                } else {
+                    trueCount = 0
+                    mapView.zoomLevel -= 0.05
+                }
             }
+            resultZoomLevel =  mapView.zoomLevel - 0.2
+            var moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center, zoomTo: resultZoomLevel)
+            moveCameraWithZoomAndPosition.animation = .easeOut
+            moveCameraWithZoomAndPosition.animationDuration = 0.2
+            mapView.moveCamera(moveCameraWithZoomAndPosition)
         }
-        resultZoomLevel =  mapView.zoomLevel - 0.2
-        var moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center, zoomTo: resultZoomLevel)
-        moveCameraWithZoomAndPosition.animation = .easeOut
-        moveCameraWithZoomAndPosition.animationDuration = 0.2
-        mapView.moveCamera(moveCameraWithZoomAndPosition)
     }
     
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
         multipartPath.mapView = nil
+        cameraTrakingToggleFlag = true
         [myLocationButton, bottomSheet.view, bottomTabView].forEach {
             $0?.alpha = 0
             $0?.isHidden = true
         }
         if cameraState.currentImage == UIImage(named: "forest") {
+            cameraTrakingModeFlag = true
             sender.tag == 1 ? cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal) : nil
             sender.tag == 1 ? toMyLocation() : toWholeLocation()
             
         } else {
+            cameraTrakingModeFlag = false
             sender.tag == 1 ? cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal) : nil
             sender.tag == 1 ? toWholeLocation() : toMyLocation()
         }
