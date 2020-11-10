@@ -146,10 +146,10 @@
 		A515563725404C5700487BEF /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				A515563825404C9500487BEF /* MapViewController.swift */,
 				CC8A0B5C2554606F00063790 /* MapView+Ext */,
 				CC8A0B672554616200063790 /* Component */,
 				CCF3BC532540444600C7F718 /* Entity */,
-				A515563825404C9500487BEF /* MapViewController.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";

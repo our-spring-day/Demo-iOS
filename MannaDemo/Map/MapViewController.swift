@@ -16,7 +16,7 @@ protocol test {
     var chatView: UIView? { get set}
 }
 extension MapViewController: test {
-    
+
 }
 
 class MapViewController: UIViewController{

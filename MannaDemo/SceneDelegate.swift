@@ -42,8 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                     }
                 }
-
-                window.rootViewController = mainView
+                window.rootViewController = mannalistView
                 self.window = window
                 window.makeKeyAndVisible()
             }

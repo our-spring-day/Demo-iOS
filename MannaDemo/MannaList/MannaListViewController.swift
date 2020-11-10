@@ -33,7 +33,6 @@ class MannaListViewController: UIViewController, reloadData {
         })
         attribute()
         layout()
-//        print(MannaDemo.myUUID)
     }
     
     func attribute() {
@@ -89,20 +88,23 @@ class MannaListViewController: UIViewController, reloadData {
             "device_id" : deviceID,
         ]
         
-        let result = AF.request("https://manna.duckdns.org:18888/manna?deviceToken=0954A791-B5BE-4B56-8F25-07554A4D6684", parameters: param).responseJSON { response in
+        let result = AF.request("https://manna.duckdns.org:18888/manna?deviceToken=\(deviceID)", parameters: param).responseJSON { response in
+
             switch response.result {
             case .success(let value):
-                print("\(value)")
-                if let addressList = JSON(value).array {
-                    for item in addressList {
-                        print(item["manna_name"])
-                        print(item["create_timestamp"])
-                        MannaModel.model.append(Manna(time: item["create_timestamp"].string ?? "", name: item["manna_name"].string ?? ""))
-                    }
+                JSON(value).forEach { (_,data) in
+                    let item = NewManna(mannaname: data["mannaName"].string!,
+                             createTimestamp: data["createTimestamp"].int!,
+                             uuid: data["uuid"].string!)
+                    MannaModel.newModel.append(item)
+//                    data["chatJoinUserList"]
+//                    data["locationJoinUserList"]
+                    
                 }
                 completion()
-            case .failure(let err):
-                MannaModel.model.append(Manna(time: "Test", name: "서버와의 연결이 좀 안좋나봐요"))
+                break
+            case .failure(let error):
+                break
             }
         }
         
@@ -112,14 +114,14 @@ class MannaListViewController: UIViewController, reloadData {
 
 extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MannaModel.model.count
+        return MannaModel.newModel.count
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MannaListTableViewCell.id,for: indexPath) as! MannaListTableViewCell
-        if MannaModel.model.count > 0 {
-            cell.title.text = MannaModel.model[indexPath.row].name
+        if MannaModel.newModel.count > 0 {
+            cell.title.text = MannaModel.newModel[indexPath.row].mannaname
         }
         return cell
     }
