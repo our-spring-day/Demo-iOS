@@ -19,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let mainView = MapViewController()
+            let mannalistView = MannaListViewController()
             
             let registerView = RegisterUserViewController()
             
@@ -41,6 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                     }
                 }
+
                 window.rootViewController = mainView
                 self.window = window
                 window.makeKeyAndVisible()

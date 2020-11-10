@@ -28,14 +28,12 @@ class MannaListViewController: UIViewController, reloadData {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        KeychainWrapper.standard.removeObject(forKey: "device_id")
         self.getMannaList(completion: {
             self.tableView.reloadData()
         })
         attribute()
         layout()
-        print(MannaDemo.myUUID)
+//        print(MannaDemo.myUUID)
     }
     
     func attribute() {
@@ -64,7 +62,6 @@ class MannaListViewController: UIViewController, reloadData {
         }
     }
     
-    
     @objc func pushChatView() {
         let view = ChattingViewController()
         navigationController?.pushViewController(view, animated: true)
@@ -92,14 +89,14 @@ class MannaListViewController: UIViewController, reloadData {
             "device_id" : deviceID,
         ]
         
-        let result = AF.request("http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/manna", parameters: param).responseJSON { response in
+        let result = AF.request("https://manna.duckdns.org:18888/manna?deviceToken=0954A791-B5BE-4B56-8F25-07554A4D6684", parameters: param).responseJSON { response in
             switch response.result {
             case .success(let value):
-//                print("\(value)")
+                print("\(value)")
                 if let addressList = JSON(value).array {
                     for item in addressList {
-//                        print(item["manna_name"])
-//                        print(item["create_timestamp"])
+                        print(item["manna_name"])
+                        print(item["create_timestamp"])
                         MannaModel.model.append(Manna(time: item["create_timestamp"].string ?? "", name: item["manna_name"].string ?? ""))
                     }
                 }

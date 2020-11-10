@@ -24,7 +24,7 @@ class MapViewController: UIViewController{
     var userImage: [UIImage] = []
     var chatView: UIView?
     
-    var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":"96f35135-390f-496c-af00-cdb3a4104550"])])
+    var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":"6bfe12af-cb31-4b84-8d01-09db634841d3"])])
     var locationSocket: SocketIOClient!
     var chatSocket: SocketIOClient!
     var locationManager = CLLocationManager()
@@ -66,29 +66,22 @@ class MapViewController: UIViewController{
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
-        
         locationSocket.connect()
         chatSocket.connect()
-        
         locationSocket.on("locationConnect") { (array, ack) in
             UserModel.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
             self.bottomSheet.runningTimeController.collectionView.reloadData()
         }
-        
         chatSocket.on("chat") { (array, ack) in
-            
             let json = JSON(array)
             guard let test = json[0].string?.data(using: .utf8) else { return }
             guard let jsonData = try? JSON(test) else { return }
             guard let temp = "\(jsonData)".data(using: .utf8) else { return }
             let result: SocketMessage = try! JSONDecoder().decode(SocketMessage.self, from: temp)
-            print(result.sender.username)
-            print(result)
             if result.message != nil {
                 switch result.sender.username {
                     case "우석":
@@ -129,7 +122,6 @@ class MapViewController: UIViewController{
                             print(incoming)
                             let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
                             ChattingViewController.shared.chatMessage.append(message)
-                            
                         }
                         break
                     case "규리":
@@ -138,7 +130,6 @@ class MapViewController: UIViewController{
                             print(incoming)
                             let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
                             ChattingViewController.shared.chatMessage.append(message)
-                            
                         }
                         break
                     case "종찬":
@@ -160,14 +151,9 @@ class MapViewController: UIViewController{
                     default:
                         break
                 }
-                
-                print(ChattingViewController.shared.chatMessage)
-                
             }
-            
             ChattingViewController.shared.chatView.reloadData()
         }
-        
         locationSocket.on("location") { (array, ack) in
             var _: String?
             var deviceToken: String?
@@ -175,25 +161,20 @@ class MapViewController: UIViewController{
             var lat_: Double?
             var lng_: Double?
             let json = JSON(array)
-            
             if let data = json[0].string?.data(using: .utf8) {
                 if let json = try? JSON(data) {
                     let temp = "\(json)".data(using: .utf8)
                     let result: SocketData = try! JSONDecoder().decode(SocketData.self, from: temp!)
-                    
-                    
                     deviceToken = result.sender.deviceToken
                     username = result.sender.username
                     guard let token = deviceToken else { return }
-                    
                     switch result.type {
-                    
                     case "LOCATION":
                         lat_ = result.location?.latitude
                         lng_ = result.location?.longitude
                         UserModel.userList[token]?.state = true
-                        
                         break
+                        
                     case "JOIN":
                         guard let name = username else { return }
                         UserModel.userList[token]?.state = true
@@ -216,7 +197,6 @@ class MapViewController: UIViewController{
                     default:
                         break
                     }
-                    
                     guard let lat = lat_ else { return }
                     guard let lng = lng_ else { return }
                     guard UserModel.userList[token] != nil else { return }
@@ -257,10 +237,6 @@ class MapViewController: UIViewController{
     
     // MARK: Attribute
     func attribute() {
-        //        socket.do {
-        //            $0.delegate = self
-        //        }
-        
         ChattingViewController.shared.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
@@ -433,7 +409,16 @@ class MapViewController: UIViewController{
     //MARK: 컬렉션 뷰 아이템 세팅
     func setCollcetionViewItem() {
         userListForCollectionView = Array(UserModel.userList.values)
+        
+        
+        
         userListForCollectionView.sort { $0.state && !$1.state}
+        
+        
+        
+        
+        
+        
         userListForCollectionView.sort { $0.remainTime < $1.remainTime }
     }
     
@@ -458,8 +443,9 @@ class MapViewController: UIViewController{
     @objc func toMyLocation() {
         
         if cameraTrakingToggleFlag && cameraTrakingModeFlag {
-            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
-            mapView.moveCamera(moveCameraWithZoomAndPosition)
+            mapView.positionMode = .direction
+//            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
+//            mapView.moveCamera(moveCameraWithZoomAndPosition)
         }
     }
     
