@@ -36,7 +36,7 @@ class tempViewController: UIViewController {
             $0.top.equalTo(backgroundView.snp.top).offset(11.5)
             $0.centerX.equalTo(self.view)
             $0.width.equalTo(MannaDemo.convertWidth(value: 60))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 5))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 5))
         }
         backButton.snp.makeConstraints {
             $0.top.equalTo(bar.snp.bottom).offset(30)

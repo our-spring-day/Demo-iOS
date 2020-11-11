@@ -23,6 +23,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             let registerView = RegisterUserViewController()
             
+            print("이 기종의 스케일", UIScreen.main.scale)
+            
+            
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {
                 if let uuid = UIDevice.current.identifierForVendor?.uuidString {
                     let saveSuccessful: Bool = KeychainWrapper.standard.set(uuid, forKey: "device_id")

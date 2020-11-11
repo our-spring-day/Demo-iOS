@@ -53,6 +53,8 @@ class MapViewController: UIViewController{
     var disconnectToggleFlag = false
     var cameraTrakingToggleFlag = true
     var cameraTrakingModeFlag = true
+    var rankingBUtton = UIButton()
+    var chatBUtton = UIButton()
     
     
     // MARK: ViewDidLoad
@@ -67,15 +69,12 @@ class MapViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(meetInfo?.uuid)
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
-        dump(locationSocket)
         chatSocket = manager.socket(forNamespace: "/chat")
         locationSocket.connect()
         chatSocket.connect()
         locationSocket.on("locationConnect") { (array, ack) in
-            print(array)
             UserModel.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
             self.bottomSheet.runningTimeController.collectionView.reloadData()
@@ -232,6 +231,7 @@ class MapViewController: UIViewController{
         attribute()
         bottomSheet.runningTimeController.collectionView.reloadData()
     }
+    
     @objc func sendMessage() {
         guard let text = ChattingViewController.shared.textField.text else { return }
         chatSocket.emit("chat", "\(text)")
@@ -287,7 +287,7 @@ class MapViewController: UIViewController{
             $0.runningTimeController.collectionView.delegate = self
             $0.runningTimeController.collectionView.dataSource = self
             $0.parentView = self.view
-            $0.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: view.frame.width, height: view.frame.height)
+            $0.view.frame = CGRect(x: 0, y: MannaDemo.convertHeight(value: 470), width: view.frame.width, height: view.frame.height)
             $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
             $0.rankingViewController.animationView.addGestureRecognizer(tempToggleGesture)
         }
@@ -318,10 +318,25 @@ class MapViewController: UIViewController{
             $0.mapView = mapView
             $0.isForceShowIcon = true
         }
+        rankingBUtton.do {
+            $0.backgroundColor = .white
+            $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
+            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
+            $0.layer.masksToBounds = true
+            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
+        }
+        chatBUtton.do {
+            $0.backgroundColor = .white
+            $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
+            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
+            $0.layer.masksToBounds = true
+            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
+        }
     }
     
+    // MARK: layout
     func layout() {
-        [mapView, cameraState, myLocationButton, backButton, timerView, bottomSheet.view, bottomTabView, toastLabel].forEach { view.addSubview($0) }
+        [mapView, cameraState, myLocationButton, backButton, timerView, toastLabel, chatBUtton, rankingBUtton].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
@@ -332,17 +347,13 @@ class MapViewController: UIViewController{
             $0.centerX.equalTo(view)
             $0.centerY.equalTo(view).offset(-100)
             $0.width.equalTo(MannaDemo.convertWidth(value: 200))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 50))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 50))
         }
         timerView.snp.makeConstraints {
             $0.centerX.equalTo(view)
             $0.centerY.equalTo(backButton)
             $0.width.equalTo(MannaDemo.convertWidth(value: 130))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
-        }
-        bottomTabView.snp.makeConstraints {
-            $0.bottom.leading.trailing.equalTo(view)
-            $0.height.equalTo(MannaDemo.convertHeigt(value: MannaDemo.convertHeigt(value: 85)))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
         myLocationButton.snp.makeConstraints {
             $0.top.equalTo(cameraState.snp.bottom).offset(11)
@@ -353,6 +364,16 @@ class MapViewController: UIViewController{
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
+        }
+        rankingBUtton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 53))
+        }
+        chatBUtton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 53))
         }
     }
     
@@ -413,16 +434,7 @@ class MapViewController: UIViewController{
     //MARK: 컬렉션 뷰 아이템 세팅
     func setCollcetionViewItem() {
         userListForCollectionView = Array(UserModel.userList.values)
-        
-        
-        
         userListForCollectionView.sort { $0.state && !$1.state}
-        
-        
-        
-        
-        
-        
         userListForCollectionView.sort { $0.remainTime < $1.remainTime }
     }
     
@@ -552,7 +564,7 @@ class MapViewController: UIViewController{
             self.bottomSheet.rankingViewController.view.isHidden = true
             self.bottomSheet.runningTimeController.view.isHidden = true
             UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 525), width: self.view.frame.width, height: self.view.frame.height)
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeight(value: 525), width: self.view.frame.width, height: self.view.frame.height)
             }
             break
         case 1:
@@ -567,7 +579,7 @@ class MapViewController: UIViewController{
                 bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "man"), for: .normal)
             }
             UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: self.view.frame.width, height: self.view.frame.height)
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeight(value: 470), width: self.view.frame.width, height: self.view.frame.height)
             }
             break
         case 2:
@@ -575,7 +587,7 @@ class MapViewController: UIViewController{
             self.bottomSheet.rankingViewController.view.isHidden = true
             self.bottomSheet.runningTimeController.view.isHidden = false
             UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: self.view.frame.width, height: self.view.frame.height)
+                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeight(value: 470), width: self.view.frame.width, height: self.view.frame.height)
             }
             break
         default:

@@ -13,7 +13,7 @@ class MannaDemo {
     
     static var myUUID = KeychainWrapper.standard.string(forKey: "device_id")
     
-    static func convertHeigt(value: CGFloat) -> CGFloat{
+    static func convertHeight(value: CGFloat) -> CGFloat{
         return screenSize.height * (value / 812)
     }
     

@@ -30,13 +30,13 @@ class RunningTimeViewController: UIViewController {
         [collectionView, expectArrived].forEach { view.addSubview($0) }
         
         expectArrived.snp.makeConstraints {
-            $0.top.equalTo(view).offset(MannaDemo.convertHeigt(value: 33.68))
+            $0.top.equalTo(view).offset(MannaDemo.convertHeight(value: 33.68))
             $0.leading.equalTo(view).offset(MannaDemo.convertWidth(value: 25.11))
             $0.width.equalTo(MannaDemo.convertWidth(value: 200))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 25))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 25))
         }
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(expectArrived.snp.bottom).offset(MannaDemo.convertHeigt(value: 22.26))
+            $0.top.equalTo(expectArrived.snp.bottom).offset(MannaDemo.convertHeight(value: 22.26))
             $0.centerX.equalTo(view.snp.centerX)
         }
     }

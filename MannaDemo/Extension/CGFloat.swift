@@ -9,5 +9,5 @@ import UIKit
 
 
 public extension CGFloat {
-    func pixelsToPoints() -> CGFloat { return self / UIScreen.main.scale }
+    func pixelsToPoints() -> CGFloat { return self * ( 2 / UIScreen.main.scale ) }
 }
