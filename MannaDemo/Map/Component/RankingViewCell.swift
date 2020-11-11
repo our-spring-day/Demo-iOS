@@ -24,6 +24,7 @@ class RankingViewCell: UITableViewCell {
     lazy var profileImage = UIImageView()
     lazy var userName = UILabel()
     lazy var state = UILabel()
+    lazy var medal = Medal(frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 42), height: MannaDemo.convertWidth(value: 42)))
     lazy var button = UIButton()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -43,6 +44,10 @@ class RankingViewCell: UITableViewCell {
         }
         state.do {
             $0.text = data.state
+        }
+        medal.do {
+            $0.layer.cornerRadius = $0.frame.width / 2
+            $0.clipsToBounds = true
         }
     }
     
@@ -77,7 +82,7 @@ class RankingViewCell: UITableViewCell {
     }
     
     func layout() {
-        [profileImage, userName, state, button].forEach{ contentView.addSubview($0) }
+        [profileImage, userName, state, medal, button].forEach{ contentView.addSubview($0) }
         
         profileImage.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -104,6 +109,14 @@ class RankingViewCell: UITableViewCell {
             $0.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
             $0.widthAnchor.constraint(equalToConstant: 79).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 39).isActive = true
+        }
+        medal.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+            $0.centerXAnchor.constraint(equalTo: button.centerXAnchor).isActive = true
+            
+            $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 42)).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 42)).isActive = true
         }
     }
     

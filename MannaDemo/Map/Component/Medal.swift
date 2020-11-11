@@ -6,28 +6,17 @@
 //
 
 import UIKit
+import Then
 
 class Medal: UIView {
-    var medalState: String = ""
-    lazy var medal = UIImageView()
-    init(_ medal: String) {
-        super.init(frame: CGRect(x: 0, y: 0, width: 42, height: 42))
-        
-        setMedal(medal: medal)
-        layout()
+    lazy var medal = UIImageView().then {
+        $0.layer.cornerRadius = $0.frame.width / 2
+        $0.clipsToBounds = true
     }
-    
-    func setMedal(medal: String) {
-        if medal == "golden" {
-            self.medal.image = UIImage(named: medal)
-            self.backgroundColor = #colorLiteral(red: 1, green: 0.9294117647, blue: 0.5803921569, alpha: 1)
-        } else if medal == "silver" {
-            self.medal.image = UIImage(named: medal)
-            self.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        } else if medal == "bronze" {
-            self.medal.image = UIImage(named: medal)
-            self.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layout()
     }
     
     func layout() {

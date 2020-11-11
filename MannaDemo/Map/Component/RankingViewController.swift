@@ -14,6 +14,8 @@ class RankingViewController: UIViewController {
     
     let userArr: [Ranking] = [Ranking(profileImage: UIImage(named: "김규리")!, profileName: "김규리", state: "12:40 도착 · 10분 소요", arrival: true),
                               Ranking(profileImage: UIImage(named: "원우석")!, profileName: "원우석", state: "12:50 도착 · 20분 소요", arrival: true),
+                              Ranking(profileImage: UIImage(named: "원우석")!, profileName: "원우석", state: "12:50 도착 · 20분 소요", arrival: true),
+                              Ranking(profileImage: UIImage(named: "원우석")!, profileName: "원우석", state: "12:50 도착 · 20분 소요", arrival: true),
                               Ranking(profileImage: UIImage(named: "보드리")!, profileName: "보드리", state: "약 10분 남음", arrival: false),
                               Ranking(profileImage: UIImage(named: "윤상원")!, profileName: "윤상원", state: "약 15분 남음", arrival: false),
                               Ranking(profileImage: UIImage(named: "이연재")!, profileName: "이연재", state: "약 20분 남음", arrival: false)]
@@ -118,22 +120,21 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = rankginView.dequeueReusableCell(withIdentifier: RankingViewCell.rankingCellID, for: indexPath) as! RankingViewCell
 
-        
         if indexPath.section == 0 {
             cell.button.isHidden = true
             if indexPath.row == 0{
-                cell.accessoryView = Medal("golden").then {
-                    $0.layer.cornerRadius = $0.frame.width / 2
-                    $0.clipsToBounds = true
-                }
+                cell.medal.medal.image = UIImage(named: "golden")
+                cell.medal.backgroundColor = #colorLiteral(red: 1, green: 0.9294117647, blue: 0.5803921569, alpha: 1)
+
             } else if indexPath.row == 1 {
-                cell.accessoryView = Medal("silver")
+                cell.medal.medal.image = UIImage(named: "silver")
             } else if indexPath.row == 2 {
-                cell.accessoryView = Medal("bronze")
+                cell.medal.medal.image = UIImage(named: "bronze")
             }
             
             cell.setData(data: arrivalUser[indexPath.row])
         } else if indexPath.section == 1 {
+            cell.medal.isHidden = true
             cell.tapped = { [unowned self] in
                 cell.buttonState = false
                 // 여기에 재촉하는거 함수 구현
