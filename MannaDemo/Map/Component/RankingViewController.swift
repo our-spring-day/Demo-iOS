@@ -10,13 +10,12 @@ import UIKit
 class RankingViewController: UIViewController {
     lazy var rankginView = UITableView()
     lazy var backgroundView = UIView()
-    lazy var prevImage = UIImageView()
+    var dismissButton = UIButton()
+    var timerView = TimerView(.rankingView)
     
     let userArr: [Ranking] = [Ranking(profileImage: UIImage(named: "김규리")!, profileName: "김규리", state: "12:40 도착 · 10분 소요", arrival: true),
                               Ranking(profileImage: UIImage(named: "원우석")!, profileName: "원우석", state: "12:50 도착 · 20분 소요", arrival: true),
-                              Ranking(profileImage: UIImage(named: "원우석")!, profileName: "원우석", state: "12:50 도착 · 20분 소요", arrival: true),
-                              Ranking(profileImage: UIImage(named: "원우석")!, profileName: "원우석", state: "12:50 도착 · 20분 소요", arrival: true),
-                              Ranking(profileImage: UIImage(named: "보드리")!, profileName: "보드리", state: "약 10분 남음", arrival: false),
+                              Ranking(profileImage: UIImage(named: "보들이")!, profileName: "보들이", state: "약 10분 남음", arrival: false),
                               Ranking(profileImage: UIImage(named: "윤상원")!, profileName: "윤상원", state: "약 15분 남음", arrival: false),
                               Ranking(profileImage: UIImage(named: "이연재")!, profileName: "이연재", state: "약 20분 남음", arrival: false)]
     
@@ -41,9 +40,6 @@ class RankingViewController: UIViewController {
             $0.backgroundColor = .white
             $0.addGestureRecognizer(gesture)
         }
-        prevImage.do {
-            $0.image = UIImage(named: "prev")
-        }
         rankginView.do {
             $0.backgroundColor = .white
             $0.register(RankingViewCell.self, forCellReuseIdentifier: RankingViewCell.rankingCellID)
@@ -53,29 +49,35 @@ class RankingViewController: UIViewController {
             $0.separatorStyle = .none
             $0.rowHeight = MannaDemo.convertWidth(value: 70)
         }
+        dismissButton.do {
+            $0.setImage(#imageLiteral(resourceName: "dismiss"), for: .normal)
+            $0.layer.cornerRadius = $0.frame.width / 2
+            $0.clipsToBounds = true
+            $0.addTarget(self, action: #selector(prevButton), for: .touchUpInside)
+            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 18.02), left: MannaDemo.convertHeight(value: 14.37), bottom: MannaDemo.convertHeight(value: 18.94), right: MannaDemo.convertHeight(value: 14.57))
+        }
     }
 
     func layout() {
-        [rankginView, backgroundView, prevImage].forEach { view.addSubview($0) }
+        [timerView, rankginView, dismissButton].forEach { view.addSubview($0) }
         
         rankginView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.topAnchor.constraint(equalTo: view.topAnchor, constant: MannaDemo.convertHeigt(value: 140)).isActive = true
+            $0.topAnchor.constraint(equalTo: view.topAnchor, constant: MannaDemo.convertHeight(value: 140)).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         }
-        backgroundView.do {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.topAnchor.constraint(equalTo: view.topAnchor, constant: MannaDemo.convertHeigt(value: 46)).isActive = true
-            $0.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: MannaDemo.convertWidth(value: 15)).isActive = true
-            $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 45)).isActive = true
-            $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 45)).isActive = true
+        dismissButton.snp.makeConstraints {
+            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
+            $0.leading.equalToSuperview().offset(15)
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
-        prevImage.do {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
-            $0.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
+        timerView.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.centerY.equalTo(dismissButton)
+            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
     }
     
@@ -85,7 +87,7 @@ class RankingViewController: UIViewController {
     }
     
     @objc func prevButton(_ sender: UITapGestureRecognizer) {
-        print("여기가 뒤로가기")
+        dismiss(animated: true)
     }
 }
 

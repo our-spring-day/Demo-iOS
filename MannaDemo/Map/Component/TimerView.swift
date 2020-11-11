@@ -114,17 +114,22 @@ class TimerView: UIView {
     func layout() {
         [minuteLabel, secondLabel, colon].forEach { addSubview($0) }
         minuteLabel.snp.makeConstraints {
-            $0.trailing.equalTo(colon.snp.leading).offset(-5)
+            $0.leading.equalTo(self)
+            $0.trailing.equalTo(colon.snp.leading).offset(15)
             $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(40)
+            $0.height.equalTo(40)
+            $0.width.equalTo(20)
         }
         secondLabel.snp.makeConstraints {
-            $0.leading.equalTo(colon.snp.trailing).offset(5)
+            $0.trailing.equalTo(self)
+            $0.leading.equalTo(colon.snp.trailing).offset(-15)
             $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(40)
+            $0.height.equalTo(40)
         }
         colon.snp.makeConstraints {
             $0.centerX.centerY.equalTo(self)
+            $0.width.equalTo(5)
+            $0.height.equalTo(30)
         }
     }
     

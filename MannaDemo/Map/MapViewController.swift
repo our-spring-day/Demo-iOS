@@ -318,7 +318,7 @@ class MapViewController: UIViewController{
         [mapView, cameraState, myLocationButton, backButton, timerView, toastLabel, chatBUtton, rankingBUtton].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(46)
+            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
             $0.leading.equalToSuperview().offset(15)
             $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
@@ -386,7 +386,7 @@ class MapViewController: UIViewController{
     }
 
     @objc func showRankingView() {
-        let view = NewRankingViewViewController()
+        let view = RankingViewController()
         view.view.backgroundColor = .white
         view.modalPresentationStyle = .custom
         view.modalTransitionStyle = .crossDissolve
