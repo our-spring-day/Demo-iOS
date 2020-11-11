@@ -12,6 +12,7 @@ import SwiftyJSON
 import Lottie
 import SocketIO
 
+
 protocol test {
     var chatView: UIView? { get set}
 }
@@ -24,7 +25,7 @@ class MapViewController: UIViewController{
     var userImage: [UIImage] = []
     var chatView: UIView?
     
-    var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":"96f35135-390f-496c-af00-cdb3a4104550"])])
+    var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":"6bfe12af-cb31-4b84-8d01-09db634841d3"])])
     var locationSocket: SocketIOClient!
     var chatSocket: SocketIOClient!
     var locationManager = CLLocationManager()
@@ -66,7 +67,7 @@ class MapViewController: UIViewController{
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        GetMannaAPI.getManna()
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
@@ -385,7 +386,7 @@ class MapViewController: UIViewController{
         }
     }
     
-    //MARK: 렌더링 이미지ㅇ
+    //MARK: 렌더링 이미지
     func renderImage() {
         for name in userName {
             let image = UserView(text: name).then({

@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+struct MannaList {
+    let uuid : String
+    let createTimestamp: Int
+    let mannaName: String
+    let locationJoinUserList: String?
+    let chatJoinUserList: String?
+}

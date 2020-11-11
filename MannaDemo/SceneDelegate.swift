@@ -18,6 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
+            let rankView = RankingViewController()
+            
             let mainView = MapViewController()
             
             let registerView = RegisterUserViewController()
@@ -41,7 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                     }
                 }
-                window.rootViewController = mainView
+                window.rootViewController = rankView
                 self.window = window
                 window.makeKeyAndVisible()
             }
