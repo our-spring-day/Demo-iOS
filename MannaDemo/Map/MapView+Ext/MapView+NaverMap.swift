@@ -10,11 +10,11 @@ import NMapsMap
 
 extension MapViewController: NMFMapViewCameraDelegate {
     func zoomLinearEquation(zoomLevel: Double) -> CGFloat{
-        return  CGFloat(-(25/3) * zoomLevel + 175)
+        return  CGFloat(-5 * zoomLevel + 115)
     }
     
     func markerResizeByZoomLevel() {
-        if mapView.zoomLevel > 15 {
+        if mapView.zoomLevel > 13 {
             tokenWithMarker.map { (key, marker) in
                 marker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
                 marker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))

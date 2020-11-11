@@ -39,7 +39,7 @@ class TimerView: UIView {
         minuteLabel.text = "\(59 - Int(minute)!)"
         secondLabel.text = "\(59 - Int(second)!)"
         
-        if (59 - Int(minute)!) > 10 && (59 - Int(minute)!) < 20 {
+        if (59 - Int(minute)!) > 9 && (59 - Int(minute)!) < 19 {
             switch whereAt {
             case .mapView:
                 self.backgroundColor = UIColor(named: "20minute")
@@ -51,7 +51,7 @@ class TimerView: UIView {
             case .none:
                 print("타이머의 whereAt 변수를 할당하세요")
             }
-        } else if (59 - Int(minute)!) <= 10 {
+        } else if (59 - Int(minute)!) < 10 {
             switch whereAt {
             case .mapView:
                 self.backgroundColor = UIColor(named: "10minute")
