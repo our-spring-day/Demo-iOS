@@ -136,9 +136,15 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.section == 1 {
             cell.tapped = { [unowned self] in
                 cell.buttonState = false
+                // 여기에 재촉하는거 함수 구현
+                // ->>
+                Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+                    cell.buttonState = true
+                }
             }
             cell.setData(data: notArrivalUser[indexPath.row])
         }
         return cell
     }
+
 }
