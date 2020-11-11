@@ -28,14 +28,11 @@ class MannaListViewController: UIViewController, reloadData {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        KeychainWrapper.standard.removeObject(forKey: "device_id")
         self.getMannaList(completion: {
             self.tableView.reloadData()
         })
         attribute()
         layout()
-        print(MannaDemo.myUUID)
     }
     
     func attribute() {
@@ -64,7 +61,6 @@ class MannaListViewController: UIViewController, reloadData {
         }
     }
     
-    
     @objc func pushChatView() {
         let view = ChattingViewController()
         navigationController?.pushViewController(view, animated: true)
@@ -92,20 +88,23 @@ class MannaListViewController: UIViewController, reloadData {
             "device_id" : deviceID,
         ]
         
-        let result = AF.request("http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/manna", parameters: param).responseJSON { response in
+        let result = AF.request("https://manna.duckdns.org:18888/manna?deviceToken=\(deviceID)", parameters: param).responseJSON { response in
+
             switch response.result {
             case .success(let value):
-//                print("\(value)")
-                if let addressList = JSON(value).array {
-                    for item in addressList {
-//                        print(item["manna_name"])
-//                        print(item["create_timestamp"])
-                        MannaModel.model.append(Manna(time: item["create_timestamp"].string ?? "", name: item["manna_name"].string ?? ""))
-                    }
+                JSON(value).forEach { (_,data) in
+                    let item = NewManna(mannaname: data["mannaName"].string!,
+                             createTimestamp: data["createTimestamp"].int!,
+                             uuid: data["uuid"].string!)
+                    MannaModel.newModel.append(item)
+//                    data["chatJoinUserList"]
+//                    data["locationJoinUserList"]
+                    
                 }
                 completion()
-            case .failure(let err):
-                MannaModel.model.append(Manna(time: "Test", name: "서버와의 연결이 좀 안좋나봐요"))
+                break
+            case .failure(let error):
+                break
             }
         }
         
@@ -115,14 +114,14 @@ class MannaListViewController: UIViewController, reloadData {
 
 extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MannaModel.model.count
+        return MannaModel.newModel.count
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MannaListTableViewCell.id,for: indexPath) as! MannaListTableViewCell
-        if MannaModel.model.count > 0 {
-            cell.title.text = MannaModel.model[indexPath.row].name
+        if MannaModel.newModel.count > 0 {
+            cell.title.text = MannaModel.newModel[indexPath.row].mannaname
         }
         return cell
     }
@@ -131,6 +130,7 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let view = MapViewController()
+        view.meetInfo  = MannaModel.newModel[indexPath.row]
         view.modalPresentationStyle = .fullScreen
         self.present(view, animated: true, completion: nil)
     }

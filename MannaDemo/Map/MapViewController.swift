@@ -9,7 +9,6 @@ import UIKit
 import NMapsMap
 import CoreLocation
 import SwiftyJSON
-import Lottie
 import SocketIO
 
 protocol test {
@@ -23,40 +22,36 @@ class MapViewController: UIViewController{
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
     var chatView: UIView?
-    
-    var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":"96f35135-390f-496c-af00-cdb3a4104550"])])
+    var meetInfo: NewManna?
+    lazy var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":meetInfo!.uuid])])
     var locationSocket: SocketIOClient!
     var chatSocket: SocketIOClient!
     var locationManager = CLLocationManager()
     var tokenWithMarker: [String : NMFMarker] = [:]
     let mapView = NMFMapView()
     let backButton = UIButton()
-    var timerView = TimerView()
-    var bottomSheet = BottomSheetViewController()
     let multipartPath = NMFMultipartPath()
-    var animationView = AnimationView(name:"12670-flying-airplane")
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
     var myLongitude: Double = 0
-    var zoomLevel: Double = 10
+    //이거 랭킹 뷰컨으로 옮겨질듯
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
+    
     var imageToNameFlag = true
     var toastLabel = UILabel()
     var cameraState = UIButton()
-    var bottomTabView = BottomTabView()
     var myLocationButton = UIButton()
-    lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
-    lazy var tempToggleGesture = UITapGestureRecognizer(target: self, action: #selector(didtempToggleButtonClicked))
-    var cameraStateFlag = true
+    lazy var goToChatGesture = UITapGestureRecognizer(target: self, action: #selector(goToChatGestureFunc))
     var goalMarker = NMFMarker()
-    var tempToggleButton = UIButton()
     var disconnectToggleFlag = false
     var cameraTrakingToggleFlag = true
     var cameraTrakingModeFlag = true
+    var rankingBUtton = UIButton()
+    var chatBUtton = UIButton()
+    var timerView = TimerView(.mapView)
     
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
-        
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
@@ -70,104 +65,90 @@ class MapViewController: UIViewController{
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
-        
         locationSocket.connect()
         chatSocket.connect()
-        
         locationSocket.on("locationConnect") { (array, ack) in
             UserModel.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
-            self.bottomSheet.runningTimeController.collectionView.reloadData()
         }
-        
         chatSocket.on("chat") { (array, ack) in
-            
             let json = JSON(array)
             guard let test = json[0].string?.data(using: .utf8) else { return }
             guard let jsonData = try? JSON(test) else { return }
             guard let temp = "\(jsonData)".data(using: .utf8) else { return }
             let result: SocketMessage = try! JSONDecoder().decode(SocketMessage.self, from: temp)
-            print(result.sender.username)
-            print(result)
             if result.message != nil {
                 switch result.sender.username {
-                    case "우석":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "연재":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "상원":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "재인":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "효근":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                            
-                        }
-                        break
-                    case "규리":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                            
-                        }
-                        break
-                    case "종찬":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "용권":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    default:
-                        break
+                case "우석":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "연재":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "상원":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "재인":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "효근":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "규리":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "종찬":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "용권":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                default:
+                    break
                 }
-                
-                print(ChattingViewController.shared.chatMessage)
-                
             }
-            
             ChattingViewController.shared.chatView.reloadData()
         }
-        
         locationSocket.on("location") { (array, ack) in
             var _: String?
             var deviceToken: String?
@@ -175,25 +156,20 @@ class MapViewController: UIViewController{
             var lat_: Double?
             var lng_: Double?
             let json = JSON(array)
-            
             if let data = json[0].string?.data(using: .utf8) {
                 if let json = try? JSON(data) {
                     let temp = "\(json)".data(using: .utf8)
                     let result: SocketData = try! JSONDecoder().decode(SocketData.self, from: temp!)
-                    
-                    
                     deviceToken = result.sender.deviceToken
                     username = result.sender.username
                     guard let token = deviceToken else { return }
-                    
                     switch result.type {
-                    
                     case "LOCATION":
                         lat_ = result.location?.latitude
                         lng_ = result.location?.longitude
                         UserModel.userList[token]?.state = true
-                        
                         break
+                        
                     case "JOIN":
                         guard let name = username else { return }
                         UserModel.userList[token]?.state = true
@@ -201,22 +177,19 @@ class MapViewController: UIViewController{
                         self.marking()
                         self.showToast(message: "\(name)님 접속하셨습니다.")
                         self.setCollcetionViewItem()
-                        self.bottomSheet.runningTimeController.collectionView.reloadData()
                         break
                         
                     case "LEAVE":
                         guard let name = username else { return }
-                       UserModel.userList[token]?.networkValidTime = 61
+                        UserModel.userList[token]?.networkValidTime = 61
                         self.marking()
                         self.setCollcetionViewItem()
-                        self.bottomSheet.runningTimeController.collectionView.reloadData()
                         self.showToast(message: "\(name)님 나가셨습니다.")
                         break
                         
                     default:
                         break
                     }
-                    
                     guard let lat = lat_ else { return }
                     guard let lng = lng_ else { return }
                     guard UserModel.userList[token] != nil else { return }
@@ -230,13 +203,10 @@ class MapViewController: UIViewController{
                         }
                     }
                     self.setCollcetionViewItem()
-                    self.bottomSheet.runningTimeController.collectionView.reloadData()
                 }
             }
             
         }
-        chatView = bottomSheet.chatViewController.backgroundView
-        myLocationButton.isHidden = true
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
@@ -246,8 +216,8 @@ class MapViewController: UIViewController{
         layout()
         didMarkerClicked()
         attribute()
-        bottomSheet.runningTimeController.collectionView.reloadData()
     }
+    
     @objc func sendMessage() {
         guard let text = ChattingViewController.shared.textField.text else { return }
         chatSocket.emit("chat", "\(text)")
@@ -257,10 +227,6 @@ class MapViewController: UIViewController{
     
     // MARK: Attribute
     func attribute() {
-        //        socket.do {
-        //            $0.delegate = self
-        //        }
-        
         ChattingViewController.shared.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
@@ -303,20 +269,6 @@ class MapViewController: UIViewController{
             $0.layer.cornerRadius = 10
             $0.layer.masksToBounds = true
         }
-        bottomSheet.do {
-            $0.runningTimeController.collectionView.delegate = self
-            $0.runningTimeController.collectionView.dataSource = self
-            $0.parentView = self.view
-            $0.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: view.frame.width, height: view.frame.height)
-            $0.chatViewController.backgroundView.addGestureRecognizer(testGesture)
-            $0.rankingViewController.animationView.addGestureRecognizer(tempToggleGesture)
-        }
-        bottomTabView.do {
-            $0.backgroundColor = .white
-            $0.chat.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
-            $0.runningTime.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
-            $0.ranking.addTarget(self, action: #selector(didClickecBottomTabButton), for: .touchUpInside)
-        }
         cameraState.do {
             $0.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
             $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
@@ -325,6 +277,7 @@ class MapViewController: UIViewController{
             $0.dropShadow()
         }
         myLocationButton.do {
+            $0.alpha = 0.4
             $0.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
             $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
@@ -338,31 +291,46 @@ class MapViewController: UIViewController{
             $0.mapView = mapView
             $0.isForceShowIcon = true
         }
+        rankingBUtton.do {
+            $0.backgroundColor = .white
+            $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
+            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
+            $0.layer.masksToBounds = true
+            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
+            $0.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
+            $0.dropShadow()
+        }
+        chatBUtton.do {
+            $0.backgroundColor = .white
+            $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
+            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
+            $0.layer.masksToBounds = true
+            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
+            $0.dropShadow()
+            $0.addGestureRecognizer(goToChatGesture)
+        }
     }
     
+    // MARK: layout
     func layout() {
-        [mapView, cameraState, myLocationButton, backButton, timerView, bottomSheet.view, bottomTabView, toastLabel].forEach { view.addSubview($0) }
+        [mapView, cameraState, myLocationButton, backButton, timerView, toastLabel, chatBUtton, rankingBUtton].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
-            $0.leading.equalToSuperview().offset(22)
-            $0.width.height.equalTo(40)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(46)
+            $0.leading.equalToSuperview().offset(15)
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
         toastLabel.snp.makeConstraints {
             $0.centerX.equalTo(view)
             $0.centerY.equalTo(view).offset(-100)
             $0.width.equalTo(MannaDemo.convertWidth(value: 200))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 50))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 50))
         }
         timerView.snp.makeConstraints {
             $0.centerX.equalTo(view)
             $0.centerY.equalTo(backButton)
-            $0.width.equalTo(MannaDemo.convertWidth(value: 130))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 45))
-        }
-        bottomTabView.snp.makeConstraints {
-            $0.bottom.leading.trailing.equalTo(view)
-            $0.height.equalTo(MannaDemo.convertHeigt(value: MannaDemo.convertHeigt(value: 85)))
+            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
         myLocationButton.snp.makeConstraints {
             $0.top.equalTo(cameraState.snp.bottom).offset(11)
@@ -374,40 +342,38 @@ class MapViewController: UIViewController{
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
         }
+        rankingBUtton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
+            $0.trailing.equalTo(view.snp.trailing).offset(-20)
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 53))
+        }
+        chatBUtton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
+            $0.leading.equalTo(view.snp.leading).offset(20)
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 53))
+        }
     }
     
     //MARK: 마커 생성
     func array() {
-        UserModel.userList.keys.map { tokenWithMarker[$0] = NMFMarker()}
+        UserModel.userList.keys.forEach { tokenWithMarker[$0] = NMFMarker()}
         for marker in tokenWithMarker.values {
             marker.width = MannaDemo.convertWidth(value: 5)
             marker.height = MannaDemo.convertWidth(value: 5)
         }
     }
     
-    //MARK: 렌더링 이미지ㅇ
-    func renderImage() {
-        for name in userName {
-            let image = UserView(text: name).then({
-                $0.layer.cornerRadius = 30
-            })
-            let renderImage = image.asImage()
-            userImage.append(renderImage)
-        }
+    @objc func showRankingView() {
+        let view = NewRankingViewViewController()
+        view.view.backgroundColor = .white
+        view.modalPresentationStyle = .custom
+        view.modalTransitionStyle = .crossDissolve
+        self.present(view, animated: true)
     }
-    
-    //MARK: 닉네임 이미지 셋
-    func nicknameImageSet() {
-        _ = 0
-        //        for key in UserModel.userList.keys {
-        //            UserModel.userList[key]?.nicknameImage = userImage[count]
-        //            count += 1
-        //        }
-    }
-    
     //MARK: 마커 클릭 이벤트
     func didMarkerClicked() {
-        tokenWithMarker.keys.map { key in
+        tokenWithMarker.keys.forEach { key in
+            cameraTrakingToggleFlag = false
             tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
                 let lat = UserModel.userList[key]?.latitude
                 let lng = UserModel.userList[key]?.longitude
@@ -454,77 +420,11 @@ class MapViewController: UIViewController{
         }
     }
     
-    //MARK: 내위치 카메라 세팅
-    @objc func toMyLocation() {
-        
-        if cameraTrakingToggleFlag && cameraTrakingModeFlag {
-            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
-            mapView.moveCamera(moveCameraWithZoomAndPosition)
-        }
-    }
-    
-    //MARK: 모두의 위치 카메라 세팅
-    @objc func toWholeLocation() {
-        if cameraTrakingToggleFlag && cameraTrakingModeFlag == false {
-            let minLatLng = NMGLatLng(lat: 150, lng: 150)
-            let maxLatLng = NMGLatLng(lat: 0, lng: 0)
-            var resultZoomLevel: Double = 0
-            
-            UserModel.userList.keys.forEach {
-                if UserModel.userList[$0]?.state == true{
-                    if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
-                        if minLatLng.lat > UserModel.userList[$0]!.latitude {
-                            minLatLng.lat = UserModel.userList[$0]!.latitude
-                        }
-                        if minLatLng.lng > UserModel.userList[$0]!.longitude {
-                            
-                            minLatLng.lng = UserModel.userList[$0]!.longitude
-                        }
-                        if maxLatLng.lat < UserModel.userList[$0]!.latitude {
-                            maxLatLng.lat = UserModel.userList[$0]!.latitude
-                        }
-                        if maxLatLng.lng < UserModel.userList[$0]!.longitude {
-                            maxLatLng.lng = UserModel.userList[$0]!.longitude
-                        }
-                    }
-                }
-            }
-            
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
-            let zoomInit = NMFCameraUpdate(zoomTo: 18)
-            mapView.moveCamera(cameraUpdate)
-            mapView.moveCamera(zoomInit)
-            
-            while mapView.zoomLevel > 1 {
-                let count = UserModel.userList.values.filter{ $0.state == true }.count
-                var trueCount = 0
-                UserModel.userList.keys.forEach {
-                    if UserModel.userList[$0]?.state == true && UserModel.userList[$0]?.latitude != 0 && UserModel.userList[$0]?.longitude != 0 {
-                        let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
-                        if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
-                            trueCount += 1
-                        }
-                    }
-                }
-                if trueCount == count { break } else {
-                    trueCount = 0
-                    mapView.zoomLevel -= 0.05
-                }
-            }
-            
-            resultZoomLevel =  mapView.zoomLevel - 0.4
-            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center, zoomTo: resultZoomLevel)
-            mapView.moveCamera(moveCameraWithZoomAndPosition)
-        }
-    }
-    
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
         multipartPath.mapView = nil
         cameraTrakingToggleFlag = true
-        [myLocationButton, bottomSheet.view, bottomTabView].forEach {
-            $0?.alpha = 0
-            $0?.isHidden = true
-        }
+        myLocationButton.alpha = 0.4
+        
         if cameraState.currentImage == UIImage(named: "forest") {
             cameraTrakingModeFlag = true
             sender.tag == 1 ? cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal) : cameraTrakingModeFlag.toggle()
@@ -537,60 +437,53 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 내위치 카메라 세팅
+    @objc func toMyLocation() {
+        
+        if cameraTrakingToggleFlag && cameraTrakingModeFlag {
+//            mapView.positionMode = .direction
+            let cameraUpdate =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng),zoomTo: 15)
+            cameraUpdate.animation = .fly
+            cameraUpdate.animationDuration = 0.4
+            mapView.moveCamera(cameraUpdate)
+        }
+    }
+    
+    //MARK: 모두의 위치 카메라 세팅
+    @objc func toWholeLocation() {
+        if cameraTrakingToggleFlag && cameraTrakingModeFlag == false {
+            let minLatLng = NMGLatLng(lat: 150, lng: 150)
+            let maxLatLng = NMGLatLng(lat: 0, lng: 0)
+            
+            UserModel.userList.keys.forEach {
+                if UserModel.userList[$0]?.state == true {
+                    if UserModel.userList[$0]!.longitude != 0 && UserModel.userList[$0]!.latitude != 0 {
+                        if minLatLng.lat > UserModel.userList[$0]!.latitude {
+                            minLatLng.lat = UserModel.userList[$0]!.latitude
+                        }
+                        if minLatLng.lng > UserModel.userList[$0]!.longitude {
+                            minLatLng.lng = UserModel.userList[$0]!.longitude
+                        }
+                        if maxLatLng.lat < UserModel.userList[$0]!.latitude {
+                            maxLatLng.lat = UserModel.userList[$0]!.latitude
+                        }
+                        if maxLatLng.lng < UserModel.userList[$0]!.longitude {
+                            maxLatLng.lng = UserModel.userList[$0]!.longitude
+                        }
+                    }
+                }
+            }
+            let cameraUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng), padding: 90)
+            cameraUpdate.animation = .fly
+            cameraUpdate.animationDuration = 0.4
+            mapView.moveCamera(cameraUpdate)
+        }
+    }
+    
     //MARK: 채팅창 클릭
-    @objc func testGestureFunc() {
-//        let view = ChattingViewController()
+    @objc func goToChatGestureFunc() {
         let view = ChattingViewController.shared
         present(view, animated: true)
-        self.view.bringSubviewToFront(bottomTabView)
-        bottomTabView.bringSubviewToFront(self.view)
-    }
-    
-    //MARK: 임시 토글 버튼 액션
-    @objc func didtempToggleButtonClicked() {
-        locationSocket.connect()
-        imageToNameFlag.toggle()
-        marking()
-        bottomSheet.runningTimeController.collectionView.reloadData()
-    }
-    
-    //MARK: 바텀탭 버튼 클릭
-    @objc func didClickecBottomTabButton(_ sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            self.bottomSheet.chatViewController.view.isHidden = false
-            self.bottomSheet.rankingViewController.view.isHidden = true
-            self.bottomSheet.runningTimeController.view.isHidden = true
-            UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 525), width: self.view.frame.width, height: self.view.frame.height)
-            }
-            break
-        case 1:
-            self.bottomSheet.chatViewController.view.isHidden = true
-            self.bottomSheet.rankingViewController.view.isHidden = false
-            self.bottomSheet.runningTimeController.view.isHidden = true
-            
-            disconnectToggleFlag.toggle()
-            if bottomTabView.runningTime.currentImage == #imageLiteral(resourceName: "man") {
-                bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "women"), for: .normal)
-            } else {
-                bottomTabView.runningTime.setImage(#imageLiteral(resourceName: "man"), for: .normal)
-            }
-            UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: self.view.frame.width, height: self.view.frame.height)
-            }
-            break
-        case 2:
-            self.bottomSheet.chatViewController.view.isHidden = true
-            self.bottomSheet.rankingViewController.view.isHidden = true
-            self.bottomSheet.runningTimeController.view.isHidden = false
-            UIView.animate(withDuration: 0.15) {
-                self.bottomSheet.view.frame = CGRect(x: 0, y: MannaDemo.convertHeigt(value: 470), width: self.view.frame.width, height: self.view.frame.height)
-            }
-            break
-        default:
-            break
-        }
     }
     
     //MARK: 뒤로가기
@@ -600,6 +493,7 @@ class MapViewController: UIViewController{
     
     //MARK: 마커 전체 세팅
     @objc func marking() {
+        
         for key in UserModel.userList.keys {
             let user = UserModel.userList[key]
             if imageToNameFlag {
@@ -621,9 +515,13 @@ class MapViewController: UIViewController{
                 if key != MannaDemo.myUUID {
                     tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
                     tokenWithMarker[key]?.mapView = mapView
+                } else if key == MannaDemo.myUUID {
+                    //                    tokenWithMarker[key]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
+                    //                    tokenWithMarker[key]?.mapView = mapView
                 }
             }
         }
+        
     }
     
     //MARK: 위치권한 확인
@@ -656,12 +554,6 @@ class MapViewController: UIViewController{
             if UserModel.userList[$0]?.state == true {
                 UserModel.userList[$0]?.networkValidTime += 1
             }
-        }
-        let state = UIApplication.shared.applicationState
-        if state == .background {
-            bottomSheet.rankingViewController.animationView.pause()
-        }else if state == .active {
-            bottomSheet.rankingViewController.animationView.play()
         }
     }   
 }

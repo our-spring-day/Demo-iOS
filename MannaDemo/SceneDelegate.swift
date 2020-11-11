@@ -19,8 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             let mainView = MapViewController()
+            let mannalistView = MannaListViewController()
             
             let registerView = RegisterUserViewController()
+            
+            print("이 기종의 스케일", UIScreen.main.scale)
+            
             
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {
                 if let uuid = UIDevice.current.identifierForVendor?.uuidString {
@@ -41,7 +45,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                     }
                 }
-                window.rootViewController = mainView
+                window.rootViewController = mannalistView
                 self.window = window
                 window.makeKeyAndVisible()
             }

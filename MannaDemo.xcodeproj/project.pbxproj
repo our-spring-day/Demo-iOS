@@ -28,6 +28,8 @@
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
 		CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */; };
 		CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */; };
+		CC21A7DC255BA03900E31F77 /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A7DB255BA03900E31F77 /* CGFloat.swift */; };
+		CC21A7F5255BB21A00E31F77 /* NewRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */; };
 		CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC41A0862548157C00C0E762 /* MannaDemo.swift */; };
 		CC41A0A32548448800C0E762 /* 12670-flying-airplane.json in Resources */ = {isa = PBXBuildFile; fileRef = CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */; };
 		CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748311255058A2006C1E02 /* BottomTabView.swift */; };
@@ -39,7 +41,6 @@
 		CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B2225540BAD00063790 /* TimerView.swift */; };
 		CC8A0B5A2554605F00063790 /* MapView+NaverMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B592554605F00063790 /* MapView+NaverMap.swift */; };
 		CC8A0B5E2554609B00063790 /* MapView+CLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B5D2554609B00063790 /* MapView+CLocation.swift */; };
-		CC8A0B62255460EC00063790 /* MapView+Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B61255460EC00063790 /* MapView+Socket.swift */; };
 		CC8A0B652554611B00063790 /* MapView+Collectionview.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B642554611B00063790 /* MapView+Collectionview.swift */; };
 		CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845A2540231A00441445 /* AppDelegate.swift */; };
 		CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8B845C2540231A00441445 /* SceneDelegate.swift */; };
@@ -78,6 +79,8 @@
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionView.swift; sourceTree = "<group>"; };
 		CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionViewCell.swift; sourceTree = "<group>"; };
+		CC21A7DB255BA03900E31F77 /* CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
+		CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRankingViewController.swift; sourceTree = "<group>"; };
 		CC41A0862548157C00C0E762 /* MannaDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaDemo.swift; sourceTree = "<group>"; };
 		CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "12670-flying-airplane.json"; sourceTree = "<group>"; };
 		CC748311255058A2006C1E02 /* BottomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTabView.swift; sourceTree = "<group>"; };
@@ -89,7 +92,6 @@
 		CC8A0B2225540BAD00063790 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		CC8A0B592554605F00063790 /* MapView+NaverMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+NaverMap.swift"; sourceTree = "<group>"; };
 		CC8A0B5D2554609B00063790 /* MapView+CLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+CLocation.swift"; sourceTree = "<group>"; };
-		CC8A0B61255460EC00063790 /* MapView+Socket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+Socket.swift"; sourceTree = "<group>"; };
 		CC8A0B642554611B00063790 /* MapView+Collectionview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+Collectionview.swift"; sourceTree = "<group>"; };
 		CC8B84572540231900441445 /* MannaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MannaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC8B845A2540231A00441445 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -148,10 +150,10 @@
 		A515563725404C5700487BEF /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				A515563825404C9500487BEF /* MapViewController.swift */,
 				CC8A0B5C2554606F00063790 /* MapView+Ext */,
 				CC8A0B672554616200063790 /* Component */,
 				CCF3BC532540444600C7F718 /* Entity */,
-				A515563825404C9500487BEF /* MapViewController.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -183,6 +185,7 @@
 				A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */,
 				A53817E52552803000ACD946 /* UITextField+Ext.swift */,
 				A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */,
+				CC21A7DB255BA03900E31F77 /* CGFloat.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -209,7 +212,6 @@
 			children = (
 				CC8A0B592554605F00063790 /* MapView+NaverMap.swift */,
 				CC8A0B5D2554609B00063790 /* MapView+CLocation.swift */,
-				CC8A0B61255460EC00063790 /* MapView+Socket.swift */,
 				CC8A0B642554611B00063790 /* MapView+Collectionview.swift */,
 			);
 			path = "MapView+Ext";
@@ -227,6 +229,7 @@
 				CC748318255124FB006C1E02 /* RankingViewViewController.swift */,
 				CC74832B255164E7006C1E02 /* tempViewController.swift */,
 				CC8A0B2225540BAD00063790 /* TimerView.swift */,
+				CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				CCF3BC552540446500C7F718 /* Manna.swift in Sources */,
 				CCF3BC59254046BA00C7F718 /* MannaModel.swift in Sources */,
 				CC74831C25513098006C1E02 /* RunningTimeViewController.swift in Sources */,
+				CC21A7DC255BA03900E31F77 /* CGFloat.swift in Sources */,
 				CC8B845F2540231A00441445 /* ViewController.swift in Sources */,
 				CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */,
 				CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */,
@@ -448,9 +452,9 @@
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
 				A543EAF52555C5A7005363B8 /* SocketMessage.swift in Sources */,
 				A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */,
-				CC8A0B62255460EC00063790 /* MapView+Socket.swift in Sources */,
 				A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */,
 				CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */,
+				CC21A7F5255BB21A00E31F77 /* NewRankingViewController.swift in Sources */,
 				CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */,
 				CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */,
 				CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */,

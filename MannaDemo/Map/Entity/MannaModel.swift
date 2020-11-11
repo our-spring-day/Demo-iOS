@@ -13,4 +13,6 @@ class MannaModel {
         Manna(time: "asdf", name: "합정 어딘가"),
         Manna(time: "asdf", name: "강남 넘어 ")
     ]
+    
+    static var newModel: [NewManna] = []
 }

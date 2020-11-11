@@ -11,3 +11,11 @@ struct Manna {
     var time: String
     var name: String
 }
+
+struct NewManna: Codable {
+    var mannaname : String
+    var createTimestamp : Int
+    var chatJoinUserList : [String]?
+    var uuid : String
+    var locationJoinUserList : String?
+}

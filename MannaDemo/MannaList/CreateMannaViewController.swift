@@ -79,7 +79,6 @@ class CreateMannaViewController: UIViewController {
             ]
         
         let result = AF.request("http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/manna", method: .post, parameters: param, encoding: JSONEncoding.default)
-        
         result.responseJSON() { response in
                 print("JSON = \(try! response.result.get())")
             if let jsonObject = try! response.result.get()  as? [String: Any] {

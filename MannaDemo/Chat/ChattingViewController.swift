@@ -24,7 +24,7 @@ class ChattingViewController: UIViewController {
     }
     lazy var sendButton = UIButton(frame: CGRect(x: 0, y: 0,
                                                  width: MannaDemo.convertWidth(value: 40),
-                                                 height: MannaDemo.convertHeigt(value: 40)))
+                                                 height: MannaDemo.convertHeight(value: 40)))
         .then {
             $0.setImage(UIImage(named: "finger"), for: .normal)
             $0.imageEdgeInsets = UIEdgeInsets(top: 9, left: 9, bottom: 9, right: 9)
@@ -68,14 +68,14 @@ class ChattingViewController: UIViewController {
                 $0.leadingAnchor.constraint(equalTo: accView.leadingAnchor, constant: MannaDemo.convertWidth(value: 13)).isActive = true
                 $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 304)).isActive = true
                 $0.topAnchor.constraint(equalTo: accView.topAnchor).isActive = true
-                $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 43)).isActive = true
+                $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeight(value: 43)).isActive = true
                 $0.bottomAnchor.constraint(equalTo:accView.layoutMarginsGuide.bottomAnchor, constant: -3).isActive = true
             }
             sendButton.do {
                 $0.translatesAutoresizingMaskIntoConstraints = false
                 $0.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 10).isActive = true
                 $0.topAnchor.constraint(equalTo: accView.topAnchor).isActive = true
-                $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 43)).isActive = true
+                $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeight(value: 43)).isActive = true
                 $0.bottomAnchor.constraint(equalTo:accView.layoutMarginsGuide.bottomAnchor, constant: -3).isActive = true
             }
         }
@@ -135,7 +135,7 @@ class ChattingViewController: UIViewController {
         chatView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -MannaDemo.convertHeigt(value: 43)).isActive = true
+            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -MannaDemo.convertHeight(value: 43)).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         }
@@ -214,7 +214,7 @@ extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillShow(sender: Notification) {
         
         if keyboardShown == false {
-            view.frame.origin.y = -(MannaDemo.convertHeigt(value: 258))
+            view.frame.origin.y = -(MannaDemo.convertHeight(value: 258))
             keyboardShown = true
         } else {
             keyboardShown = false
