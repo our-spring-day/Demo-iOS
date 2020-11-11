@@ -36,7 +36,7 @@ class NewRankingViewViewController: UIViewController {
         timerView.snp.makeConstraints {
             $0.centerX.equalTo(view)
             $0.centerY.equalTo(dismissButton)
-            $0.width.equalTo(MannaDemo.convertWidth(value: 130))
+            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
             $0.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
     }

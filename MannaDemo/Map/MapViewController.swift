@@ -334,9 +334,6 @@ class MapViewController: UIViewController{
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
             $0.dropShadow()
         }
-        //        timerView.do {
-        //            $0.whereAt = .mapView
-        //        }
     }
     
     // MARK: layout
@@ -357,7 +354,7 @@ class MapViewController: UIViewController{
         timerView.snp.makeConstraints {
             $0.centerX.equalTo(view)
             $0.centerY.equalTo(backButton)
-            $0.width.equalTo(MannaDemo.convertWidth(value: 130))
+            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
             $0.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
         myLocationButton.snp.makeConstraints {
@@ -492,7 +489,6 @@ class MapViewController: UIViewController{
                             minLatLng.lat = UserModel.userList[$0]!.latitude
                         }
                         if minLatLng.lng > UserModel.userList[$0]!.longitude {
-                            
                             minLatLng.lng = UserModel.userList[$0]!.longitude
                         }
                         if maxLatLng.lat < UserModel.userList[$0]!.latitude {
@@ -504,32 +500,10 @@ class MapViewController: UIViewController{
                     }
                 }
             }
-            
-            let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center)
-            let zoomInit = NMFCameraUpdate(zoomTo: 18)
+            let cameraUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng), padding: 100)
+            cameraUpdate.animation = .easeOut
+            cameraUpdate.animationDuration = 0.5
             mapView.moveCamera(cameraUpdate)
-            mapView.moveCamera(zoomInit)
-            
-            while mapView.zoomLevel > 1 {
-                let count = UserModel.userList.values.filter{ $0.state == true }.count
-                var trueCount = 0
-                UserModel.userList.keys.forEach {
-                    if UserModel.userList[$0]?.state == true && UserModel.userList[$0]?.latitude != 0 && UserModel.userList[$0]?.longitude != 0 {
-                        let targetPoint = NMGLatLng(lat: UserModel.userList[$0]!.latitude, lng: UserModel.userList[$0]!.longitude)
-                        if NMGLatLngBounds(southWest: mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height)), northEast: mapView.projection.latlng(from: CGPoint(x: UIScreen.main.bounds.width, y: 0))).hasPoint(targetPoint) {
-                            trueCount += 1
-                        }
-                    }
-                }
-                if trueCount == count { break } else {
-                    trueCount = 0
-                    mapView.zoomLevel -= 0.05
-                }
-            }
-            
-            resultZoomLevel =  mapView.zoomLevel - 0.4
-            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng).center, zoomTo: resultZoomLevel)
-            mapView.moveCamera(moveCameraWithZoomAndPosition)
         }
     }
     
@@ -636,6 +610,10 @@ class MapViewController: UIViewController{
                 if key != MannaDemo.myUUID {
                     tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
                     tokenWithMarker[key]?.mapView = mapView
+                } else if key == MannaDemo.myUUID {
+                    
+//                    tokenWithMarker[key]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
+//                    tokenWithMarker[key]?.mapView = mapView
                 }
             }
         }
