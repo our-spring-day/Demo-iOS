@@ -30,7 +30,7 @@ extension MapViewController: CLLocationManagerDelegate {
         
         
         setCollcetionViewItem()
-        bottomSheet.runningTimeController.collectionView.reloadData()
+//        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     
