@@ -42,7 +42,7 @@ extension MapViewController: NMFMapViewCameraDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         cameraTrakingToggleFlag = false
         UIView.animate(withDuration: 0.5) { [self] in
-            [myLocationButton, bottomTabView].forEach {
+            [myLocationButton].forEach {
                 $0.alpha = 1
                 $0.isHidden = false
             }

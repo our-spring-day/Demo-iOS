@@ -9,7 +9,6 @@ import UIKit
 import NMapsMap
 import CoreLocation
 import SwiftyJSON
-import Lottie
 import SocketIO
 
 protocol test {
@@ -31,24 +30,19 @@ class MapViewController: UIViewController{
     var tokenWithMarker: [String : NMFMarker] = [:]
     let mapView = NMFMapView()
     let backButton = UIButton()
-//    var bottomSheet = BottomSheetViewController()
     let multipartPath = NMFMultipartPath()
-    var animationView = AnimationView(name:"12670-flying-airplane")
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
     var myLongitude: Double = 0
-    var zoomLevel: Double = 10
+    //이거 랭킹 뷰컨으로 옮겨질듯
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
+    
     var imageToNameFlag = true
     var toastLabel = UILabel()
     var cameraState = UIButton()
-    var bottomTabView = BottomTabView()
     var myLocationButton = UIButton()
-    lazy var testGesture = UITapGestureRecognizer(target: self, action: #selector(testGestureFunc))
-    lazy var tempToggleGesture = UITapGestureRecognizer(target: self, action: #selector(didtempToggleButtonClicked))
-    var cameraStateFlag = true
+    lazy var goToChatGesture = UITapGestureRecognizer(target: self, action: #selector(goToChatGestureFunc))
     var goalMarker = NMFMarker()
-    var tempToggleButton = UIButton()
     var disconnectToggleFlag = false
     var cameraTrakingToggleFlag = true
     var cameraTrakingModeFlag = true
@@ -313,6 +307,7 @@ class MapViewController: UIViewController{
             $0.layer.masksToBounds = true
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
             $0.dropShadow()
+            $0.addGestureRecognizer(goToChatGesture)
         }
     }
     
@@ -375,27 +370,6 @@ class MapViewController: UIViewController{
         view.modalTransitionStyle = .crossDissolve
         self.present(view, animated: true)
     }
-    
-    //MARK: 렌더링 이미지ㅇ
-    func renderImage() {
-        for name in userName {
-            let image = UserView(text: name).then({
-                $0.layer.cornerRadius = 30
-            })
-            let renderImage = image.asImage()
-            userImage.append(renderImage)
-        }
-    }
-    
-    //MARK: 닉네임 이미지 셋
-    func nicknameImageSet() {
-        _ = 0
-        //        for key in UserModel.userList.keys {
-        //            UserModel.userList[key]?.nicknameImage = userImage[count]
-        //            count += 1
-        //        }
-    }
-    
     //MARK: 마커 클릭 이벤트
     func didMarkerClicked() {
         tokenWithMarker.keys.map { key in
@@ -470,7 +444,7 @@ class MapViewController: UIViewController{
 //            mapView.positionMode = .direction
             let cameraUpdate =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng),zoomTo: 15)
             cameraUpdate.animation = .fly
-            cameraUpdate.animationDuration = 0.3
+            cameraUpdate.animationDuration = 0.4
             mapView.moveCamera(cameraUpdate)
         }
     }
@@ -501,25 +475,15 @@ class MapViewController: UIViewController{
             }
             let cameraUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng), padding: 90)
             cameraUpdate.animation = .fly
-            cameraUpdate.animationDuration = 0.3
+            cameraUpdate.animationDuration = 0.4
             mapView.moveCamera(cameraUpdate)
         }
     }
     
     //MARK: 채팅창 클릭
-    @objc func testGestureFunc() {
+    @objc func goToChatGestureFunc() {
         let view = ChattingViewController.shared
         present(view, animated: true)
-//        self.view.bringSubviewToFront(bottomTabView)
-//        bottomTabView.bringSubviewToFront(self.view)
-    }
-    
-    //MARK: 임시 토글 버튼 액션
-    @objc func didtempToggleButtonClicked() {
-        locationSocket.connect()
-        imageToNameFlag.toggle()
-        marking()
-//        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     //MARK: 뒤로가기
