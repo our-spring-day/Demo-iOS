@@ -8,14 +8,27 @@
 import UIKit
 
 class RankingViewCell: UITableViewCell {
-    static let rankingCellID = "rangkingCellID"
-    
-    let profileImage = UIImageView()
-    let userName = UILabel()
-    let state = UILabel()
+    static let rankingCellID = "rankingCellID"
+    var tapped: (() -> ())?
+    var buttonState: Bool = true {
+        didSet {
+            button.isUserInteractionEnabled = buttonState ? true : false
+            button.backgroundColor = buttonState ? UIColor.appColor(.urgentOn) : UIColor.appColor(.urgentOff)
+            if buttonState == true {
+                button.setTitleColor(#colorLiteral(red: 0.3529411765, green: 0.4196078431, blue: 1, alpha: 1), for: .normal)
+            } else {
+                button.setTitleColor(#colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1), for: .normal)
+            }
+        }
+    }
+    lazy var profileImage = UIImageView()
+    lazy var userName = UILabel()
+    lazy var state = UILabel()
+    lazy var button = UIButton()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         attribute()
         layout()
     }
@@ -51,10 +64,19 @@ class RankingViewCell: UITableViewCell {
             $0.textColor = #colorLiteral(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
             $0.font = UIFont(name: "NotoSansKR-Medium", size: 14)
         }
+        button.do {
+            $0.layer.cornerRadius = 20
+            $0.clipsToBounds = true
+            $0.backgroundColor = UIColor.appColor(.urgentOn)
+            $0.setTitle("재촉하기", for: .normal)
+            $0.setTitleColor(#colorLiteral(red: 0.3529411765, green: 0.4196078431, blue: 1, alpha: 1), for: .normal)
+            $0.titleLabel?.font = UIFont(name: "NotoSansKR-Bold", size: 13)
+            $0.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
+        }
     }
     
     func layout() {
-        [profileImage, userName, state].forEach{ addSubview($0) }
+        [profileImage, userName, state, button].forEach{ contentView.addSubview($0) }
         
         profileImage.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -75,6 +97,18 @@ class RankingViewCell: UITableViewCell {
             $0.leadingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: MannaDemo.convertWidth(value: 15)).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 19).isActive = true
         }
+        button.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+            $0.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true
+            $0.widthAnchor.constraint(equalToConstant: 79).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: 39).isActive = true
+        }
+    }
+    
+    @objc func tapButton(_ sender: UIButton) {
+        tapped?()
+
     }
     
     required init?(coder: NSCoder) {

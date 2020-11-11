@@ -12,6 +12,8 @@ enum AssetsColor {
     case sendMessage
     case chatName
     case messageSendButton
+    case urgentOn
+    case urgentOff
 }
 
 extension UIColor {
@@ -25,6 +27,10 @@ extension UIColor {
             return #colorLiteral(red: 0.6, green: 0.6, blue: 0.6, alpha: 1)
         case .messageSendButton:
             return #colorLiteral(red: 0.9490196078, green: 0.9490196078, blue: 0.9490196078, alpha: 1)
+        case .urgentOn:
+            return #colorLiteral(red: 0.3529411765, green: 0.4196078431, blue: 1, alpha: 0.1)
+        case .urgentOff:
+            return #colorLiteral(red: 0.6666666667, green: 0.6666666667, blue: 0.6666666667, alpha: 0.1)
         }
         
     }

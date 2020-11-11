@@ -117,9 +117,10 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = rankginView.dequeueReusableCell(withIdentifier: RankingViewCell.rankingCellID, for: indexPath) as! RankingViewCell
+
         
         if indexPath.section == 0 {
-            
+            cell.button.isHidden = true
             if indexPath.row == 0{
                 cell.accessoryView = Medal("golden").then {
                     $0.layer.cornerRadius = $0.frame.width / 2
@@ -133,8 +134,8 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             
             cell.setData(data: arrivalUser[indexPath.row])
         } else if indexPath.section == 1 {
-            cell.accessoryView = UrgentButton(true).then {
-                $0.layer.cornerRadius = 20
+            cell.tapped = { [unowned self] in
+                cell.buttonState = false
             }
             cell.setData(data: notArrivalUser[indexPath.row])
         }
