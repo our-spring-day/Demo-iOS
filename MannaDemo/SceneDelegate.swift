@@ -21,8 +21,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let rankView = RankingViewController()
             
             let mainView = MapViewController()
+            let mannalistView = MannaListViewController()
             
             let registerView = RegisterUserViewController()
+            
+            print("이 기종의 스케일", UIScreen.main.scale)
+            
             
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {
                 if let uuid = UIDevice.current.identifierForVendor?.uuidString {
@@ -43,7 +47,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                     }
                 }
-                window.rootViewController = rankView
+
+                // window.rootViewController = rankView
+                window.rootViewController = mannalistView
                 self.window = window
                 window.makeKeyAndVisible()
             }

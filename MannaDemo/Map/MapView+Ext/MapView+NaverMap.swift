@@ -10,11 +10,11 @@ import NMapsMap
 
 extension MapViewController: NMFMapViewCameraDelegate {
     func zoomLinearEquation(zoomLevel: Double) -> CGFloat{
-        return  CGFloat(-(25/3) * zoomLevel + 175)
+        return  CGFloat(-5 * zoomLevel + 115)
     }
     
     func markerResizeByZoomLevel() {
-        if mapView.zoomLevel > 15 {
+        if mapView.zoomLevel > 13 {
             tokenWithMarker.map { (key, marker) in
                 marker.width = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
                 marker.height = MannaDemo.convertWidth(value: zoomLinearEquation(zoomLevel: mapView.zoomLevel))
@@ -42,16 +42,15 @@ extension MapViewController: NMFMapViewCameraDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         cameraTrakingToggleFlag = false
         UIView.animate(withDuration: 0.5) { [self] in
-            [myLocationButton, bottomSheet.view, bottomTabView].forEach {
-                $0?.alpha = 1
-                $0?.isHidden = false
+            [myLocationButton].forEach {
+                $0.alpha = 1
+                $0.isHidden = false
             }
         }
     }
     
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
         markerResizeByZoomLevel()
-//        print(mapView.projection.latlngBounds(fromViewBounds: self.view.frame).hasPoint(goalMarker.position))
     }
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
         markerResizeByZoomLevel()

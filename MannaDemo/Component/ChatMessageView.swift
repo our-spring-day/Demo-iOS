@@ -12,7 +12,7 @@ class ChatMessageView: UIView {
     lazy var textInput = UITextField()
     lazy var sendButton = UIButton(frame: CGRect(x: 0, y: 0,
                                                  width: MannaDemo.convertWidth(value: 40),
-                                                 height: MannaDemo.convertHeigt(value: 40)))
+                                                 height: MannaDemo.convertHeight(value: 40)))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,20 +46,20 @@ class ChatMessageView: UIView {
         textInput.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: topAnchor,
-                                    constant: MannaDemo.convertHeigt(value: 5)).isActive = true
+                                    constant: MannaDemo.convertHeight(value: 5)).isActive = true
             $0.leadingAnchor.constraint(equalTo: leadingAnchor,
                                         constant: MannaDemo.convertWidth(value: 10)).isActive = true
             $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 298)).isActive = true
-            $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 40)).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeight(value: 40)).isActive = true
         }
         sendButton.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: topAnchor,
-                                    constant: MannaDemo.convertHeigt(value: 5)).isActive = true
+                                    constant: MannaDemo.convertHeight(value: 5)).isActive = true
             $0.leadingAnchor.constraint(equalTo: textInput.trailingAnchor,
                                         constant: MannaDemo.convertWidth(value: 11)).isActive = true
             $0.widthAnchor.constraint(equalToConstant: MannaDemo.convertWidth(value: 40)).isActive = true
-            $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeigt(value: 40)).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: MannaDemo.convertHeight(value: 40)).isActive = true
         }
     }
     required init?(coder: NSCoder) {

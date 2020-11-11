@@ -24,7 +24,6 @@ extension MapViewController: CLLocationManagerDelegate {
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
         locationSocket.emit("location", "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
         setCollcetionViewItem()
-        bottomSheet.runningTimeController.collectionView.reloadData()
     }
     
     // MARK: 위치권한 다시 받는곳

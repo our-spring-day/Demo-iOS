@@ -80,13 +80,13 @@ class BottomTabView: UIView {
         }
         borderLineView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(self)
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 1))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 1))
         }
         indicatorView.snp.makeConstraints {
             $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 4))
             $0.centerX.equalTo(runningTime)
-            $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+            $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
         }
     }
     
@@ -95,9 +95,9 @@ class BottomTabView: UIView {
         UIView.animate(withDuration: 0.12, delay: 0, options: .transitionCurlUp, animations: {
             self.indicatorView.snp.remakeConstraints {
                 $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                 $0.centerX.equalTo(self.chat).offset(-5)
-                $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
             }
             self.layoutIfNeeded()
         })
@@ -105,9 +105,9 @@ class BottomTabView: UIView {
             UIView.animate(withDuration: 0.1, delay: 0, options: .transitionCurlUp, animations: {
                 self.indicatorView.snp.remakeConstraints {
                     $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                    $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                    $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                     $0.centerX.equalTo(self.chat).offset(3)
-                    $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                    $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
                 }
                 self.layoutIfNeeded()
             })
@@ -115,9 +115,9 @@ class BottomTabView: UIView {
                 UIView.animate(withDuration: 0.1, delay: 0, options: .transitionCurlUp, animations: {
                     self.indicatorView.snp.remakeConstraints {
                         $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                        $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                        $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                         $0.centerX.equalTo(self.chat)
-                        $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                        $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
                     }
                     self.layoutIfNeeded()
                 })
@@ -130,9 +130,9 @@ class BottomTabView: UIView {
         UIView.animate(withDuration: 0.12, delay: 0, options: .transitionCurlUp, animations: {
             self.indicatorView.snp.remakeConstraints {
                 $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                 $0.centerX.equalTo(self.runningTime).offset(self.state == .chat ? 5 : -5)
-                $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
             }
             self.layoutIfNeeded()
         })
@@ -140,9 +140,9 @@ class BottomTabView: UIView {
             UIView.animate(withDuration: 0.1, delay: 0, options: .transitionCurlUp, animations: {
                 self.indicatorView.snp.remakeConstraints {
                     $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                    $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                    $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                     $0.centerX.equalTo(self.runningTime).offset(self.state == .chat ? -3 : 3)
-                    $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                    $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
                 }
                 self.layoutIfNeeded()
             })
@@ -150,9 +150,9 @@ class BottomTabView: UIView {
                 UIView.animate(withDuration: 0.1, delay: 0, options: .transitionCurlUp, animations: {
                     self.indicatorView.snp.remakeConstraints {
                         $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                        $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                        $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                         $0.centerX.equalTo(self.runningTime)
-                        $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                        $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
                     }
                     self.layoutIfNeeded()
                 },completion: { _ in
@@ -168,9 +168,9 @@ class BottomTabView: UIView {
         UIView.animate(withDuration: 0.12, delay: 0, options: .transitionCurlUp, animations: {
             self.indicatorView.snp.remakeConstraints {
                 $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                 $0.centerX.equalTo(self.ranking).offset(5)
-                $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
             }
             self.layoutIfNeeded()
         })
@@ -178,9 +178,9 @@ class BottomTabView: UIView {
             UIView.animate(withDuration: 0.1, delay: 0, options: .transitionCurlUp, animations: {
                 self.indicatorView.snp.remakeConstraints {
                     $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                    $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                    $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                     $0.centerX.equalTo(self.ranking).offset(-3)
-                    $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                    $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
                 }
                 self.layoutIfNeeded()
             })
@@ -188,9 +188,9 @@ class BottomTabView: UIView {
                 UIView.animate(withDuration: 0.1, delay: 0, options: .transitionCurlUp, animations: {
                     self.indicatorView.snp.remakeConstraints {
                         $0.width.equalTo(MannaDemo.convertWidth(value: 32))
-                        $0.height.equalTo(MannaDemo.convertHeigt(value: 4))
+                        $0.height.equalTo(MannaDemo.convertHeight(value: 4))
                         $0.centerX.equalTo(self.ranking)
-                        $0.top.equalTo(self).offset(-MannaDemo.convertHeigt(value: 1))
+                        $0.top.equalTo(self).offset(-MannaDemo.convertHeight(value: 1))
                     }
                     self.layoutIfNeeded()
                 })

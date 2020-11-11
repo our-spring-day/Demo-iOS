@@ -20,9 +20,9 @@ extension BottomSheetViewController {
 //        static let partialViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.64
 //        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.00
         
-        static let halfViewYPosition: CGFloat = MannaDemo.convertHeigt(value: 470)
-        static let partialViewYPosition: CGFloat = MannaDemo.convertHeigt(value: 525)
-        static let fullViewYPosition: CGFloat = MannaDemo.convertHeigt(value: 0)
+        static let halfViewYPosition: CGFloat = MannaDemo.convertHeight(value: 470)
+        static let partialViewYPosition: CGFloat = MannaDemo.convertHeight(value: 525)
+        static let fullViewYPosition: CGFloat = MannaDemo.convertHeight(value: 0)
     }
 }
 
@@ -153,7 +153,7 @@ class BottomSheetViewController: UIViewController {
             $0.top.equalTo(backgroundView.snp.top).offset(11.5)
             $0.centerX.equalTo(self.view)
             $0.width.equalTo(MannaDemo.convertWidth(value: 60))
-            $0.height.equalTo(MannaDemo.convertHeigt(value: 5))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 5))
         }
     }
 }

@@ -46,4 +46,10 @@ extension UIView {
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
     }
+    
+    func copyView<T: UIView>() -> T {
+        //        NSKeyedUnarchiver.unarchivedObject(ofClass: <#T##NSCoding.Protocol#>, from: <#T##Data#>)
+        return NSKeyedUnarchiver.unarchiveObject(with: NSKeyedArchiver.archivedData(withRootObject: self)) as! T
+        
+    }
 }
