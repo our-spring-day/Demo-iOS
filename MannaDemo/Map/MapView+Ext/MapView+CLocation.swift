@@ -16,9 +16,9 @@ extension MapViewController: CLLocationManagerDelegate {
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
 
-        print("현재 : \(locValue.latitude)")
-        print("현재 : \(locValue.longitude)")
-        print("=============================")
+//        print("현재 : \(locValue.latitude)")
+//        print("현재 : \(locValue.longitude)")
+//        print("=============================")
         
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
