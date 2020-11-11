@@ -160,6 +160,7 @@ class MapViewController: UIViewController{
             let json = JSON(array)
             if let data = json[0].string?.data(using: .utf8) {
                 if let json = try? JSON(data) {
+                    print("이게 까기전", json)
                     let temp = "\(json)".data(using: .utf8)
                     let result: SocketData = try! JSONDecoder().decode(SocketData.self, from: temp!)
                     deviceToken = result.sender.deviceToken
@@ -444,26 +445,53 @@ class MapViewController: UIViewController{
     }
     
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
+        mapView.positionMode = .compass
         multipartPath.mapView = nil
         cameraTrakingToggleFlag = true
-        myLocationButton.alpha = 0.4
         
         if cameraState.currentImage == UIImage(named: "forest") {
             cameraTrakingModeFlag = true
-            sender.tag == 1 ? cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal) : cameraTrakingModeFlag.toggle()
-            sender.tag == 1 ? toMyLocation() : toWholeLocation()
-            
+            if sender.tag == 1 {
+                myLocationButton.alpha = 0.4
+                cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
+                toMyLocation()
+            } else {
+                if myLocationButton.alpha == 0.4000000059604645 && sender.tag == 2 {
+                    //지금 트래킹 중인거고
+                    myLocationButton.setImage(#imageLiteral(resourceName: "mylocationtracking"), for: .normal)
+                    mapView.positionMode = .compass
+                } else {
+                    //트래킹 중이 아닌거지
+                    myLocationButton.alpha = 0.4
+                    cameraTrakingModeFlag.toggle()
+                    toWholeLocation()
+                }
+                
+            }
         } else {
             cameraTrakingModeFlag = false
-            sender.tag == 1 ? cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal) : cameraTrakingModeFlag.toggle()
-            sender.tag == 1 ? toWholeLocation() : toMyLocation()
+            if sender.tag == 1 {
+                myLocationButton.alpha = 0.4
+                cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
+                toWholeLocation()
+            } else {
+                if myLocationButton.alpha == 0.4000000059604645 && sender.tag == 2 {
+                    //지금 트래킹 중인거고
+                    myLocationButton.setImage(#imageLiteral(resourceName: "mylocationtracking"), for: .normal)
+                    mapView.positionMode = .compass
+                } else {
+                    myLocationButton.alpha = 0.4
+                    cameraTrakingModeFlag.toggle()
+                    toMyLocation()
+                }
+            }
         }
     }
     
     //MARK: 내위치 카메라 세팅
     @objc func toMyLocation() {
         
-        if cameraTrakingToggleFlag && cameraTrakingModeFlag {
+        if cameraTrakingToggleFlag && cameraTrakingModeFlag && mapView.positionMode != .compass {
 //            mapView.positionMode = .direction
             let cameraUpdate =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng),zoomTo: 15)
             cameraUpdate.animation = .fly
@@ -474,7 +502,7 @@ class MapViewController: UIViewController{
     
     //MARK: 모두의 위치 카메라 세팅
     @objc func toWholeLocation() {
-        if cameraTrakingToggleFlag && cameraTrakingModeFlag == false {
+        if cameraTrakingToggleFlag && cameraTrakingModeFlag == false && mapView.positionMode != .compass {
             let minLatLng = NMGLatLng(lat: 150, lng: 150)
             let maxLatLng = NMGLatLng(lat: 0, lng: 0)
             

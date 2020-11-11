@@ -14,8 +14,6 @@
 		A52A1C3D255BA239000794A5 /* RankingViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3C255BA239000794A5 /* RankingViewCell.swift */; };
 		A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3F255BAA3C000794A5 /* Ranking.swift */; };
 		A52A1C47255BBB23000794A5 /* Medal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C46255BBB23000794A5 /* Medal.swift */; };
-		A52A1C53255BD4CE000794A5 /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A52A1C52255BD4CE000794A5 /* NotoSansKR-Bold.otf */; };
-		A52A1C56255BD4F7000794A5 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = A52A1C55255BD4F7000794A5 /* NotoSansKR-Medium.otf */; };
 		A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E22552752F00ACD946 /* ChatMessageView.swift */; };
 		A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E52552803000ACD946 /* UITextField+Ext.swift */; };
 		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
@@ -40,6 +38,8 @@
 		CC21A7F5255BB21A00E31F77 /* NewRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */; };
 		CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC41A0862548157C00C0E762 /* MannaDemo.swift */; };
 		CC41A0A32548448800C0E762 /* 12670-flying-airplane.json in Resources */ = {isa = PBXBuildFile; fileRef = CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */; };
+		CC46AE74255C015B0053F221 /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CC46AE72255C015B0053F221 /* NotoSansKR-Bold.otf */; };
+		CC46AE75255C015B0053F221 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = CC46AE73255C015B0053F221 /* NotoSansKR-Medium.otf */; };
 		CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748311255058A2006C1E02 /* BottomTabView.swift */; };
 		CC74831525511F0C006C1E02 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831425511F0C006C1E02 /* ChatViewController.swift */; };
 		CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748318255124FB006C1E02 /* RankingViewViewController.swift */; };
@@ -73,8 +73,6 @@
 		A52A1C3C255BA239000794A5 /* RankingViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewCell.swift; sourceTree = "<group>"; };
 		A52A1C3F255BAA3C000794A5 /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		A52A1C46255BBB23000794A5 /* Medal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medal.swift; sourceTree = "<group>"; };
-		A52A1C52255BD4CE000794A5 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSansKR-Bold.otf"; path = "../../../../Downloads/Noto_Sans_KR/NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
-		A52A1C55255BD4F7000794A5 /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSansKR-Medium.otf"; path = "../../../../Downloads/Noto_Sans_KR/NotoSansKR-Medium.otf"; sourceTree = "<group>"; };
 		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
@@ -99,6 +97,8 @@
 		CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRankingViewController.swift; sourceTree = "<group>"; };
 		CC41A0862548157C00C0E762 /* MannaDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaDemo.swift; sourceTree = "<group>"; };
 		CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "12670-flying-airplane.json"; sourceTree = "<group>"; };
+		CC46AE72255C015B0053F221 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
+		CC46AE73255C015B0053F221 /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Medium.otf"; sourceTree = "<group>"; };
 		CC748311255058A2006C1E02 /* BottomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTabView.swift; sourceTree = "<group>"; };
 		CC74831425511F0C006C1E02 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		CC748318255124FB006C1E02 /* RankingViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewViewController.swift; sourceTree = "<group>"; };
@@ -174,15 +174,6 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
-		A52A1C4D255BD322000794A5 /* Font */ = {
-			isa = PBXGroup;
-			children = (
-				A52A1C52255BD4CE000794A5 /* NotoSansKR-Bold.otf */,
-				A52A1C55255BD4F7000794A5 /* NotoSansKR-Medium.otf */,
-			);
-			path = Font;
-			sourceTree = "<group>";
-		};
 		A5A0F058255149DE00A11EEF /* Chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -230,6 +221,15 @@
 				CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */,
 			);
 			path = lottie;
+			sourceTree = "<group>";
+		};
+		CC46AE71255C014A0053F221 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				CC46AE72255C015B0053F221 /* NotoSansKR-Bold.otf */,
+				CC46AE73255C015B0053F221 /* NotoSansKR-Medium.otf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 		CC8A0B5C2554606F00063790 /* MapView+Ext */ = {
@@ -283,7 +283,7 @@
 		CC8B84592540231900441445 /* MannaDemo */ = {
 			isa = PBXGroup;
 			children = (
-				A52A1C4D255BD322000794A5 /* Font */,
+				CC46AE71255C014A0053F221 /* Font */,
 				CC41A0A52548449200C0E762 /* lottie */,
 				A5D48F1F2542AD8600399462 /* Extension */,
 				A5D48F182542A5FB00399462 /* Component */,
@@ -398,12 +398,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A52A1C56255BD4F7000794A5 /* NotoSansKR-Medium.otf in Resources */,
+				CC46AE75255C015B0053F221 /* NotoSansKR-Medium.otf in Resources */,
 				CC8B84672540231A00441445 /* LaunchScreen.storyboard in Resources */,
 				CC41A0A32548448800C0E762 /* 12670-flying-airplane.json in Resources */,
 				CC8B84642540231A00441445 /* Assets.xcassets in Resources */,
 				CC8B84622540231A00441445 /* Main.storyboard in Resources */,
-				A52A1C53255BD4CE000794A5 /* NotoSansKR-Bold.otf in Resources */,
+				CC46AE74255C015B0053F221 /* NotoSansKR-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,7 +488,6 @@
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
 				A543EAF52555C5A7005363B8 /* SocketMessage.swift in Sources */,
 				A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */,
-				CC8A0B62255460EC00063790 /* MapView+Socket.swift in Sources */,
 				A52A1C47255BBB23000794A5 /* Medal.swift in Sources */,
 				A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */,
 				CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */,
