@@ -20,10 +20,6 @@ class RankingViewController: UIViewController {
     
     var arrivalUser: [Ranking] = []
     var notArrivalUser: [Ranking] = []
-//    lazy var goldenBackground = UIView(frame: CGRect(x: 0, y: 0, width: 31, height: 41))
-//    lazy var golden = GoldenMedal(frame: CGRect(x: 0, y: 0, width: 41, height: 41))
-//    lazy var silver = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-//    lazy var bronze = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
     lazy var urgentButton = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 39))
     
     override func viewDidLoad() {
@@ -123,15 +119,23 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = rankginView.dequeueReusableCell(withIdentifier: RankingViewCell.rankingCellID, for: indexPath) as! RankingViewCell
         
         if indexPath.section == 0 {
+            
             if indexPath.row == 0{
-                cell.accessoryView = Medal("golden")
+                cell.accessoryView = Medal("golden").then {
+                    $0.layer.cornerRadius = $0.frame.width / 2
+                    $0.clipsToBounds = true
+                }
             } else if indexPath.row == 1 {
                 cell.accessoryView = Medal("silver")
             } else if indexPath.row == 2 {
                 cell.accessoryView = Medal("bronze")
             }
+            
             cell.setData(data: arrivalUser[indexPath.row])
         } else if indexPath.section == 1 {
+            cell.accessoryView = UrgentButton(true).then {
+                $0.layer.cornerRadius = 20
+            }
             cell.setData(data: notArrivalUser[indexPath.row])
         }
         return cell

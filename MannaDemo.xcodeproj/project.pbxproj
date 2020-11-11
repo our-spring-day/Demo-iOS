@@ -14,6 +14,9 @@
 		A52A1C3D255BA239000794A5 /* RankingViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3C255BA239000794A5 /* RankingViewCell.swift */; };
 		A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3F255BAA3C000794A5 /* Ranking.swift */; };
 		A52A1C47255BBB23000794A5 /* Medal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C46255BBB23000794A5 /* Medal.swift */; };
+		A52A1C4B255BC15A000794A5 /* UrgentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C4A255BC15A000794A5 /* UrgentButton.swift */; };
+		A52A1C53255BD4CE000794A5 /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A52A1C52255BD4CE000794A5 /* NotoSansKR-Bold.otf */; };
+		A52A1C56255BD4F7000794A5 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = A52A1C55255BD4F7000794A5 /* NotoSansKR-Medium.otf */; };
 		A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E22552752F00ACD946 /* ChatMessageView.swift */; };
 		A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E52552803000ACD946 /* UITextField+Ext.swift */; };
 		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
@@ -70,6 +73,9 @@
 		A52A1C3C255BA239000794A5 /* RankingViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewCell.swift; sourceTree = "<group>"; };
 		A52A1C3F255BAA3C000794A5 /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		A52A1C46255BBB23000794A5 /* Medal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medal.swift; sourceTree = "<group>"; };
+		A52A1C4A255BC15A000794A5 /* UrgentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgentButton.swift; sourceTree = "<group>"; };
+		A52A1C52255BD4CE000794A5 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSansKR-Bold.otf"; path = "../../../../Downloads/Noto_Sans_KR/NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
+		A52A1C55255BD4F7000794A5 /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSansKR-Medium.otf"; path = "../../../../Downloads/Noto_Sans_KR/NotoSansKR-Medium.otf"; sourceTree = "<group>"; };
 		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
@@ -168,6 +174,15 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		A52A1C4D255BD322000794A5 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				A52A1C52255BD4CE000794A5 /* NotoSansKR-Bold.otf */,
+				A52A1C55255BD4F7000794A5 /* NotoSansKR-Medium.otf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		A5A0F058255149DE00A11EEF /* Chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -242,6 +257,7 @@
 				A52A1C39255BA162000794A5 /* RankingViewController.swift */,
 				A52A1C3C255BA239000794A5 /* RankingViewCell.swift */,
 				A52A1C46255BBB23000794A5 /* Medal.swift */,
+				A52A1C4A255BC15A000794A5 /* UrgentButton.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -267,6 +283,7 @@
 		CC8B84592540231900441445 /* MannaDemo */ = {
 			isa = PBXGroup;
 			children = (
+				A52A1C4D255BD322000794A5 /* Font */,
 				CC41A0A52548449200C0E762 /* lottie */,
 				A5D48F1F2542AD8600399462 /* Extension */,
 				A5D48F182542A5FB00399462 /* Component */,
@@ -381,10 +398,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A52A1C56255BD4F7000794A5 /* NotoSansKR-Medium.otf in Resources */,
 				CC8B84672540231A00441445 /* LaunchScreen.storyboard in Resources */,
 				CC41A0A32548448800C0E762 /* 12670-flying-airplane.json in Resources */,
 				CC8B84642540231A00441445 /* Assets.xcassets in Resources */,
 				CC8B84622540231A00441445 /* Main.storyboard in Resources */,
+				A52A1C53255BD4CE000794A5 /* NotoSansKR-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +502,7 @@
 				CC8A0B5E2554609B00063790 /* MapView+CLocation.swift in Sources */,
 				A52A1C3D255BA239000794A5 /* RankingViewCell.swift in Sources */,
 				A5F82CE625568074009A8AC5 /* GetMannaAPI.swift in Sources */,
+				A52A1C4B255BC15A000794A5 /* UrgentButton.swift in Sources */,
 				A52A1C3A255BA162000794A5 /* RankingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
