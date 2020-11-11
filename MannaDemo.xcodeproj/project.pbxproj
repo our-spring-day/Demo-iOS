@@ -29,6 +29,7 @@
 		CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */; };
 		CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */; };
 		CC21A7DC255BA03900E31F77 /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A7DB255BA03900E31F77 /* CGFloat.swift */; };
+		CC21A7F5255BB21A00E31F77 /* NewRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */; };
 		CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC41A0862548157C00C0E762 /* MannaDemo.swift */; };
 		CC41A0A32548448800C0E762 /* 12670-flying-airplane.json in Resources */ = {isa = PBXBuildFile; fileRef = CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */; };
 		CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748311255058A2006C1E02 /* BottomTabView.swift */; };
@@ -79,6 +80,7 @@
 		CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionView.swift; sourceTree = "<group>"; };
 		CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionViewCell.swift; sourceTree = "<group>"; };
 		CC21A7DB255BA03900E31F77 /* CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
+		CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRankingViewController.swift; sourceTree = "<group>"; };
 		CC41A0862548157C00C0E762 /* MannaDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaDemo.swift; sourceTree = "<group>"; };
 		CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "12670-flying-airplane.json"; sourceTree = "<group>"; };
 		CC748311255058A2006C1E02 /* BottomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTabView.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				CC748318255124FB006C1E02 /* RankingViewViewController.swift */,
 				CC74832B255164E7006C1E02 /* tempViewController.swift */,
 				CC8A0B2225540BAD00063790 /* TimerView.swift */,
+				CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -451,6 +454,7 @@
 				A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */,
 				A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */,
 				CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */,
+				CC21A7F5255BB21A00E31F77 /* NewRankingViewController.swift in Sources */,
 				CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */,
 				CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */,
 				CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */,

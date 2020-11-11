@@ -31,7 +31,6 @@ class MapViewController: UIViewController{
     var tokenWithMarker: [String : NMFMarker] = [:]
     let mapView = NMFMapView()
     let backButton = UIButton()
-    var timerView = TimerView()
     var bottomSheet = BottomSheetViewController()
     let multipartPath = NMFMultipartPath()
     var animationView = AnimationView(name:"12670-flying-airplane")
@@ -55,7 +54,7 @@ class MapViewController: UIViewController{
     var cameraTrakingModeFlag = true
     var rankingBUtton = UIButton()
     var chatBUtton = UIButton()
-    
+    var timerView = TimerView(.mapView)
     
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
@@ -219,7 +218,6 @@ class MapViewController: UIViewController{
             
         }
         chatView = bottomSheet.chatViewController.backgroundView
-        myLocationButton.isHidden = true
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
@@ -305,6 +303,7 @@ class MapViewController: UIViewController{
             $0.dropShadow()
         }
         myLocationButton.do {
+            $0.alpha = 0.4
             $0.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
             $0.addTarget(self, action: #selector(didMyLocationButtonClicked), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
@@ -324,6 +323,8 @@ class MapViewController: UIViewController{
             $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
             $0.layer.masksToBounds = true
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
+            $0.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
+            $0.dropShadow()
         }
         chatBUtton.do {
             $0.backgroundColor = .white
@@ -331,7 +332,11 @@ class MapViewController: UIViewController{
             $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
             $0.layer.masksToBounds = true
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
+            $0.dropShadow()
         }
+        //        timerView.do {
+        //            $0.whereAt = .mapView
+        //        }
     }
     
     // MARK: layout
@@ -339,9 +344,9 @@ class MapViewController: UIViewController{
         [mapView, cameraState, myLocationButton, backButton, timerView, toastLabel, chatBUtton, rankingBUtton].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
-            $0.leading.equalToSuperview().offset(22)
-            $0.width.height.equalTo(40)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(46)
+            $0.leading.equalToSuperview().offset(15)
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
         toastLabel.snp.makeConstraints {
             $0.centerX.equalTo(view)
@@ -384,6 +389,14 @@ class MapViewController: UIViewController{
             marker.width = MannaDemo.convertWidth(value: 5)
             marker.height = MannaDemo.convertWidth(value: 5)
         }
+    }
+    
+    @objc func showRankingView() {
+        let view = NewRankingViewViewController()
+        view.view.backgroundColor = .white
+        view.modalPresentationStyle = .custom
+        view.modalTransitionStyle = .crossDissolve
+        self.present(view, animated: true)
     }
     
     //MARK: 렌더링 이미지ㅇ
@@ -523,7 +536,8 @@ class MapViewController: UIViewController{
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
         multipartPath.mapView = nil
         cameraTrakingToggleFlag = true
-        [myLocationButton, bottomSheet.view, bottomTabView].forEach {
+        myLocationButton.alpha = 0.4
+        [bottomSheet.view, bottomTabView].forEach {
             $0?.alpha = 0
             $0?.isHidden = true
         }
@@ -541,7 +555,6 @@ class MapViewController: UIViewController{
     
     //MARK: 채팅창 클릭
     @objc func testGestureFunc() {
-        //        let view = ChattingViewController()
         let view = ChattingViewController.shared
         present(view, animated: true)
         self.view.bringSubviewToFront(bottomTabView)

@@ -7,93 +7,124 @@
 
 import UIKit
 
+enum TimerAtwhere {
+    case mapView
+    case rankingView
+}
+
 class TimerView: UIView {
-    var hourLabel = UILabel()
+    static var shared = TimerView(.mapView)
     var minuteLabel = UILabel()
     var secondLabel = UILabel()
-    var colon1 = UILabel()
-    var conlon2 = UILabel()
+    var colon = UILabel()
+    var whereAt: TimerAtwhere?
     
-    init() {
+    init(_ at: TimerAtwhere) {
         super.init(frame: CGRect.zero)
+        whereAt = at
         attribute()
         layout()
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timer), userInfo: nil, repeats: true)
+        timer()
+        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timer), userInfo: nil, repeats: true)
     }
     
     @objc func timer() {
-        let hourFormatter = DateFormatter()
         let miniuteFormatter = DateFormatter()
         let secondFormatter = DateFormatter()
-        hourFormatter.dateFormat = "HH"
         miniuteFormatter.dateFormat = "mm"
         secondFormatter.dateFormat = "ss"
-        
-        let hour = hourFormatter.string(from: Date())
         let minute = miniuteFormatter.string(from: Date())
         let second = secondFormatter.string(from: Date())
         
-        hourLabel.text = "\((Int(hour)!) - Int(hour)!)"
         minuteLabel.text = "\(59 - Int(minute)!)"
         secondLabel.text = "\(59 - Int(second)!)"
         
         if (59 - Int(minute)!) > 10 && (59 - Int(minute)!) < 20 {
-            self.backgroundColor = UIColor(named: "20minute")
+            switch whereAt {
+            case .mapView:
+                self.backgroundColor = UIColor(named: "20minute")
+                break
+            case .rankingView:
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "20minute") }
+
+                break
+            case .none:
+                print("타이머의 whereAt 변수를 할당하세요")
+            }
         } else if (59 - Int(minute)!) <= 10 {
-            self.backgroundColor = UIColor(named: "10minute")
+            switch whereAt {
+            case .mapView:
+                self.backgroundColor = UIColor(named: "10minute")
+                break
+            case .rankingView:
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "10minute") }
+                break
+            case .none:
+                print("타이머의 whereAt 변수를 할당하세요")
+            }
         } else {
-            self.backgroundColor = UIColor(named: "keyColor")
+            switch whereAt {
+            case .mapView:
+                self.backgroundColor = UIColor(named: "keyColor")
+                break
+            case .rankingView:
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "keyColor") }
+                break
+            case .none:
+                print("타이머의 whereAt 변수를 할당하세요")
+            }
         }
     }
-
     
     func attribute() {
         self.do {
-            $0.backgroundColor = UIColor(named: "keyColor")
             $0.layer.cornerRadius = 20
             $0.layer.masksToBounds = true
-            $0.dropShadow()
+            
+            switch whereAt {
+            case .mapView:
+                $0.backgroundColor = UIColor(named: "keyColor")
+                $0.dropShadow()
+            case .rankingView:
+                
+                $0.backgroundColor = .white
+                $0.layer.borderWidth = MannaDemo.convertHeight(value: 1)
+                $0.layer.borderColor = UIColor.lightGray.cgColor
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "keyColor") }
+            case .none:
+                print("타이머의 whereAt 변수를 할당하세요")
+            }
         }
-        [hourLabel, minuteLabel, secondLabel].forEach {
+        
+        [minuteLabel, secondLabel].forEach {
             $0.do {
-                $0.font = UIFont(name: "SFProDisplay-Medium", size: 17)
+                $0.font = UIFont(name: "SFProDisplay-Semibold", size: 19)
                 $0.textAlignment = .center
                 $0.textColor = .white
             }
         }
-        [colon1,conlon2].forEach {
+        [colon].forEach {
             $0.text = ":"
+            $0.font = UIFont(name: "SFProDisplay-Semibold", size: 19)
             $0.textAlignment = .center
             $0.textColor = .white
         }
     }
     
     func layout() {
-        [hourLabel, minuteLabel, secondLabel, colon1, conlon2].forEach { addSubview($0) }
-        
-        hourLabel.snp.makeConstraints {
-            $0.trailing.equalTo(minuteLabel.snp.leading).offset(-5)
-            $0.centerY.equalToSuperview()
-            $0.width.height.equalTo(40)
-        }
+        [minuteLabel, secondLabel, colon].forEach { addSubview($0) }
         minuteLabel.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
+            $0.trailing.equalTo(colon.snp.leading).offset(-5)
+            $0.centerY.equalToSuperview()
             $0.width.height.equalTo(40)
         }
         secondLabel.snp.makeConstraints {
-            $0.leading.equalTo(minuteLabel.snp.trailing).offset(5)
+            $0.leading.equalTo(colon.snp.trailing).offset(5)
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(40)
         }
-        colon1.snp.makeConstraints {
-            $0.centerY.equalTo(self)
-            $0.leading.equalTo(hourLabel.snp.trailing)
-            $0.trailing.equalTo(minuteLabel.snp.leading)
-        }
-        conlon2.snp.makeConstraints {
-            $0.centerY.equalTo(self)
-            $0.leading.equalTo(minuteLabel.snp.trailing)
-            $0.trailing.equalTo(secondLabel.snp.leading)
+        colon.snp.makeConstraints {
+            $0.centerX.centerY.equalTo(self)
         }
     }
     
