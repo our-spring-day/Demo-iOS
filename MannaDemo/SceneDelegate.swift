@@ -18,6 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
+            let rankView = RankingViewController()
+            
             let mainView = MapViewController()
             let mannalistView = MannaListViewController()
             
@@ -45,6 +47,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         }
                     }
                 }
+
+                // window.rootViewController = rankView
                 window.rootViewController = mannalistView
                 self.window = window
                 window.makeKeyAndVisible()

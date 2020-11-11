@@ -11,6 +11,7 @@ import CoreLocation
 import SwiftyJSON
 import SocketIO
 
+
 protocol test {
     var chatView: UIView? { get set}
 }
@@ -22,6 +23,7 @@ class MapViewController: UIViewController{
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
     var chatView: UIView?
+
     var meetInfo: NewManna?
     lazy var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":meetInfo!.uuid])])
     var locationSocket: SocketIOClient!
@@ -61,7 +63,7 @@ class MapViewController: UIViewController{
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        GetMannaAPI.getManna()
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
@@ -316,7 +318,7 @@ class MapViewController: UIViewController{
         [mapView, cameraState, myLocationButton, backButton, timerView, toastLabel, chatBUtton, rankingBUtton].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(46)
+            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
             $0.leading.equalToSuperview().offset(15)
             $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
@@ -363,12 +365,33 @@ class MapViewController: UIViewController{
         }
     }
     
+    //MARK: 렌더링 이미지
+    func renderImage() {
+        for name in userName {
+            let image = UserView(text: name).then({
+                $0.layer.cornerRadius = 30
+            })
+            let renderImage = image.asImage()
+            userImage.append(renderImage)
+        }
+    }
+    
+    //MARK: 닉네임 이미지 셋
+    func nicknameImageSet() {
+        _ = 0
+        //        for key in UserModel.userList.keys {
+        //            UserModel.userList[key]?.nicknameImage = userImage[count]
+        //            count += 1
+        //        }
+    }
+
     @objc func showRankingView() {
-        let view = NewRankingViewViewController()
+        let view = RankingViewController()
         view.view.backgroundColor = .white
         view.modalPresentationStyle = .custom
         view.modalTransitionStyle = .crossDissolve
         self.present(view, animated: true)
+
     }
     //MARK: 마커 클릭 이벤트
     func didMarkerClicked() {
