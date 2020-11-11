@@ -130,6 +130,7 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let view = MapViewController()
+        view.meetInfo  = MannaModel.newModel[indexPath.row]
         view.modalPresentationStyle = .fullScreen
         self.present(view, animated: true, completion: nil)
     }

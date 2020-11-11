@@ -16,15 +16,15 @@ protocol test {
     var chatView: UIView? { get set}
 }
 extension MapViewController: test {
-
+    
 }
 
 class MapViewController: UIViewController{
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
     var chatView: UIView?
-    
-    var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":"6bfe12af-cb31-4b84-8d01-09db634841d3"])])
+    var meetInfo: NewManna?
+    lazy var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":meetInfo!.uuid])])
     var locationSocket: SocketIOClient!
     var chatSocket: SocketIOClient!
     var locationManager = CLLocationManager()
@@ -54,9 +54,9 @@ class MapViewController: UIViewController{
     var cameraTrakingToggleFlag = true
     var cameraTrakingModeFlag = true
     
+    
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
-        
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
@@ -66,12 +66,16 @@ class MapViewController: UIViewController{
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(meetInfo?.uuid)
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
+        dump(locationSocket)
         chatSocket = manager.socket(forNamespace: "/chat")
         locationSocket.connect()
         chatSocket.connect()
         locationSocket.on("locationConnect") { (array, ack) in
+            print(array)
             UserModel.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
             self.bottomSheet.runningTimeController.collectionView.reloadData()
@@ -84,72 +88,72 @@ class MapViewController: UIViewController{
             let result: SocketMessage = try! JSONDecoder().decode(SocketMessage.self, from: temp)
             if result.message != nil {
                 switch result.sender.username {
-                    case "우석":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "연재":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "상원":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "재인":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "효근":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "규리":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "종찬":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    case "용권":
-                        if let message = result.message?.message {
-                            let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                            print(incoming)
-                            let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
-                            ChattingViewController.shared.chatMessage.append(message)
-                        }
-                        break
-                    default:
-                        break
+                case "우석":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "연재":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "상원":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "재인":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "효근":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "규리":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "종찬":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                case "용권":
+                    if let message = result.message?.message {
+                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                        print(incoming)
+                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        ChattingViewController.shared.chatMessage.append(message)
+                    }
+                    break
+                default:
+                    break
                 }
             }
             ChattingViewController.shared.chatView.reloadData()
@@ -187,7 +191,7 @@ class MapViewController: UIViewController{
                         
                     case "LEAVE":
                         guard let name = username else { return }
-                       UserModel.userList[token]?.networkValidTime = 61
+                        UserModel.userList[token]?.networkValidTime = 61
                         self.marking()
                         self.setCollcetionViewItem()
                         self.bottomSheet.runningTimeController.collectionView.reloadData()
@@ -444,8 +448,8 @@ class MapViewController: UIViewController{
         
         if cameraTrakingToggleFlag && cameraTrakingModeFlag {
             mapView.positionMode = .direction
-//            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
-//            mapView.moveCamera(moveCameraWithZoomAndPosition)
+            //            let moveCameraWithZoomAndPosition =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude), zoomTo: 16)
+            //            mapView.moveCamera(moveCameraWithZoomAndPosition)
         }
     }
     
@@ -525,7 +529,7 @@ class MapViewController: UIViewController{
     
     //MARK: 채팅창 클릭
     @objc func testGestureFunc() {
-//        let view = ChattingViewController()
+        //        let view = ChattingViewController()
         let view = ChattingViewController.shared
         present(view, animated: true)
         self.view.bringSubviewToFront(bottomTabView)
