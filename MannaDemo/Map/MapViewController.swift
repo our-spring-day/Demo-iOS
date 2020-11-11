@@ -356,7 +356,7 @@ class MapViewController: UIViewController{
     
     //MARK: 마커 생성
     func array() {
-        UserModel.userList.keys.map { tokenWithMarker[$0] = NMFMarker()}
+        UserModel.userList.keys.forEach { tokenWithMarker[$0] = NMFMarker()}
         for marker in tokenWithMarker.values {
             marker.width = MannaDemo.convertWidth(value: 5)
             marker.height = MannaDemo.convertWidth(value: 5)
@@ -372,7 +372,7 @@ class MapViewController: UIViewController{
     }
     //MARK: 마커 클릭 이벤트
     func didMarkerClicked() {
-        tokenWithMarker.keys.map { key in
+        tokenWithMarker.keys.forEach { key in
             cameraTrakingToggleFlag = false
             tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
                 let lat = UserModel.userList[key]?.latitude
@@ -493,6 +493,7 @@ class MapViewController: UIViewController{
     
     //MARK: 마커 전체 세팅
     @objc func marking() {
+        
         for key in UserModel.userList.keys {
             let user = UserModel.userList[key]
             if imageToNameFlag {
@@ -515,12 +516,12 @@ class MapViewController: UIViewController{
                     tokenWithMarker[key]?.position = NMGLatLng(lat: UserModel.userList[key]!.latitude, lng: UserModel.userList[key]!.longitude)
                     tokenWithMarker[key]?.mapView = mapView
                 } else if key == MannaDemo.myUUID {
-                    
                     //                    tokenWithMarker[key]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
                     //                    tokenWithMarker[key]?.mapView = mapView
                 }
             }
         }
+        
     }
     
     //MARK: 위치권한 확인

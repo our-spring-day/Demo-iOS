@@ -9,31 +9,17 @@ import UIKit
 import CoreLocation
 
 extension MapViewController: CLLocationManagerDelegate {
-    
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
-        
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-        
         UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
         UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
-        
-        
-        
         locationSocket.emit("location", "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
-        
-        
         setCollcetionViewItem()
-//        bottomSheet.runningTimeController.collectionView.reloadData()
     }
-    
-    
     
     // MARK: 위치권한 다시 받는곳
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
