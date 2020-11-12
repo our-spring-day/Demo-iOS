@@ -56,6 +56,7 @@
 		CC8B84622540231A00441445 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84602540231A00441445 /* Main.storyboard */; };
 		CC8B84642540231A00441445 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84632540231A00441445 /* Assets.xcassets */; };
 		CC8B84672540231A00441445 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84652540231A00441445 /* LaunchScreen.storyboard */; };
+		CCC19F9A255D34200092DD05 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC19F99255D34200092DD05 /* Int+Ext.swift */; };
 		CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE75253254028FE008E0BA1 /* MannaListViewController.swift */; };
 		CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */; };
 		CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */; };
@@ -117,6 +118,7 @@
 		CC8B84632540231A00441445 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC8B84662540231A00441445 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CC8B84682540231A00441445 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CCC19F99255D34200092DD05 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
 		CCE75253254028FE008E0BA1 /* MannaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListViewController.swift; sourceTree = "<group>"; };
 		CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListTableViewCell.swift; sourceTree = "<group>"; };
 		CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMannaViewController.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				A53817E52552803000ACD946 /* UITextField+Ext.swift */,
 				A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */,
 				CC21A7DB255BA03900E31F77 /* CGFloat.swift */,
+				CCC19F99255D34200092DD05 /* Int+Ext.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */,
 				A5A0F06325515C1900A11EEF /* ChatMessage.swift in Sources */,
 				A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */,
+				CCC19F9A255D34200092DD05 /* Int+Ext.swift in Sources */,
 				CC107739255464D300908D71 /* TravelData.swift in Sources */,
 				A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */,
 				CC79E4AE2555B4DE001C726F /* SocketData.swift in Sources */,

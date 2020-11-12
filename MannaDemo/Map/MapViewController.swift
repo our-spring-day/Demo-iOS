@@ -100,79 +100,58 @@ class MapViewController: UIViewController{
             guard let jsonData = try? JSON(test) else { return }
             guard let temp = "\(jsonData)".data(using: .utf8) else { return }
             let result: SocketMessage = try! JSONDecoder().decode(SocketMessage.self, from: temp)
+            var newMessage: ChatMessage?
             if result.message != nil {
-                print(result.message?.createTimestamp)
+                let incoming = result.sender.deviceToken != MannaDemo.myUUID
                 switch result.sender.username {
                 case "우석":
-                    if let message = result.message?.message {
-                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        
-                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
-                        ChattingViewController.shared.chatMessage.append(message)
+                    if let message = result.message?.message, let timestamp = result.message?.createTimestamp {
+                        newMessage = ChatMessage(user: result.sender.username, text: message, timeStamp: timestamp, isIncoming: incoming, sendState: false)
                     }
                     break
                 case "연재":
-                    if let message = result.message?.message {
-                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
-                        ChattingViewController.shared.chatMessage.append(message)
+                    if let message = result.message?.message, let timestamp = result.message?.createTimestamp {
+                        newMessage = ChatMessage(user: result.sender.username, text: message, timeStamp: timestamp, isIncoming: incoming, sendState: false)
                     }
                     break
                 case "상원":
-                    if let message = result.message?.message {
-                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
-                        ChattingViewController.shared.chatMessage.append(message)
+                    if let message = result.message?.message, let timestamp = result.message?.createTimestamp {
+                        newMessage = ChatMessage(user: result.sender.username, text: message, timeStamp: timestamp, isIncoming: incoming, sendState: false)
                     }
                     break
                 case "재인":
-                    if let message = result.message?.message {
-                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
-                        ChattingViewController.shared.chatMessage.append(message)
+                    if let message = result.message?.message, let timestamp = result.message?.createTimestamp {
+                        newMessage = ChatMessage(user: result.sender.username, text: message, timeStamp: timestamp, isIncoming: incoming, sendState: false)
                     }
                     break
                 case "효근":
-                    if let message = result.message?.message {
-                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
-                        ChattingViewController.shared.chatMessage.append(message)
+                    if let message = result.message?.message, let timestamp = result.message?.createTimestamp {
+                        newMessage = ChatMessage(user: result.sender.username, text: message, timeStamp: timestamp, isIncoming: incoming, sendState: false)
                     }
                     break
                 case "규리":
-                    if let message = result.message?.message {
-                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
-                        ChattingViewController.shared.chatMessage.append(message)
+                    if let message = result.message?.message, let timestamp = result.message?.createTimestamp {
+                        newMessage = ChatMessage(user: result.sender.username, text: message, timeStamp: timestamp, isIncoming: incoming, sendState: false)
                     }
                     break
                 case "종찬":
-                    if let message = result.message?.message {
-                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
-                        ChattingViewController.shared.chatMessage.append(message)
+                    if let message = result.message?.message, let timestamp = result.message?.createTimestamp {
+                        newMessage = ChatMessage(user: result.sender.username, text: message, timeStamp: timestamp, isIncoming: incoming, sendState: false)
                     }
                     break
                 case "용권":
-                    if let message = result.message?.message {
-                        let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
-                        ChattingViewController.shared.chatMessage.append(message)
+                    if let message = result.message?.message, let timestamp = result.message?.createTimestamp {
+                        newMessage = ChatMessage(user: result.sender.username, text: message, timeStamp: timestamp, isIncoming: incoming, sendState: false)
                     }
                     break
                 default:
                     break
                 }
             }
-            ChattingViewController.shared.chatView.reloadData()
+            guard let newMessageBinding = newMessage else { return }
             
+            ChattingViewController.shared.chatMessage.append(newMessageBinding)
+            ChattingViewController.shared.chatView.reloadData()
         }
         locationSocket.on("location") { (array, ack) in
             var _: String?

@@ -13,6 +13,7 @@ class ChattingViewController: UIViewController {
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     let chatView = UITableView()
+    var chatMessage: [ChatMessage] = []
     let textField = UITextField().then {
         $0.textColor = .black
         $0.attributedPlaceholder = .init(string: "메세지 입력", attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.chatName)])
@@ -33,22 +34,7 @@ class ChattingViewController: UIViewController {
             $0.clipsToBounds = true
         }
     
-    var chatMessage: [ChatMessage] =
-        [
-//            ChatMessage(user: "짱구", text: "이번주 토요일 더포도 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", timeStamp: <#Int#>, isIncoming: true, sendState: false),
-//            ChatMessage(user: "짱구", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", timeStamp: <#Int#>, isIncoming: true, sendState: false),
-//            ChatMessage(user: "짱구", text: "늦으면 벌금 오천만원임니다~~😉", timeStamp: <#Int#>, isIncoming: true, sendState: false),
-//            ChatMessage(user: "영희", text: "알겠슴니다~~🙀", timeStamp: <#Int#>, isIncoming: false, sendState: false),
-//            ChatMessage(user: "영희", text: "우리는 오늘 놀러갈거에요!!", timeStamp: <#Int#>, isIncoming: false, sendState: false),
-//            ChatMessage(user: "기영", text: "잠이오냐!!", timeStamp: <#Int#>, isIncoming: true, sendState: false),
-//            ChatMessage(user: "기영", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", timeStamp: <#Int#>, isIncoming: true, sendState: false),
-//            ChatMessage(user: "찬이", text: "새키얌", timeStamp: <#Int#>, isIncoming: true, sendState: false),
-//            ChatMessage(user: "찬이", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", timeStamp: <#Int#>, isIncoming: true, sendState: false),
-//            ChatMessage(user: "상원", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", timeStamp: <#Int#>, isIncoming: false, sendState: false),
-//            ChatMessage(user: "상원", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", timeStamp: <#Int#>, isIncoming: false, sendState: false),
-//            ChatMessage(user: "돼지", text: "우리는 오늘 놀러갈거에요!!", timeStamp: <#Int#>, isIncoming: true, sendState: false),
-//            ChatMessage(user: "돼지", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", timeStamp: <#Int#>, isIncoming: true, sendState: false)
-        ]
+    
     
     // MARK: inputAccessroyView init
     
@@ -56,15 +42,13 @@ class ChattingViewController: UIViewController {
     override var canBecomeFirstResponder: Bool { return true }
     override var inputAccessoryView: UIView? {
         if accView == nil {
-            
             accView = CustomView()
             accView.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 0.845515839)
-            
             textField.borderStyle = .roundedRect
-            
             accView.addSubview(textField)
             accView.addSubview(sendButton)
             accView.autoresizingMask = .flexibleHeight
+            
             textField.do {
                 $0.translatesAutoresizingMaskIntoConstraints = false
                 $0.leadingAnchor.constraint(equalTo: accView.leadingAnchor, constant: MannaDemo.convertWidth(value: 13)).isActive = true
@@ -86,9 +70,6 @@ class ChattingViewController: UIViewController {
     
     // MARK: CustomView
     class CustomView: UIView {
-        // this is needed so that the inputAccesoryView is properly sized from the auto layout constraints
-        // actual value is not important
-        
         override var intrinsicContentSize: CGSize {
             return CGSize.zero
         }
@@ -100,7 +81,6 @@ class ChattingViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         attirbute()
         layout()
-        //        scrollBottom()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -190,6 +170,8 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
         cell.chatMessage = message
+        
+        cell.timeStamp.text = String(chatMessage[indexPath.row].timeStamp.dateFormatted(withFormat: "MM-dd-yyyy HH:mm"))
         
         return cell
     }

@@ -13,7 +13,7 @@ class ChatCell: UITableViewCell {
     let userImage = UIImageView()
     let message = UILabel()
     let background = UIView()
-    let timeStamp = UILabel()
+    var timeStamp = UILabel()
     
     var leadingConstraints: NSLayoutConstraint!
     var trailingConstraints: NSLayoutConstraint!
@@ -131,7 +131,7 @@ class ChatCell: UITableViewCell {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 9).isActive = true
-            $0.widthAnchor.constraint(equalToConstant: $0.intrinsicContentSize.width).isActive = true
+            $0.widthAnchor.constraint(equalToConstant: 100).isActive = true
         }
         
         leadingConstraints = message.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 14)
