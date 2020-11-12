@@ -23,7 +23,7 @@ class MapViewController: UIViewController{
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
     var chatView: UIView?
-
+    
     var meetInfo: NewManna?
     lazy var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":meetInfo!.uuid])])
     var locationSocket: SocketIOClient!
@@ -69,7 +69,7 @@ class MapViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         ChattingViewController.shared.chatMessage.removeAll()
-//        GetMannaAPI.getManna()
+        //        GetMannaAPI.getManna()
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
@@ -386,7 +386,7 @@ class MapViewController: UIViewController{
         //            count += 1
         //        }
     }
-
+    
     @objc func showRankingView() {
         
         let view = RankingViewController()
@@ -446,7 +446,7 @@ class MapViewController: UIViewController{
     }
     
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
-//        mapView.positionMode = .compass
+        //        mapView.positionMode = .compass
         multipartPath.mapView = nil
         cameraTrakingToggleFlag = true
         

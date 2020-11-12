@@ -129,9 +129,9 @@ class ChatCell: UITableViewCell {
         }
         timeStamp.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
+            $0.bottomAnchor.constraint(equalTo: background.bottomAnchor).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 9).isActive = true
-            $0.widthAnchor.constraint(equalToConstant: 100).isActive = true
+            $0.widthAnchor.constraint(equalToConstant: $0.intrinsicContentSize.width + 20).isActive = true
         }
         
         leadingConstraints = message.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 14)
@@ -146,12 +146,11 @@ class ChatCell: UITableViewCell {
         sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 15)
         sendTopConstraints.isActive = true
         
-        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: message.trailingAnchor, constant: 10)
+        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: message.trailingAnchor, constant: 15)
         timeStampLeadingConstraints.isActive = true
         
-        timeStampTrailingConstraints = timeStamp.trailingAnchor.constraint(equalTo: message.leadingAnchor, constant: -10)
+        timeStampTrailingConstraints = timeStamp.trailingAnchor.constraint(equalTo: message.leadingAnchor, constant: -5)
         timeStampTrailingConstraints.isActive = true
-        
     }
     
     required init?(coder: NSCoder) {

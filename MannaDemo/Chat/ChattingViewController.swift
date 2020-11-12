@@ -33,9 +33,6 @@ class ChattingViewController: UIViewController {
             $0.layer.cornerRadius = $0.frame.size.width/2
             $0.clipsToBounds = true
         }
-    
-    
-    
     // MARK: inputAccessroyView init
     
     var accView: UIView!
@@ -157,7 +154,6 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = chatView.dequeueReusableCell(withIdentifier: ChatCell.cellID, for: indexPath) as! ChatCell
         cell.selectionStyle = .none
         var message = chatMessage[indexPath.row]
-        
         if indexPath.row > 0 {
             // 이전 User, 현재 User 같으면
             // message.sendState 상태 true
@@ -169,19 +165,31 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
                 message.sendState = false
             }
         }
+        var currentDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row].timeStamp / 1000))
+        var compareDate =
         cell.chatMessage = message
+        let hourFormatter = DateFormatter()
+        let minuteFormatter = DateFormatter()
         
-        cell.timeStamp.text = String(chatMessage[indexPath.row].timeStamp.dateFormatted(withFormat: "MM-dd-yyyy HH:mm"))
+        hourFormatter.locale = Locale(identifier: "ko")
+        minuteFormatter.locale = Locale(identifier: "ko")
         
+        hourFormatter.dateFormat = "HH"
+        minuteFormatter.dateFormat = "mm"
+        
+        var hour = hourFormatter.string(from: currentDate)
+        var minute = minuteFormatter.string(from: currentDate)
+        
+        if Int(hour)! >= 0 && Int(hour)! < 12 {
+            cell.timeStamp.text = "오전 \(hour) : \(minute)"
+        } else {
+            
+            cell.timeStamp.text = "오후 \(Int(hour)! - 12) : \(minute)"
+        }
         return cell
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //        if scrollView.panGestureRecognizer.location(in: view.superview).y > 480 && keyboardShown == true {
-        //            view.frame.origin.y = scrollView.panGestureRecognizer.location(in: view.superview).y
-        //        }
-        //
-        //        print(scrollView.panGestureRecognizer.location(in: view.superview).y)
     }
     
     func scrollBottom() {
