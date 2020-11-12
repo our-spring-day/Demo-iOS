@@ -10,7 +10,7 @@ import Alamofire
 import SwiftyJSON
 import NMapsMap
 
-class PathAPI {
+class MannaAPI {
     static func getPath(lat: Double, lng: Double, completion: @escaping (TravelData) -> Void) {
         var marker = [NMGLatLng]()
         var duration: Int
@@ -31,6 +31,21 @@ class PathAPI {
                     completion(result)
                 case .failure(let _):
                     print("error")
+            }
+        }
+    }
+    
+    static func getChat(mannaID: String, completion: @escaping ([ChatMessage]) -> ()) {
+        AF.request("https://manna.duckdns.org:18888/manna/\(mannaID)/chat?deviceToken=\(MannaDemo.myUUID!)").response { response in
+            switch response.result {
+            case .success(let value):
+                if let json = JSON(value).array {
+                    print(json)
+                }
+                break
+            case .failure(let err):
+                print(err)
+                break
             }
         }
     }

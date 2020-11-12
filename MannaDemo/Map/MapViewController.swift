@@ -59,10 +59,16 @@ class MapViewController: UIViewController{
             cameraUpdateOnlyOnceFlag = false
         }
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        locationSocket.disconnect()
+        chatSocket.disconnect()
+        ChattingViewController.shared.chatMessage.removeAll()
+    }
     
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        ChattingViewController.shared.chatMessage.removeAll()
         GetMannaAPI.getManna()
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
@@ -72,6 +78,21 @@ class MapViewController: UIViewController{
         locationSocket.on("locationConnect") { (array, ack) in
             UserModel.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
+        }
+        chatSocket.on("chatConnect") { (array, ack) in
+            print(ack)
+            print(array)
+        }
+        chatSocket.on("chatDisconnect") { (array, ack) in
+            print(array)
+            print(ack)
+        }
+        locationSocket.on("locationDisconnect") { (array, ack) in
+            print(array)
+            print(ack)
+        }
+        locationSocket.on("locationConnect") { (array, ack) in
+            print(array)
         }
         chatSocket.on("chat") { (array, ack) in
             let json = JSON(array)
@@ -150,6 +171,7 @@ class MapViewController: UIViewController{
                 }
             }
             ChattingViewController.shared.chatView.reloadData()
+            print(ChattingViewController.shared.chatMessage)
         }
         locationSocket.on("location") { (array, ack) in
             var _: String?
@@ -160,7 +182,6 @@ class MapViewController: UIViewController{
             let json = JSON(array)
             if let data = json[0].string?.data(using: .utf8) {
                 if let json = try? JSON(data) {
-//                    print("이게 까기전", json)
                     let temp = "\(json)".data(using: .utf8)
                     let result: SocketData = try! JSONDecoder().decode(SocketData.self, from: temp!)
                     deviceToken = result.sender.deviceToken
@@ -200,7 +221,7 @@ class MapViewController: UIViewController{
                     if token != MannaDemo.myUUID {
                         UserModel.userList[token]?.latitude = lat
                         UserModel.userList[token]?.longitude = lng
-                        PathAPI.getPath(lat: lat_!, lng: lng_!) { (result) in
+                        MannaAPI.getPath(lat: lat_!, lng: lng_!) { (result) in
                             UserModel.userList[token]?.remainDistance = result.distance
                             UserModel.userList[token]?.remainTime = result.duration
                         }
@@ -387,12 +408,12 @@ class MapViewController: UIViewController{
     }
 
     @objc func showRankingView() {
+        
         let view = RankingViewController()
         view.view.backgroundColor = .white
         view.modalPresentationStyle = .custom
         view.modalTransitionStyle = .crossDissolve
         self.present(view, animated: true)
-
     }
     //MARK: 마커 클릭 이벤트
     func didMarkerClicked() {
@@ -406,7 +427,7 @@ class MapViewController: UIViewController{
                 cameraUpdate.animationDuration = 0.3
                 mapView.moveCamera(cameraUpdate)
                 
-                PathAPI.getPath(lat: lat!, lng: lng!) { result in
+                MannaAPI.getPath(lat: lat!, lng: lng!) { result in
                     multipartPath.lineParts = [
                         NMGLineString(points: result.path)
                     ]

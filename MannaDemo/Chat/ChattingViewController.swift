@@ -203,9 +203,11 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollBottom() {
-        DispatchQueue.main.async {
-            let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
-            self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        if ChattingViewController.shared.chatMessage.count != 0 {
+            DispatchQueue.main.async {
+                let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
+                self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            }
         }
     }
 }
