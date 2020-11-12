@@ -175,12 +175,10 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatView.dequeueReusableCell(withIdentifier: ChatCell.cellID, for: indexPath) as! ChatCell
-        
         cell.selectionStyle = .none
         var message = chatMessage[indexPath.row]
         
         if indexPath.row > 0 {
-            
             // 이전 User, 현재 User 같으면
             // message.sendState 상태 true
             if message.user == chatMessage[indexPath.row - 1].user {

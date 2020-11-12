@@ -16,15 +16,11 @@ class ChatCell: UITableViewCell {
     let timeStamp = UILabel()
     
     var leadingConstraints: NSLayoutConstraint!
-    var timeStampLeadingConstraints: NSLayoutConstraint!
-    
     var trailingConstraints: NSLayoutConstraint!
-    var timeStampTrailngConstraints: NSLayoutConstraint!
-    
     var sendTopConstraints: NSLayoutConstraint!
     var receiveTopConstraints: NSLayoutConstraint!
-    
-    var tempMessageWidthConstraints: NSLayoutConstraint!
+    var timeStampLeadingConstraints: NSLayoutConstraint!
+    var timeStampTrailingConstraints: NSLayoutConstraint!
     
     var chatMessage: ChatMessage! {
         didSet {
@@ -36,13 +32,10 @@ class ChatCell: UITableViewCell {
             userImage.image = chatMessage.isIncoming ? UIImage(named: chatMessage.user) : nil
             
             if chatMessage.isIncoming {
-//                message.widthAnchor.constraint(equalToConstant: 150).isActive = false
-//                message.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
                 leadingConstraints.isActive = true
-                timeStampLeadingConstraints.isActive = true
                 trailingConstraints.isActive = false
-                timeStampTrailngConstraints.isActive = false
-                
+                timeStampLeadingConstraints.isActive = true
+                timeStampTrailingConstraints.isActive = false
                 if chatMessage.sendState {
                     receiveTopConstraints.isActive = false
                     sendTopConstraints.isActive = true
@@ -52,13 +45,10 @@ class ChatCell: UITableViewCell {
                     sendTopConstraints.isActive = false
                 }
             } else {
-//                message.widthAnchor.constraint(equalToConstant: 150).isActive = true
-//                message.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
-                trailingConstraints.isActive = true
-                timeStampTrailngConstraints.isActive = true
                 leadingConstraints.isActive = false
+                trailingConstraints.isActive = true
                 timeStampLeadingConstraints.isActive = false
-                
+                timeStampTrailingConstraints.isActive = true
                 receiveTopConstraints.isActive = false
                 sendTopConstraints.isActive = true
                 userImage.isHidden = true
@@ -101,7 +91,7 @@ class ChatCell: UITableViewCell {
             $0.layer.cornerRadius = 9
         }
         timeStamp.do {
-            $0.text = "오후 12:37"
+            $0.text = "오후 12:47"
             $0.textColor = UIColor.lightGray
             $0.font = UIFont.systemFont(ofSize: 9, weight: .regular)
         }
@@ -127,10 +117,7 @@ class ChatCell: UITableViewCell {
         }
         message.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 14).isActive = true
-//            $0.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -32).isActive = true
             $0.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15).isActive = true
-//            $0.widthAnchor.constraint(equalToConstant: 150).isActive = true
             $0.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
         }
         background.do {
@@ -138,25 +125,20 @@ class ChatCell: UITableViewCell {
             $0.topAnchor.constraint(equalTo: message.topAnchor, constant: -8).isActive = true
             $0.bottomAnchor.constraint(equalTo: message.bottomAnchor, constant: 8).isActive = true
             $0.leadingAnchor.constraint(equalTo: message.leadingAnchor, constant: -9).isActive = true
-            $0.trailingAnchor.constraint(equalTo: message.trailingAnchor, constant: 8).isActive = true
+            $0.trailingAnchor.constraint(equalTo: message.trailingAnchor, constant: 9).isActive = true
         }
         timeStamp.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.leadingAnchor.constraint(equalTo: background.trailingAnchor, constant: 10).isActive = true
-            $0.bottomAnchor.constraint(equalTo: background.bottomAnchor,constant: -2).isActive = true
+            $0.bottomAnchor.constraint(equalTo: message.bottomAnchor).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 9).isActive = true
             $0.widthAnchor.constraint(equalToConstant: $0.intrinsicContentSize.width).isActive = true
         }
         
         leadingConstraints = message.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 14)
         leadingConstraints.isActive = true
-        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: background.trailingAnchor, constant: 10)
-        timeStampLeadingConstraints.isActive = true
         
         trailingConstraints = message.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32)
         trailingConstraints.isActive = true
-        timeStampTrailngConstraints = timeStamp.trailingAnchor.constraint(equalTo: background.leadingAnchor, constant: -10)
-        timeStampTrailngConstraints.isActive = true
         
         receiveTopConstraints = message.topAnchor.constraint(equalTo: userImage.centerYAnchor, constant: 14)
         receiveTopConstraints.isActive = true
@@ -164,7 +146,11 @@ class ChatCell: UITableViewCell {
         sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 15)
         sendTopConstraints.isActive = true
         
-        //MARK: temp
+        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: message.trailingAnchor, constant: 10)
+        timeStampLeadingConstraints.isActive = true
+        
+        timeStampTrailingConstraints = timeStamp.trailingAnchor.constraint(equalTo: message.leadingAnchor, constant: -10)
+        timeStampTrailingConstraints.isActive = true
         
     }
     
