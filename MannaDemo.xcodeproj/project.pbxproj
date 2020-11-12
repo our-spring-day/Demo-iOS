@@ -19,7 +19,7 @@
 		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
 		A543EAF52555C5A7005363B8 /* SocketMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A543EAF42555C5A7005363B8 /* SocketMessage.swift */; };
 		A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = A549EDD32543510900EC65E3 /* ShowToast.swift */; };
-		A5822B15255022C50085B55A /* PathAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5822B14255022C50085B55A /* PathAPI.swift */; };
+		A5822B15255022C50085B55A /* MannaAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5822B14255022C50085B55A /* MannaAPI.swift */; };
 		A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05925514A0900A11EEF /* ChattingViewController.swift */; };
 		A5A0F05D25514A1400A11EEF /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05C25514A1400A11EEF /* ChatCell.swift */; };
 		A5A0F0602551593300A11EEF /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */; };
@@ -78,7 +78,7 @@
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
 		A543EAF42555C5A7005363B8 /* SocketMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketMessage.swift; sourceTree = "<group>"; };
 		A549EDD32543510900EC65E3 /* ShowToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowToast.swift; sourceTree = "<group>"; };
-		A5822B14255022C50085B55A /* PathAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathAPI.swift; sourceTree = "<group>"; };
+		A5822B14255022C50085B55A /* MannaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaAPI.swift; sourceTree = "<group>"; };
 		A5A0F05925514A0900A11EEF /* ChattingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingViewController.swift; sourceTree = "<group>"; };
 		A5A0F05C25514A1400A11EEF /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
 		A5A0F05F2551593300A11EEF /* UIColor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
@@ -327,7 +327,7 @@
 				CCF3BC542540446500C7F718 /* Manna.swift */,
 				CCF3BC58254046BA00C7F718 /* MannaModel.swift */,
 				CCEC0F0D2541D9330028B497 /* User.swift */,
-				A5822B14255022C50085B55A /* PathAPI.swift */,
+				A5822B14255022C50085B55A /* MannaAPI.swift */,
 				A5A0F06225515C1900A11EEF /* ChatMessage.swift */,
 				CC107738255464D300908D71 /* TravelData.swift */,
 				CC79E4AD2555B4DE001C726F /* SocketData.swift */,
@@ -460,7 +460,7 @@
 				A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */,
 				A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */,
 				A5D48F252542AE3B00399462 /* UserView.swift in Sources */,
-				A5822B15255022C50085B55A /* PathAPI.swift in Sources */,
+				A5822B15255022C50085B55A /* MannaAPI.swift in Sources */,
 				CCF3BC552540446500C7F718 /* Manna.swift in Sources */,
 				CCF3BC59254046BA00C7F718 /* MannaModel.swift in Sources */,
 				CC74831C25513098006C1E02 /* RunningTimeViewController.swift in Sources */,

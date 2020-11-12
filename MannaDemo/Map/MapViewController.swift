@@ -69,7 +69,7 @@ class MapViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         ChattingViewController.shared.chatMessage.removeAll()
-        GetMannaAPI.getManna()
+//        GetMannaAPI.getManna()
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
@@ -101,12 +101,13 @@ class MapViewController: UIViewController{
             guard let temp = "\(jsonData)".data(using: .utf8) else { return }
             let result: SocketMessage = try! JSONDecoder().decode(SocketMessage.self, from: temp)
             if result.message != nil {
+                print(result.message?.createTimestamp)
                 switch result.sender.username {
                 case "우석":
                     if let message = result.message?.message {
                         let incoming = result.sender.deviceToken != MannaDemo.myUUID
-                        print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        
+                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
                         ChattingViewController.shared.chatMessage.append(message)
                     }
                     break
@@ -114,7 +115,7 @@ class MapViewController: UIViewController{
                     if let message = result.message?.message {
                         let incoming = result.sender.deviceToken != MannaDemo.myUUID
                         print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
                         ChattingViewController.shared.chatMessage.append(message)
                     }
                     break
@@ -122,7 +123,7 @@ class MapViewController: UIViewController{
                     if let message = result.message?.message {
                         let incoming = result.sender.deviceToken != MannaDemo.myUUID
                         print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
                         ChattingViewController.shared.chatMessage.append(message)
                     }
                     break
@@ -130,7 +131,7 @@ class MapViewController: UIViewController{
                     if let message = result.message?.message {
                         let incoming = result.sender.deviceToken != MannaDemo.myUUID
                         print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
                         ChattingViewController.shared.chatMessage.append(message)
                     }
                     break
@@ -138,7 +139,7 @@ class MapViewController: UIViewController{
                     if let message = result.message?.message {
                         let incoming = result.sender.deviceToken != MannaDemo.myUUID
                         print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
                         ChattingViewController.shared.chatMessage.append(message)
                     }
                     break
@@ -146,7 +147,7 @@ class MapViewController: UIViewController{
                     if let message = result.message?.message {
                         let incoming = result.sender.deviceToken != MannaDemo.myUUID
                         print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
                         ChattingViewController.shared.chatMessage.append(message)
                     }
                     break
@@ -154,7 +155,7 @@ class MapViewController: UIViewController{
                     if let message = result.message?.message {
                         let incoming = result.sender.deviceToken != MannaDemo.myUUID
                         print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
                         ChattingViewController.shared.chatMessage.append(message)
                     }
                     break
@@ -162,7 +163,7 @@ class MapViewController: UIViewController{
                     if let message = result.message?.message {
                         let incoming = result.sender.deviceToken != MannaDemo.myUUID
                         print(incoming)
-                        let message = ChatMessage(user: result.sender.username, text: message, isIncoming: incoming, sendState: false)
+                        let message = ChatMessage(user: result.sender.username, text: message, timeStamp: 0, isIncoming: incoming, sendState: false)
                         ChattingViewController.shared.chatMessage.append(message)
                     }
                     break
@@ -171,7 +172,7 @@ class MapViewController: UIViewController{
                 }
             }
             ChattingViewController.shared.chatView.reloadData()
-            print(ChattingViewController.shared.chatMessage)
+            
         }
         locationSocket.on("location") { (array, ack) in
             var _: String?
@@ -488,7 +489,7 @@ class MapViewController: UIViewController{
                     cameraTrakingToggleFlag = false
                     myLocationButton.setImage(#imageLiteral(resourceName: "mylocationtracking"), for: .normal)
                     myLocationButton.alpha = 1
-                    var cameraUpdate = NMFCameraUpdate(zoomTo: 17)
+                    let cameraUpdate = NMFCameraUpdate(zoomTo: 17)
                     mapView.moveCamera(cameraUpdate)
                     mapView.positionMode = .compass
                 } else {
@@ -515,7 +516,7 @@ class MapViewController: UIViewController{
                     cameraTrakingToggleFlag = false
                     myLocationButton.setImage(#imageLiteral(resourceName: "mylocationtracking"), for: .normal)
                     myLocationButton.alpha = 1
-                    var cameraUpdate = NMFCameraUpdate(zoomTo: 17)
+                    let cameraUpdate = NMFCameraUpdate(zoomTo: 17)
                     mapView.moveCamera(cameraUpdate)
                     mapView.positionMode = .compass
                 } else {
@@ -531,7 +532,6 @@ class MapViewController: UIViewController{
     
     //MARK: 내위치 카메라 세팅
     @objc func toMyLocation() {
-//        mapView.positionMode = .normal
         if cameraTrakingToggleFlag && cameraTrakingModeFlag && mapView.positionMode != .compass {
             let cameraUpdate =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng),zoomTo: 15)
             cameraUpdate.animation = .fly
@@ -542,7 +542,6 @@ class MapViewController: UIViewController{
     
     //MARK: 모두의 위치 카메라 세팅
     @objc func toWholeLocation() {
-//        mapView.positionMode = .normal
         if cameraTrakingToggleFlag && cameraTrakingModeFlag == false && mapView.positionMode != .compass {
             let minLatLng = NMGLatLng(lat: 150, lng: 150)
             let maxLatLng = NMGLatLng(lat: 0, lng: 0)

@@ -80,11 +80,11 @@ class CreateMannaViewController: UIViewController {
         
         let result = AF.request("http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/manna", method: .post, parameters: param, encoding: JSONEncoding.default)
         result.responseJSON() { response in
-                print("JSON = \(try! response.result.get())")
+//                print("JSON = \(try! response.result.get())")
             if let jsonObject = try! response.result.get()  as? [String: Any] {
-                print("타임스탬프 : \(jsonObject["create_timestamp"]!)")
-                print("만나네임 : \(jsonObject["manna_name"]!)")
-                print("uuid : \(jsonObject["uuid"]!)")
+//                print("타임스탬프 : \(jsonObject["create_timestamp"]!)")
+//                print("만나네임 : \(jsonObject["manna_name"]!)")
+//                print("uuid : \(jsonObject["uuid"]!)")
                 MannaModel.model.append(Manna(time: "\(jsonObject["create_timestamp"]!)", name: "\(jsonObject["manna_name"]!)") )
                  
             }

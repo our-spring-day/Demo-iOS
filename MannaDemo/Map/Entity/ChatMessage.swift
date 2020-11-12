@@ -10,6 +10,7 @@ import Foundation
 struct ChatMessage {
     let user: String
     let text: String
+    let timeStamp: Int
     let isIncoming: Bool
     var sendState: Bool
 }

@@ -130,7 +130,7 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
         let view = MapViewController()
         view.meetInfo  = MannaModel.newModel[indexPath.row]
         MannaAPI.getChat(mannaID: MannaModel.newModel[indexPath.row].uuid) { (test) in
-            print(test)
+//            print(test)
         }
         view.modalPresentationStyle = .fullScreen
         self.present(view, animated: true, completion: nil)

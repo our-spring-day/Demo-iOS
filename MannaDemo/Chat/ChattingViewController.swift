@@ -34,19 +34,21 @@ class ChattingViewController: UIViewController {
         }
     
     var chatMessage: [ChatMessage] =
-        [ChatMessage(user: "짱구", text: "이번주 토요일 더포도 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", isIncoming: true, sendState: false),
-         ChatMessage(user: "짱구", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", isIncoming: true, sendState: false),
-         ChatMessage(user: "짱구", text: "늦으면 벌금 오천만원임니다~~😉", isIncoming: true, sendState: false),
-         ChatMessage(user: "영희", text: "알겠슴니다~~🙀", isIncoming: false, sendState: false),
-         ChatMessage(user: "영희", text: "우리는 오늘 놀러갈거에요!!", isIncoming: false, sendState: false),
-         ChatMessage(user: "기영", text: "잠이오냐!!", isIncoming: true, sendState: false),
-         ChatMessage(user: "기영", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false),
-         ChatMessage(user: "찬이", text: "새키얌", isIncoming: true, sendState: false),
-         ChatMessage(user: "찬이", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false),
-         ChatMessage(user: "상원", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: false, sendState: false),
-         ChatMessage(user: "상원", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", isIncoming: false, sendState: false),
-         ChatMessage(user: "돼지", text: "우리는 오늘 놀러갈거에요!!", isIncoming: true, sendState: false),
-         ChatMessage(user: "돼지", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false)]
+        [
+//            ChatMessage(user: "짱구", text: "이번주 토요일 더포도 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", timeStamp: <#Int#>, isIncoming: true, sendState: false),
+//            ChatMessage(user: "짱구", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", timeStamp: <#Int#>, isIncoming: true, sendState: false),
+//            ChatMessage(user: "짱구", text: "늦으면 벌금 오천만원임니다~~😉", timeStamp: <#Int#>, isIncoming: true, sendState: false),
+//            ChatMessage(user: "영희", text: "알겠슴니다~~🙀", timeStamp: <#Int#>, isIncoming: false, sendState: false),
+//            ChatMessage(user: "영희", text: "우리는 오늘 놀러갈거에요!!", timeStamp: <#Int#>, isIncoming: false, sendState: false),
+//            ChatMessage(user: "기영", text: "잠이오냐!!", timeStamp: <#Int#>, isIncoming: true, sendState: false),
+//            ChatMessage(user: "기영", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", timeStamp: <#Int#>, isIncoming: true, sendState: false),
+//            ChatMessage(user: "찬이", text: "새키얌", timeStamp: <#Int#>, isIncoming: true, sendState: false),
+//            ChatMessage(user: "찬이", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", timeStamp: <#Int#>, isIncoming: true, sendState: false),
+//            ChatMessage(user: "상원", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", timeStamp: <#Int#>, isIncoming: false, sendState: false),
+//            ChatMessage(user: "상원", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", timeStamp: <#Int#>, isIncoming: false, sendState: false),
+//            ChatMessage(user: "돼지", text: "우리는 오늘 놀러갈거에요!!", timeStamp: <#Int#>, isIncoming: true, sendState: false),
+//            ChatMessage(user: "돼지", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", timeStamp: <#Int#>, isIncoming: true, sendState: false)
+        ]
     
     // MARK: inputAccessroyView init
     
@@ -98,7 +100,7 @@ class ChattingViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         attirbute()
         layout()
-//        scrollBottom()
+        //        scrollBottom()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -195,11 +197,11 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if scrollView.panGestureRecognizer.location(in: view.superview).y > 480 && keyboardShown == true {
-//            view.frame.origin.y = scrollView.panGestureRecognizer.location(in: view.superview).y
-//        }
-//
-//        print(scrollView.panGestureRecognizer.location(in: view.superview).y)
+        //        if scrollView.panGestureRecognizer.location(in: view.superview).y > 480 && keyboardShown == true {
+        //            view.frame.origin.y = scrollView.panGestureRecognizer.location(in: view.superview).y
+        //        }
+        //
+        //        print(scrollView.panGestureRecognizer.location(in: view.superview).y)
     }
     
     func scrollBottom() {
