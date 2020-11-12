@@ -165,9 +165,14 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
                 message.sendState = false
             }
         }
-        var currentDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row].timeStamp / 1000))
-        var compareDate =
         cell.chatMessage = message
+        
+        
+        
+        var compareDate: Date?
+        var compareHour: String?
+        var compareMinute: String?
+        
         let hourFormatter = DateFormatter()
         let minuteFormatter = DateFormatter()
         
@@ -177,15 +182,30 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         hourFormatter.dateFormat = "HH"
         minuteFormatter.dateFormat = "mm"
         
-        var hour = hourFormatter.string(from: currentDate)
-        var minute = minuteFormatter.string(from: currentDate)
-        
-        if Int(hour)! >= 0 && Int(hour)! < 12 {
-            cell.timeStamp.text = "오전 \(hour) : \(minute)"
-        } else {
-            
-            cell.timeStamp.text = "오후 \(Int(hour)! - 12) : \(minute)"
+        if indexPath.row > 1 {
+            compareDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row - 1].timeStamp / 1000))
+            compareHour = hourFormatter.string(from: compareDate!)
+            compareMinute = minuteFormatter.string(from: compareDate!)
         }
+        
+        var currentDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row].timeStamp / 1000))
+        var currentHour = hourFormatter.string(from: currentDate)
+        var currentMinute = minuteFormatter.string(from: currentDate)
+        
+        
+        if let comparedhour = compareHour, let comparedMinute = compareMinute{
+            if "\(currentHour) : \(currentMinute)" != "\(comparedhour) : \(comparedMinute)" {
+                if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
+                    cell.timeStamp.text = "오전 \(currentHour) : \(currentMinute)"
+                } else {
+                    
+                    cell.timeStamp.text = "오후 \(Int(currentHour)! - 12) : \(currentMinute)"
+                }
+            } else {
+                cell.timeStamp.text = ""
+            }
+        }
+        
         return cell
     }
     
