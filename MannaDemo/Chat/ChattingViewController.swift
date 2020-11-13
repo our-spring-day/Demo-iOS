@@ -21,8 +21,7 @@ class ChattingViewController: UIViewController, chattingView {
     var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    
-    
+    var timerView = TimerView(.rankingView)
     var chatMessage: [ChatMessage] = []
     
     var textField = UITextField().then {
@@ -122,12 +121,19 @@ class ChattingViewController: UIViewController, chattingView {
     // MARK: chatView Layout
     func layout() {
         view.addSubview(chatView)
+        view.addSubview(timerView)
         chatView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
             $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -MannaDemo.convertHeight(value: 43)).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        }
+        timerView.snp.makeConstraints {
+            $0.centerX.equalTo(view)
+            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
+            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
     }
     

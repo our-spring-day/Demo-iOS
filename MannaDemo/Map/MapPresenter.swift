@@ -11,6 +11,7 @@ class MapPresenter {
     
     func currentRanking(userList: [String : User], completion: @escaping ([String : User]) -> ()) {
         var currentRanking = userList
+        
         currentRanking.keys.forEach { (key) in
             if ((currentRanking[key]?.state) != nil) {
                 MannaAPI.getPath(lat: currentRanking[key]!.latitude, lng: currentRanking[key]!.longitude) { (travelData) in

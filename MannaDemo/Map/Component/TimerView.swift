@@ -96,11 +96,12 @@ class TimerView: UIView {
                 $0.backgroundColor = UIColor(named: "keyColor")
                 $0.dropShadow()
             case .rankingView:
-                
-                $0.backgroundColor = .white
-                $0.layer.borderWidth = MannaDemo.convertHeight(value: 1)
-                $0.layer.borderColor = UIColor.lightGray.cgColor
+                var viewBlurEffect = UIVisualEffectView()
+                viewBlurEffect.effect = UIBlurEffect(style: .dark)
+                self.addSubview(viewBlurEffect)
+                viewBlurEffect.frame = self.bounds
                 [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "keyColor") }
+                $0.dropShadow()
             case .none:
                 print("타이머의 whereAt 변수를 할당하세요")
             }

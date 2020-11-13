@@ -36,13 +36,16 @@ class RankingViewCell: UITableViewCell {
     
     func setData(data: User) {
         profileImage.do {
-            $0.image = data.profileImage
+            $0.image = data.anotherdisconnectProfileImage
         }
         userName.do {
             $0.text = data.name
         }
         state.do {
-            $0.text = data.state ? "\(data.remainTime)" : ""
+            var hour = data.remainTime / 3600
+            var minute = (data.remainTime % 3600) / 60
+            var messsage = hour > 0 ? "약 \(data.remainTime / 3600) 시간 \((data.remainTime % 3600) / 60) 분 남음" : "약 \((data.remainTime % 3600) / 60) 분 남음"
+            $0.text = data.state ? messsage : ""
         }
         medal.do {
             $0.layer.cornerRadius = $0.frame.width / 2

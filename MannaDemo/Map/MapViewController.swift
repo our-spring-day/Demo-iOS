@@ -71,7 +71,9 @@ class MapViewController: UIViewController, ChatSet{
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-//        chattingViewController.chatMessage!.removeAll()
+        presenter.currentRanking(userList: rankingViewController!.userList) { userList in
+            self.rankingViewController!.userList = userList
+        }
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
@@ -231,8 +233,6 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func didClickedTimerView() {
-        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-        
         timerView.tempToggleFlag.toggle()
         rankingViewController?.userList[MannaDemo.myUUID!]?.state.toggle()
         if timerView.tempToggleFlag {
@@ -494,7 +494,6 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
-        //        mapView.positionMode = .compass
         multipartPath.mapView = nil
         cameraTrakingToggleFlag = true
         
@@ -504,6 +503,7 @@ class MapViewController: UIViewController, ChatSet{
             if sender.tag == 1 {
                 //산<->나무 버튼 클릭
                 //현: 숲 트래킹 유무 상관 x -> 후: 나무 트래킹 o
+                tokenWithMarker[MannaDemo.myUUID!]!.mapView = mapView
                 mapView.positionMode = .normal
                 myLocationButton.alpha = 0.4
                 cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
@@ -519,6 +519,7 @@ class MapViewController: UIViewController, ChatSet{
                     let cameraUpdate = NMFCameraUpdate(zoomTo: 17)
                     mapView.moveCamera(cameraUpdate)
                     mapView.positionMode = .compass
+                    
                 } else {
                     //트래킹 중이 아닌거지
                     mapView.positionMode = .normal
@@ -545,6 +546,7 @@ class MapViewController: UIViewController, ChatSet{
                     myLocationButton.alpha = 1
                     let cameraUpdate = NMFCameraUpdate(zoomTo: 17)
                     mapView.moveCamera(cameraUpdate)
+                    
                     mapView.positionMode = .compass
                 } else {
                     mapView.positionMode = .normal
@@ -602,6 +604,8 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 채팅창 클릭
     @objc func goToChatGestureFunc() {
         chattingViewController!.chatView.reloadData()
+        self.chattingViewController!.modalPresentationStyle = .custom
+        self.chattingViewController!.modalTransitionStyle = .crossDissolve
         present(chattingViewController!, animated: true)
     }
     
@@ -612,7 +616,6 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 마커 전체 세팅
     @objc func marking() {
-        
         for key in rankingViewController!.userList.keys {
             let user = rankingViewController!.userList[key]
             if imageToNameFlag {
@@ -634,9 +637,9 @@ class MapViewController: UIViewController, ChatSet{
                 if key != MannaDemo.myUUID {
                     tokenWithMarker[key]?.position = NMGLatLng(lat: rankingViewController!.userList[key]!.latitude, lng: rankingViewController!.userList[key]!.longitude)
                     tokenWithMarker[key]?.mapView = mapView
-                } else if key == MannaDemo.myUUID {
-                    //                    tokenWithMarker[key]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
-                    //                    tokenWithMarker[key]?.mapView = mapView
+                } else if key == MannaDemo.myUUID && mapView.positionMode != .compass{
+//                    tokenWithMarker[key]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
+//                    tokenWithMarker[key]?.mapView = mapView
                 }
             }
         }
