@@ -10,7 +10,7 @@ import NMapsMap
 import CoreLocation
 import SwiftyJSON
 import SocketIO
-
+import AudioToolbox
 
 protocol ChatSet {
     var chattingViewController: chattingView? { get set }
@@ -231,7 +231,10 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func didClickedTimerView() {
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+        
         timerView.tempToggleFlag.toggle()
+        rankingViewController?.userList[MannaDemo.myUUID!]?.state.toggle()
         if timerView.tempToggleFlag {
             UIView.animate(withDuration: 0.05, animations: {
                 self.timerView.snp.updateConstraints {

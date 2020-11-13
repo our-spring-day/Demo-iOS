@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 protocol RankingView: UIViewController {
     var userList: [String : User] { get set }
@@ -107,7 +108,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         if section == 0 {
             headerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         } else if section == 1 {
-            headerView.backgroundColor = arrivalUser.count > 0 ? #colorLiteral(red: 0.7066357986, green: 0.7186221, blue: 0.7235718003, alpha: 0.1084653253) : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            headerView.backgroundColor = #colorLiteral(red: 0.7066357986, green: 0.7186221, blue: 0.7235718003, alpha: 0.1084653253)
         }
         return headerView
     }
@@ -136,7 +137,6 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             } else if indexPath.row == 2 {
                 cell.medal.medal.image = UIImage(named: "bronze")
             }
-            
             cell.setData(data: arrivalUser[indexPath.row])
         } else if indexPath.section == 1 {
             cell.medal.isHidden = true
@@ -149,6 +149,13 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
             cell.setData(data: notArrivalUser[indexPath.row])
+            if indexPath.row == 4 {
+                cell.button.do {
+                    $0.setTitle("연결끊김", for: .normal)
+                    $0.backgroundColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 0.09524828767)
+                    $0.setTitleColor(#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1), for: .normal)
+                }
+            }
         }
         return cell
     }
