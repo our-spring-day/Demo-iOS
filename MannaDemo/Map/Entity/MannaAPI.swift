@@ -37,6 +37,7 @@ class MannaAPI {
     
     static func getChat(mannaID: String, completion: @escaping ([ChatMessage]) -> ()) {
         AF.request("https://manna.duckdns.org:18888/manna/\(mannaID)/chat?deviceToken=\(MannaDemo.myUUID!)").response { response in
+            var result: [ChatMessage] = []
             switch response.result {
             case .success(let value):
                 if let json = JSON(value).array {
@@ -46,10 +47,11 @@ class MannaAPI {
                                                     timeStamp: chat["createTimestamp"].int!,
                                     isIncoming: chat["sender"]["deviceToken"].string! == MannaDemo.myUUID ? false : true,
                                     sendState: false)
-                        ChattingViewController.shared.chatMessage.append(chatPiece)
-                        ChattingViewController.shared.chatMessage.sort(by: { $0.timeStamp < $1.timeStamp })
+                        result.append(chatPiece)
                     }
                 }
+                result.sort(by: { $0.timeStamp < $1.timeStamp })
+                completion(result)
                 break
             case .failure(let err):
                 print(err)

@@ -7,14 +7,25 @@
 
 import UIKit
 
-class ChattingViewController: UIViewController {
+protocol chattingView: UIViewController {
+    var chatMessage: [ChatMessage] { get set }
+    var chatView: UITableView { get set }
+    var textField: UITextField { get set }
+    var sendButton: UIButton { get set }
+    func scrollBottom()
+}
+
+class ChattingViewController: UIViewController, chattingView {
+    var chatView = UITableView()
     static let shared = ChattingViewController()
     var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    let chatView = UITableView()
+    
+    
     var chatMessage: [ChatMessage] = []
-    let textField = UITextField().then {
+    
+    var textField = UITextField().then {
         $0.textColor = .black
         $0.attributedPlaceholder = .init(string: "메세지 입력", attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.chatName)])
         $0.layer.cornerRadius = 20
@@ -167,8 +178,6 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         cell.chatMessage = message
         
-        
-        
         var compareDate: Date?
         var compareHour: String?
         var compareMinute: String?
@@ -188,9 +197,9 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
             compareMinute = minuteFormatter.string(from: compareDate!)
         }
         
-        var currentDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row].timeStamp / 1000))
-        var currentHour = hourFormatter.string(from: currentDate)
-        var currentMinute = minuteFormatter.string(from: currentDate)
+        let currentDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row].timeStamp / 1000))
+        let currentHour = hourFormatter.string(from: currentDate)
+        let currentMinute = minuteFormatter.string(from: currentDate)
         
         
         if let comparedhour = compareHour, let comparedMinute = compareMinute{
@@ -198,14 +207,12 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
                 if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
                     cell.timeStamp.text = "오전 \(currentHour) : \(currentMinute)"
                 } else {
-                    
                     cell.timeStamp.text = "오후 \(Int(currentHour)! - 12) : \(currentMinute)"
                 }
             } else {
                 cell.timeStamp.text = ""
             }
         }
-        
         return cell
     }
     
@@ -224,7 +231,6 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillShow(sender: Notification) {
-        
         if keyboardShown == false {
             view.frame.origin.y = -(MannaDemo.convertHeight(value: 258))
             keyboardShown = true

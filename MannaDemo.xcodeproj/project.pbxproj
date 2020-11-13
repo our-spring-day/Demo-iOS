@@ -32,19 +32,19 @@
 		CC107739255464D300908D71 /* TravelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC107738255464D300908D71 /* TravelData.swift */; };
 		CC1077472555956500908D71 /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1077462555956500908D71 /* SocketIOManager.swift */; };
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
-		CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */; };
-		CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */; };
+		CC1CC96E25429F080020D4C5 /* none6.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* none6.swift */; };
+		CC1CC97125429F490020D4C5 /* none7.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* none7.swift */; };
 		CC21A7DC255BA03900E31F77 /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A7DB255BA03900E31F77 /* CGFloat.swift */; };
-		CC21A7F5255BB21A00E31F77 /* NewRankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */; };
+		CC21A7F5255BB21A00E31F77 /* none3.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC21A7F4255BB21A00E31F77 /* none3.swift */; };
 		CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC41A0862548157C00C0E762 /* MannaDemo.swift */; };
 		CC41A0A32548448800C0E762 /* 12670-flying-airplane.json in Resources */ = {isa = PBXBuildFile; fileRef = CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */; };
 		CC46AE74255C015B0053F221 /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CC46AE72255C015B0053F221 /* NotoSansKR-Bold.otf */; };
 		CC46AE75255C015B0053F221 /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = CC46AE73255C015B0053F221 /* NotoSansKR-Medium.otf */; };
 		CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748311255058A2006C1E02 /* BottomTabView.swift */; };
-		CC74831525511F0C006C1E02 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831425511F0C006C1E02 /* ChatViewController.swift */; };
-		CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748318255124FB006C1E02 /* RankingViewViewController.swift */; };
-		CC74831C25513098006C1E02 /* RunningTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831B25513098006C1E02 /* RunningTimeViewController.swift */; };
-		CC74832C255164E7006C1E02 /* tempViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74832B255164E7006C1E02 /* tempViewController.swift */; };
+		CC74831525511F0C006C1E02 /* none2.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831425511F0C006C1E02 /* none2.swift */; };
+		CC748319255124FB006C1E02 /* none.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC748318255124FB006C1E02 /* none.swift */; };
+		CC74831C25513098006C1E02 /* none5.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74831B25513098006C1E02 /* none5.swift */; };
+		CC74832C255164E7006C1E02 /* none4.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC74832B255164E7006C1E02 /* none4.swift */; };
 		CC79E4AE2555B4DE001C726F /* SocketData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC79E4AD2555B4DE001C726F /* SocketData.swift */; };
 		CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B2225540BAD00063790 /* TimerView.swift */; };
 		CC8A0B5A2554605F00063790 /* MapView+NaverMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A0B592554605F00063790 /* MapView+NaverMap.swift */; };
@@ -57,6 +57,7 @@
 		CC8B84642540231A00441445 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84632540231A00441445 /* Assets.xcassets */; };
 		CC8B84672540231A00441445 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84652540231A00441445 /* LaunchScreen.storyboard */; };
 		CCC19F9A255D34200092DD05 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC19F99255D34200092DD05 /* Int+Ext.swift */; };
+		CCD8DDC4255E478900BA7D7E /* MapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD8DDC3255E478900BA7D7E /* MapPresenter.swift */; };
 		CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE75253254028FE008E0BA1 /* MannaListViewController.swift */; };
 		CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */; };
 		CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */; };
@@ -92,19 +93,19 @@
 		CC107738255464D300908D71 /* TravelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelData.swift; sourceTree = "<group>"; };
 		CC1077462555956500908D71 /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
-		CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionView.swift; sourceTree = "<group>"; };
-		CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaCollectionViewCell.swift; sourceTree = "<group>"; };
+		CC1CC96D25429F080020D4C5 /* none6.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none6.swift; sourceTree = "<group>"; };
+		CC1CC97025429F490020D4C5 /* none7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none7.swift; sourceTree = "<group>"; };
 		CC21A7DB255BA03900E31F77 /* CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
-		CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRankingViewController.swift; sourceTree = "<group>"; };
+		CC21A7F4255BB21A00E31F77 /* none3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none3.swift; sourceTree = "<group>"; };
 		CC41A0862548157C00C0E762 /* MannaDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaDemo.swift; sourceTree = "<group>"; };
 		CC41A0A22548448800C0E762 /* 12670-flying-airplane.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "12670-flying-airplane.json"; sourceTree = "<group>"; };
 		CC46AE72255C015B0053F221 /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
 		CC46AE73255C015B0053F221 /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Medium.otf"; sourceTree = "<group>"; };
 		CC748311255058A2006C1E02 /* BottomTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTabView.swift; sourceTree = "<group>"; };
-		CC74831425511F0C006C1E02 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
-		CC748318255124FB006C1E02 /* RankingViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewViewController.swift; sourceTree = "<group>"; };
-		CC74831B25513098006C1E02 /* RunningTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningTimeViewController.swift; sourceTree = "<group>"; };
-		CC74832B255164E7006C1E02 /* tempViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tempViewController.swift; sourceTree = "<group>"; };
+		CC74831425511F0C006C1E02 /* none2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none2.swift; sourceTree = "<group>"; };
+		CC748318255124FB006C1E02 /* none.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none.swift; sourceTree = "<group>"; };
+		CC74831B25513098006C1E02 /* none5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none5.swift; sourceTree = "<group>"; };
+		CC74832B255164E7006C1E02 /* none4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none4.swift; sourceTree = "<group>"; };
 		CC79E4AD2555B4DE001C726F /* SocketData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketData.swift; sourceTree = "<group>"; };
 		CC8A0B2225540BAD00063790 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		CC8A0B592554605F00063790 /* MapView+NaverMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView+NaverMap.swift"; sourceTree = "<group>"; };
@@ -119,6 +120,7 @@
 		CC8B84662540231A00441445 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CC8B84682540231A00441445 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CCC19F99255D34200092DD05 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
+		CCD8DDC3255E478900BA7D7E /* MapPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPresenter.swift; sourceTree = "<group>"; };
 		CCE75253254028FE008E0BA1 /* MannaListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListViewController.swift; sourceTree = "<group>"; };
 		CCE7525825402DE5008E0BA1 /* MannaListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaListTableViewCell.swift; sourceTree = "<group>"; };
 		CCE7525C254034EA008E0BA1 /* CreateMannaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMannaViewController.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				A515563825404C9500487BEF /* MapViewController.swift */,
+				CCD8DDC3255E478900BA7D7E /* MapPresenter.swift */,
 				CC8A0B5C2554606F00063790 /* MapView+Ext */,
 				CC8A0B672554616200063790 /* Component */,
 				CCF3BC532540444600C7F718 /* Entity */,
@@ -250,17 +253,17 @@
 			children = (
 				CC748311255058A2006C1E02 /* BottomTabView.swift */,
 				CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */,
-				CC1CC96D25429F080020D4C5 /* MannaCollectionView.swift */,
-				CC1CC97025429F490020D4C5 /* MannaCollectionViewCell.swift */,
-				CC74831425511F0C006C1E02 /* ChatViewController.swift */,
-				CC74831B25513098006C1E02 /* RunningTimeViewController.swift */,
-				CC748318255124FB006C1E02 /* RankingViewViewController.swift */,
-				CC74832B255164E7006C1E02 /* tempViewController.swift */,
 				CC8A0B2225540BAD00063790 /* TimerView.swift */,
 				A52A1C39255BA162000794A5 /* RankingViewController.swift */,
 				A52A1C3C255BA239000794A5 /* RankingViewCell.swift */,
 				A52A1C46255BBB23000794A5 /* Medal.swift */,
-				CC21A7F4255BB21A00E31F77 /* NewRankingViewController.swift */,
+				CC748318255124FB006C1E02 /* none.swift */,
+				CC74831425511F0C006C1E02 /* none2.swift */,
+				CC21A7F4255BB21A00E31F77 /* none3.swift */,
+				CC74832B255164E7006C1E02 /* none4.swift */,
+				CC74831B25513098006C1E02 /* none5.swift */,
+				CC1CC96D25429F080020D4C5 /* none6.swift */,
+				CC1CC97025429F490020D4C5 /* none7.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -459,14 +462,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC74832C255164E7006C1E02 /* tempViewController.swift in Sources */,
+				CC74832C255164E7006C1E02 /* none4.swift in Sources */,
 				A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */,
 				A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */,
 				A5D48F252542AE3B00399462 /* UserView.swift in Sources */,
 				A5822B15255022C50085B55A /* MannaAPI.swift in Sources */,
 				CCF3BC552540446500C7F718 /* Manna.swift in Sources */,
 				CCF3BC59254046BA00C7F718 /* MannaModel.swift in Sources */,
-				CC74831C25513098006C1E02 /* RunningTimeViewController.swift in Sources */,
+				CCD8DDC4255E478900BA7D7E /* MapPresenter.swift in Sources */,
+				CC74831C25513098006C1E02 /* none5.swift in Sources */,
 				CC21A7DC255BA03900E31F77 /* CGFloat.swift in Sources */,
 				CC8B845F2540231A00441445 /* ViewController.swift in Sources */,
 				CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */,
@@ -488,18 +492,18 @@
 				CC8A0B652554611B00063790 /* MapView+Collectionview.swift in Sources */,
 				CC1077472555956500908D71 /* SocketIOManager.swift in Sources */,
 				A549EDD42543510900EC65E3 /* ShowToast.swift in Sources */,
-				CC74831525511F0C006C1E02 /* ChatViewController.swift in Sources */,
+				CC74831525511F0C006C1E02 /* none2.swift in Sources */,
 				CCE7525925402DE5008E0BA1 /* MannaListTableViewCell.swift in Sources */,
 				A543EAF52555C5A7005363B8 /* SocketMessage.swift in Sources */,
 				A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */,
 				A52A1C47255BBB23000794A5 /* Medal.swift in Sources */,
 				A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */,
-				CC748319255124FB006C1E02 /* RankingViewViewController.swift in Sources */,
-				CC21A7F5255BB21A00E31F77 /* NewRankingViewController.swift in Sources */,
+				CC748319255124FB006C1E02 /* none.swift in Sources */,
+				CC21A7F5255BB21A00E31F77 /* none3.swift in Sources */,
 				CC8A0B2325540BAD00063790 /* TimerView.swift in Sources */,
 				CC748312255058A2006C1E02 /* BottomTabView.swift in Sources */,
-				CC1CC97125429F490020D4C5 /* MannaCollectionViewCell.swift in Sources */,
-				CC1CC96E25429F080020D4C5 /* MannaCollectionView.swift in Sources */,
+				CC1CC97125429F490020D4C5 /* none7.swift in Sources */,
+				CC1CC96E25429F080020D4C5 /* none6.swift in Sources */,
 				A515563925404C9500487BEF /* MapViewController.swift in Sources */,
 				CCEC0F0E2541D9330028B497 /* User.swift in Sources */,
 				CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */,

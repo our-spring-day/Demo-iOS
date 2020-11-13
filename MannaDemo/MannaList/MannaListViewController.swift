@@ -97,6 +97,7 @@ class MannaListViewController: UIViewController, reloadData {
                              createTimestamp: data["createTimestamp"].int!,
                              uuid: data["uuid"].string!)
                     MannaModel.newModel.append(item)
+                    print(item.uuid)
                 }
                 completion()
                 break
@@ -126,11 +127,18 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.reloadData()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        ChattingViewController.shared.chatMessage.removeAll()
-        let view = MapViewController()
+
+        var view = MapViewController()
+        var subChatView = ChattingViewController()
+        
+        view.chattingViewController = subChatView
         view.meetInfo  = MannaModel.newModel[indexPath.row]
-        MannaAPI.getChat(mannaID: MannaModel.newModel[indexPath.row].uuid) { (test) in
-//            print(test)
+        DispatchQueue.global().async {
+            MannaAPI.getChat(mannaID: MannaModel.newModel[indexPath.row].uuid) { result in
+                print(result)
+                subChatView.chatMessage = result
+                view.chattingViewController = subChatView
+            }
         }
         view.modalPresentationStyle = .fullScreen
         self.present(view, animated: true, completion: nil)

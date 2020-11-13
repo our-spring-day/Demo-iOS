@@ -12,18 +12,16 @@ import SwiftyJSON
 import SocketIO
 
 
-protocol test {
-    var chatView: UIView? { get set}
-}
-extension MapViewController: test {
-    
+protocol ChatSet {
+    var chattingViewController: chattingView? { get set }
 }
 
-class MapViewController: UIViewController{
+class MapViewController: UIViewController, ChatSet{
+    var chattingViewController: chattingView?
+    
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
     var chatView: UIView?
-    
     var meetInfo: NewManna?
     lazy var manager = SocketManager(socketURL: URL(string: "https://manna.duckdns.org:19999")!, config: [.log(false), .compress, .connectParams(["deviceToken": MannaDemo.myUUID!,"mannaID":meetInfo!.uuid])])
     var locationSocket: SocketIOClient!
@@ -38,7 +36,6 @@ class MapViewController: UIViewController{
     var myLongitude: Double = 0
     //이거 랭킹 뷰컨으로 옮겨질듯
     var userListForCollectionView: [User] = Array(UserModel.userList.values)
-    
     var imageToNameFlag = true
     var toastLabel = UILabel()
     var cameraState = UIButton()
@@ -62,14 +59,14 @@ class MapViewController: UIViewController{
     override func viewWillDisappear(_ animated: Bool) {
         locationSocket.disconnect()
         chatSocket.disconnect()
-        ChattingViewController.shared.chatMessage.removeAll()
+        chattingViewController!.chatMessage.removeAll()
+        print(chatSocket.status)
     }
     
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        ChattingViewController.shared.chatMessage.removeAll()
-        //        GetMannaAPI.getManna()
+//        chattingViewController.chatMessage!.removeAll()
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
         chatSocket = manager.socket(forNamespace: "/chat")
@@ -79,22 +76,20 @@ class MapViewController: UIViewController{
             UserModel.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
         }
-        chatSocket.on("chatConnect") { (array, ack) in
+        chatSocket.on("chatConnect") { [self] (array, ack) in
             print(ack)
-            print(array)
+            print(chatSocket.status)
         }
         chatSocket.on("chatDisconnect") { (array, ack) in
             print(array)
-            print(ack)
         }
         locationSocket.on("locationDisconnect") { (array, ack) in
             print(array)
-            print(ack)
         }
         locationSocket.on("locationConnect") { (array, ack) in
             print(array)
         }
-        chatSocket.on("chat") { (array, ack) in
+        chatSocket.on("chat") { [self] (array, ack) in
             let json = JSON(array)
             guard let test = json[0].string?.data(using: .utf8) else { return }
             guard let jsonData = try? JSON(test) else { return }
@@ -150,8 +145,8 @@ class MapViewController: UIViewController{
             }
             guard let newMessageBinding = newMessage else { return }
             
-            ChattingViewController.shared.chatMessage.append(newMessageBinding)
-            ChattingViewController.shared.chatView.reloadData()
+            chattingViewController!.chatMessage.append(newMessageBinding)
+            chattingViewController!.chatView.reloadData()
         }
         locationSocket.on("location") { (array, ack) in
             var _: String?
@@ -223,15 +218,15 @@ class MapViewController: UIViewController{
     }
     
     @objc func sendMessage() {
-        guard let text = ChattingViewController.shared.textField.text else { return }
+        guard let text = chattingViewController!.textField.text else { return }
         chatSocket.emit("chat", "\(text)")
-        ChattingViewController.shared.scrollBottom()
-        ChattingViewController.shared.textField.text = ""
+        chattingViewController!.scrollBottom()
+        chattingViewController!.textField.text = ""
     }
     
     // MARK: Attribute
     func attribute() {
-        ChattingViewController.shared.sendButton.do {
+        chattingViewController!.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
         backButton.do {
@@ -388,13 +383,14 @@ class MapViewController: UIViewController{
     }
     
     @objc func showRankingView() {
-        
+        //여기서 엄청난 처리를 해준 뒤 보내야함
         let view = RankingViewController()
         view.view.backgroundColor = .white
         view.modalPresentationStyle = .custom
         view.modalTransitionStyle = .crossDissolve
         self.present(view, animated: true)
     }
+    
     //MARK: 마커 클릭 이벤트
     func didMarkerClicked() {
         tokenWithMarker.keys.forEach { key in
@@ -552,8 +548,8 @@ class MapViewController: UIViewController{
     
     //MARK: 채팅창 클릭
     @objc func goToChatGestureFunc() {
-        let view = ChattingViewController.shared
-        present(view, animated: true)
+        chattingViewController!.chatView.reloadData()
+        present(chattingViewController!, animated: true)
     }
     
     //MARK: 뒤로가기
