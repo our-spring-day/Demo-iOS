@@ -385,14 +385,13 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func showRankingView() {
-        
         presenter.currentRanking(userList: rankingViewController!.userList) { userList in
             self.rankingViewController!.userList = userList
-            self.rankingViewController!.view.backgroundColor = .white
-            self.rankingViewController!.modalPresentationStyle = .custom
-            self.rankingViewController!.modalTransitionStyle = .crossDissolve
-            self.present(self.rankingViewController!, animated: true)
         }
+        self.rankingViewController!.view.backgroundColor = .white
+        self.rankingViewController!.modalPresentationStyle = .custom
+        self.rankingViewController!.modalTransitionStyle = .crossDissolve
+        self.present(self.rankingViewController!, animated: true)
     }
     
     //MARK: 마커 클릭 이벤트

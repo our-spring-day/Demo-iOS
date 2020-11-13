@@ -15,11 +15,11 @@ class MapPresenter {
             if ((currentRanking[key]?.state) != nil) {
                 MannaAPI.getPath(lat: currentRanking[key]!.latitude, lng: currentRanking[key]!.longitude) { (travelData) in
                     currentRanking[key]?.remainDistance = travelData.distance
-                    print("이게 돌면서", currentRanking[key]?.remainDistance)
                     currentRanking[key]?.remainTime = travelData.duration
                     completion(currentRanking)
                 }
             }
         }
+        
     }
 }

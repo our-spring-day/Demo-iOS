@@ -40,11 +40,9 @@ class RankingViewCell: UITableViewCell {
         }
         userName.do {
             $0.text = data.name
-            print(data.name)
         }
         state.do {
-            $0.text = data.state ? "\(data.remainDistance)" : "연결끊김(tempMessage)"
-//            $0.text = "\(data.remainTime)"
+            $0.text = data.state ? "\(data.remainTime)" : "연결끊김(tempMessage)"
         }
         medal.do {
             $0.layer.cornerRadius = $0.frame.width / 2

@@ -17,16 +17,6 @@ class RankingViewController: UIViewController, RankingView {
     var dismissButton = UIButton()
     var timerView = TimerView(.rankingView)
     var userList: [String : User] = [:]
-//    var userList: [String : User] = [
-//        "f606564d8371e455" : User(id: "1", name: "우석", state: false, profileImage: #imageLiteral(resourceName: "우석img"), disconnectProfileImage: #imageLiteral(resourceName: "invalid2"), anotherdisconnectProfileImage: #imageLiteral(resourceName: "invalid1"), nicknameImage: #imageLiteral(resourceName: "우석"), latitude: 0, longitude: 0, remainDistance: 0, ranking: 0, networkValidTime: 0, remainTime: 9999999999, arrived: false),
-//        "aed64e8da3a07df4" : User(id: "2", name: "연재", state: false, profileImage: #imageLiteral(resourceName: "disconnect"), disconnectProfileImage: #imageLiteral(resourceName: "invalid2"), anotherdisconnectProfileImage: #imageLiteral(resourceName: "invalid1"), nicknameImage: #imageLiteral(resourceName: "연재"), latitude: 0, longitude: 0, remainDistance: 0, ranking: 0, networkValidTime: 0, remainTime: 9999999999, arrived: false),
-//        "8F630481-548D-4B8A-B501-FFD90ADFDBA4" : User(id: "3", name: "상원", state: false, profileImage: #imageLiteral(resourceName: "상원img"), disconnectProfileImage: #imageLiteral(resourceName: "invalid2"), anotherdisconnectProfileImage: #imageLiteral(resourceName: "invalid1"), nicknameImage: #imageLiteral(resourceName: "상원"), latitude: 0, longitude: 0, remainDistance: 100, ranking: 0, networkValidTime: 0, remainTime: 9999999999, arrived: false),
-//        "0954A791-B5BE-4B56-8F25-07554A4D6684" : User(id: "4", name: "재인", state: false, profileImage: #imageLiteral(resourceName: "재인img"), disconnectProfileImage: #imageLiteral(resourceName: "invalid2"), anotherdisconnectProfileImage: #imageLiteral(resourceName: "invalid1"), nicknameImage: #imageLiteral(resourceName: "재인"), latitude: 0, longitude: 0, remainDistance: 100, ranking: 0, networkValidTime: 0, remainTime: 9999999999, arrived: false),
-//        "8D44FAA1-2F87-4702-9DAC-B8B15D949880" : User(id: "5", name: "효근", state: false, profileImage: #imageLiteral(resourceName: "규리img"), disconnectProfileImage: #imageLiteral(resourceName: "invalid2"), anotherdisconnectProfileImage: #imageLiteral(resourceName: "invalid1"), nicknameImage: #imageLiteral(resourceName: "효근"), latitude: 0, longitude: 0, remainDistance: 100, ranking: 0, networkValidTime: 0, remainTime: 9999999999, arrived: false),
-//        "2872483D-9E7B-46D1-A2B8-44832FE3F1AD" : User(id: "6", name: "규리", state: false, profileImage: #imageLiteral(resourceName: "default"), disconnectProfileImage: #imageLiteral(resourceName: "invalid2"), anotherdisconnectProfileImage: #imageLiteral(resourceName: "invalid1"), nicknameImage: #imageLiteral(resourceName: "test"), latitude: 0, longitude: 0, remainDistance: 100, ranking: 0, networkValidTime: 0, remainTime: 9999999999, arrived: false),
-//        "C65CDF73-8C04-4F76-A26A-AE3400FEC14B" : User(id: "7", name: "종찬", state: false, profileImage: #imageLiteral(resourceName: "종찬img"), disconnectProfileImage: #imageLiteral(resourceName: "invalid2"), anotherdisconnectProfileImage: #imageLiteral(resourceName: "invalid1"), nicknameImage: #imageLiteral(resourceName: "종찬"), latitude: 0, longitude: 0, remainDistance: 100, ranking: 0, networkValidTime: 0, remainTime: 9999999999, arrived: false),
-//        "69751764-A224-4923-9844-C61646743D10" : User(id: "8", name: "용권", state: false, profileImage: #imageLiteral(resourceName: "규리img"), disconnectProfileImage: #imageLiteral(resourceName: "invalid2"), anotherdisconnectProfileImage: #imageLiteral(resourceName: "invalid1"), nicknameImage: #imageLiteral(resourceName: "종찬"), latitude: 0, longitude: 0, remainDistance: 100, ranking: 0, networkValidTime: 0, remainTime: 9999999999, arrived: false)
-//    ]
     var arrivalUser: [User] = []
     var notArrivalUser: [User] = []
     lazy var urgentButton = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 39))
@@ -34,9 +24,7 @@ class RankingViewController: UIViewController, RankingView {
     override func viewDidLoad() {
         super.viewDidLoad()
         sortedUser()
-        print(userList.values)
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(sortedUser), userInfo: nil, repeats: true)
-        sortedUser()
         attribute()
         layout()
     }
@@ -94,10 +82,11 @@ class RankingViewController: UIViewController, RankingView {
     
     @objc func sortedUser() {
         arrivalUser = Array(userList.values).filter { $0.arrived }
-        arrivalUser.sort { $0.remainDistance > $1.remainDistance }
+        arrivalUser = arrivalUser.sorted { $0.remainTime < $1.remainTime }
         notArrivalUser = Array(userList.values).filter { !$0.arrived }
+        notArrivalUser = notArrivalUser.sorted { $0.remainTime < $1.remainTime }
+        
         rankginView.reloadData()
-        print(userList.values)
     }
     
     @objc func prevButton(_ sender: UITapGestureRecognizer) {
@@ -118,7 +107,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         if section == 0 {
             headerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         } else if section == 1 {
-            headerView.backgroundColor = #colorLiteral(red: 0.7066357986, green: 0.7186221, blue: 0.7235718003, alpha: 0.1084653253)
+            headerView.backgroundColor = arrivalUser.count > 0 ? #colorLiteral(red: 0.7066357986, green: 0.7186221, blue: 0.7235718003, alpha: 0.1084653253) : #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         }
         return headerView
     }
