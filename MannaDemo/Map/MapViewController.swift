@@ -48,7 +48,7 @@ class MapViewController: UIViewController, ChatSet{
     var rankingBUtton = UIButton()
     var chatBUtton = UIButton()
     var timerView = TimerView(.mapView)
-    
+    lazy var tempTimerGesture = UITapGestureRecognizer(target: self, action: #selector(didClickedTimerView))
     lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
     
@@ -211,10 +211,10 @@ class MapViewController: UIViewController, ChatSet{
             }
             
         }
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(toWholeLocation), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toWholeLocation), userInfo: nil, repeats: true)
         
         array()
         layout()
@@ -230,6 +230,9 @@ class MapViewController: UIViewController, ChatSet{
         chattingViewController!.textField.text = ""
     }
     
+    @objc func didClickedTimerView() {
+        timerView.tempToggleFlag.toggle()
+    }
     // MARK: Attribute
     func attribute() {
         chattingViewController!.sendButton.do {
@@ -313,6 +316,9 @@ class MapViewController: UIViewController, ChatSet{
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
             $0.dropShadow()
             $0.addGestureRecognizer(goToChatGesture)
+        }
+        timerView.do {
+            $0.addGestureRecognizer(tempTimerGesture)
         }
     }
     

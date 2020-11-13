@@ -24,7 +24,7 @@ class RankingViewController: UIViewController, RankingView {
     override func viewDidLoad() {
         super.viewDidLoad()
         sortedUser()
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(sortedUser), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(sortedUser), userInfo: nil, repeats: true)
         attribute()
         layout()
     }
