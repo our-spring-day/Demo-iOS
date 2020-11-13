@@ -13,11 +13,14 @@ class ChatCell: UITableViewCell {
     let userImage = UIImageView()
     let message = UILabel()
     let background = UIView()
+    var timeStamp = UILabel()
     
     var leadingConstraints: NSLayoutConstraint!
     var trailingConstraints: NSLayoutConstraint!
     var sendTopConstraints: NSLayoutConstraint!
     var receiveTopConstraints: NSLayoutConstraint!
+    var timeStampLeadingConstraints: NSLayoutConstraint!
+    var timeStampTrailingConstraints: NSLayoutConstraint!
     
     var chatMessage: ChatMessage! {
         didSet {
@@ -31,6 +34,8 @@ class ChatCell: UITableViewCell {
             if chatMessage.isIncoming {
                 leadingConstraints.isActive = true
                 trailingConstraints.isActive = false
+                timeStampLeadingConstraints.isActive = true
+                timeStampTrailingConstraints.isActive = false
                 if chatMessage.sendState {
                     receiveTopConstraints.isActive = false
                     sendTopConstraints.isActive = true
@@ -42,6 +47,8 @@ class ChatCell: UITableViewCell {
             } else {
                 leadingConstraints.isActive = false
                 trailingConstraints.isActive = true
+                timeStampLeadingConstraints.isActive = false
+                timeStampTrailingConstraints.isActive = true
                 receiveTopConstraints.isActive = false
                 sendTopConstraints.isActive = true
                 userImage.isHidden = true
@@ -83,12 +90,18 @@ class ChatCell: UITableViewCell {
         background.do {
             $0.layer.cornerRadius = 9
         }
+        timeStamp.do {
+            $0.text = "오후 12:47"
+            $0.textColor = UIColor.lightGray
+            $0.font = UIFont.systemFont(ofSize: 9, weight: .regular)
+        }
     }
     func layout() {
         addSubview(userImage)
         addSubview(userName)
         addSubview(background)
         addSubview(message)
+        addSubview(timeStamp)
         
         userImage.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +125,13 @@ class ChatCell: UITableViewCell {
             $0.topAnchor.constraint(equalTo: message.topAnchor, constant: -8).isActive = true
             $0.bottomAnchor.constraint(equalTo: message.bottomAnchor, constant: 8).isActive = true
             $0.leadingAnchor.constraint(equalTo: message.leadingAnchor, constant: -9).isActive = true
-            $0.trailingAnchor.constraint(equalTo: message.trailingAnchor, constant: 8).isActive = true
+            $0.trailingAnchor.constraint(equalTo: message.trailingAnchor, constant: 9).isActive = true
+        }
+        timeStamp.do {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.bottomAnchor.constraint(equalTo: background.bottomAnchor).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: 9).isActive = true
+            $0.widthAnchor.constraint(equalToConstant: $0.intrinsicContentSize.width + 20).isActive = true
         }
         
         leadingConstraints = message.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 14)
@@ -126,6 +145,12 @@ class ChatCell: UITableViewCell {
         
         sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 15)
         sendTopConstraints.isActive = true
+        
+        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: message.trailingAnchor, constant: 15)
+        timeStampLeadingConstraints.isActive = true
+        
+        timeStampTrailingConstraints = timeStamp.trailingAnchor.constraint(equalTo: message.leadingAnchor, constant: -5)
+        timeStampTrailingConstraints.isActive = true
     }
     
     required init?(coder: NSCoder) {

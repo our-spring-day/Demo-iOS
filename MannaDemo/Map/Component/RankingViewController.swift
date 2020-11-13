@@ -6,26 +6,26 @@
 //
 
 import UIKit
+import AudioToolbox
 
-class RankingViewController: UIViewController {
+protocol RankingView: UIViewController {
+    var userList: [String : User] { get set }
+}
+
+class RankingViewController: UIViewController, RankingView {
     lazy var rankginView = UITableView()
     lazy var backgroundView = UIView()
     var dismissButton = UIButton()
     var timerView = TimerView(.rankingView)
-    
-    let userArr: [Ranking] = [Ranking(profileImage: UIImage(named: "김규리")!, profileName: "김규리", state: "12:40 도착 · 10분 소요", arrival: true),
-                              Ranking(profileImage: UIImage(named: "원우석")!, profileName: "원우석", state: "12:50 도착 · 20분 소요", arrival: true),
-                              Ranking(profileImage: UIImage(named: "보들이")!, profileName: "보들이", state: "약 10분 남음", arrival: false),
-                              Ranking(profileImage: UIImage(named: "윤상원")!, profileName: "윤상원", state: "약 15분 남음", arrival: false),
-                              Ranking(profileImage: UIImage(named: "이연재")!, profileName: "이연재", state: "약 20분 남음", arrival: false)]
-    
-    var arrivalUser: [Ranking] = []
-    var notArrivalUser: [Ranking] = []
+    var userList: [String : User] = [:]
+    var arrivalUser: [User] = []
+    var notArrivalUser: [User] = []
     lazy var urgentButton = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 39))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         sortedUser()
+        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(sortedUser), userInfo: nil, repeats: true)
         attribute()
         layout()
     }
@@ -81,9 +81,13 @@ class RankingViewController: UIViewController {
         }
     }
     
-    func sortedUser() {
-        arrivalUser = userArr.filter { $0.arrival }
-        notArrivalUser = userArr.filter { !$0.arrival }
+    @objc func sortedUser() {
+        arrivalUser = Array(userList.values).filter { $0.arrived }
+        arrivalUser = arrivalUser.sorted { $0.remainTime < $1.remainTime }
+        notArrivalUser = Array(userList.values).filter { !$0.arrived }
+        notArrivalUser = notArrivalUser.sorted { $0.remainTime < $1.remainTime }
+        
+        rankginView.reloadData()
     }
     
     @objc func prevButton(_ sender: UITapGestureRecognizer) {
@@ -133,7 +137,6 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             } else if indexPath.row == 2 {
                 cell.medal.medal.image = UIImage(named: "bronze")
             }
-            
             cell.setData(data: arrivalUser[indexPath.row])
         } else if indexPath.section == 1 {
             cell.medal.isHidden = true
@@ -146,6 +149,13 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
             cell.setData(data: notArrivalUser[indexPath.row])
+            if indexPath.row == 4 {
+                cell.button.do {
+                    $0.setTitle("연결끊김", for: .normal)
+                    $0.backgroundColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 0.09524828767)
+                    $0.setTitleColor(#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1), for: .normal)
+                }
+            }
         }
         return cell
     }

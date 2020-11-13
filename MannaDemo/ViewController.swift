@@ -23,13 +23,9 @@ class ViewController: UIViewController {
         view.backgroundColor = .brown
         let temp = makeImageFrom(marker2)
         imageView.image = #imageLiteral(resourceName: "back")
-//        imageView2.image = imageView.asImage()
         
         view.addSubview(marker)
         view.addSubview(imageView)
-//        view.addSubview(marker3)
-//        marker3.addSubview(name)
-//        view.addSubview(imageView2)
 
         marker.translatesAutoresizingMaskIntoConstraints = false
         marker.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true

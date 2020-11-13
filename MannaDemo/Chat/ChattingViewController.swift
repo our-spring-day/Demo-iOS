@@ -7,13 +7,25 @@
 
 import UIKit
 
-class ChattingViewController: UIViewController {
+protocol chattingView: UIViewController {
+    var chatMessage: [ChatMessage] { get set }
+    var chatView: UITableView { get set }
+    var textField: UITextField { get set }
+    var sendButton: UIButton { get set }
+    func scrollBottom()
+}
+
+class ChattingViewController: UIViewController, chattingView {
+    var chatView = UITableView()
     static let shared = ChattingViewController()
     var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    let chatView = UITableView()
-    let textField = UITextField().then {
+    
+    
+    var chatMessage: [ChatMessage] = []
+    
+    var textField = UITextField().then {
         $0.textColor = .black
         $0.attributedPlaceholder = .init(string: "메세지 입력", attributes: [NSAttributedString.Key.foregroundColor: UIColor.appColor(.chatName)])
         $0.layer.cornerRadius = 20
@@ -32,37 +44,19 @@ class ChattingViewController: UIViewController {
             $0.layer.cornerRadius = $0.frame.size.width/2
             $0.clipsToBounds = true
         }
-    
-    var chatMessage: [ChatMessage] =
-        [ChatMessage(user: "짱구", text: "이번주 토요일 더포도 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", isIncoming: true, sendState: false),
-         ChatMessage(user: "짱구", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", isIncoming: true, sendState: false),
-         ChatMessage(user: "짱구", text: "늦으면 벌금 오천만원임니다~~😉", isIncoming: true, sendState: false),
-         ChatMessage(user: "영희", text: "알겠슴니다~~🙀", isIncoming: false, sendState: false),
-         ChatMessage(user: "영희", text: "우리는 오늘 놀러갈거에요!!", isIncoming: false, sendState: false),
-         ChatMessage(user: "기영", text: "잠이오냐!!", isIncoming: true, sendState: false),
-         ChatMessage(user: "기영", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false),
-         ChatMessage(user: "찬이", text: "새키얌", isIncoming: true, sendState: false),
-         ChatMessage(user: "찬이", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false),
-         ChatMessage(user: "상원", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: false, sendState: false),
-         ChatMessage(user: "상원", text: "이번주 토요일 스터디룸 빌렸어요 늦지말고 오세요~👀 1시부터 4시까지 입니다. 어쩌구저쩌구 세줄~~세줄~~세줄~~", isIncoming: false, sendState: false),
-         ChatMessage(user: "돼지", text: "우리는 오늘 놀러갈거에요!!", isIncoming: true, sendState: false),
-         ChatMessage(user: "돼지", text: "에~이 그건 아니지 에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지에~이 그건 아니지", isIncoming: true, sendState: false)]
-    
     // MARK: inputAccessroyView init
     
     var accView: UIView!
     override var canBecomeFirstResponder: Bool { return true }
     override var inputAccessoryView: UIView? {
         if accView == nil {
-            
             accView = CustomView()
             accView.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 0.845515839)
-            
             textField.borderStyle = .roundedRect
-            
             accView.addSubview(textField)
             accView.addSubview(sendButton)
             accView.autoresizingMask = .flexibleHeight
+            
             textField.do {
                 $0.translatesAutoresizingMaskIntoConstraints = false
                 $0.leadingAnchor.constraint(equalTo: accView.leadingAnchor, constant: MannaDemo.convertWidth(value: 13)).isActive = true
@@ -84,9 +78,6 @@ class ChattingViewController: UIViewController {
     
     // MARK: CustomView
     class CustomView: UIView {
-        // this is needed so that the inputAccesoryView is properly sized from the auto layout constraints
-        // actual value is not important
-        
         override var intrinsicContentSize: CGSize {
             return CGSize.zero
         }
@@ -98,7 +89,6 @@ class ChattingViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         attirbute()
         layout()
-//        scrollBottom()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -173,12 +163,9 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatView.dequeueReusableCell(withIdentifier: ChatCell.cellID, for: indexPath) as! ChatCell
-        
         cell.selectionStyle = .none
         var message = chatMessage[indexPath.row]
-        
         if indexPath.row > 0 {
-            
             // 이전 User, 현재 User 같으면
             // message.sendState 상태 true
             if message.user == chatMessage[indexPath.row - 1].user {
@@ -191,28 +178,59 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         cell.chatMessage = message
         
+        var compareDate: Date?
+        var compareHour: String?
+        var compareMinute: String?
+        
+        let hourFormatter = DateFormatter()
+        let minuteFormatter = DateFormatter()
+        
+        hourFormatter.locale = Locale(identifier: "ko")
+        minuteFormatter.locale = Locale(identifier: "ko")
+        
+        hourFormatter.dateFormat = "HH"
+        minuteFormatter.dateFormat = "mm"
+        
+        if indexPath.row > 1 {
+            compareDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row - 1].timeStamp / 1000))
+            compareHour = hourFormatter.string(from: compareDate!)
+            compareMinute = minuteFormatter.string(from: compareDate!)
+        }
+        
+        let currentDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row].timeStamp / 1000))
+        let currentHour = hourFormatter.string(from: currentDate)
+        let currentMinute = minuteFormatter.string(from: currentDate)
+        
+        
+        if let comparedhour = compareHour, let comparedMinute = compareMinute{
+            if "\(currentHour) : \(currentMinute)" != "\(comparedhour) : \(comparedMinute)" {
+                if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
+                    cell.timeStamp.text = "오전 \(currentHour) : \(currentMinute)"
+                } else {
+                    cell.timeStamp.text = "오후 \(Int(currentHour)! - 12) : \(currentMinute)"
+                }
+            } else {
+                cell.timeStamp.text = ""
+            }
+        }
         return cell
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if scrollView.panGestureRecognizer.location(in: view.superview).y > 480 && keyboardShown == true {
-//            view.frame.origin.y = scrollView.panGestureRecognizer.location(in: view.superview).y
-//        }
-//
-//        print(scrollView.panGestureRecognizer.location(in: view.superview).y)
     }
     
     func scrollBottom() {
-        DispatchQueue.main.async {
-            let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
-            self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        if ChattingViewController.shared.chatMessage.count != 0 {
+            DispatchQueue.main.async {
+                let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
+                self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            }
         }
     }
 }
 
 extension ChattingViewController: UITextFieldDelegate {
     @objc func keyboardWillShow(sender: Notification) {
-        
         if keyboardShown == false {
             view.frame.origin.y = -(MannaDemo.convertHeight(value: 258))
             keyboardShown = true

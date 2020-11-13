@@ -30,20 +30,19 @@ class RankingViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-       
         attribute()
         layout()
     }
     
-    func setData(data: Ranking) {
+    func setData(data: User) {
         profileImage.do {
             $0.image = data.profileImage
         }
         userName.do {
-            $0.text = data.profileName
+            $0.text = data.name
         }
         state.do {
-            $0.text = data.state
+            $0.text = data.state ? "\(data.remainTime)" : ""
         }
         medal.do {
             $0.layer.cornerRadius = $0.frame.width / 2

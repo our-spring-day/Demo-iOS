@@ -18,6 +18,12 @@ class TimerView: UIView {
     var secondLabel = UILabel()
     var colon = UILabel()
     var whereAt: TimerAtwhere?
+    var checkIn = UILabel()
+    var tempToggleFlag = false {
+        didSet {
+            didChangedTempToggleFlag()
+        }
+    }
     
     init(_ at: TimerAtwhere) {
         super.init(frame: CGRect.zero)
@@ -26,6 +32,11 @@ class TimerView: UIView {
         layout()
         timer()
         Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timer), userInfo: nil, repeats: true)
+    }
+    
+    @objc func didChangedTempToggleFlag() {
+        tempToggleFlag == true ? [secondLabel, minuteLabel, colon].forEach { $0.isHidden = true } : [secondLabel, minuteLabel, colon].forEach { $0.isHidden = false }
+        checkIn.isHidden = tempToggleFlag == true ? false : true
     }
     
     @objc func timer() {
@@ -80,7 +91,6 @@ class TimerView: UIView {
         self.do {
             $0.layer.cornerRadius = 20
             $0.layer.masksToBounds = true
-            
             switch whereAt {
             case .mapView:
                 $0.backgroundColor = UIColor(named: "keyColor")
@@ -109,10 +119,18 @@ class TimerView: UIView {
             $0.textAlignment = .center
             $0.textColor = .white
         }
+        checkIn.do {
+            $0.font = UIFont(name: "SFProDisplay-Semibold", size: 16)
+            $0.textAlignment = .center
+            $0.textColor = .white
+            $0.text = "체크인 하기"
+            $0.isHidden = true
+        }
     }
     
     func layout() {
-        [minuteLabel, secondLabel, colon].forEach { addSubview($0) }
+        [minuteLabel, secondLabel, colon, checkIn].forEach { addSubview($0) }
+        
         minuteLabel.snp.makeConstraints {
             $0.leading.equalTo(self)
             $0.trailing.equalTo(colon.snp.leading).offset(15)
@@ -130,6 +148,9 @@ class TimerView: UIView {
             $0.centerX.centerY.equalTo(self)
             $0.width.equalTo(5)
             $0.height.equalTo(30)
+        }
+        checkIn.snp.makeConstraints {
+            $0.width.height.centerX.centerY.equalTo(self)
         }
     }
     
