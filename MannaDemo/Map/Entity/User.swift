@@ -9,6 +9,7 @@ import UIKit
 
 struct User {
     var id: String
+    var name: String?
     var state: Bool
     var profileImage: UIImage
     var disconnectProfileImage: UIImage

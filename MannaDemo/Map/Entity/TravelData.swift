@@ -15,4 +15,3 @@ struct TravelData {
     var duration: Int
     var distance: Double
 }
-
