@@ -232,6 +232,46 @@ class MapViewController: UIViewController, ChatSet{
     
     @objc func didClickedTimerView() {
         timerView.tempToggleFlag.toggle()
+        if timerView.tempToggleFlag {
+            UIView.animate(withDuration: 0.05, animations: {
+                self.timerView.snp.updateConstraints {
+                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
+                }
+                self.timerView.alpha = 0
+                self.view.setNeedsLayout()
+                self.view.layoutIfNeeded()
+            },completion: {_ in
+                UIView.animate(withDuration: 0.1) {
+                    self.timerView.alpha = 1
+                    self.timerView.snp.updateConstraints {
+                        $0.width.equalTo(MannaDemo.convertWidth(value: 115))
+                    }
+                    self.view.setNeedsLayout()
+                    self.view.layoutIfNeeded()
+                }
+            })
+            
+        } else {
+            UIView.animate(withDuration: 0.05, animations: {
+                self.timerView.snp.updateConstraints {
+                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
+                }
+                self.timerView.alpha = 0
+                self.view.setNeedsLayout()
+                self.view.layoutIfNeeded()
+            },completion: {_ in
+                UIView.animate(withDuration: 0.1) {
+                    self.timerView.alpha = 1
+                    self.timerView.snp.updateConstraints {
+                        $0.width.equalTo(MannaDemo.convertWidth(value: 102))
+                    }
+                    self.view.setNeedsLayout()
+                    self.view.layoutIfNeeded()
+                }
+            })
+        }
+        
+        
     }
     // MARK: Attribute
     func attribute() {
