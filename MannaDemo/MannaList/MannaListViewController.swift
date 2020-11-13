@@ -130,8 +130,12 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
 
         var view = MapViewController()
         var subChatView = ChattingViewController()
+        var subRankingView = RankingViewController()
         
         view.chattingViewController = subChatView
+        view.rankingViewController = subRankingView
+        
+        view.rankingViewController?.userList = UserModel.userList
         view.meetInfo  = MannaModel.newModel[indexPath.row]
         DispatchQueue.global().async {
             MannaAPI.getChat(mannaID: MannaModel.newModel[indexPath.row].uuid) { result in

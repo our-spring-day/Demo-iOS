@@ -71,7 +71,7 @@ extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSourc
             mapView.moveCamera(cameraUpdate)
             MannaAPI.getPath(lat: userListForCollectionView[indexPath.row].latitude, lng: userListForCollectionView[indexPath.row].longitude) { result in
                 self.multipartPath.lineParts = [
-                    NMGLineString(points: result.path)
+                    NMGLineString(points: result.path!)
                 ]
                 self.multipartPath.colorParts = [
                     NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)

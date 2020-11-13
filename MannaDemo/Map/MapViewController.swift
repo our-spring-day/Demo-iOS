@@ -14,11 +14,12 @@ import SocketIO
 
 protocol ChatSet {
     var chattingViewController: chattingView? { get set }
+    var rankingViewController: RankingView? { get set }
 }
 
 class MapViewController: UIViewController, ChatSet{
+    var rankingViewController: RankingView?
     var chattingViewController: chattingView?
-    
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
     var chatView: UIView?
@@ -47,8 +48,8 @@ class MapViewController: UIViewController, ChatSet{
     var rankingBUtton = UIButton()
     var chatBUtton = UIButton()
     var timerView = TimerView(.mapView)
-    var rankingViewController = RankingViewController()
-    lazy var userListForCollectionView: [User] = Array(rankingViewController.userList.values)
+    
+    lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
     
     // MARK: ViewDidLoad
@@ -77,7 +78,7 @@ class MapViewController: UIViewController, ChatSet{
         locationSocket.connect()
         chatSocket.connect()
         locationSocket.on("locationConnect") { [self] (array, ack) in
-            rankingViewController.userList[MannaDemo.myUUID!]?.state = true
+            rankingViewController!.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
         }
         chatSocket.on("chatConnect") { [self] (array, ack) in
@@ -170,13 +171,13 @@ class MapViewController: UIViewController, ChatSet{
                     case "LOCATION":
                         lat_ = result.location?.latitude
                         lng_ = result.location?.longitude
-                        rankingViewController.userList[token]?.state = true
+                        rankingViewController!.userList[token]?.state = true
                         break
                         
                     case "JOIN":
                         guard let name = username else { return }
-                        rankingViewController.userList[token]?.state = true
-                        rankingViewController.userList[token]?.networkValidTime = 0
+                        rankingViewController!.userList[token]?.state = true
+                        rankingViewController!.userList[token]?.networkValidTime = 0
                         self.marking()
                         self.showToast(message: "\(name)님 접속하셨습니다.")
                         self.setCollcetionViewItem()
@@ -184,7 +185,7 @@ class MapViewController: UIViewController, ChatSet{
                         
                     case "LEAVE":
                         guard let name = username else { return }
-                        rankingViewController.userList[token]?.networkValidTime = 61
+                        rankingViewController!.userList[token]?.networkValidTime = 61
                         self.marking()
                         self.setCollcetionViewItem()
                         self.showToast(message: "\(name)님 나가셨습니다.")
@@ -195,17 +196,17 @@ class MapViewController: UIViewController, ChatSet{
                     }
                     guard let lat = lat_ else { return }
                     guard let lng = lng_ else { return }
-                    guard rankingViewController.userList[token] != nil else { return }
-                    rankingViewController.userList[token]?.networkValidTime = 0
+                    guard rankingViewController!.userList[token] != nil else { return }
+                    rankingViewController!.userList[token]?.networkValidTime = 0
                     if token != MannaDemo.myUUID {
-                        rankingViewController.userList[token]?.latitude = lat
-                        rankingViewController.userList[token]?.longitude = lng
+                        rankingViewController!.userList[token]?.latitude = lat
+                        rankingViewController!.userList[token]?.longitude = lng
                         MannaAPI.getPath(lat: lat_!, lng: lng_!) { (result) in
-                            rankingViewController.userList[token]?.remainDistance = result.distance
-                            rankingViewController.userList[token]?.remainTime = result.duration
+                            rankingViewController!.userList[token]?.remainDistance = result.distance
+                            rankingViewController!.userList[token]?.remainTime = result.duration
                         }
                     }
-                    self.setCollcetionViewItem()
+//                    self.setCollcetionViewItem()
                 }
             }
             
@@ -360,7 +361,7 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 마커 생성
     func array() {
-        rankingViewController.userList.keys.forEach { tokenWithMarker[$0] = NMFMarker()}
+        rankingViewController!.userList.keys.forEach { tokenWithMarker[$0] = NMFMarker()}
         for marker in tokenWithMarker.values {
             marker.width = MannaDemo.convertWidth(value: 5)
             marker.height = MannaDemo.convertWidth(value: 5)
@@ -384,14 +385,14 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func showRankingView() {
-        //여기서 엄청난 처리를 해준 뒤 보내야됨
-        presenter.currentRanking(userList: rankingViewController.userList) { [self] (userList) in
-            rankingViewController.userList = userList
+        
+        presenter.currentRanking(userList: rankingViewController!.userList) { userList in
+            self.rankingViewController!.userList = userList
+            self.rankingViewController!.view.backgroundColor = .white
+            self.rankingViewController!.modalPresentationStyle = .custom
+            self.rankingViewController!.modalTransitionStyle = .crossDissolve
+            self.present(self.rankingViewController!, animated: true)
         }
-        rankingViewController.view.backgroundColor = .white
-        rankingViewController.modalPresentationStyle = .custom
-        rankingViewController.modalTransitionStyle = .crossDissolve
-        self.present(rankingViewController, animated: true)
     }
     
     //MARK: 마커 클릭 이벤트
@@ -399,8 +400,8 @@ class MapViewController: UIViewController, ChatSet{
         tokenWithMarker.keys.forEach { key in
             cameraTrakingToggleFlag = false
             tokenWithMarker[key]?.touchHandler = { [self] (overlay: NMFOverlay) -> Bool in
-                let lat = rankingViewController.userList[key]?.latitude
-                let lng = rankingViewController.userList[key]?.longitude
+                let lat = rankingViewController!.userList[key]?.latitude
+                let lng = rankingViewController!.userList[key]?.longitude
                 let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat!, lng: lng!))
                 cameraUpdate.animation = .easeOut
                 cameraUpdate.animationDuration = 0.3
@@ -408,7 +409,7 @@ class MapViewController: UIViewController, ChatSet{
                 
                 MannaAPI.getPath(lat: lat!, lng: lng!) { result in
                     multipartPath.lineParts = [
-                        NMGLineString(points: result.path)
+                        NMGLineString(points: result.path!)
                     ]
                     multipartPath.colorParts = [
                         NMFPathColor(color: UIColor(named: "keyColor")!, outlineColor: UIColor.white, passedColor: UIColor.gray, passedOutlineColor: UIColor.lightGray)
@@ -422,9 +423,9 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 컬렉션 뷰 아이템 세팅
     func setCollcetionViewItem() {
-        userListForCollectionView = Array(rankingViewController.userList.values)
-        userListForCollectionView.sort { $0.state && !$1.state}
-        userListForCollectionView.sort { $0.remainTime < $1.remainTime }
+//        userListForCollectionView = Array(rankingViewController!.userList.values)
+//        userListForCollectionView.sort { $0.state && !$1.state}
+//        userListForCollectionView.sort { $0.remainTime < $1.remainTime }
     }
     
     //MARK: init 카메라 세팅
@@ -524,20 +525,21 @@ class MapViewController: UIViewController, ChatSet{
             let minLatLng = NMGLatLng(lat: 150, lng: 150)
             let maxLatLng = NMGLatLng(lat: 0, lng: 0)
             
-            rankingViewController.userList.keys.forEach {
-                if rankingViewController.userList[$0]?.state == true {
-                    if rankingViewController.userList[$0]!.longitude != 0 && rankingViewController.userList[$0]!.latitude != 0 {
-                        if minLatLng.lat > rankingViewController.userList[$0]!.latitude {
-                            minLatLng.lat = rankingViewController.userList[$0]!.latitude
+            rankingViewController!.userList.keys.forEach {
+                if rankingViewController!.userList[$0]?.state == true {
+                    print(rankingViewController!.userList[$0]!.longitude)
+                    if rankingViewController!.userList[$0]!.longitude != 0 && rankingViewController!.userList[$0]!.latitude != 0 {
+                        if minLatLng.lat > rankingViewController!.userList[$0]!.latitude {
+                            minLatLng.lat = rankingViewController!.userList[$0]!.latitude
                         }
-                        if minLatLng.lng > rankingViewController.userList[$0]!.longitude {
-                            minLatLng.lng = rankingViewController.userList[$0]!.longitude
+                        if minLatLng.lng > rankingViewController!.userList[$0]!.longitude {
+                            minLatLng.lng = rankingViewController!.userList[$0]!.longitude
                         }
-                        if maxLatLng.lat < rankingViewController.userList[$0]!.latitude {
-                            maxLatLng.lat = rankingViewController.userList[$0]!.latitude
+                        if maxLatLng.lat < rankingViewController!.userList[$0]!.latitude {
+                            maxLatLng.lat = rankingViewController!.userList[$0]!.latitude
                         }
-                        if maxLatLng.lng < rankingViewController.userList[$0]!.longitude {
-                            maxLatLng.lng = rankingViewController.userList[$0]!.longitude
+                        if maxLatLng.lng < rankingViewController!.userList[$0]!.longitude {
+                            maxLatLng.lng = rankingViewController!.userList[$0]!.longitude
                         }
                     }
                 }
@@ -563,26 +565,26 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 마커 전체 세팅
     @objc func marking() {
         
-        for key in rankingViewController.userList.keys {
-            let user = rankingViewController.userList[key]
+        for key in rankingViewController!.userList.keys {
+            let user = rankingViewController!.userList[key]
             if imageToNameFlag {
                 if user!.networkValidTime > 60 {
                     //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
-                    tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: rankingViewController.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: rankingViewController.userList[key]!.anotherdisconnectProfileImage)
+                    tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: rankingViewController!.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: rankingViewController!.userList[key]!.anotherdisconnectProfileImage)
                 } else {
-                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: rankingViewController.userList[key]!.nicknameImage)
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: rankingViewController!.userList[key]!.nicknameImage)
                 }
             } else {
                 if user!.networkValidTime > 60 {
                     //여결이 끊겼을 때 사진프로필 + 끊긴 이미지
-                    tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: rankingViewController.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: rankingViewController.userList[key]!.anotherdisconnectProfileImage)
+                    tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: rankingViewController!.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: rankingViewController!.userList[key]!.anotherdisconnectProfileImage)
                 } else {
-                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: rankingViewController.userList[key]!.profileImage)
+                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: rankingViewController!.userList[key]!.profileImage)
                 }
             }
-            if (rankingViewController.userList[key]?.state)! {
+            if (rankingViewController!.userList[key]?.state)! {
                 if key != MannaDemo.myUUID {
-                    tokenWithMarker[key]?.position = NMGLatLng(lat: rankingViewController.userList[key]!.latitude, lng: rankingViewController.userList[key]!.longitude)
+                    tokenWithMarker[key]?.position = NMGLatLng(lat: rankingViewController!.userList[key]!.latitude, lng: rankingViewController!.userList[key]!.longitude)
                     tokenWithMarker[key]?.mapView = mapView
                 } else if key == MannaDemo.myUUID {
                     //                    tokenWithMarker[key]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
@@ -619,9 +621,9 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 사용자상태 처리
     @objc func timeChecker() {
-        rankingViewController.userList.keys.forEach {
-            if rankingViewController.userList[$0]?.state == true {
-                rankingViewController.userList[$0]?.networkValidTime += 1
+        rankingViewController!.userList.keys.forEach {
+            if rankingViewController!.userList[$0]?.state == true {
+                rankingViewController!.userList[$0]?.networkValidTime += 1
             }
         }
     }   

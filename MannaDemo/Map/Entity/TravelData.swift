@@ -11,7 +11,7 @@ import UIKit
 import NMapsMap
 
 struct TravelData {
-    var path: [NMGLatLng]
+    var path: [NMGLatLng]?
     var duration: Int
     var distance: Double
 }

@@ -15,13 +15,8 @@ extension MapViewController: CLLocationManagerDelegate {
         locationManager.showsBackgroundLocationIndicator = true
         myLatitude = locValue.latitude
         myLongitude = locValue.longitude
-
-//        print("현재 : \(locValue.latitude)")
-//        print("현재 : \(locValue.longitude)")
-//        print("=============================")
-        
-        UserModel.userList[MannaDemo.myUUID!]?.latitude = myLatitude
-        UserModel.userList[MannaDemo.myUUID!]?.longitude = myLongitude
+        rankingViewController!.userList[MannaDemo.myUUID!]?.latitude = myLatitude
+        rankingViewController!.userList[MannaDemo.myUUID!]?.longitude = myLongitude
         locationSocket.emit("location", "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
         setCollcetionViewItem()
     }
