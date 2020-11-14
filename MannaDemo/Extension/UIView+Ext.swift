@@ -39,17 +39,11 @@ extension UIView {
     func dropShadow() {
         layer.masksToBounds = false
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.5
-        layer.shadowOffset = CGSize(width: -1, height: 1)
-        layer.shadowRadius = 1
-        layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        layer.shadowOpacity = 0.1
+        layer.shadowOffset = CGSize(width: 10, height: 10)
+        layer.shadowRadius = 10
+        layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 19, height: self.bounds.height)).cgPath
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
-    }
-    
-    func copyView<T: UIView>() -> T {
-        //        NSKeyedUnarchiver.unarchivedObject(ofClass: <#T##NSCoding.Protocol#>, from: <#T##Data#>)
-        return NSKeyedUnarchiver.unarchiveObject(with: NSKeyedArchiver.archivedData(withRootObject: self)) as! T
-        
     }
 }

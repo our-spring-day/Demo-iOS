@@ -42,6 +42,7 @@ extension MapViewController: NMFMapViewCameraDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         cameraTrakingToggleFlag = false
         mapView.positionMode = .normal
+        tokenWithMarker[MannaDemo.myUUID!]!.mapView = mapView
         UIView.animate(withDuration: 0.5) { [self] in
             [myLocationButton].forEach {
                 $0.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)

@@ -21,8 +21,7 @@ class ChattingViewController: UIViewController, chattingView {
     var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    
-    
+//    var timerView = TimerView(.rankingView)
     var chatMessage: [ChatMessage] = []
     
     var textField = UITextField().then {
@@ -122,6 +121,7 @@ class ChattingViewController: UIViewController, chattingView {
     // MARK: chatView Layout
     func layout() {
         view.addSubview(chatView)
+//        view.addSubview(timerView)
         chatView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -129,6 +129,12 @@ class ChattingViewController: UIViewController, chattingView {
             $0.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         }
+//        timerView.snp.makeConstraints {
+//            $0.centerX.equalTo(view)
+//            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
+//            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
+//            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
+//        }
     }
     
     // MARK: TableView tap hide keyboard action
@@ -153,6 +159,7 @@ class ChattingViewController: UIViewController, chattingView {
         } else {
             sendButton.backgroundColor = UIColor.appColor(.messageSendButton)
         }
+        chatView.reloadData()
     }
 }
 
@@ -178,9 +185,10 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         cell.chatMessage = message
         
-        var compareDate: Date?
-        var compareHour: String?
-        var compareMinute: String?
+        var nextUser: String?
+        var nextDate: Date?
+        var nextHour: String?
+        var nextMinute: String?
         
         let hourFormatter = DateFormatter()
         let minuteFormatter = DateFormatter()
@@ -191,32 +199,34 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         hourFormatter.dateFormat = "HH"
         minuteFormatter.dateFormat = "mm"
         
-        if indexPath.row > 1 {
-            compareDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row - 1].timeStamp / 1000))
-            compareHour = hourFormatter.string(from: compareDate!)
-            compareMinute = minuteFormatter.string(from: compareDate!)
-        }
-        
         let currentDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row].timeStamp / 1000))
         let currentHour = hourFormatter.string(from: currentDate)
         let currentMinute = minuteFormatter.string(from: currentDate)
         
+        if indexPath.row < chatMessage.count - 1 {
+            nextUser = chatMessage[indexPath.row + 1].user
+            nextDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row + 1].timeStamp / 1000))
+            nextHour = hourFormatter.string(from: nextDate!)
+            nextMinute = minuteFormatter.string(from: nextDate!)
+        }
         
-        if let comparedhour = compareHour, let comparedMinute = compareMinute{
-            if "\(currentHour) : \(currentMinute)" != "\(comparedhour) : \(comparedMinute)" {
+        if let safeNextMan = nextUser, let safeNextHour = nextHour, let safeNextMinute = nextMinute {
+            if chatMessage[indexPath.row].user == safeNextMan && "\(currentHour) : \(currentMinute)" == "\(safeNextHour) : \(safeNextMinute)" {
+                cell.timeStamp.text = ""
+            } else {
                 if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
                     cell.timeStamp.text = "오전 \(currentHour) : \(currentMinute)"
                 } else {
                     cell.timeStamp.text = "오후 \(Int(currentHour)! - 12) : \(currentMinute)"
                 }
-            } else {
-                cell.timeStamp.text = ""
             }
         }
+        
         return cell
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
     }
     
     func scrollBottom() {
