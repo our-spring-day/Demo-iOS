@@ -159,6 +159,7 @@ class ChattingViewController: UIViewController, chattingView {
         } else {
             sendButton.backgroundColor = UIColor.appColor(.messageSendButton)
         }
+        chatView.reloadData()
     }
 }
 
@@ -184,9 +185,10 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         cell.chatMessage = message
         
-        var compareDate: Date?
-        var compareHour: String?
-        var compareMinute: String?
+        var nextUser: String?
+        var nextDate: Date?
+        var nextHour: String?
+        var nextMinute: String?
         
         let hourFormatter = DateFormatter()
         let minuteFormatter = DateFormatter()
@@ -197,34 +199,34 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         hourFormatter.dateFormat = "HH"
         minuteFormatter.dateFormat = "mm"
         
-        if indexPath.row > 1 {
-            compareDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row - 1].timeStamp / 1000))
-            compareHour = hourFormatter.string(from: compareDate!)
-            compareMinute = minuteFormatter.string(from: compareDate!)
-        }
-        
         let currentDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row].timeStamp / 1000))
         let currentHour = hourFormatter.string(from: currentDate)
         let currentMinute = minuteFormatter.string(from: currentDate)
         
+        if indexPath.row < chatMessage.count - 1 {
+            nextUser = chatMessage[indexPath.row + 1].user
+            nextDate = Date(timeIntervalSince1970: TimeInterval(chatMessage[indexPath.row + 1].timeStamp / 1000))
+            nextHour = hourFormatter.string(from: nextDate!)
+            nextMinute = minuteFormatter.string(from: nextDate!)
+        }
         
-        if let comparedhour = compareHour, let comparedMinute = compareMinute{
-            if "\(currentHour) : \(currentMinute)" != "\(comparedhour) : \(comparedMinute)" || chatMessage[indexPath.row - 1].user != chatMessage[indexPath.row].user {
-                //표시해라
+        if let safeNextMan = nextUser, let safeNextHour = nextHour, let safeNextMinute = nextMinute {
+            if chatMessage[indexPath.row].user == safeNextMan && "\(currentHour) : \(currentMinute)" == "\(safeNextHour) : \(safeNextMinute)" {
+                cell.timeStamp.text = ""
+            } else {
                 if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
                     cell.timeStamp.text = "오전 \(currentHour) : \(currentMinute)"
                 } else {
                     cell.timeStamp.text = "오후 \(Int(currentHour)! - 12) : \(currentMinute)"
                 }
-            } else {
-                //표시 하지 마라
-                cell.timeStamp.text = ""
             }
         }
+        
         return cell
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
     }
     
     func scrollBottom() {
