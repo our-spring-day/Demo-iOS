@@ -21,7 +21,7 @@ class ChattingViewController: UIViewController, chattingView {
     var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    var timerView = TimerView(.rankingView)
+//    var timerView = TimerView(.rankingView)
     var chatMessage: [ChatMessage] = []
     
     var textField = UITextField().then {
@@ -121,7 +121,7 @@ class ChattingViewController: UIViewController, chattingView {
     // MARK: chatView Layout
     func layout() {
         view.addSubview(chatView)
-        view.addSubview(timerView)
+//        view.addSubview(timerView)
         chatView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -129,12 +129,12 @@ class ChattingViewController: UIViewController, chattingView {
             $0.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         }
-        timerView.snp.makeConstraints {
-            $0.centerX.equalTo(view)
-            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
-            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
-            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
-        }
+//        timerView.snp.makeConstraints {
+//            $0.centerX.equalTo(view)
+//            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
+//            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
+//            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
+//        }
     }
     
     // MARK: TableView tap hide keyboard action
@@ -209,13 +209,15 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         
         
         if let comparedhour = compareHour, let comparedMinute = compareMinute{
-            if "\(currentHour) : \(currentMinute)" != "\(comparedhour) : \(comparedMinute)" {
+            if "\(currentHour) : \(currentMinute)" != "\(comparedhour) : \(comparedMinute)" || chatMessage[indexPath.row - 1].user != chatMessage[indexPath.row].user {
+                //표시해라
                 if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
                     cell.timeStamp.text = "오전 \(currentHour) : \(currentMinute)"
                 } else {
                     cell.timeStamp.text = "오후 \(Int(currentHour)! - 12) : \(currentMinute)"
                 }
             } else {
+                //표시 하지 마라
                 cell.timeStamp.text = ""
             }
         }

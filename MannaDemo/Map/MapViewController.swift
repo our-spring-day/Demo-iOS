@@ -604,8 +604,8 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 채팅창 클릭
     @objc func goToChatGestureFunc() {
         chattingViewController!.chatView.reloadData()
-        self.chattingViewController!.modalPresentationStyle = .custom
-        self.chattingViewController!.modalTransitionStyle = .crossDissolve
+//        self.chattingViewController!.modalPresentationStyle = .custom
+//        self.chattingViewController!.modalTransitionStyle = .crossDissolve
         present(chattingViewController!, animated: true)
     }
     
