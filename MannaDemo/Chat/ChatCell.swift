@@ -61,6 +61,7 @@ class ChatCell: UITableViewCell {
         userImage.isHidden = false
         userName.text?.removeAll()
         message.text?.removeAll()
+        
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -91,7 +92,7 @@ class ChatCell: UITableViewCell {
             $0.layer.cornerRadius = 9
         }
         timeStamp.do {
-            $0.text = "오후 12:47"
+            $0.text = ""
             $0.textColor = UIColor.lightGray
             $0.font = UIFont.systemFont(ofSize: 9, weight: .regular)
         }
@@ -131,7 +132,7 @@ class ChatCell: UITableViewCell {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.bottomAnchor.constraint(equalTo: background.bottomAnchor).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 9).isActive = true
-            $0.widthAnchor.constraint(equalToConstant: $0.intrinsicContentSize.width + 20).isActive = true
+            $0.widthAnchor.constraint(lessThanOrEqualToConstant: 100).isActive = true
         }
         
         leadingConstraints = message.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 14)
@@ -146,10 +147,10 @@ class ChatCell: UITableViewCell {
         sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 15)
         sendTopConstraints.isActive = true
         
-        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: message.trailingAnchor, constant: 15)
+        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: background.trailingAnchor, constant: 5)
         timeStampLeadingConstraints.isActive = true
         
-        timeStampTrailingConstraints = timeStamp.trailingAnchor.constraint(equalTo: message.leadingAnchor, constant: -5)
+        timeStampTrailingConstraints = timeStamp.trailingAnchor.constraint(equalTo: background.leadingAnchor, constant: -5)
         timeStampTrailingConstraints.isActive = true
     }
     

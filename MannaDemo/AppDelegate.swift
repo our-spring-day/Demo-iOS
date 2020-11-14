@@ -8,7 +8,7 @@
 import UIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
@@ -22,15 +22,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let renderImage = image.asImage()
             userImage.append(renderImage)
         }
-        print(userImage)
-        var count = 0
-//        for key in UserModel.userList.keys {
-//            UserModel.userList[key]?.nicknameImage = userImage[count]
-//            count += 1
-//        }
         
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+        
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in    // 1
+            if let error = error {
+                // Error Handling
+            }
+            DispatchQueue.main.async {
+                application.registerForRemoteNotifications()    // 2
+            }
+        }
         return true
     }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let deviceTokenString = deviceToken.map { String(format: "%02x", $0) }.joined()
+        print("device 토큰 : ", deviceTokenString)
+    }
+
 
     // MARK: UISceneSession Lifecycle
 

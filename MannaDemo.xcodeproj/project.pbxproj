@@ -75,6 +75,7 @@
 		A52A1C3C255BA239000794A5 /* RankingViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewCell.swift; sourceTree = "<group>"; };
 		A52A1C3F255BAA3C000794A5 /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		A52A1C46255BBB23000794A5 /* Medal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medal.swift; sourceTree = "<group>"; };
+		A537747D2560043E00C0A91B /* MannaDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MannaDemo.entitlements; sourceTree = "<group>"; };
 		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
@@ -289,6 +290,7 @@
 		CC8B84592540231900441445 /* MannaDemo */ = {
 			isa = PBXGroup;
 			children = (
+				A537747D2560043E00C0A91B /* MannaDemo.entitlements */,
 				CC46AE71255C014A0053F221 /* Font */,
 				CC41A0A52548449200C0E762 /* lottie */,
 				A5D48F1F2542AD8600399462 /* Extension */,
@@ -659,6 +661,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MannaDemo/MannaDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DH7PS64634;
 				INFOPLIST_FILE = MannaDemo/Info.plist;
@@ -679,6 +682,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MannaDemo/MannaDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DH7PS64634;
 				INFOPLIST_FILE = MannaDemo/Info.plist;

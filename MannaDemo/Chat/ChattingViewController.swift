@@ -211,13 +211,14 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         if let safeNextMan = nextUser, let safeNextHour = nextHour, let safeNextMinute = nextMinute {
-            if chatMessage[indexPath.row].user == safeNextMan && "\(currentHour) : \(currentMinute)" == "\(safeNextHour) : \(safeNextMinute)" {
+            if chatMessage[indexPath.row].user == safeNextMan
+                && "\(currentHour) : \(currentMinute)" == "\(safeNextHour) : \(safeNextMinute)" {
                 cell.timeStamp.text = ""
             } else {
                 if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
-                    cell.timeStamp.text = "오전 \(currentHour) : \(currentMinute)"
+                    cell.timeStamp.text = chatMessage[indexPath.row].timeStamp.getTime()
                 } else {
-                    cell.timeStamp.text = "오후 \(Int(currentHour)! - 12) : \(currentMinute)"
+                    cell.timeStamp.text = chatMessage[indexPath.row].timeStamp.getTime()
                 }
             }
         }
