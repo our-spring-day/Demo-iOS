@@ -11,6 +11,6 @@ struct ChatMessage {
     let user: String
     let text: String
     let timeStamp: Int
-    let isIncoming: Bool
+    let isIncoming: UserState
     var sendState: Bool
 }

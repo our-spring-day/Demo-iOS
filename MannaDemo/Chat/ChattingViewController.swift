@@ -113,7 +113,6 @@ class ChattingViewController: UIViewController, chattingView {
             $0.register(ChatCell.self, forCellReuseIdentifier: ChatCell.cellID)
             $0.separatorStyle = .none
             $0.backgroundColor = .white
-            $0.keyboardDismissMode = .interactive
         }
         sendButton.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
@@ -121,7 +120,6 @@ class ChattingViewController: UIViewController, chattingView {
     // MARK: chatView Layout
     func layout() {
         view.addSubview(chatView)
-//        view.addSubview(timerView)
         chatView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -129,12 +127,6 @@ class ChattingViewController: UIViewController, chattingView {
             $0.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         }
-//        timerView.snp.makeConstraints {
-//            $0.centerX.equalTo(view)
-//            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
-//            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
-//            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
-//        }
     }
     
     // MARK: TableView tap hide keyboard action
@@ -211,8 +203,11 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         if let safeNextMan = nextUser, let safeNextHour = nextHour, let safeNextMinute = nextMinute {
+            print(safeNextMan)
+            print(safeNextHour)
+            print(safeNextMinute)
             if chatMessage[indexPath.row].user == safeNextMan
-                && "\(currentHour) : \(currentMinute)" == "\(safeNextHour) : \(safeNextMinute)" {
+                && "\(currentHour) : \(currentMinute)" == "\(safeNextHour):\(safeNextMinute)" {
                 cell.timeStamp.text = ""
             } else {
                 if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {

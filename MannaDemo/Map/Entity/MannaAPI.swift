@@ -45,7 +45,7 @@ class MannaAPI {
                         let chatPiece = ChatMessage(user: chat["sender"]["username"].string!,
                                                     text: chat["message"].string!,
                                                     timeStamp: chat["createTimestamp"].int!,
-                                    isIncoming: chat["sender"]["deviceToken"].string! == MannaDemo.myUUID ? false : true,
+                                                    isIncoming: chat["sender"]["deviceToken"].string! == MannaDemo.myUUID ? .me : .other,
                                     sendState: false)
                         result.append(chatPiece)
                     }

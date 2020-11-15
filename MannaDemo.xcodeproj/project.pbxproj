@@ -14,6 +14,7 @@
 		A52A1C3D255BA239000794A5 /* RankingViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3C255BA239000794A5 /* RankingViewCell.swift */; };
 		A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3F255BAA3C000794A5 /* Ranking.swift */; };
 		A52A1C47255BBB23000794A5 /* Medal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C46255BBB23000794A5 /* Medal.swift */; };
+		A53774BF2561655400C0A91B /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53774BE2561655400C0A91B /* UserState.swift */; };
 		A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E22552752F00ACD946 /* ChatMessageView.swift */; };
 		A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E52552803000ACD946 /* UITextField+Ext.swift */; };
 		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
@@ -76,6 +77,7 @@
 		A52A1C3F255BAA3C000794A5 /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		A52A1C46255BBB23000794A5 /* Medal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medal.swift; sourceTree = "<group>"; };
 		A537747D2560043E00C0A91B /* MannaDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MannaDemo.entitlements; sourceTree = "<group>"; };
+		A53774BE2561655400C0A91B /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				A5F82CE525568074009A8AC5 /* GetMannaAPI.swift */,
 				A5F82CE82556811B009A8AC5 /* MannaList.swift */,
 				A52A1C3F255BAA3C000794A5 /* Ranking.swift */,
+				A53774BE2561655400C0A91B /* UserState.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -482,6 +485,7 @@
 				CCC19F9A255D34200092DD05 /* Int+Ext.swift in Sources */,
 				CC107739255464D300908D71 /* TravelData.swift in Sources */,
 				A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */,
+				A53774BF2561655400C0A91B /* UserState.swift in Sources */,
 				CC79E4AE2555B4DE001C726F /* SocketData.swift in Sources */,
 				CCE75254254028FE008E0BA1 /* MannaListViewController.swift in Sources */,
 				A5A0F0602551593300A11EEF /* UIColor+Ext.swift in Sources */,

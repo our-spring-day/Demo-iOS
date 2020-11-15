@@ -24,14 +24,14 @@ class ChatCell: UITableViewCell {
     
     var chatMessage: ChatMessage! {
         didSet {
-            background.backgroundColor = chatMessage.isIncoming ? UIColor.appColor(.receiveMessage) : UIColor.appColor(.sendMessage)
-            message.textColor = chatMessage.isIncoming ? .black : .white
+            background.backgroundColor = chatMessage.isIncoming == .other ? UIColor.appColor(.receiveMessage) : UIColor.appColor(.sendMessage)
+            message.textColor = chatMessage.isIncoming == .other ? .black : .white
             
             message.text = chatMessage.text
-            userName.text = chatMessage.isIncoming ? chatMessage.user : ""
-            userImage.image = chatMessage.isIncoming ? UIImage(named: chatMessage.user) : nil
+            userName.text = chatMessage.isIncoming == .other ? chatMessage.user : ""
+            userImage.image = chatMessage.isIncoming == .other ? UIImage(named: chatMessage.user) : nil
             
-            if chatMessage.isIncoming {
+            if chatMessage.isIncoming == .other {
                 leadingConstraints.isActive = true
                 trailingConstraints.isActive = false
                 timeStampLeadingConstraints.isActive = true
@@ -61,7 +61,6 @@ class ChatCell: UITableViewCell {
         userImage.isHidden = false
         userName.text?.removeAll()
         message.text?.removeAll()
-        
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -92,7 +91,6 @@ class ChatCell: UITableViewCell {
             $0.layer.cornerRadius = 9
         }
         timeStamp.do {
-            $0.text = ""
             $0.textColor = UIColor.lightGray
             $0.font = UIFont.systemFont(ofSize: 9, weight: .regular)
         }
