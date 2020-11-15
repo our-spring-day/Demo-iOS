@@ -175,7 +175,9 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
                 message.sendState = false
             }
         }
-        cell.chatMessage = message
+        
+                cell.chatMessage = message
+//        cell.configure(chatMessage: message)
         
         var nextUser: String?
         var nextDate: Date?
@@ -203,9 +205,6 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         if let safeNextMan = nextUser, let safeNextHour = nextHour, let safeNextMinute = nextMinute {
-            print(safeNextMan)
-            print(safeNextHour)
-            print(safeNextMinute)
             if chatMessage[indexPath.row].user == safeNextMan
                 && "\(currentHour) : \(currentMinute)" == "\(safeNextHour):\(safeNextMinute)" {
                 cell.timeStamp.text = ""
@@ -217,6 +216,8 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
+        
+
         
         return cell
     }

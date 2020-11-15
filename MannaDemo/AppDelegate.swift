@@ -26,20 +26,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         
-        center.requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in    // 1
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in
             if let error = error {
-                // Error Handling
+                print(error)
             }
+            print("success : ", success)
+            
             DispatchQueue.main.async {
-                application.registerForRemoteNotifications()    // 2
+                application.registerForRemoteNotifications()
             }
         }
+        
+        
+//        UIApplication.shared.registerForRemoteNotifications()
         return true
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let deviceTokenString = deviceToken.map { String(format: "%02x", $0) }.joined()
         print("device 토큰 : ", deviceTokenString)
+        
     }
 
 

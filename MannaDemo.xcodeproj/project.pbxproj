@@ -15,6 +15,7 @@
 		A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3F255BAA3C000794A5 /* Ranking.swift */; };
 		A52A1C47255BBB23000794A5 /* Medal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C46255BBB23000794A5 /* Medal.swift */; };
 		A53774BF2561655400C0A91B /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53774BE2561655400C0A91B /* UserState.swift */; };
+		A53774C32561876F00C0A91B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53774C22561876F00C0A91B /* PushKit.framework */; };
 		A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E22552752F00ACD946 /* ChatMessageView.swift */; };
 		A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E52552803000ACD946 /* UITextField+Ext.swift */; };
 		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
@@ -78,6 +79,7 @@
 		A52A1C46255BBB23000794A5 /* Medal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medal.swift; sourceTree = "<group>"; };
 		A537747D2560043E00C0A91B /* MannaDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MannaDemo.entitlements; sourceTree = "<group>"; };
 		A53774BE2561655400C0A91B /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
+		A53774C22561876F00C0A91B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A53774C32561876F00C0A91B /* PushKit.framework in Frameworks */,
 				8E7C8A978621D2D74141175E /* Pods_MannaDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -157,6 +160,7 @@
 		9BC61FB96D6AEB5AB853DE98 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A53774C22561876F00C0A91B /* PushKit.framework */,
 				746C721A3B03AF62EF85DC20 /* Pods_MannaDemo.framework */,
 			);
 			name = Frameworks;

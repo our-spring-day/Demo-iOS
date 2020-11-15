@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import SnapKit
 
 class ChatCell: UITableViewCell {
     static let cellID = "chatCellID"
     let userName = UILabel()
     let userImage = UIImageView()
-    let message = UILabel()
+    var message = UILabel()
     let background = UIView()
     var timeStamp = UILabel()
     
@@ -68,6 +69,44 @@ class ChatCell: UITableViewCell {
         self.backgroundColor = .white
         attirbute()
         layout()
+    }
+    
+    func configure(chatMessage: ChatMessage) {
+        self.message.text = chatMessage.text
+        
+        switch chatMessage.isIncoming {
+        case .me:
+            self.userImage.image = nil
+            self.userName.text = nil
+            self.background.backgroundColor = UIColor.appColor(.sendMessage)
+            self.message.textColor = .white
+            self.leadingConstraints.isActive = false
+            self.trailingConstraints.isActive = true
+            self.timeStampLeadingConstraints.isActive = false
+            self.timeStampTrailingConstraints.isActive = true
+            self.receiveTopConstraints.isActive = false
+            self.sendTopConstraints.isActive = true
+            self.userImage.isHidden = true
+            
+        case .other:
+            self.userImage.image = UIImage(named: chatMessage.user)
+            self.userName.text = chatMessage.user
+            self.background.backgroundColor = UIColor.appColor(.receiveMessage)
+            self.message.textColor = .black
+            self.leadingConstraints.isActive = true
+            self.trailingConstraints.isActive = false
+            self.timeStampLeadingConstraints.isActive = true
+            self.timeStampTrailingConstraints.isActive = false
+            if chatMessage.sendState {
+                self.receiveTopConstraints.isActive = false
+                self.sendTopConstraints.isActive = true
+                self.userImage.isHidden = true
+            } else{
+                self.receiveTopConstraints.isActive = true
+                self.sendTopConstraints.isActive = false
+            }
+        }
+        self.setNeedsLayout()
     }
     
     func attirbute() {
