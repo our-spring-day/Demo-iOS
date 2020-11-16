@@ -14,7 +14,6 @@ protocol RankingView: UIViewController {
 
 class RankingViewController: UIViewController, RankingView {
     lazy var rankginView = UITableView()
-    lazy var backgroundView = UIView()
     var dismissButton = UIButton()
     var timerView = TimerView(.rankingView)
     var userList: [String : User] = [:]
@@ -31,19 +30,11 @@ class RankingViewController: UIViewController, RankingView {
     }
     
     func attribute() {
-        let gesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                     action: #selector(prevButton(_:)))
         self.do {
-            $0.view.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-//            $0.view.backgroundColor = .white
-        }
-        backgroundView.do {
-            $0.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-//            $0.backgroundColor = .white
-            $0.addGestureRecognizer(gesture)
+            $0.view.backgroundColor = .white
         }
         rankginView.do {
-            $0.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+            $0.backgroundColor = .white
             $0.register(RankingViewCell.self, forCellReuseIdentifier: RankingViewCell.rankingCellID)
             $0.delegate = self
             $0.dataSource = self
@@ -147,11 +138,9 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 // 여기에 재촉하는거 함수 구현
                 // ->>
                 if let userName = notArrivalUser[indexPath.row].name {
-                    let userID = getDeviceToken.getUserDeviceToken(name: userName)
-                    MannaAPI.urgeUser(receiveUser: userID)
+                    MannaAPI.urgeUser(userName: userName)
                 }
-//                print("유저 이름 : ", notArrivalUser[indexPath.row].name)
-                Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+                Timer.scheduledTimer(withTimeInterval: 180, repeats: false) { _ in
                     cell.buttonState = true
                 }
             }

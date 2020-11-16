@@ -80,9 +80,10 @@ class MannaAPI {
     }
     
     
-    static func urgeUser(receiveUser: String) {
+    static func urgeUser(userName: String) {
         guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
-        let url = "https://manna.duckdns.org:18888/manna/96f35135-390f-496c-af00-cdb3a4104550/push/\(deviceID)?deviceToken=\(receiveUser)"
+        let receiveUser = getDeviceToken.getUserDeviceToken(name: userName)
+        let url = "https://manna.duckdns.org:18888/manna/96f35135-390f-496c-af00-cdb3a4104550/push/\(receiveUser)?deviceToken=\(deviceID)"
         
         AF.request(url, method: .post).responseString { response in
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
