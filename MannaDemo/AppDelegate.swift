@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
     var userImage: [UIImage] = []
@@ -22,15 +23,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let renderImage = image.asImage()
             userImage.append(renderImage)
         }
-        print(userImage)
-        var count = 0
-//        for key in UserModel.userList.keys {
-//            UserModel.userList[key]?.nicknameImage = userImage[count]
-//            count += 1
-//        }
+        
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+        
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in
+            if let error = error {
+                print(error)
+            }
+            print("success : ", success)
+            
+            DispatchQueue.main.async {
+                application.registerForRemoteNotifications()
+            }
+        }
         
         return true
     }
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        /// 앱이 foreground  상태일 때 Push 받으면 alert를 띄워준다
+        completionHandler([.alert, .sound])
+      }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let deviceTokenString = deviceToken.map { String(format: "%02x", $0) }.joined()
+        print("device 토큰 : ", deviceTokenString)
+        MannaAPI.registerPushToken(pushToken: deviceTokenString)
+    }
+
 
     // MARK: UISceneSession Lifecycle
 

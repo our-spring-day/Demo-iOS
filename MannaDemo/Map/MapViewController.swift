@@ -104,7 +104,7 @@ class MapViewController: UIViewController, ChatSet{
             let result: SocketMessage = try! JSONDecoder().decode(SocketMessage.self, from: temp)
             var newMessage: ChatMessage?
             if result.message != nil {
-                let incoming = result.sender.deviceToken != MannaDemo.myUUID
+                let incoming: UserState = result.sender.deviceToken != MannaDemo.myUUID ? .other : .me
                 switch result.sender.username {
                 case "우석":
                     if let message = result.message?.message, let timestamp = result.message?.createTimestamp {

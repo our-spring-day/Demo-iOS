@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import SnapKit
 
 class ChatCell: UITableViewCell {
     static let cellID = "chatCellID"
     let userName = UILabel()
     let userImage = UIImageView()
-    let message = UILabel()
+    var message = UILabel()
     let background = UIView()
     var timeStamp = UILabel()
     
@@ -24,14 +25,14 @@ class ChatCell: UITableViewCell {
     
     var chatMessage: ChatMessage! {
         didSet {
-            background.backgroundColor = chatMessage.isIncoming ? UIColor.appColor(.receiveMessage) : UIColor.appColor(.sendMessage)
-            message.textColor = chatMessage.isIncoming ? .black : .white
+            background.backgroundColor = chatMessage.isIncoming == .other ? UIColor.appColor(.receiveMessage) : UIColor.appColor(.sendMessage)
+            message.textColor = chatMessage.isIncoming == .other ? .black : .white
             
             message.text = chatMessage.text
-            userName.text = chatMessage.isIncoming ? chatMessage.user : ""
-            userImage.image = chatMessage.isIncoming ? UIImage(named: chatMessage.user) : nil
+            userName.text = chatMessage.isIncoming == .other ? chatMessage.user : ""
+            userImage.image = chatMessage.isIncoming == .other ? UIImage(named: chatMessage.user) : nil
             
-            if chatMessage.isIncoming {
+            if chatMessage.isIncoming == .other {
                 leadingConstraints.isActive = true
                 trailingConstraints.isActive = false
                 timeStampLeadingConstraints.isActive = true
@@ -70,6 +71,44 @@ class ChatCell: UITableViewCell {
         layout()
     }
     
+    func configure(chatMessage: ChatMessage) {
+        self.message.text = chatMessage.text
+        
+        switch chatMessage.isIncoming {
+        case .me:
+            self.userImage.image = nil
+            self.userName.text = nil
+            self.background.backgroundColor = UIColor.appColor(.sendMessage)
+            self.message.textColor = .white
+            self.leadingConstraints.isActive = false
+            self.trailingConstraints.isActive = true
+            self.timeStampLeadingConstraints.isActive = false
+            self.timeStampTrailingConstraints.isActive = true
+            self.receiveTopConstraints.isActive = false
+            self.sendTopConstraints.isActive = true
+            self.userImage.isHidden = true
+            
+        case .other:
+            self.userImage.image = UIImage(named: chatMessage.user)
+            self.userName.text = chatMessage.user
+            self.background.backgroundColor = UIColor.appColor(.receiveMessage)
+            self.message.textColor = .black
+            self.leadingConstraints.isActive = true
+            self.trailingConstraints.isActive = false
+            self.timeStampLeadingConstraints.isActive = true
+            self.timeStampTrailingConstraints.isActive = false
+            if chatMessage.sendState {
+                self.receiveTopConstraints.isActive = false
+                self.sendTopConstraints.isActive = true
+                self.userImage.isHidden = true
+            } else{
+                self.receiveTopConstraints.isActive = true
+                self.sendTopConstraints.isActive = false
+            }
+        }
+        self.setNeedsLayout()
+    }
+    
     func attirbute() {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
@@ -91,7 +130,6 @@ class ChatCell: UITableViewCell {
             $0.layer.cornerRadius = 9
         }
         timeStamp.do {
-            $0.text = "오후 12:47"
             $0.textColor = UIColor.lightGray
             $0.font = UIFont.systemFont(ofSize: 9, weight: .regular)
         }
@@ -131,7 +169,7 @@ class ChatCell: UITableViewCell {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.bottomAnchor.constraint(equalTo: background.bottomAnchor).isActive = true
             $0.heightAnchor.constraint(equalToConstant: 9).isActive = true
-            $0.widthAnchor.constraint(equalToConstant: $0.intrinsicContentSize.width + 20).isActive = true
+            $0.widthAnchor.constraint(lessThanOrEqualToConstant: 100).isActive = true
         }
         
         leadingConstraints = message.leadingAnchor.constraint(equalTo: userImage.trailingAnchor, constant: 14)
@@ -146,10 +184,10 @@ class ChatCell: UITableViewCell {
         sendTopConstraints = message.topAnchor.constraint(equalTo: topAnchor, constant: 15)
         sendTopConstraints.isActive = true
         
-        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: message.trailingAnchor, constant: 15)
+        timeStampLeadingConstraints = timeStamp.leadingAnchor.constraint(equalTo: background.trailingAnchor, constant: 5)
         timeStampLeadingConstraints.isActive = true
         
-        timeStampTrailingConstraints = timeStamp.trailingAnchor.constraint(equalTo: message.leadingAnchor, constant: -5)
+        timeStampTrailingConstraints = timeStamp.trailingAnchor.constraint(equalTo: background.leadingAnchor, constant: -5)
         timeStampTrailingConstraints.isActive = true
     }
     

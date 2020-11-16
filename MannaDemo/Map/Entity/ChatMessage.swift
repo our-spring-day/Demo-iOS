@@ -9,8 +9,8 @@ import Foundation
 
 struct ChatMessage {
     let user: String
-    let text: String
+    var text: String
     let timeStamp: Int
-    let isIncoming: Bool
+    let isIncoming: UserState
     var sendState: Bool
 }

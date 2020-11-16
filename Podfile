@@ -14,6 +14,10 @@ target 'MannaDemo' do
   pod 'SwiftyJSON'
   pod 'Starscream'
   pod 'lottie-ios'  
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'RxKeyboard'
+
 # Pods for MannaDemo
 
 end

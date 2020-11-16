@@ -14,7 +14,6 @@ protocol RankingView: UIViewController {
 
 class RankingViewController: UIViewController, RankingView {
     lazy var rankginView = UITableView()
-    lazy var backgroundView = UIView()
     var dismissButton = UIButton()
     var timerView = TimerView(.rankingView)
     var userList: [String : User] = [:]
@@ -31,14 +30,8 @@ class RankingViewController: UIViewController, RankingView {
     }
     
     func attribute() {
-        let gesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                     action: #selector(prevButton(_:)))
         self.do {
             $0.view.backgroundColor = .white
-        }
-        backgroundView.do {
-            $0.backgroundColor = .white
-            $0.addGestureRecognizer(gesture)
         }
         rankginView.do {
             $0.backgroundColor = .white
@@ -144,18 +137,14 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.buttonState = false
                 // 여기에 재촉하는거 함수 구현
                 // ->>
-                Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+                if let userName = notArrivalUser[indexPath.row].name {
+                    MannaAPI.urgeUser(userName: userName)
+                }
+                Timer.scheduledTimer(withTimeInterval: 180, repeats: false) { _ in
                     cell.buttonState = true
                 }
             }
             cell.setData(data: notArrivalUser[indexPath.row])
-//            if indexPath.row == 4 {
-//                cell.button.do {
-//                    $0.setTitle("연결끊김", for: .normal)
-//                    $0.backgroundColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 0.09524828767)
-//                    $0.setTitleColor(#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1), for: .normal)
-//                }
-//            }
         }
         return cell
     }
