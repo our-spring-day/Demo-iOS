@@ -175,8 +175,8 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
                 message.sendState = false
             }
         }
-        
-                cell.chatMessage = message
+     
+        cell.chatMessage = message
 //        cell.configure(chatMessage: message)
         
         var nextUser: String?

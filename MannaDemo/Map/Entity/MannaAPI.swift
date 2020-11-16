@@ -84,12 +84,9 @@ class MannaAPI {
         guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
         let url = "https://manna.duckdns.org:18888/manna/96f35135-390f-496c-af00-cdb3a4104550/push/\(deviceID)?deviceToken=\(receiveUser)"
         
-        AF.request(url, method: .post).responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                print("성공 : ", value)
-            case .failure(let err):
-                print("에러 : ",err)
+        AF.request(url, method: .post).responseString { response in
+            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
+                print("Data: \(utf8Text)")
             }
         }
     }

@@ -16,6 +16,7 @@
 		A52A1C47255BBB23000794A5 /* Medal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C46255BBB23000794A5 /* Medal.swift */; };
 		A53774BF2561655400C0A91B /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53774BE2561655400C0A91B /* UserState.swift */; };
 		A53774C32561876F00C0A91B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53774C22561876F00C0A91B /* PushKit.framework */; };
+		A53774E62562E2F100C0A91B /* getDeviceToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53774E52562E2F100C0A91B /* getDeviceToken.swift */; };
 		A53817E32552752F00ACD946 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E22552752F00ACD946 /* ChatMessageView.swift */; };
 		A53817E62552803000ACD946 /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E52552803000ACD946 /* UITextField+Ext.swift */; };
 		A53817E92552AA1E00ACD946 /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */; };
@@ -29,7 +30,6 @@
 		A5D48F1A2542A60F00399462 /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F192542A60F00399462 /* Marker.swift */; };
 		A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F202542AD9B00399462 /* UIView+Ext.swift */; };
 		A5D48F252542AE3B00399462 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F242542AE3B00399462 /* UserView.swift */; };
-		A5F82CE625568074009A8AC5 /* GetMannaAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F82CE525568074009A8AC5 /* GetMannaAPI.swift */; };
 		A5F82CE92556811B009A8AC5 /* MannaList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F82CE82556811B009A8AC5 /* MannaList.swift */; };
 		CC107739255464D300908D71 /* TravelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC107738255464D300908D71 /* TravelData.swift */; };
 		CC1077472555956500908D71 /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1077462555956500908D71 /* SocketIOManager.swift */; };
@@ -80,6 +80,7 @@
 		A537747D2560043E00C0A91B /* MannaDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MannaDemo.entitlements; sourceTree = "<group>"; };
 		A53774BE2561655400C0A91B /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 		A53774C22561876F00C0A91B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
+		A53774E52562E2F100C0A91B /* getDeviceToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getDeviceToken.swift; sourceTree = "<group>"; };
 		A53817E22552752F00ACD946 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		A53817E52552803000ACD946 /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
 		A53817E82552AA1E00ACD946 /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
@@ -93,7 +94,6 @@
 		A5D48F192542A60F00399462 /* Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
 		A5D48F202542AD9B00399462 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		A5D48F242542AE3B00399462 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
-		A5F82CE525568074009A8AC5 /* GetMannaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMannaAPI.swift; sourceTree = "<group>"; };
 		A5F82CE82556811B009A8AC5 /* MannaList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaList.swift; sourceTree = "<group>"; };
 		CC107738255464D300908D71 /* TravelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelData.swift; sourceTree = "<group>"; };
 		CC1077462555956500908D71 /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
@@ -271,6 +271,7 @@
 				CC74831B25513098006C1E02 /* none5.swift */,
 				CC1CC96D25429F080020D4C5 /* none6.swift */,
 				CC1CC97025429F490020D4C5 /* none7.swift */,
+				A53774E52562E2F100C0A91B /* getDeviceToken.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -305,9 +306,9 @@
 				A515563725404C5700487BEF /* Map */,
 				CCE752492540288F008E0BA1 /* MannaList */,
 				A515562B2540290600487BEF /* RegisterUser */,
-				CC8B845A2540231A00441445 /* AppDelegate.swift */,
 				A5A0F058255149DE00A11EEF /* Chat */,
 				CC8B845C2540231A00441445 /* SceneDelegate.swift */,
+				CC8B845A2540231A00441445 /* AppDelegate.swift */,
 				CC8B845E2540231A00441445 /* ViewController.swift */,
 				CC8B84602540231A00441445 /* Main.storyboard */,
 				CC8B84632540231A00441445 /* Assets.xcassets */,
@@ -346,7 +347,6 @@
 				CC107738255464D300908D71 /* TravelData.swift */,
 				CC79E4AD2555B4DE001C726F /* SocketData.swift */,
 				A543EAF42555C5A7005363B8 /* SocketMessage.swift */,
-				A5F82CE525568074009A8AC5 /* GetMannaAPI.swift */,
 				A5F82CE82556811B009A8AC5 /* MannaList.swift */,
 				A52A1C3F255BAA3C000794A5 /* Ranking.swift */,
 				A53774BE2561655400C0A91B /* UserState.swift */,
@@ -471,6 +471,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A53774E62562E2F100C0A91B /* getDeviceToken.swift in Sources */,
 				CC74832C255164E7006C1E02 /* none4.swift in Sources */,
 				A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */,
 				A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */,
@@ -520,7 +521,6 @@
 				A5D48F1A2542A60F00399462 /* Marker.swift in Sources */,
 				CC8A0B5E2554609B00063790 /* MapView+CLocation.swift in Sources */,
 				A52A1C3D255BA239000794A5 /* RankingViewCell.swift in Sources */,
-				A5F82CE625568074009A8AC5 /* GetMannaAPI.swift in Sources */,
 				A52A1C3A255BA162000794A5 /* RankingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

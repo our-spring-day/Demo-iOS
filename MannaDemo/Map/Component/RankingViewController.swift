@@ -34,14 +34,16 @@ class RankingViewController: UIViewController, RankingView {
         let gesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                                      action: #selector(prevButton(_:)))
         self.do {
-            $0.view.backgroundColor = .white
+            $0.view.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+//            $0.view.backgroundColor = .white
         }
         backgroundView.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+//            $0.backgroundColor = .white
             $0.addGestureRecognizer(gesture)
         }
         rankginView.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
             $0.register(RankingViewCell.self, forCellReuseIdentifier: RankingViewCell.rankingCellID)
             $0.delegate = self
             $0.dataSource = self
@@ -144,18 +146,16 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.buttonState = false
                 // 여기에 재촉하는거 함수 구현
                 // ->>
+                if let userName = notArrivalUser[indexPath.row].name {
+                    let userID = getDeviceToken.getUserDeviceToken(name: userName)
+                    MannaAPI.urgeUser(receiveUser: userID)
+                }
+//                print("유저 이름 : ", notArrivalUser[indexPath.row].name)
                 Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
                     cell.buttonState = true
                 }
             }
             cell.setData(data: notArrivalUser[indexPath.row])
-//            if indexPath.row == 4 {
-//                cell.button.do {
-//                    $0.setTitle("연결끊김", for: .normal)
-//                    $0.backgroundColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 0.09524828767)
-//                    $0.setTitleColor(#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1), for: .normal)
-//                }
-//            }
         }
         return cell
     }
