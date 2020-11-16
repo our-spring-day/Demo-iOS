@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol chattingView: UIViewController {
     var chatMessage: [ChatMessage] { get set }
@@ -21,7 +22,6 @@ class ChattingViewController: UIViewController, chattingView {
     var keyboardShown:Bool = true
     var messageInput = ChatMessageView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//    var timerView = TimerView(.rankingView)
     var chatMessage: [ChatMessage] = []
     
     var textField = UITextField().then {
@@ -177,7 +177,6 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         }
      
         cell.chatMessage = message
-//        cell.configure(chatMessage: message)
         
         var nextUser: String?
         var nextDate: Date?
