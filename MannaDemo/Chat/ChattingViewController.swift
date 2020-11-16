@@ -274,11 +274,14 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.textField.endEditing(true)
+    }
 }
 
 extension ChattingViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        textField.endEditing(true)
         self.textField.endEditing(true)
     }
 }
