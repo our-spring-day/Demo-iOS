@@ -9,6 +9,7 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 import NMapsMap
+import SwiftKeychainWrapper
 
 class MannaAPI {
     static func getPath(lat: Double, lng: Double, completion: @escaping (TravelData) -> Void) {
@@ -56,6 +57,39 @@ class MannaAPI {
             case .failure(let err):
                 print(err)
                 break
+            }
+        }
+    }
+    
+    static func registerPushToken(pushToken: String) {
+        guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
+        let url = "https://manna.duckdns.org:18888/user/pushToken?deviceToken=\(deviceID)"
+
+        let params: Parameters = [
+            "pushToken" : pushToken,
+            "type" : "apns"
+        ]
+        AF.request(url, method: .post, parameters: params, encoding: URLEncoding.httpBody).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                print("성공 : ",value)
+            case .failure(let err):
+                print("에러 : ",err)
+            }
+        }
+    }
+    
+    
+    static func urgeUser(receiveUser: String) {
+        guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
+        let url = "https://manna.duckdns.org:18888/manna/96f35135-390f-496c-af00-cdb3a4104550/push/\(deviceID)?deviceToken=\(receiveUser)"
+        
+        AF.request(url, method: .post).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                print("성공 : ", value)
+            case .failure(let err):
+                print("에러 : ",err)
             }
         }
     }
