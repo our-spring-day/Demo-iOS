@@ -79,6 +79,8 @@ class MapViewController: UIViewController, ChatSet{
         chatSocket = manager.socket(forNamespace: "/chat")
         locationSocket.connect()
         chatSocket.connect()
+        
+        
         locationSocket.on("locationConnect") { [self] (array, ack) in
             rankingViewController!.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
@@ -155,6 +157,8 @@ class MapViewController: UIViewController, ChatSet{
             chattingViewController!.chatMessage.append(newMessageBinding)
             chattingViewController!.chatView.reloadData()
         }
+        
+        
         locationSocket.on("location") { [self] (array, ack) in
             var _: String?
             var deviceToken: String?

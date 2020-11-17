@@ -82,8 +82,12 @@ class MannaAPI {
     
     static func urgeUser(userName: String) {
         guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
-        let receiveUser = getDeviceToken.getUserDeviceToken(name: userName)
-        let url = "https://manna.duckdns.org:18888/manna/96f35135-390f-496c-af00-cdb3a4104550/push/\(receiveUser)?deviceToken=\(deviceID)"
+        let userToken = getDeviceToken.getUserDeviceToken(name: userName)
+        print("deviceID : 쏘는 사람 = ",deviceID)
+        print("userToken : 받는 사람 = ",userToken)
+        let url = "https://manna.duckdns.org:18888/manna/96f35135-390f-496c-af00-cdb3a4104550/push/\(userToken)?deviceToken=\(deviceID)"
+        
+       
         
         AF.request(url, method: .post).responseString { response in
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {

@@ -36,7 +36,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 window.rootViewController = registerView
             } else {
                 if let deviceID = KeychainWrapper.standard.string(forKey: "device_id") {
-                    print(deviceID)
+                    print("deviceID : ",deviceID)
                     AF.request(url, method: .get, parameters: ["device_id": deviceID]).responseJSON { response in
                         switch response.result {
                         case .success(let value):
@@ -46,10 +46,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                             print("유저 조회안됨")
                         }
                     }
+                    window.rootViewController = mannalistView
                 }
 
-                // window.rootViewController = rankView
-                window.rootViewController = mannalistView
                 self.window = window
                 window.makeKeyAndVisible()
             }
