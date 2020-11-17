@@ -261,9 +261,17 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         
         if let safeNextMan = nextUser, let safeNextHour = nextHour, let safeNextMinute = nextMinute {
             if chatMessage[indexPath.row].user == safeNextMan
-                && "\(currentHour) : \(currentMinute)" == "\(safeNextHour):\(safeNextMinute)" {
+                && "\(currentHour) : \(currentMinute)" == "\(safeNextHour) : \(safeNextMinute)" {
                 cell.timeStamp.text = ""
             } else {
+                if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
+                    cell.timeStamp.text = chatMessage[indexPath.row].timeStamp.getTime()
+                } else {
+                    cell.timeStamp.text = chatMessage[indexPath.row].timeStamp.getTime()
+                }
+            }
+        } else {
+            if indexPath.row == chatMessage.count - 1 {
                 if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
                     cell.timeStamp.text = chatMessage[indexPath.row].timeStamp.getTime()
                 } else {
