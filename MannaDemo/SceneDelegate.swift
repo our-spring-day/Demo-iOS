@@ -39,8 +39,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     let param: Parameters = [
                         "device_id" : deviceID,
                     ]
-                    
-                    AF.request("https://manna.duckdns.org:18888/manna?deviceToken=\(deviceID)", parameters: param).responseJSON { response in
+                    AF.request(url, method: .get, parameters: ["device_id": deviceID]).responseJSON { response in
                         switch response.result {
                         case .success(let value):
                             print("성공",value)
@@ -57,7 +56,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                             break
                         }
                     }
+                    window.rootViewController = mannalistView
                 }
+
+                self.window = window
+                window.makeKeyAndVisible()
             }
             self.window = window
             window.makeKeyAndVisible()

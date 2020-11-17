@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+import RxKeyboard
+import RxSwift
+import RxCocoa
 
 protocol chattingView: UIViewController {
     var chatMessage: [ChatMessage] { get set }
@@ -17,6 +20,8 @@ protocol chattingView: UIViewController {
 }
 
 class ChattingViewController: UIViewController, chattingView {
+    let disposeBag = DisposeBag()
+    
     var chatView = UITableView()
     let bottomView = UIView().then {
         $0.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
@@ -37,17 +42,10 @@ class ChattingViewController: UIViewController, chattingView {
             $0.setImage(UIImage(named: "good"), for: .normal)
         }
     
-//    // MARK: CustomView
-//    class CustomView: UIView {
-//        override var intrinsicContentSize: CGSize {
-//            return CGSize.zero
-//        }
-//    }
-    
     // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        keyboardShow()
+//        keyboardShow()
         attirbute()
         layout()
     }
@@ -89,6 +87,14 @@ class ChattingViewController: UIViewController, chattingView {
             }
         }
     }
+    
+    func bind() {
+        RxKeyboard.instance.visibleHeight
+            .drive(onNext: { [weak self] keyboradHeight in
+                print(keyboradHeight)
+            })
+    }
+
     
     func attirbute() {
         let appearance = UINavigationBarAppearance()
@@ -147,7 +153,6 @@ class ChattingViewController: UIViewController, chattingView {
         sendButton.snp.makeConstraints {
             $0.centerY.equalTo(textField.snp.centerY)
             $0.leading.equalTo(textField.snp.trailing).offset(15)
-//            $0.trailing.equalTo(bottomView.snp.trailing).offset()
             $0.width.equalTo(25)
             $0.height.equalTo(25)
         }
