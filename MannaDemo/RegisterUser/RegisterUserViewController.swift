@@ -58,7 +58,6 @@ class RegisterUserViewController: UIViewController {
         guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
         guard let userName = userName.text else { return }
         let url = "https://manna.duckdns.org:18888/useruser?deviceToken=\(deviceID)&username=\(userName)"
-        print("dlrjdla?",deviceID)
         registerUser(url)
         print("등록완료!!!")
         view.modalPresentationStyle = .fullScreen
