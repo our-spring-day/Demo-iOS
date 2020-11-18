@@ -18,6 +18,9 @@ protocol ChatSet {
 }
 
 class MapViewController: UIViewController, ChatSet{
+    
+    var defaultOverlayImage = defaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
+    var compassOverlayImage = compassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
     var rankingViewController: RankingView?
     var chattingViewController: chattingView?
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
@@ -51,13 +54,23 @@ class MapViewController: UIViewController, ChatSet{
     lazy var tempTimerGesture = UITapGestureRecognizer(target: self, action: #selector(didClickedTimerView))
     lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
+//    var imageView: UIImageView = {
+//        let view = UIImageView()
+//        view.image = compassOverLayView(frame: CGRect(x: 100, y: 100, width: 60, height: 100)).asImage()
+////        view.image = #imageLiteral(resourceName: "tree")
+//        view.frame = CGRect(x: 100, y: 100, width: 60, height: 100)
+//        return view
+//    }()
+//    var imageView = compassOverLayView(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
     
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
+        
         if cameraUpdateOnlyOnceFlag {
             camereUpdateOnlyOnce()
             cameraUpdateOnlyOnceFlag = false
         }
+        
     }
     
     // MARK: ViewWillDisappear
@@ -278,6 +291,8 @@ class MapViewController: UIViewController, ChatSet{
     }
     // MARK: Attribute
     func attribute() {
+//        view.addSubview(imageView)
+        
         chattingViewController!.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
@@ -300,11 +315,9 @@ class MapViewController: UIViewController, ChatSet{
             $0.positionMode = .direction
         }
         mapView.locationOverlay.do {
-            $0.icon = NMFOverlayImage(image: #imageLiteral(resourceName: "overlay"))
-            $0.circleOutlineColor = .blue
-            $0.circleOutlineWidth = 2
-            $0.circleColor = .red
-            $0.circleRadius = 0.1
+            $0.icon = NMFOverlayImage(image: defaultOverlayImage)
+            $0.iconWidth = MannaDemo.convertWidth(value: 60)
+            $0.iconHeight = MannaDemo.convertWidth(value: 100)
         }
         locationManager.do {
             $0.delegate = self
@@ -363,6 +376,7 @@ class MapViewController: UIViewController, ChatSet{
         timerView.do {
             $0.addGestureRecognizer(tempTimerGesture)
         }
+        
     }
     
     // MARK: layout
@@ -418,15 +432,15 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     //MARK: 렌더링 이미지
-    func renderImage() {
-        for name in userName {
-            let image = UserView(text: name).then({
-                $0.layer.cornerRadius = 30
-            })
-            let renderImage = image.asImage()
-            userImage.append(renderImage)
-        }
-    }
+//    func renderImage() {
+//        for name in userName {
+//            let image = UserView(text: name).then({
+//                $0.layer.cornerRadius = 30
+//            })
+//            let renderImage = image.asImage()
+//            userImage.append(renderImage)
+//        }
+//    }
     
     //MARK: 닉네임 이미지 셋
     func nicknameImageSet() {
@@ -519,6 +533,11 @@ class MapViewController: UIViewController, ChatSet{
                     let cameraUpdate = NMFCameraUpdate(zoomTo: 17)
                     mapView.moveCamera(cameraUpdate)
                     mapView.positionMode = .compass
+                    mapView.locationOverlay.icon = NMFOverlayImage(image: compassOverlayImage)
+                    mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
+                    mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
+                    print(mapView.locationOverlay.iconWidth)
+                    print(mapView.locationOverlay.iconHeight)
                     
                 } else {
                     //트래킹 중이 아닌거지
@@ -527,6 +546,9 @@ class MapViewController: UIViewController, ChatSet{
                     cameraTrakingModeFlag.toggle()
                     myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
                     toWholeLocation()
+                    mapView.locationOverlay.icon = NMFOverlayImage(image: defaultOverlayImage)
+                    mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
+                    mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
                 }
             }
         } else {
@@ -548,12 +570,18 @@ class MapViewController: UIViewController, ChatSet{
                     mapView.moveCamera(cameraUpdate)
                     
                     mapView.positionMode = .compass
+                    mapView.locationOverlay.icon = NMFOverlayImage(image: compassOverlayImage)
+                    mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
+                    mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
                 } else {
                     mapView.positionMode = .normal
                     myLocationButton.alpha = 0.4
                     cameraTrakingModeFlag.toggle()
                     myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
                     toMyLocation()
+                    mapView.locationOverlay.icon = NMFOverlayImage(image: defaultOverlayImage)
+                    mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
+                    mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
                 }
             }
         }
@@ -604,8 +632,6 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 채팅창 클릭
     @objc func goToChatGestureFunc() {
         chattingViewController!.chatView.reloadData()
-//        self.chattingViewController!.modalPresentationStyle = .custom
-//        self.chattingViewController!.modalTransitionStyle = .crossDissolve
         present(chattingViewController!, animated: true)
     }
     

@@ -93,6 +93,7 @@ class MannaListViewController: UIViewController, reloadData {
             switch response.result {
             case .success(let value):
                 JSON(value).forEach { (_,data) in
+                    print("여기 떨어지나",data)
                     let item = NewManna(mannaname: data["mannaName"].string!,
                              createTimestamp: data["createTimestamp"].int!,
                              uuid: data["uuid"].string!)
