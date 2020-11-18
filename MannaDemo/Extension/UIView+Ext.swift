@@ -8,12 +8,23 @@
 import UIKit
 
 extension UIView {
+    
     func asImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(bounds: bounds)
-        return renderer.image { rendererContext in
-            layer.render(in: rendererContext.cgContext)
+        layoutIfNeeded()
+        let renderer = UIGraphicsImageRenderer(size: frame.size)
+        return renderer.image { context in
+            layer.render(in: context.cgContext)
         }
     }
+    
+    func asOverlayImage() -> UIImage {
+        layoutIfNeeded()
+        let renderer = UIGraphicsImageRenderer(size: frame.size)
+        return renderer.image { context in
+            layer.render(in: context.cgContext)
+        }
+    }
+    
     func makeImageFrom(_ desiredView: UIView) -> UIImage {
         let size = CGSize(width: desiredView.bounds.width, height: desiredView.bounds.height)
         let renderer = UIGraphicsImageRenderer(size: size)
