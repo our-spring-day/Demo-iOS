@@ -89,7 +89,6 @@ class ChattingViewController: UIViewController, chattingView {
             }
         }
     }
-
     
     func attirbute() {
         let appearance = UINavigationBarAppearance()

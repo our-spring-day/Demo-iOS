@@ -97,7 +97,6 @@ class MannaListViewController: UIViewController, reloadData {
                              createTimestamp: data["createTimestamp"].int!,
                              uuid: data["uuid"].string!)
                     MannaModel.newModel.append(item)
-//                    print(item.uuid)
                 }
                 completion()
                 break
@@ -105,7 +104,6 @@ class MannaListViewController: UIViewController, reloadData {
                 break
             }
         }
-        
     }
 }
 
