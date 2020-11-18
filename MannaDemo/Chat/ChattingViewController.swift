@@ -14,12 +14,13 @@ import RxCocoa
 protocol chattingView: UIViewController {
     var chatMessage: [ChatMessage] { get set }
     var chatView: UITableView { get set }
-    var textField: UITextField { get set }
-    var sendButton: UIButton { get set }
+    var inputBar: InputBar { get set }
     func scrollBottom()
 }
 
 class ChattingViewController: UIViewController, chattingView {
+//    var inputBar: InputBar
+    
     let disposeBag = DisposeBag()
     
     private var didSetupViewConstraints = false
@@ -29,7 +30,7 @@ class ChattingViewController: UIViewController, chattingView {
     var chatMessage: [ChatMessage] = []
     
     var textField = UITextField()
-    let inputBar = InputBar()
+    var inputBar = InputBar()
     let background = UIView().then {
         $0.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
     }
@@ -73,22 +74,10 @@ class ChattingViewController: UIViewController, chattingView {
         }
     }
     
-    func scrollLastIndex(index: Int) {
-        if chatMessage.count != 0 {
-            DispatchQueue.main.async {
-                let indexPath = IndexPath(row: index, section: 0)
-                UIView.animate(withDuration: 4, delay: 3) {
-                    self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-                }
-            }
-        }
-    }
-    
     func bind() {
         RxKeyboard.instance.visibleHeight
             .drive(onNext: { [weak self] keyboardVisibleHeight in
                 guard let `self` = self, self.didSetupViewConstraints else { return }
-                print("keyboardVisibleHeight111",keyboardVisibleHeight)
                 if keyboardVisibleHeight > 83 {
                     self.inputBar.snp.updateConstraints {
                         $0.bottom.equalTo(self.view.snp.bottom).offset(-keyboardVisibleHeight)
@@ -96,7 +85,7 @@ class ChattingViewController: UIViewController, chattingView {
                 }
                 self.view.setNeedsLayout()
                 UIView.animate(withDuration: 0) {
-                    self.chatView.contentInset.bottom = keyboardVisibleHeight
+                    self.chatView.contentInset.bottom = keyboardVisibleHeight + 50
                     self.view.layoutIfNeeded()
                 }
             })
@@ -112,7 +101,7 @@ class ChattingViewController: UIViewController, chattingView {
     override func viewDidLayoutSubviews() {
       super.viewDidLayoutSubviews()
         if self.chatView.contentInset.bottom == 0 {
-          self.chatView.contentInset.bottom = self.inputBar.frame.height * 2
+          self.chatView.contentInset.bottom = self.inputBar.frame.height * 3
         }
     }
     
@@ -168,7 +157,7 @@ class ChattingViewController: UIViewController, chattingView {
                 $0.bottom.equalTo(self.view.snp.bottom).offset(-90)
             }
             self.chatView.contentOffset.y -= (291 - 90)
-            
+            self.chatView.contentInset.bottom = 50
             self.view.layoutIfNeeded()
         }
     }

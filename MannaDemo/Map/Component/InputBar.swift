@@ -8,6 +8,7 @@
 import UIKit
 
 class InputBar: UIView {
+    let toolBar = UIToolbar()
     let textView = UITextView().then {
         $0.textColor = .black
         $0.isEditable = true
@@ -27,9 +28,14 @@ class InputBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .red
+        self.addSubview(self.toolBar)
         self.addSubview(self.textView)
         self.addSubview(self.sendButton)
         
+        self.toolBar.snp.makeConstraints {
+            $0.edges.equalTo(0)
+        }
         self.textView.snp.makeConstraints {
             $0.top.equalTo(5)
             $0.trailing.equalTo(self.sendButton.snp.leading).offset(-7)
