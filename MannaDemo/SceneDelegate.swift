@@ -42,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     AF.request(url, method: .get, parameters: ["device_id": deviceID]).responseJSON { response in
                         switch response.result {
                         case .success(let value):
-                            print("성공",value)
+//                            print("성공",value)
                             let result = JSON(value)["error"]
                             if result == "Not Found" {
                                 window.rootViewController = registerView
@@ -56,7 +56,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                             break
                         }
                     }
-                    window.rootViewController = mannalistView
                 }
 
                 self.window = window
