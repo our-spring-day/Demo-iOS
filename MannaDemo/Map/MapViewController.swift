@@ -18,9 +18,10 @@ protocol ChatSet {
 }
 
 class MapViewController: UIViewController, ChatSet{
+    var defaultOverlayImage = DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
+    var compassOverlayImage = CompassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
     
-    var defaultOverlayImage = defaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
-    var compassOverlayImage = compassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
+    
     var rankingViewController: RankingView?
     var chattingViewController: chattingView?
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
@@ -54,14 +55,13 @@ class MapViewController: UIViewController, ChatSet{
     lazy var tempTimerGesture = UITapGestureRecognizer(target: self, action: #selector(didClickedTimerView))
     lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
-//    var imageView: UIImageView = {
-//        let view = UIImageView()
-//        view.image = compassOverLayView(frame: CGRect(x: 100, y: 100, width: 60, height: 100)).asImage()
-////        view.image = #imageLiteral(resourceName: "tree")
-//        view.frame = CGRect(x: 100, y: 100, width: 60, height: 100)
-//        return view
-//    }()
-//    var imageView = compassOverLayView(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+    var imageView: UIImageView = {
+        let view = UIImageView()
+        view.image = LocationProfileImageVIew(name: "상원", frame: CGRect(x: 100, y: 100, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()
+        view.frame = CGRect(x: 100, y: 100, width: 60, height: 60)
+        return view
+    }()
+//    var imageView = LocationProfileImageVIew(name: "상원", frame: CGRect(x: 100, y: 100, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61)))
     
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
@@ -84,6 +84,7 @@ class MapViewController: UIViewController, ChatSet{
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         presenter.currentRanking(userList: rankingViewController!.userList) { userList in
             self.rankingViewController!.userList = userList
         }
@@ -291,7 +292,7 @@ class MapViewController: UIViewController, ChatSet{
     }
     // MARK: Attribute
     func attribute() {
-//        view.addSubview(imageView)
+        view.addSubview(imageView)
         
         chattingViewController!.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
@@ -425,9 +426,11 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 마커 생성
     func array() {
         rankingViewController!.userList.keys.forEach { tokenWithMarker[$0] = NMFMarker()}
+//        tokenWithMarker[key]?.width = MannaDemo.convertWidth(value: 56)
+//        tokenWithMarker[key]?.height = MannaDemo.convertWidth(value: 62.61)
         for marker in tokenWithMarker.values {
-            marker.width = MannaDemo.convertWidth(value: 5)
-            marker.height = MannaDemo.convertWidth(value: 5)
+            marker.width = MannaDemo.convertWidth(value: 56)
+            marker.height = MannaDemo.convertWidth(value: 62.61)
         }
     }
     
@@ -644,12 +647,13 @@ class MapViewController: UIViewController, ChatSet{
     @objc func marking() {
         for key in rankingViewController!.userList.keys {
             let user = rankingViewController!.userList[key]
+            
             if imageToNameFlag {
                 if user!.networkValidTime > 60 {
                     //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
                     tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: rankingViewController!.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: rankingViewController!.userList[key]!.anotherdisconnectProfileImage)
                 } else {
-                    tokenWithMarker[key]?.iconImage = NMFOverlayImage(image: rankingViewController!.userList[key]!.nicknameImage)
+                    tokenWithMarker[key]?.iconImage = (rankingViewController?.locationProfileImageArray[(user?.name)!])!
                 }
             } else {
                 if user!.networkValidTime > 60 {
