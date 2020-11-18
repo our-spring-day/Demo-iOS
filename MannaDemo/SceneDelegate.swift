@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import SwiftKeychainWrapper
+import SwiftyJSON
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let url = "http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/user"
@@ -27,7 +28,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             print("이 기종의 스케일", UIScreen.main.scale)
             
-            
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {
                 if let uuid = UIDevice.current.identifierForVendor?.uuidString {
                     let saveSuccessful: Bool = KeychainWrapper.standard.set(uuid, forKey: "device_id")
@@ -36,22 +36,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 window.rootViewController = registerView
             } else {
                 if let deviceID = KeychainWrapper.standard.string(forKey: "device_id") {
-                    print("deviceID : ",deviceID)
-                    AF.request(url, method: .get, parameters: ["device_id": deviceID]).responseJSON { response in
+                    let param: Parameters = [
+                        "device_id" : deviceID,
+                    ]
+                    
+                    AF.request("https://manna.duckdns.org:18888/manna?deviceToken=\(deviceID)", parameters: param).responseJSON { response in
                         switch response.result {
                         case .success(let value):
-                            let json = value
-                            print("성공")
-                        case .failure(let _):
-                            print("유저 조회안됨")
+                            print("성공",value)
+                            let result = JSON(value)["error"]
+                            if result == "Not Found" {
+                                window.rootViewController = registerView
+                            } else {
+                                window.rootViewController = mannalistView
+                            }
+                            break
+                        case .failure(let error):
+                            print("실패")
+                            window.rootViewController = registerView
+                            break
                         }
                     }
                     window.rootViewController = mannalistView
                 }
-
-                self.window = window
-                window.makeKeyAndVisible()
             }
+            self.window = window
+            window.makeKeyAndVisible()
         }
         
         func sceneDidDisconnect(_ scene: UIScene) {

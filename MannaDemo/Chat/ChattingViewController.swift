@@ -94,7 +94,6 @@ class ChattingViewController: UIViewController, chattingView {
                 print(keyboradHeight)
             })
     }
-
     
     func attirbute() {
         let appearance = UINavigationBarAppearance()

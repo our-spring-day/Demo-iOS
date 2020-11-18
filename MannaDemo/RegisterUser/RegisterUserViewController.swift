@@ -74,11 +74,11 @@ class RegisterUserViewController: UIViewController {
                    parameters: parameter,
                    encoding: JSONEncoding.default).responseJSON { response in
                     switch response.result {
-                        case .success(let value):
-                            print("\(value)")
-                        case .failure(let err):
-                            print("\(err)")
-                        }
-                   }
+                    case .success(let value):
+                        print("\(value)")
+                    case .failure(let err):
+                        print("\(err)")
+                    }
+            }
     }
 }
