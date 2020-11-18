@@ -7,7 +7,7 @@
 
 import UIKit
 
-class defaultOverlayView: UIView {
+class DefaultOverlayView: UIView {
     var backgroundCircle = UIView()
     var coreCircle = UIView()
     
@@ -48,7 +48,7 @@ class defaultOverlayView: UIView {
     }
 }
 
-class compassOverLayView: UIView {
+class CompassOverLayView: UIView {
     
     lazy var backgroundCircle = UIView()
     lazy var coreCircle = UIView()
@@ -102,6 +102,74 @@ class compassOverLayView: UIView {
             $0.centerX.centerY.equalTo(self)
             $0.width.height.equalTo(MannaDemo.convertWidth(value: 7))
         }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class DisconnectProfileVIew: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class LocationProfileImageVIew: UIView {
+    
+    var backgroundView = UIImageView()
+    var triangleVIew = UIImageView()
+    var userName = ""
+    init(name: String,  frame: CGRect) {
+        super.init(frame: frame)
+        userName = name
+        attribute()
+        layout()
+    }
+    
+    func attribute() {
+        backgroundView.do {
+            $0.image = UIImage(named: "\(userName)")
+            $0.layer.borderWidth = MannaDemo.convertWidth(value: 3)
+            $0.layer.borderColor = UIColor(named: "bordercolor")?.cgColor
+            $0.layer.cornerRadius = MannaDemo.convertWidth(value: 24)
+            $0.contentMode = .scaleAspectFill
+            $0.layer.masksToBounds = true
+        }
+        triangleVIew.do {
+            $0.image = #imageLiteral(resourceName: "triangle")
+        }
+    }
+    
+    func layout() {
+        [triangleVIew, backgroundView].forEach { self.addSubview($0) }
+        
+        backgroundView.snp.makeConstraints {
+            $0.width.height.equalTo(MannaDemo.convertWidth(value: 56))
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(MannaDemo.convertWidth(value: 3.3))
+            $0.trailing.equalToSuperview().offset(MannaDemo.convertWidth(value: -3.3))
+        }
+        triangleVIew.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(MannaDemo.convertWidth(value: -1))
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(MannaDemo.convertWidth(value: 20))
+            $0.height.equalTo(MannaDemo.convertWidth(value: 10.44))
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class ChatProfileImageView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {
