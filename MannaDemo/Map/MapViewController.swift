@@ -233,7 +233,7 @@ class MapViewController: UIViewController, ChatSet{
         guard let text = chattingViewController!.inputBar.textView.text else { return }
         chatSocket.emit("chat", "\(text)")
         chattingViewController?.chatView.reloadData()
-        chattingViewController!.scrollBottom()
+//        chattingViewController!.scrollBottom()
         chattingViewController!.inputBar.textView.text = ""
     }
     
