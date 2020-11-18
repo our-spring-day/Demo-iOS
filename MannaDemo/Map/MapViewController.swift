@@ -244,10 +244,11 @@ class MapViewController: UIViewController, ChatSet{
     
     // MARK: SendMessage
     @objc func sendMessage() {
-        guard let text = chattingViewController!.textField.text else { return }
+        guard let text = chattingViewController!.inputBar.textView.text else { return }
         chatSocket.emit("chat", "\(text)")
+        chattingViewController?.chatView.reloadData()
         chattingViewController!.scrollBottom()
-        chattingViewController!.textField.text = ""
+        chattingViewController!.inputBar.textView.text = ""
     }
     
     @objc func didClickedTimerView() {
@@ -296,9 +297,7 @@ class MapViewController: UIViewController, ChatSet{
     }
     // MARK: Attribute
     func attribute() {
-        view.addSubview(imageView)
-        
-        chattingViewController!.sendButton.do {
+        chattingViewController!.inputBar.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
         backButton.do {
