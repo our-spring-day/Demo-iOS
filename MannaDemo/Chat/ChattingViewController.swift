@@ -25,9 +25,21 @@ class ChattingViewController: UIViewController, chattingView {
     static let shared = ChattingViewController()
     var chatView = UITableView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    var tempHeight: CGFloat?
     var chatMessage: [ChatMessage] = []
-    
+    var maxY: CGFloat = 0
     var inputBar = InputBar()
+    var scrollButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40)).then {
+        $0.backgroundColor = .white
+        $0.imageView?.contentMode = .scaleAspectFit
+        $0.imageEdgeInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
+        $0.setImage(UIImage(named: "bottom"), for: .normal)
+        $0.layer.cornerRadius = $0.frame.width / 2
+        $0.layer.shadowColor = UIColor.gray.cgColor
+        $0.layer.shadowOpacity = 1.0
+        $0.layer.shadowOffset = CGSize.zero
+        $0.layer.shadowRadius = 6
+    }
     let background = UIView().then {
         $0.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
     }
@@ -50,6 +62,7 @@ class ChattingViewController: UIViewController, chattingView {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         scrollBottom()
+//        tempHeight =  chatView.contentOffset.y
     }
     
     func scrollBottom() {
@@ -57,7 +70,6 @@ class ChattingViewController: UIViewController, chattingView {
             DispatchQueue.main.async {
                 let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
                 self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: false)
-                self.chatView.contentOffset.y += 50
             }
         }
     }
@@ -155,6 +167,7 @@ class ChattingViewController: UIViewController, chattingView {
         self.view.addSubview(self.chatView)
         self.view.addSubview(self.inputBar)
         self.view.addSubview(self.background)
+        self.view.addSubview(self.scrollButton)
         
         self.chatView.snp.makeConstraints {
             $0.leading.trailing.top.equalToSuperview()
@@ -167,6 +180,11 @@ class ChattingViewController: UIViewController, chattingView {
         self.background.snp.makeConstraints {
             $0.leading.trailing.bottom.equalTo(0)
             $0.top.equalTo(self.inputBar.snp.top)
+        }
+        self.scrollButton.snp.makeConstraints {
+            $0.width.height.equalTo(40)
+            $0.trailing.equalTo(-20)
+            $0.bottom.equalTo(inputBar.snp.top).offset(-20)
         }
         self.view.bringSubviewToFront(inputBar)
     }
@@ -260,14 +278,22 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         self.inputBar.textView.resignFirstResponder()
     }
 }
+
+extension ChattingViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+        maxY = maxY < chatView.contentOffset.y ? chatView.contentOffset.y : maxY
+        
+        if maxY - chatView.contentOffset.y > 800 {
+            print("버튼 나옴")
+        } else {
+            print("버튼 들어감")
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard let height = tempHeight else { return }
 //
-//extension ChattingViewController: UITextViewDelegate {
-//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-//        if textView.text == "" {
-//            if (text == "\n") {
-//                textView.resignFirstResponder()
-//            }
-//        }
-//        return true
-//    }
-//}
+//        print("요거는",chatView.contentOffset.y)
+    }
+}
