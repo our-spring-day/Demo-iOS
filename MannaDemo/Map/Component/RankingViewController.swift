@@ -18,10 +18,12 @@ protocol RankingView: UIViewController {
 class RankingViewController: UIViewController, RankingView {
     lazy var rankingView = UITableView()
     var dismissButton = UIButton()
-    var timerView = TimerView(.rankingView)
+    var timerView = TimerView(.mapView)
     var userList: [String : User] = [:]
     var arrivalUser: [User] = []
     var notArrivalUser: [User] = []
+    var bottomBar = BottomBar()
+    
     lazy var urgentButton = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 39))
     lazy var locationProfileImageArray: [String : NMFOverlayImage] = [
         "우석" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["f606564d8371e455"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
@@ -43,6 +45,7 @@ class RankingViewController: UIViewController, RankingView {
         "종찬" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["C65CDF73-8C04-4F76-A26A-AE3400FEC14B"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
         "용권" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["69751764-A224-4923-9844-C61646743D10"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage())
     ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         sortedUser()
@@ -54,6 +57,9 @@ class RankingViewController: UIViewController, RankingView {
     func attribute() {
         self.do {
             $0.view.backgroundColor = .white
+        }
+        bottomBar.do {
+            $0.backgroundColor = .none
         }
         rankingView.do {
             $0.backgroundColor = .white
@@ -74,25 +80,23 @@ class RankingViewController: UIViewController, RankingView {
     }
 
     func layout() {
-        [timerView, rankingView, dismissButton].forEach { view.addSubview($0) }
+        [rankingView, bottomBar, dismissButton].forEach { view.addSubview($0) }
         
         rankingView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.topAnchor, constant: MannaDemo.convertHeight(value: 140)).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: MannaDemo.convertHeight(value: -140)).isActive = true
+            $0.bottomAnchor.constraint(equalTo: bottomBar.topAnchor).isActive = true
+        }
+        bottomBar.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.snp.bottom).offset(-90)
         }
         dismissButton.snp.makeConstraints {
             $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
             $0.leading.equalToSuperview().offset(15)
             $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
-        }
-        timerView.snp.makeConstraints {
-            $0.centerX.equalTo(view)
-            $0.centerY.equalTo(dismissButton)
-            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
-            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
     }
     
@@ -101,7 +105,6 @@ class RankingViewController: UIViewController, RankingView {
         arrivalUser = arrivalUser.sorted { $0.remainTime < $1.remainTime }
         notArrivalUser = Array(userList.values).filter { !$0.arrived }
         notArrivalUser = notArrivalUser.sorted { $0.remainTime < $1.remainTime }
-        
         rankingView.reloadData()
     }
     
