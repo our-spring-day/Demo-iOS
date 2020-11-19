@@ -63,10 +63,19 @@ class ChattingViewController: UIViewController, chattingView {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        scrollBottom()
+        viewLoadScrollBottom()
     }
     
     @objc func scrollBottom() {
+        if chatMessage.count != 0 {
+            DispatchQueue.main.async {
+                let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
+                self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+            }
+            scrollButton.isHidden = true
+        }
+    }
+    func viewLoadScrollBottom() {
         if chatMessage.count != 0 {
             DispatchQueue.main.async {
                 let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)

@@ -246,8 +246,13 @@ class MapViewController: UIViewController, ChatSet{
         guard let text = chattingViewController!.inputBar.textView.text else { return }
         chatSocket.emit("chat", "\(text)")
         chattingViewController?.chatView.reloadData()
-//        chattingViewController!.scrollBottom()
         chattingViewController!.inputBar.textView.text = ""
+        
+        let time = DispatchTime.now() + .milliseconds(100)
+        DispatchQueue.main.asyncAfter(deadline: time) { [self] in
+            chattingViewController!.scrollBottom()
+        }
+        
     }
     
     @objc func didClickedTimerView() {
