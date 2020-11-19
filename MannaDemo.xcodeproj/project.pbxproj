@@ -32,6 +32,7 @@
 		A5D48F212542AD9B00399462 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F202542AD9B00399462 /* UIView+Ext.swift */; };
 		A5D48F252542AE3B00399462 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D48F242542AE3B00399462 /* UserView.swift */; };
 		A5F82CE92556811B009A8AC5 /* MannaList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5F82CE82556811B009A8AC5 /* MannaList.swift */; };
+		CC0F50282564DF2F000026AE /* overlayImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0F50272564DF2F000026AE /* overlayImageView.swift */; };
 		CC107739255464D300908D71 /* TravelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC107738255464D300908D71 /* TravelData.swift */; };
 		CC1077472555956500908D71 /* SocketIOManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1077462555956500908D71 /* SocketIOManager.swift */; };
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
@@ -97,6 +98,7 @@
 		A5D48F202542AD9B00399462 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		A5D48F242542AE3B00399462 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		A5F82CE82556811B009A8AC5 /* MannaList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MannaList.swift; sourceTree = "<group>"; };
+		CC0F50272564DF2F000026AE /* overlayImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = overlayImageView.swift; sourceTree = "<group>"; };
 		CC107738255464D300908D71 /* TravelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelData.swift; sourceTree = "<group>"; };
 		CC1077462555956500908D71 /* SocketIOManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketIOManager.swift; sourceTree = "<group>"; };
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				CC1CC97025429F490020D4C5 /* none7.swift */,
 				A53774E52562E2F100C0A91B /* getDeviceToken.swift */,
 				A5968F6F2564DF7600013D2E /* InputBar.swift */,
+				CC0F50272564DF2F000026AE /* overlayImageView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -475,6 +478,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A53774E62562E2F100C0A91B /* getDeviceToken.swift in Sources */,
+				CC0F50282564DF2F000026AE /* overlayImageView.swift in Sources */,
 				CC74832C255164E7006C1E02 /* none4.swift in Sources */,
 				A5968F702564DF7700013D2E /* InputBar.swift in Sources */,
 				A5155632254029BE00487BEF /* RegisterUserViewController.swift in Sources */,

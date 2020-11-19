@@ -16,13 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        for name in userName {
-            let image = UserView(text: name).then({
-                $0.layer.cornerRadius = 30
-            })
-            let renderImage = image.asImage()
-            userImage.append(renderImage)
-        }
+//        for name in userName {
+//            let image = UserView(text: name).then({
+//                $0.layer.cornerRadius = 30
+//            })
+//            let renderImage = image.asImage()
+//            userImage.append(renderImage)
+//        }
         
         let center = UNUserNotificationCenter.current()
         center.delegate = self

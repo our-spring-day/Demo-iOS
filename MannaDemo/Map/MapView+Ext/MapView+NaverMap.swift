@@ -42,6 +42,9 @@ extension MapViewController: NMFMapViewCameraDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         cameraTrakingToggleFlag = false
         mapView.positionMode = .normal
+        mapView.locationOverlay.icon = NMFOverlayImage(image: defaultOverlayImage)
+        mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
+        mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
         tokenWithMarker[MannaDemo.myUUID!]!.mapView = mapView
         UIView.animate(withDuration: 0.5) { [self] in
             [myLocationButton].forEach {
@@ -53,6 +56,8 @@ extension MapViewController: NMFMapViewCameraDelegate {
     }
     
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
         markerResizeByZoomLevel()
     }
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
