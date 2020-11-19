@@ -110,8 +110,61 @@ class CompassOverLayView: UIView {
 }
 
 class DisconnectProfileVIew: UIView {
-    override init(frame: CGRect) {
+    var backgroundView = UIImageView()
+    var triangleVIew = UIImageView()
+    var userName = ""
+    var zzzImage = UIImageView()
+    
+    init(name: String,  frame: CGRect) {
         super.init(frame: frame)
+        userName = name
+        attribute()
+        layout()
+    }
+    
+    func attribute() {
+        self.do {
+            $0.alpha = 0.3
+        }
+        backgroundView.do {
+            $0.image = UIImage(named: "\(userName)")
+            $0.layer.borderWidth = MannaDemo.convertWidth(value: 3)
+            $0.layer.borderColor = UIColor(named: "bordercolor")?.cgColor
+            $0.layer.cornerRadius = MannaDemo.convertWidth(value: 24)
+            $0.contentMode = .scaleAspectFill
+            $0.layer.masksToBounds = true
+        }
+        triangleVIew.do {
+            $0.image = #imageLiteral(resourceName: "triangle")
+        }
+        zzzImage.do {
+            $0.image = #imageLiteral(resourceName: "용권1")
+        }
+    }
+    
+    func layout() {
+        [triangleVIew, backgroundView, zzzImage].forEach { self.addSubview($0) }
+        
+        backgroundView.snp.makeConstraints {
+            $0.width.height.equalTo(MannaDemo.convertWidth(value: 56))
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(MannaDemo.convertWidth(value: 3.3))
+            $0.trailing.equalToSuperview().offset(MannaDemo.convertWidth(value: -3.3))
+//            $0.leading.equalToSuperview()
+//            $0.trailing.equalToSuperview()
+        }
+        triangleVIew.snp.makeConstraints {
+//            $0.bottom.equalToSuperview().offset(MannaDemo.convertWidth(value: -1.5))
+            $0.top.equalTo(backgroundView.snp.bottom).offset(-MannaDemo.convertWidth(value: 5))
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(MannaDemo.convertWidth(value: 20))
+            $0.height.equalTo(MannaDemo.convertWidth(value: 10.44))
+        }
+        zzzImage.snp.makeConstraints {
+            $0.width.equalTo(MannaDemo.convertWidth(value: 30))
+            $0.height.equalTo(MannaDemo.convertHeight(value: 30))
+            $0.top.trailing.equalTo(self)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -155,7 +208,7 @@ class LocationProfileImageVIew: UIView {
             $0.trailing.equalToSuperview().offset(MannaDemo.convertWidth(value: -3.3))
         }
         triangleVIew.snp.makeConstraints {
-            $0.bottom.equalToSuperview().offset(MannaDemo.convertWidth(value: -1))
+            $0.top.equalTo(backgroundView.snp.bottom).offset(-MannaDemo.convertWidth(value: 5))
             $0.centerX.equalToSuperview()
             $0.width.equalTo(MannaDemo.convertWidth(value: 20))
             $0.height.equalTo(MannaDemo.convertWidth(value: 10.44))
