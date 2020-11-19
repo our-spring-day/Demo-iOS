@@ -148,7 +148,7 @@ class ChattingViewController: UIViewController, chattingView {
         self.inputBar.snp.makeConstraints {
             $0.leading.trailing.equalTo(0)
             $0.bottom.equalTo(view.snp.bottom).offset(-90)
-        }
+            }
         self.background.snp.makeConstraints {
             $0.leading.trailing.bottom.equalTo(0)
             $0.top.equalTo(self.inputBar.snp.top).offset(-3)

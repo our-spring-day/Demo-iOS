@@ -118,7 +118,10 @@ class ChatCell: UITableViewCell {
             $0.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         }
         userImage.do {
-            $0.layer.cornerRadius = 11
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = UIColor(named: "chatbordercolor")?.cgColor
+            $0.layer.cornerRadius = 16
+            $0.layer.masksToBounds = true
         }
         message.do {
             $0.textColor = .black
