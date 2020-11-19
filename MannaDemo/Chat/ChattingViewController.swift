@@ -50,6 +50,7 @@ class ChattingViewController: UIViewController, chattingView {
                                                  height: MannaDemo.convertHeight(value: 17)))
         .then {
             $0.setImage(UIImage(named: "good"), for: .normal)
+            $0.addTarget(self, action: #selector(scrollBottom), for: .touchUpInside)
         }
     
     // MARK: viewDidLoad
@@ -163,10 +164,6 @@ class ChattingViewController: UIViewController, chattingView {
         }
         self.view.bringSubviewToFront(inputBar)
     }
-    
-//    func textViewSetup() {
-//        if inputBar.send
-//    }
 }
 
 
