@@ -47,11 +47,11 @@ class MapViewController: UIViewController, ChatSet{
     var toastLabel = UILabel()
     var cameraState = UIButton()
     var myLocationButton = UIButton()
-    lazy var goToChatGesture = UITapGestureRecognizer(target: self, action: #selector(goToChatGestureFunc))
     var goalMarker = NMFMarker()
     var disconnectToggleFlag = false
     var cameraTrakingToggleFlag = true
     var cameraTrakingModeFlag = true
+    lazy var goToChatGesture = UITapGestureRecognizer(target: self, action: #selector(goToChatGestureFunc))
     lazy var tempTimerGesture = UITapGestureRecognizer(target: self, action: #selector(didClickedTimerView))
     lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
@@ -390,14 +390,14 @@ class MapViewController: UIViewController, ChatSet{
             $0.height.equalTo(MannaDemo.convertHeight(value: 50))
         }
         myLocationButton.snp.makeConstraints {
-            $0.top.equalTo(cameraState.snp.bottom).offset(11)
-            $0.trailing.equalToSuperview().offset(-22)
-            $0.width.height.equalTo(40)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 45))
+            $0.leading.equalTo(cameraState.snp.trailing).offset(MannaDemo.convertWidth(value: 10.88))
+            $0.width.height.equalTo(45)
         }
         cameraState.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
-            $0.trailing.equalToSuperview().offset(-22)
-            $0.width.height.equalTo(40)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 45))
+            $0.trailing.equalToSuperview().offset(-MannaDemo.convertWidth(value: 70.88))
+            $0.width.height.equalTo(45)
         }
         bottomBar.snp.makeConstraints {
             $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
@@ -651,8 +651,7 @@ class MapViewController: UIViewController, ChatSet{
                         tokenWithMarker[key]?.position = NMGLatLng(lat: rankingViewController!.userList[key]!.latitude, lng: rankingViewController!.userList[key]!.longitude)
                         tokenWithMarker[key]?.mapView = mapView
                     } else if key == MannaDemo.myUUID && mapView.positionMode != .compass{
-                        tokenWithMarker[key]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
-                        tokenWithMarker[key]?.mapView = mapView
+//
                     }
                 }
             }
