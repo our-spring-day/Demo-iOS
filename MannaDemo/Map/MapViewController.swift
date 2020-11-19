@@ -92,6 +92,8 @@ class MapViewController: UIViewController, ChatSet{
         chatSocket = manager.socket(forNamespace: "/chat")
         locationSocket.connect()
         chatSocket.connect()
+        
+        
         locationSocket.on("locationConnect") { [self] (array, ack) in
             rankingViewController!.userList[MannaDemo.myUUID!]?.state = true
             self.setCollcetionViewItem()
@@ -168,6 +170,8 @@ class MapViewController: UIViewController, ChatSet{
             chattingViewController!.chatMessage.append(newMessageBinding)
             chattingViewController!.chatView.reloadData()
         }
+        
+        
         locationSocket.on("location") { [self] (array, ack) in
             var _: String?
             var deviceToken: String?
@@ -239,10 +243,11 @@ class MapViewController: UIViewController, ChatSet{
     
     // MARK: SendMessage
     @objc func sendMessage() {
-        guard let text = chattingViewController!.textField.text else { return }
+        guard let text = chattingViewController!.inputBar.textView.text else { return }
         chatSocket.emit("chat", "\(text)")
-        chattingViewController!.scrollBottom()
-        chattingViewController!.textField.text = ""
+        chattingViewController?.chatView.reloadData()
+//        chattingViewController!.scrollBottom()
+        chattingViewController!.inputBar.textView.text = ""
     }
     
     @objc func didClickedTimerView() {
@@ -291,9 +296,7 @@ class MapViewController: UIViewController, ChatSet{
     }
     // MARK: Attribute
     func attribute() {
-//        view.addSubview(imageView)
-        
-        chattingViewController!.sendButton.do {
+        chattingViewController!.inputBar.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
         backButton.do {

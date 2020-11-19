@@ -43,7 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     AF.request("https://manna.duckdns.org:18888/manna?deviceToken=\(deviceID)", parameters: param).responseJSON { response in
                         switch response.result {
                         case .success(let value):
-                            print("성공",value)
+//                            print("성공",value)
                             let result = JSON(value)["error"]
                             if result == "Not Found" {
                                 window.rootViewController = registerView
