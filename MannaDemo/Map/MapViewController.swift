@@ -52,9 +52,9 @@ class MapViewController: UIViewController, ChatSet{
     var disconnectToggleFlag = false
     var cameraTrakingToggleFlag = true
     var cameraTrakingModeFlag = true
-    var rankingBUtton = UIButton()
-    var chatButton = UIButton()
-    var timerView = TimerView(.mapView)
+//    var rankingBUtton = UIButton()
+//    var chatButton = UIButton()
+//    var timerView = TimerView(.mapView)
     lazy var tempTimerGesture = UITapGestureRecognizer(target: self, action: #selector(didClickedTimerView))
     lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
@@ -64,8 +64,8 @@ class MapViewController: UIViewController, ChatSet{
         view.frame = CGRect(x: 100, y: 100, width: 60, height: 60)
         return view
     }()
-//    var imageView = LocationProfileImageVIew(name: "상원", frame: CGRect(x: 100, y: 100, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61)))
-//    var bottomBar = BottomBar()
+    var bottomBar = BottomBar()
+    
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
@@ -175,7 +175,6 @@ class MapViewController: UIViewController, ChatSet{
             chattingViewController!.chatView.reloadData()
         }
         
-        
         locationSocket.on("location") { [self] (array, ack) in
             var _: String?
             var deviceToken: String?
@@ -229,7 +228,6 @@ class MapViewController: UIViewController, ChatSet{
                             rankingViewController!.userList[token]?.remainTime = result.duration
                         }
                     }
-//                    self.setCollcetionViewItem()
                 }
             }
             
@@ -255,48 +253,46 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func didClickedTimerView() {
-        timerView.tempToggleFlag.toggle()
-        rankingViewController?.userList[MannaDemo.myUUID!]?.state.toggle()
-        if timerView.tempToggleFlag {
-            UIView.animate(withDuration: 0.05, animations: {
-                self.timerView.snp.updateConstraints {
-                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
-                }
-                self.timerView.alpha = 0
-                self.view.setNeedsLayout()
-                self.view.layoutIfNeeded()
-            },completion: {_ in
-                UIView.animate(withDuration: 0.1) {
-                    self.timerView.alpha = 1
-                    self.timerView.snp.updateConstraints {
-                        $0.width.equalTo(MannaDemo.convertWidth(value: 115))
-                    }
-                    self.view.setNeedsLayout()
-                    self.view.layoutIfNeeded()
-                }
-            })
-            
-        } else {
-            UIView.animate(withDuration: 0.05, animations: {
-                self.timerView.snp.updateConstraints {
-                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
-                }
-                self.timerView.alpha = 0
-                self.view.setNeedsLayout()
-                self.view.layoutIfNeeded()
-            },completion: {_ in
-                UIView.animate(withDuration: 0.1) {
-                    self.timerView.alpha = 1
-                    self.timerView.snp.updateConstraints {
-                        $0.width.equalTo(MannaDemo.convertWidth(value: 102))
-                    }
-                    self.view.setNeedsLayout()
-                    self.view.layoutIfNeeded()
-                }
-            })
-        }
-        
-        
+//        timerView.tempToggleFlag.toggle()
+//        rankingViewController?.userList[MannaDemo.myUUID!]?.state.toggle()
+//        if timerView.tempToggleFlag {
+//            UIView.animate(withDuration: 0.05, animations: {
+//                self.timerView.snp.updateConstraints {
+//                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
+//                }
+//                self.timerView.alpha = 0
+//                self.view.setNeedsLayout()
+//                self.view.layoutIfNeeded()
+//            },completion: {_ in
+//                UIView.animate(withDuration: 0.1) {
+//                    self.timerView.alpha = 1
+//                    self.timerView.snp.updateConstraints {
+//                        $0.width.equalTo(MannaDemo.convertWidth(value: 115))
+//                    }
+//                    self.view.setNeedsLayout()
+//                    self.view.layoutIfNeeded()
+//                }
+//            })
+//
+//        } else {
+//            UIView.animate(withDuration: 0.05, animations: {
+//                self.timerView.snp.updateConstraints {
+//                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
+//                }
+//                self.timerView.alpha = 0
+//                self.view.setNeedsLayout()
+//                self.view.layoutIfNeeded()
+//            },completion: {_ in
+//                UIView.animate(withDuration: 0.1) {
+//                    self.timerView.alpha = 1
+//                    self.timerView.snp.updateConstraints {
+//                        $0.width.equalTo(MannaDemo.convertWidth(value: 102))
+//                    }
+//                    self.view.setNeedsLayout()
+//                    self.view.layoutIfNeeded()
+//                }
+//            })
+//        }
     }
     // MARK: Attribute
     func attribute() {
@@ -364,32 +360,35 @@ class MapViewController: UIViewController, ChatSet{
             $0.mapView = mapView
             $0.isForceShowIcon = true
         }
-        rankingBUtton.do {
-            $0.backgroundColor = .white
-            $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
-            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
-            $0.layer.masksToBounds = true
-            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
-            $0.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
-            $0.dropShadow()
+        bottomBar.do {
+            $0.chatButton.addGestureRecognizer(goToChatGesture)
+            $0.rankingBUtton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
+            $0.timerView.addGestureRecognizer(tempTimerGesture)
         }
-        chatButton.do {
-            $0.backgroundColor = .white
-            $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
-            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
-            $0.layer.masksToBounds = true
-            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
-            $0.dropShadow()
-            $0.addGestureRecognizer(goToChatGesture)
-        }
-//        timerView.do {
-//            $0.addGestureRecognizer(tempTimerGesture)
+        
+//        rankingBUtton.do {
+//            $0.backgroundColor = .white
+//            $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
+//            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
+//            $0.layer.masksToBounds = true
+//            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
+//            $0.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
+//            $0.dropShadow()
+//        }
+//        chatButton.do {
+//            $0.backgroundColor = .white
+//            $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
+//            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
+//            $0.layer.masksToBounds = true
+//            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
+//            $0.dropShadow()
+//            $0.addGestureRecognizer(goToChatGesture)
 //        }
     }
     
     // MARK: layout
     func layout() {
-        [mapView, cameraState, myLocationButton, backButton, timerView, toastLabel, chatButton, rankingBUtton].forEach { view.addSubview($0) }
+        [mapView, cameraState, myLocationButton, backButton, toastLabel, bottomBar].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
@@ -402,12 +401,12 @@ class MapViewController: UIViewController, ChatSet{
             $0.width.equalTo(MannaDemo.convertWidth(value: 200))
             $0.height.equalTo(MannaDemo.convertHeight(value: 50))
         }
-        timerView.snp.makeConstraints {
-            $0.centerY.equalTo(chatButton.snp.centerY)
-            $0.trailing.equalTo(view).offset(-20)
-            $0.width.equalTo(MannaDemo.convertWidth(value: MannaDemo.convertWidth(value: 111)))
-            $0.height.equalTo(MannaDemo.convertHeight(value: MannaDemo.convertWidth(value: 48)))
-        }
+//        timerView.snp.makeConstraints {
+//            $0.centerY.equalTo(chatButton.snp.centerY)
+//            $0.trailing.equalTo(view).offset(-20)
+//            $0.width.equalTo(MannaDemo.convertWidth(value: MannaDemo.convertWidth(value: 111)))
+//            $0.height.equalTo(MannaDemo.convertHeight(value: MannaDemo.convertWidth(value: 48)))
+//        }
         myLocationButton.snp.makeConstraints {
             $0.top.equalTo(cameraState.snp.bottom).offset(11)
             $0.trailing.equalToSuperview().offset(-22)
@@ -418,15 +417,19 @@ class MapViewController: UIViewController, ChatSet{
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
         }
-        rankingBUtton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
-            $0.leading.equalTo(chatButton.snp.trailing).offset(MannaDemo.convertWidth(value: 10))
-            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
-        }
-        chatButton.snp.makeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
-            $0.leading.equalTo(view.snp.leading).offset(20)
-            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
+//        rankingBUtton.snp.makeConstraints {
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
+//            $0.leading.equalTo(chatButton.snp.trailing).offset(MannaDemo.convertWidth(value: 10))
+//            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
+//        }
+//        chatButton.snp.makeConstraints {
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
+//            $0.leading.equalTo(view.snp.leading).offset(20)
+//            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
+//        }
+        bottomBar.snp.makeConstraints {
+            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.snp.bottom).offset(-90)
         }
     }
     
@@ -440,17 +443,6 @@ class MapViewController: UIViewController, ChatSet{
             marker.height = MannaDemo.convertWidth(value: 62.61)
         }
     }
-    
-    //MARK: 렌더링 이미지
-//    func renderImage() {
-//        for name in userName {
-//            let image = UserView(text: name).then({
-//                $0.layer.cornerRadius = 30
-//            })
-//            let renderImage = image.asImage()
-//            userImage.append(renderImage)
-//        }
-//    }
     
     //MARK: 닉네임 이미지 셋
     func nicknameImageSet() {
