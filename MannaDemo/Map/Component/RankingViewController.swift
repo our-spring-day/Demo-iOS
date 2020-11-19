@@ -16,7 +16,7 @@ protocol RankingView: UIViewController {
 }
 
 class RankingViewController: UIViewController, RankingView {
-    lazy var rankginView = UITableView()
+    lazy var rankingView = UITableView()
     var dismissButton = UIButton()
     var timerView = TimerView(.rankingView)
     var userList: [String : User] = [:]
@@ -55,7 +55,7 @@ class RankingViewController: UIViewController, RankingView {
         self.do {
             $0.view.backgroundColor = .white
         }
-        rankginView.do {
+        rankingView.do {
             $0.backgroundColor = .white
             $0.register(RankingViewCell.self, forCellReuseIdentifier: RankingViewCell.rankingCellID)
             $0.delegate = self
@@ -74,14 +74,14 @@ class RankingViewController: UIViewController, RankingView {
     }
 
     func layout() {
-        [timerView, rankginView, dismissButton].forEach { view.addSubview($0) }
+        [timerView, rankingView, dismissButton].forEach { view.addSubview($0) }
         
-        rankginView.do {
+        rankingView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: view.topAnchor, constant: MannaDemo.convertHeight(value: 140)).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            $0.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: MannaDemo.convertHeight(value: -140)).isActive = true
         }
         dismissButton.snp.makeConstraints {
             $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
@@ -102,7 +102,7 @@ class RankingViewController: UIViewController, RankingView {
         notArrivalUser = Array(userList.values).filter { !$0.arrived }
         notArrivalUser = notArrivalUser.sorted { $0.remainTime < $1.remainTime }
         
-        rankginView.reloadData()
+        rankingView.reloadData()
     }
     
     @objc func prevButton(_ sender: UITapGestureRecognizer) {
@@ -139,7 +139,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = rankginView.dequeueReusableCell(withIdentifier: RankingViewCell.rankingCellID, for: indexPath) as! RankingViewCell
+        let cell = rankingView.dequeueReusableCell(withIdentifier: RankingViewCell.rankingCellID, for: indexPath) as! RankingViewCell
 
         if indexPath.section == 0 {
             cell.button.isHidden = true
