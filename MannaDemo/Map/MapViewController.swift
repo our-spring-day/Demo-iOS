@@ -20,8 +20,6 @@ protocol ChatSet {
 class MapViewController: UIViewController, ChatSet{
     var defaultOverlayImage = DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
     var compassOverlayImage = CompassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
-    
-    
     var rankingViewController: RankingView?
     var chattingViewController: chattingView?
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
@@ -300,6 +298,8 @@ class MapViewController: UIViewController, ChatSet{
         chattingViewController!.inputBar.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
+        view.addSubview(imageView)
+        
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
             $0.frame.size.width = 40
