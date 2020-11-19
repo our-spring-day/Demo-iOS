@@ -399,10 +399,10 @@ class MapViewController: UIViewController, ChatSet{
             $0.height.equalTo(MannaDemo.convertHeight(value: 50))
         }
         timerView.snp.makeConstraints {
-            $0.centerX.equalTo(view)
-            $0.centerY.equalTo(backButton)
-            $0.width.equalTo(MannaDemo.convertWidth(value: 102))
-            $0.height.equalTo(MannaDemo.convertHeight(value: 45))
+            $0.centerY.equalTo(chatButton.snp.centerY)
+            $0.trailing.equalTo(view).offset(-20)
+            $0.width.equalTo(MannaDemo.convertWidth(value: MannaDemo.convertWidth(value: 111)))
+            $0.height.equalTo(MannaDemo.convertHeight(value: MannaDemo.convertWidth(value: 48)))
         }
         myLocationButton.snp.makeConstraints {
             $0.top.equalTo(cameraState.snp.bottom).offset(11)
@@ -417,12 +417,12 @@ class MapViewController: UIViewController, ChatSet{
         rankingBUtton.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
             $0.leading.equalTo(chatButton.snp.trailing).offset(MannaDemo.convertWidth(value: 10))
-            $0.width.height.equalTo(MannaDemo.convertHeight(value: 53))
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
         }
         chatButton.snp.makeConstraints {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
             $0.leading.equalTo(view.snp.leading).offset(20)
-            $0.width.height.equalTo(MannaDemo.convertHeight(value: 53))
+            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
         }
     }
     
