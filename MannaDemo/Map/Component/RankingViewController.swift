@@ -13,6 +13,8 @@ protocol RankingView: UIViewController {
     var userList: [String : User] { get set }
     var locationProfileImageArray: [String : NMFOverlayImage] { get set }
     var disconnectProfileImageArray: [String : NMFOverlayImage] { get set }
+    var dismissButton: UIButton { get set }
+    var bottomBar: BottomBar { get set }
 }
 
 class RankingViewController: UIViewController, RankingView {
@@ -109,6 +111,10 @@ class RankingViewController: UIViewController, RankingView {
     }
     
     @objc func prevButton(_ sender: UITapGestureRecognizer) {
+        dismiss(animated: true)
+    }
+    
+    @objc func didClickedChatBUtton() {
         dismiss(animated: true)
     }
 }

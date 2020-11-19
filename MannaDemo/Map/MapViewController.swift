@@ -52,19 +52,17 @@ class MapViewController: UIViewController, ChatSet{
     var disconnectToggleFlag = false
     var cameraTrakingToggleFlag = true
     var cameraTrakingModeFlag = true
-//    var rankingBUtton = UIButton()
-//    var chatButton = UIButton()
-//    var timerView = TimerView(.mapView)
     lazy var tempTimerGesture = UITapGestureRecognizer(target: self, action: #selector(didClickedTimerView))
     lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
-    var imageView: UIImageView = {
-        let view = UIImageView()
-        view.image = DisconnectProfileVIew(name: "상원", frame: CGRect(x: 100, y: 100, width: MannaDemo.convertWidth(value: 63), height: MannaDemo.convertWidth(value: 69.61))).asImage()
-        view.frame = CGRect(x: 100, y: 100, width: 60, height: 60)
-        return view
-    }()
+//    var imageView: UIImageView = {
+//        let view = UIImageView()
+//        view.image = DisconnectProfileVIew(name: "상원", frame: CGRect(x: 100, y: 100, width: MannaDemo.convertWidth(value: 63), height: MannaDemo.convertWidth(value: 69.61))).asImage()
+//        view.frame = CGRect(x: 100, y: 100, width: 60, height: 60)
+//        return view
+//    }()
     var bottomBar = BottomBar()
+    var viewForTransition = UIView()
     
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
@@ -248,7 +246,6 @@ class MapViewController: UIViewController, ChatSet{
         guard let text = chattingViewController!.inputBar.textView.text else { return }
         chatSocket.emit("chat", "\(text)")
         chattingViewController?.chatView.reloadData()
-//        chattingViewController!.scrollBottom()
         chattingViewController!.inputBar.textView.text = ""
     }
     
@@ -294,12 +291,13 @@ class MapViewController: UIViewController, ChatSet{
 //            })
 //        }
     }
+    
     // MARK: Attribute
     func attribute() {
         chattingViewController!.inputBar.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
-        view.addSubview(imageView)
+//        view.addSubview(imageView)
         
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
@@ -365,30 +363,20 @@ class MapViewController: UIViewController, ChatSet{
             $0.rankingBUtton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
             $0.timerView.addGestureRecognizer(tempTimerGesture)
         }
-        
-//        rankingBUtton.do {
-//            $0.backgroundColor = .white
-//            $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
-//            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
-//            $0.layer.masksToBounds = true
-//            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
-//            $0.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
-//            $0.dropShadow()
-//        }
-//        chatButton.do {
-//            $0.backgroundColor = .white
-//            $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
-//            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
-//            $0.layer.masksToBounds = true
-//            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
-//            $0.dropShadow()
-//            $0.addGestureRecognizer(goToChatGesture)
-//        }
+        rankingViewController?.do {
+            $0.bottomBar.chatButton.addTarget(self, action: #selector(didClickedChatButtonInRankingView), for: .touchUpInside)
+            $0.bottomBar.rankingBUtton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
+            $0.dismissButton.addTarget(self, action: #selector(hideBackgroundView), for: .touchUpInside)
+        }
+        viewForTransition.do {
+            $0.backgroundColor = .white
+            $0.isHidden = true
+        }
     }
     
     // MARK: layout
     func layout() {
-        [mapView, cameraState, myLocationButton, backButton, toastLabel, bottomBar].forEach { view.addSubview($0) }
+        [mapView, cameraState, myLocationButton, backButton, toastLabel, bottomBar, viewForTransition].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
@@ -401,12 +389,6 @@ class MapViewController: UIViewController, ChatSet{
             $0.width.equalTo(MannaDemo.convertWidth(value: 200))
             $0.height.equalTo(MannaDemo.convertHeight(value: 50))
         }
-//        timerView.snp.makeConstraints {
-//            $0.centerY.equalTo(chatButton.snp.centerY)
-//            $0.trailing.equalTo(view).offset(-20)
-//            $0.width.equalTo(MannaDemo.convertWidth(value: MannaDemo.convertWidth(value: 111)))
-//            $0.height.equalTo(MannaDemo.convertHeight(value: MannaDemo.convertWidth(value: 48)))
-//        }
         myLocationButton.snp.makeConstraints {
             $0.top.equalTo(cameraState.snp.bottom).offset(11)
             $0.trailing.equalToSuperview().offset(-22)
@@ -417,27 +399,18 @@ class MapViewController: UIViewController, ChatSet{
             $0.trailing.equalToSuperview().offset(-22)
             $0.width.height.equalTo(40)
         }
-//        rankingBUtton.snp.makeConstraints {
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
-//            $0.leading.equalTo(chatButton.snp.trailing).offset(MannaDemo.convertWidth(value: 10))
-//            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
-//        }
-//        chatButton.snp.makeConstraints {
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-34)
-//            $0.leading.equalTo(view.snp.leading).offset(20)
-//            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
-//        }
         bottomBar.snp.makeConstraints {
             $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(view.snp.bottom).offset(-90)
+        }
+        viewForTransition.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalTo(view)
         }
     }
     
     //MARK: 마커 생성
     func array() {
         rankingViewController!.userList.keys.forEach { tokenWithMarker[$0] = NMFMarker()}
-//        tokenWithMarker[key]?.width = MannaDemo.convertWidth(value: 56)
-//        tokenWithMarker[key]?.height = MannaDemo.convertWidth(value: 62.61)
         for marker in tokenWithMarker.values {
             marker.width = MannaDemo.convertWidth(value: 56)
             marker.height = MannaDemo.convertWidth(value: 62.61)
@@ -450,6 +423,9 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func showRankingView() {
+        
+        viewForTransition.isHidden = false
+        
         presenter.currentRanking(userList: rankingViewController!.userList) { userList in
             self.rankingViewController!.userList = userList
         }
@@ -637,6 +613,15 @@ class MapViewController: UIViewController, ChatSet{
         present(chattingViewController!, animated: true)
     }
     
+    @objc func didClickedChatButtonInRankingView() {
+        chattingViewController!.chatView.reloadData()
+        rankingViewController?.dismiss(animated: false)
+        
+        self.chattingViewController!.modalPresentationStyle = .custom
+        self.chattingViewController!.modalTransitionStyle = .crossDissolve
+        present(chattingViewController!, animated: true)
+    }
+    
     //MARK: 뒤로가기
     @objc func back() {
         self.dismiss(animated: true)
@@ -649,7 +634,6 @@ class MapViewController: UIViewController, ChatSet{
                 if imageToNameFlag {
                     if user.networkValidTime > 60 {
                         //연결이 끊겼을 때 닉네임프로필 + 끊긴 이미지
-    //                    tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: rankingViewController!.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: rankingViewController!.userList[key]!.anotherdisconnectProfileImage)
                         tokenWithMarker[key]?.iconImage = (rankingViewController?.disconnectProfileImageArray[(user.name)!])!
                     } else {
                         tokenWithMarker[key]?.iconImage = (rankingViewController?.locationProfileImageArray[(user.name)!])!
@@ -657,7 +641,6 @@ class MapViewController: UIViewController, ChatSet{
                 } else {
                     if user.networkValidTime > 60 {
                         //여결이 끊겼을 때 사진프로필 + 끊긴 이미지
-//                        tokenWithMarker[key]?.iconImage = disconnectToggleFlag ?  NMFOverlayImage(image: rankingViewController!.userList[key]!.disconnectProfileImage) : NMFOverlayImage(image: rankingViewController!.userList[key]!.anotherdisconnectProfileImage)
                         tokenWithMarker[key]?.iconImage = (rankingViewController?.disconnectProfileImageArray[(user.name)!])!
                     } else {
                         tokenWithMarker[key]?.iconImage = (rankingViewController?.locationProfileImageArray[(user.name)!])!
@@ -675,6 +658,10 @@ class MapViewController: UIViewController, ChatSet{
             }
         }
         
+    }
+    
+    @objc func hideBackgroundView() {
+        viewForTransition.isHidden = true
     }
     
     //MARK: 위치권한 확인
