@@ -39,13 +39,25 @@ extension MapViewController: NMFMapViewCameraDelegate {
         }
     }
     
+    func myMarkerOnOverlay() {
+        let test = mapView.projection.point(from: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng))
+        var newLat = test.y - MannaDemo.convertWidth(value: 8)
+        let realLatLng = mapView.projection.latlng(from: CGPoint(x: test.x, y: newLat))
+        
+        tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: realLatLng.lat, lng: realLatLng.lng)
+        tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
+        tokenWithMarker[MannaDemo.myUUID!]?.alpha = 1
+        tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
         cameraTrakingToggleFlag = false
         mapView.positionMode = .normal
-        mapView.locationOverlay.icon = NMFOverlayImage(image: defaultOverlayImage)
+        mapView.locationOverlay.icon = defaultOverlayImageOverlay
         mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
         mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
-        tokenWithMarker[MannaDemo.myUUID!]!.mapView = mapView
+        
         UIView.animate(withDuration: 0.5) { [self] in
             [myLocationButton].forEach {
                 $0.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
@@ -59,29 +71,14 @@ extension MapViewController: NMFMapViewCameraDelegate {
         view.setNeedsLayout()
         view.layoutIfNeeded()
         markerResizeByZoomLevel()
-        let test = mapView.projection.point(from: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng))
-        var newLat = test.y - MannaDemo.convertWidth(value: 8)
-        let realLatLng = mapView.projection.latlng(from: CGPoint(x: test.x, y: newLat))
-        
-        tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: realLatLng.lat, lng: realLatLng.lng)
-        tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
+        myMarkerOnOverlay()
     }
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
         markerResizeByZoomLevel()
-        let test = mapView.projection.point(from: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng))
-        var newLat = test.y - MannaDemo.convertWidth(value: 8)
-        let realLatLng = mapView.projection.latlng(from: CGPoint(x: test.x, y: newLat))
-        
-        tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: realLatLng.lat, lng: realLatLng.lng)
-        tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
+        myMarkerOnOverlay()
     }
     func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
         markerResizeByZoomLevel()
-        let test = mapView.projection.point(from: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng))
-        var newLat = test.y - MannaDemo.convertWidth(value: 8)
-        let realLatLng = mapView.projection.latlng(from: CGPoint(x: test.x, y: newLat))
-        
-        tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: realLatLng.lat, lng: realLatLng.lng)
-        tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
+        myMarkerOnOverlay()
     }
 }

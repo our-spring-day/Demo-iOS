@@ -18,11 +18,16 @@ protocol ChatSet {
 }
 
 class MapViewController: UIViewController, ChatSet{
+<<<<<<< HEAD
     var defaultOverlayImage = DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
     var compassOverlayImage = CompassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
 <<<<<<< HEAD
 =======
     
+=======
+    var defaultOverlayImageOverlay = NMFOverlayImage(image: DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage())
+    var compassOverlayImageOverlay = NMFOverlayImage(image: CompassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage())
+>>>>>>> feat : 오버레이 찌그러짐 해결
     
 >>>>>>> feat : 랭킹뷰 대응 끝
     var rankingViewController: RankingView?
@@ -55,12 +60,12 @@ class MapViewController: UIViewController, ChatSet{
     lazy var tempTimerGesture = UITapGestureRecognizer(target: self, action: #selector(didClickedTimerView))
     lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
-//    var imageView: UIImageView = {
-//        let view = UIImageView()
-//        view.image = DisconnectProfileVIew(name: "상원", frame: CGRect(x: 100, y: 100, width: MannaDemo.convertWidth(value: 63), height: MannaDemo.convertWidth(value: 69.61))).asImage()
-//        view.frame = CGRect(x: 100, y: 100, width: 60, height: 60)
-//        return view
-//    }()
+    //    var imageView: UIImageView = {
+    //        let view = UIImageView()
+    //        view.image = DisconnectProfileVIew(name: "상원", frame: CGRect(x: 100, y: 100, width: MannaDemo.convertWidth(value: 63), height: MannaDemo.convertWidth(value: 69.61))).asImage()
+    //        view.frame = CGRect(x: 100, y: 100, width: 60, height: 60)
+    //        return view
+    //    }()
     var bottomBar = BottomBar()
     var viewForTransition = UIView()
     
@@ -85,7 +90,7 @@ class MapViewController: UIViewController, ChatSet{
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         presenter.currentRanking(userList: rankingViewController!.userList) { userList in
             self.rankingViewController!.userList = userList
         }
@@ -250,46 +255,46 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func didClickedTimerView() {
-//        timerView.tempToggleFlag.toggle()
-//        rankingViewController?.userList[MannaDemo.myUUID!]?.state.toggle()
-//        if timerView.tempToggleFlag {
-//            UIView.animate(withDuration: 0.05, animations: {
-//                self.timerView.snp.updateConstraints {
-//                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
-//                }
-//                self.timerView.alpha = 0
-//                self.view.setNeedsLayout()
-//                self.view.layoutIfNeeded()
-//            },completion: {_ in
-//                UIView.animate(withDuration: 0.1) {
-//                    self.timerView.alpha = 1
-//                    self.timerView.snp.updateConstraints {
-//                        $0.width.equalTo(MannaDemo.convertWidth(value: 115))
-//                    }
-//                    self.view.setNeedsLayout()
-//                    self.view.layoutIfNeeded()
-//                }
-//            })
-//
-//        } else {
-//            UIView.animate(withDuration: 0.05, animations: {
-//                self.timerView.snp.updateConstraints {
-//                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
-//                }
-//                self.timerView.alpha = 0
-//                self.view.setNeedsLayout()
-//                self.view.layoutIfNeeded()
-//            },completion: {_ in
-//                UIView.animate(withDuration: 0.1) {
-//                    self.timerView.alpha = 1
-//                    self.timerView.snp.updateConstraints {
-//                        $0.width.equalTo(MannaDemo.convertWidth(value: 102))
-//                    }
-//                    self.view.setNeedsLayout()
-//                    self.view.layoutIfNeeded()
-//                }
-//            })
-//        }
+        //        timerView.tempToggleFlag.toggle()
+        //        rankingViewController?.userList[MannaDemo.myUUID!]?.state.toggle()
+        //        if timerView.tempToggleFlag {
+        //            UIView.animate(withDuration: 0.05, animations: {
+        //                self.timerView.snp.updateConstraints {
+        //                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
+        //                }
+        //                self.timerView.alpha = 0
+        //                self.view.setNeedsLayout()
+        //                self.view.layoutIfNeeded()
+        //            },completion: {_ in
+        //                UIView.animate(withDuration: 0.1) {
+        //                    self.timerView.alpha = 1
+        //                    self.timerView.snp.updateConstraints {
+        //                        $0.width.equalTo(MannaDemo.convertWidth(value: 115))
+        //                    }
+        //                    self.view.setNeedsLayout()
+        //                    self.view.layoutIfNeeded()
+        //                }
+        //            })
+        //
+        //        } else {
+        //            UIView.animate(withDuration: 0.05, animations: {
+        //                self.timerView.snp.updateConstraints {
+        //                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
+        //                }
+        //                self.timerView.alpha = 0
+        //                self.view.setNeedsLayout()
+        //                self.view.layoutIfNeeded()
+        //            },completion: {_ in
+        //                UIView.animate(withDuration: 0.1) {
+        //                    self.timerView.alpha = 1
+        //                    self.timerView.snp.updateConstraints {
+        //                        $0.width.equalTo(MannaDemo.convertWidth(value: 102))
+        //                    }
+        //                    self.view.setNeedsLayout()
+        //                    self.view.layoutIfNeeded()
+        //                }
+        //            })
+        //        }
     }
     
     // MARK: Attribute
@@ -297,7 +302,7 @@ class MapViewController: UIViewController, ChatSet{
         chattingViewController!.inputBar.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
-//        view.addSubview(imageView)
+        //        view.addSubview(imageView)
         
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
@@ -318,7 +323,7 @@ class MapViewController: UIViewController, ChatSet{
             $0.positionMode = .direction
         }
         mapView.locationOverlay.do {
-            $0.icon = NMFOverlayImage(image: defaultOverlayImage)
+            $0.icon = defaultOverlayImageOverlay
             $0.iconWidth = MannaDemo.convertWidth(value: 60)
             $0.iconHeight = MannaDemo.convertWidth(value: 100)
         }
@@ -424,10 +429,11 @@ class MapViewController: UIViewController, ChatSet{
     
     @objc func showRankingView() {
         
-        viewForTransition.isHidden = false
+        
         
         presenter.currentRanking(userList: rankingViewController!.userList) { userList in
             self.rankingViewController!.userList = userList
+            self.viewForTransition.isHidden = false
         }
         self.rankingViewController!.view.backgroundColor = .white
         self.rankingViewController!.modalPresentationStyle = .custom
@@ -463,9 +469,9 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 컬렉션 뷰 아이템 세팅
     func setCollcetionViewItem() {
-//        userListForCollectionView = Array(rankingViewController!.userList.values)
-//        userListForCollectionView.sort { $0.state && !$1.state}
-//        userListForCollectionView.sort { $0.remainTime < $1.remainTime }
+        //        userListForCollectionView = Array(rankingViewController!.userList.values)
+        //        userListForCollectionView.sort { $0.state && !$1.state}
+        //        userListForCollectionView.sort { $0.remainTime < $1.remainTime }
     }
     
     //MARK: init 카메라 세팅
@@ -485,9 +491,23 @@ class MapViewController: UIViewController, ChatSet{
         }
     }
     
+    func compassMode() {
+        tokenWithMarker[MannaDemo.myUUID!]?.alpha = 0
+        cameraTrakingToggleFlag = false
+        myLocationButton.setImage(#imageLiteral(resourceName: "mylocationtracking"), for: .normal)
+        myLocationButton.alpha = 1
+        let cameraUpdate = NMFCameraUpdate(zoomTo: 17)
+        mapView.moveCamera(cameraUpdate)
+        mapView.positionMode = .compass
+        mapView.locationOverlay.icon = compassOverlayImageOverlay
+        mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
+        mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
+    }
+    
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
         multipartPath.mapView = nil
         cameraTrakingToggleFlag = true
+        tokenWithMarker[MannaDemo.myUUID!]?.alpha = 1
         
         //산일때
         if cameraState.currentImage == UIImage(named: "forest") {
@@ -495,36 +515,31 @@ class MapViewController: UIViewController, ChatSet{
             if sender.tag == 1 {
                 //산<->나무 버튼 클릭
                 //현: 숲 트래킹 유무 상관 x -> 후: 나무 트래킹 o
-                tokenWithMarker[MannaDemo.myUUID!]!.mapView = mapView
+                //tomylocation
+                toMyLocation()
                 mapView.positionMode = .normal
                 myLocationButton.alpha = 0.4
                 cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
                 myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
-                toMyLocation()
+                mapView.locationOverlay.icon = defaultOverlayImageOverlay
+                mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
+                mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
+                
             } else {
                 //내위치 버튼 클릭
                 if myLocationButton.alpha == 0.4000000059604645 {
                     //현재 트래킹 중이였음
-                    cameraTrakingToggleFlag = false
-                    myLocationButton.setImage(#imageLiteral(resourceName: "mylocationtracking"), for: .normal)
-                    myLocationButton.alpha = 1
-                    let cameraUpdate = NMFCameraUpdate(zoomTo: 17)
-                    mapView.moveCamera(cameraUpdate)
-                    mapView.positionMode = .compass
-                    mapView.locationOverlay.icon = NMFOverlayImage(image: compassOverlayImage)
-                    mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
-                    mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
-                    print(mapView.locationOverlay.iconWidth)
-                    print(mapView.locationOverlay.iconHeight)
-                    
+                    //compass
+                    compassMode()
                 } else {
                     //트래킹 중이 아닌거지
+                    //toWholeLocation
+                    toWholeLocation()
+                    cameraTrakingModeFlag.toggle()
                     mapView.positionMode = .normal
                     myLocationButton.alpha = 0.4
-                    cameraTrakingModeFlag.toggle()
                     myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
-                    toWholeLocation()
-                    mapView.locationOverlay.icon = NMFOverlayImage(image: defaultOverlayImage)
+                    mapView.locationOverlay.icon = defaultOverlayImageOverlay
                     mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
                     mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
                 }
@@ -533,31 +548,27 @@ class MapViewController: UIViewController, ChatSet{
             //나무일때
             cameraTrakingModeFlag = false
             if sender.tag == 1 {
+                //towholeLocation
+                toWholeLocation()
                 mapView.positionMode = .normal
                 myLocationButton.alpha = 0.4
                 cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
                 myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
-                toWholeLocation()
+                mapView.locationOverlay.icon = defaultOverlayImageOverlay
+                mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
+                mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
             } else {
                 if myLocationButton.alpha == 0.4000000059604645{
                     //지금 트래킹 중인거고
-                    cameraTrakingToggleFlag = false
-                    myLocationButton.setImage(#imageLiteral(resourceName: "mylocationtracking"), for: .normal)
-                    myLocationButton.alpha = 1
-                    let cameraUpdate = NMFCameraUpdate(zoomTo: 17)
-                    mapView.moveCamera(cameraUpdate)
-                    
-                    mapView.positionMode = .compass
-                    mapView.locationOverlay.icon = NMFOverlayImage(image: compassOverlayImage)
-                    mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
-                    mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
+                    compassMode()
                 } else {
+                    //myLocation
+                    toMyLocation()
+                    cameraTrakingModeFlag.toggle()
                     mapView.positionMode = .normal
                     myLocationButton.alpha = 0.4
-                    cameraTrakingModeFlag.toggle()
                     myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
-                    toMyLocation()
-                    mapView.locationOverlay.icon = NMFOverlayImage(image: defaultOverlayImage)
+                    mapView.locationOverlay.icon = defaultOverlayImageOverlay
                     mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
                     mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
                 }
@@ -567,8 +578,12 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 내위치 카메라 세팅
     @objc func toMyLocation() {
+        
         if cameraTrakingToggleFlag && cameraTrakingModeFlag && mapView.positionMode != .compass {
-            let cameraUpdate =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng),zoomTo: 15)
+            tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
+            tokenWithMarker[MannaDemo.myUUID!]?.alpha = 1
+            tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
+            let cameraUpdate =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng),zoomTo: 17)
             cameraUpdate.animation = .fly
             cameraUpdate.animationDuration = 0.4
             mapView.moveCamera(cameraUpdate)
@@ -577,7 +592,11 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 모두의 위치 카메라 세팅
     @objc func toWholeLocation() {
+        
         if cameraTrakingToggleFlag && cameraTrakingModeFlag == false && mapView.positionMode != .compass {
+            tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
+            tokenWithMarker[MannaDemo.myUUID!]?.alpha = 1
+            tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
             let minLatLng = NMGLatLng(lat: 150, lng: 150)
             let maxLatLng = NMGLatLng(lat: 0, lng: 0)
             
