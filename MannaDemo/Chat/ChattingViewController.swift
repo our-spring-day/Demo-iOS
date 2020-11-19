@@ -26,7 +26,7 @@ class ChattingViewController: UIViewController, chattingView {
     var chatView = UITableView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     var chatMessage: [ChatMessage] = []
-
+    
     var inputBar = InputBar()
     let background = UIView().then {
         $0.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
@@ -41,40 +41,45 @@ class ChattingViewController: UIViewController, chattingView {
     // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        keyboardShow()
+//        keyboardShow()
         attirbute()
+        layout()
         bind()
-//        scrollBottom()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        scrollBottom()
     }
     
     func scrollBottom() {
         if chatMessage.count != 0 {
             DispatchQueue.main.async {
                 let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
-                self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: false)
                 self.chatView.contentOffset.y += 50
             }
         }
     }
     
     // MARK: viewWillDisappear removeObserver
-        override func viewWillDisappear(_ animated: Bool) {
-            super.viewWillDisappear(animated)
-            removeObserver()
-        }
-
-        func keyboardShow() {
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        }
-
-        func removeObserver() {
-            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeObserver()
+    }
+    
+    func keyboardShow() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func removeObserver() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
     
     func bind() {
         RxKeyboard.instance.visibleHeight
             .drive(onNext: { [weak self] keyboardVisibleHeight in
-                guard let `self` = self, self.didSetupViewConstraints else { return }
+                guard let `self` = self else { return }
                 if keyboardVisibleHeight > 90 {
                     self.inputBar.snp.updateConstraints {
                         $0.bottom.equalTo(self.view.snp.bottom).offset(-keyboardVisibleHeight)
@@ -82,26 +87,42 @@ class ChattingViewController: UIViewController, chattingView {
                 }
                 self.view.setNeedsLayout()
                 UIView.animate(withDuration: 0) {
-//                    self.chatView.contentInset.bottom = 60
+                    //                    self.chatView.contentInset.bottom = 60
                     self.view.layoutIfNeeded()
                 }
             })
             .disposed(by: self.disposeBag)
         
         RxKeyboard.instance.willShowVisibleHeight
-          .drive(onNext: { keyboardVisibleHeight in
-            self.chatView.contentOffset.y += (keyboardVisibleHeight - 60)
-          })
-          .disposed(by: self.disposeBag)
+            .drive(onNext: { keyboardVisibleHeight in
+                print("키보드",keyboardVisibleHeight)
+                self.chatView.contentOffset.y += (keyboardVisibleHeight - 95)
+            })
+            
+            .disposed(by: self.disposeBag)
+        
+        RxKeyboard.instance.isHidden
+            .filter { $0 == true }
+            .drive(onNext: { ishiddn in
+                print("ㅋㄷ",ishiddn)
+                UIView.animate(withDuration: 0) {
+                    self.inputBar.snp.updateConstraints {
+                        $0.bottom.equalTo(self.view.snp.bottom).offset(-90)
+                    }
+                    self.chatView.contentOffset.y -= (291 - 95)
+                    self.view.layoutIfNeeded()
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     override func viewDidLayoutSubviews() {
-      super.viewDidLayoutSubviews()
+        super.viewDidLayoutSubviews()
         print(self.chatView.contentInset.bottom)
         if self.chatView.contentInset.bottom == 0 {
             print("으악")
-//          self.chatView.contentInset.bottom = self.inputBar.frame.height * 3
-//            self.input
+            //          self.chatView.contentInset.bottom = self.inputBar.frame.height * 3
+            //            self.input
         }
     }
     
@@ -123,18 +144,14 @@ class ChattingViewController: UIViewController, chattingView {
             $0.bounces = false
             $0.keyboardDismissMode = .interactive
         }
-//        inputBar.do {
-//            $0.textView.delegate = self
-//        }
+        //        inputBar.do {
+        //            $0.textView.delegate = self
+        //        }
     }
     
     // MARK: chatView Layout
     
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-        guard !self.didSetupViewConstraints else { return }
-        self.didSetupViewConstraints = true
-
+    func layout() {
         self.view.addSubview(self.chatView)
         self.view.addSubview(self.inputBar)
         self.view.addSubview(self.background)
@@ -149,7 +166,7 @@ class ChattingViewController: UIViewController, chattingView {
         }
         self.background.snp.makeConstraints {
             $0.leading.trailing.bottom.equalTo(0)
-            $0.top.equalTo(self.inputBar.snp.top).offset(-3)
+            $0.top.equalTo(self.inputBar.snp.top)
         }
         self.view.bringSubviewToFront(inputBar)
     }
@@ -160,8 +177,8 @@ class ChattingViewController: UIViewController, chattingView {
                 $0.bottom.equalTo(self.view.snp.bottom).offset(-90)
             }
             self.chatView.contentOffset.y -= (290 - 60)
-//            self.chatView.contentOffset.y += (291 - 83)
-//            self.chatView.contentInset.bottom = 50
+            //            self.chatView.contentOffset.y += (291 - 83)
+            //            self.chatView.contentInset.bottom = 50
             self.view.layoutIfNeeded()
         }
     }
@@ -187,7 +204,7 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
                 message.sendState = false
             }
         }
-     
+        
         cell.chatMessage = message
         
         var nextUser: String?
