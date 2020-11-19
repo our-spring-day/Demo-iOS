@@ -75,7 +75,6 @@ class ChattingViewController: UIViewController, chattingView {
         RxKeyboard.instance.visibleHeight
             .drive(onNext: { [weak self] keyboardVisibleHeight in
                 guard let `self` = self, self.didSetupViewConstraints else { return }
-                print(keyboardVisibleHeight)
                 if keyboardVisibleHeight > 90 {
                     self.inputBar.snp.updateConstraints {
                         $0.bottom.equalTo(self.view.snp.bottom).offset(-keyboardVisibleHeight)
@@ -83,7 +82,7 @@ class ChattingViewController: UIViewController, chattingView {
                 }
                 self.view.setNeedsLayout()
                 UIView.animate(withDuration: 0) {
-                    self.chatView.contentInset.bottom = keyboardVisibleHeight + 60
+//                    self.chatView.contentInset.bottom = 60
                     self.view.layoutIfNeeded()
                 }
             })
@@ -124,9 +123,9 @@ class ChattingViewController: UIViewController, chattingView {
             $0.bounces = false
             $0.keyboardDismissMode = .interactive
         }
-        inputBar.do {
-            $0.textView.delegate = self
-        }
+//        inputBar.do {
+//            $0.textView.delegate = self
+//        }
     }
     
     // MARK: chatView Layout
@@ -160,6 +159,7 @@ class ChattingViewController: UIViewController, chattingView {
             self.inputBar.snp.updateConstraints {
                 $0.bottom.equalTo(self.view.snp.bottom).offset(-90)
             }
+            self.chatView.contentOffset.y -= (290 - 60)
 //            self.chatView.contentOffset.y += (291 - 83)
 //            self.chatView.contentInset.bottom = 50
             self.view.layoutIfNeeded()
@@ -243,14 +243,14 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
         self.inputBar.textView.resignFirstResponder()
     }
 }
-
-extension ChattingViewController: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if textView.text == "" {
-            if (text == "\n") {
-                textView.resignFirstResponder()
-            }
-        }
-        return true
-    }
-}
+//
+//extension ChattingViewController: UITextViewDelegate {
+//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//        if textView.text == "" {
+//            if (text == "\n") {
+//                textView.resignFirstResponder()
+//            }
+//        }
+//        return true
+//    }
+//}

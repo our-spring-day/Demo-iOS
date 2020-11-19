@@ -635,6 +635,7 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 채팅창 클릭
     @objc func goToChatGestureFunc() {
         chattingViewController!.chatView.reloadData()
+        
         present(chattingViewController!, animated: true)
     }
     
