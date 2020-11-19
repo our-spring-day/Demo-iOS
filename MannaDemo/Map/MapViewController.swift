@@ -370,7 +370,7 @@ class MapViewController: UIViewController, ChatSet{
         }
         rankingViewController?.do {
             $0.bottomBar.chatButton.addTarget(self, action: #selector(didClickedChatButtonInRankingView), for: .touchUpInside)
-            $0.bottomBar.rankingBUtton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
+            $0.bottomBar.rankingBUtton.addTarget(self, action: #selector(hideBackgroundView), for: .touchUpInside)
             $0.dismissButton.addTarget(self, action: #selector(hideBackgroundView), for: .touchUpInside)
         }
         viewForTransition.do {
@@ -422,18 +422,9 @@ class MapViewController: UIViewController, ChatSet{
         }
     }
     
-    //MARK: 닉네임 이미지 셋
-    func nicknameImageSet() {
-        _ = 0
-    }
-    
     @objc func showRankingView() {
-        
-        
-        
         presenter.currentRanking(userList: rankingViewController!.userList) { userList in
             self.rankingViewController!.userList = userList
-            self.viewForTransition.isHidden = false
         }
         self.rankingViewController!.view.backgroundColor = .white
         self.rankingViewController!.modalPresentationStyle = .custom
@@ -619,6 +610,14 @@ class MapViewController: UIViewController, ChatSet{
                     }
                 }
             }
+            
+            //추가로 도착지 지점까지 비교해서 SET
+            minLatLng.lat = minLatLng.lat < goalMarker.position.lat ? minLatLng.lat : goalMarker.position.lat
+            minLatLng.lng = minLatLng.lng < goalMarker.position.lng ? minLatLng.lng : goalMarker.position.lng
+            maxLatLng.lat = maxLatLng.lat > goalMarker.position.lat ? maxLatLng.lat : goalMarker.position.lat
+            maxLatLng.lng = maxLatLng.lng > goalMarker.position.lng ? maxLatLng.lng : goalMarker.position.lng
+            
+            
             let cameraUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: minLatLng, northEast: maxLatLng), padding: 90)
             cameraUpdate.animation = .fly
             cameraUpdate.animationDuration = 0.4
@@ -633,12 +632,15 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func didClickedChatButtonInRankingView() {
+        viewForTransition.isHidden = false
         chattingViewController!.chatView.reloadData()
         rankingViewController?.dismiss(animated: false)
         
         self.chattingViewController!.modalPresentationStyle = .custom
         self.chattingViewController!.modalTransitionStyle = .crossDissolve
-        present(chattingViewController!, animated: true)
+        present(chattingViewController!, animated: true) { [self] in
+            viewForTransition.isHidden = true
+        }
     }
     
     //MARK: 뒤로가기
@@ -678,8 +680,11 @@ class MapViewController: UIViewController, ChatSet{
         
     }
     
-    @objc func hideBackgroundView() {
-        viewForTransition.isHidden = true
+    @objc func hideBackgroundView(_ sender: UIButton) {
+//        viewForTransition.isHidden = true
+        if sender.tag == 2 {
+            rankingViewController?.dismiss(animated: true)
+        }
     }
     
     //MARK: 위치권한 확인

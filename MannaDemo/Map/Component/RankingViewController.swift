@@ -78,6 +78,7 @@ class RankingViewController: UIViewController, RankingView {
             $0.clipsToBounds = true
             $0.addTarget(self, action: #selector(prevButton), for: .touchUpInside)
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 18.02), left: MannaDemo.convertHeight(value: 14.37), bottom: MannaDemo.convertHeight(value: 18.94), right: MannaDemo.convertHeight(value: 14.57))
+            $0.tag = 3
         }
     }
 
