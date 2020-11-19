@@ -33,6 +33,7 @@
 	<string>위치정보주실?</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>NotoSansKR-Regular.otf</string>
 		<string>NotoSansKR-Medium.otf</string>
 		<string>NotoSansKR-Bold.otf</string>
 	</array>

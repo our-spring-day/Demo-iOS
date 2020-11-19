@@ -14,6 +14,7 @@
 		A52A1C3D255BA239000794A5 /* RankingViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3C255BA239000794A5 /* RankingViewCell.swift */; };
 		A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3F255BAA3C000794A5 /* Ranking.swift */; };
 		A52A1C47255BBB23000794A5 /* Medal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C46255BBB23000794A5 /* Medal.swift */; };
+		A53681892566D5FA005516A9 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A53681882566D5FA005516A9 /* NotoSansKR-Regular.otf */; };
 		A53774BF2561655400C0A91B /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53774BE2561655400C0A91B /* UserState.swift */; };
 		A53774C32561876F00C0A91B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53774C22561876F00C0A91B /* PushKit.framework */; };
 		A53774E62562E2F100C0A91B /* getDeviceToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53774E52562E2F100C0A91B /* getDeviceToken.swift */; };
@@ -79,6 +80,7 @@
 		A52A1C3C255BA239000794A5 /* RankingViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewCell.swift; sourceTree = "<group>"; };
 		A52A1C3F255BAA3C000794A5 /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		A52A1C46255BBB23000794A5 /* Medal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medal.swift; sourceTree = "<group>"; };
+		A53681882566D5FA005516A9 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSansKR-Regular.otf"; path = "../../../../Downloads/Noto_Sans_KR/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
 		A537747D2560043E00C0A91B /* MannaDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MannaDemo.entitlements; sourceTree = "<group>"; };
 		A53774BE2561655400C0A91B /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 		A53774C22561876F00C0A91B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
@@ -243,6 +245,7 @@
 		CC46AE71255C014A0053F221 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				A53681882566D5FA005516A9 /* NotoSansKR-Regular.otf */,
 				CC46AE72255C015B0053F221 /* NotoSansKR-Bold.otf */,
 				CC46AE73255C015B0053F221 /* NotoSansKR-Medium.otf */,
 			);
@@ -425,6 +428,7 @@
 				CC8B84642540231A00441445 /* Assets.xcassets in Resources */,
 				CC8B84622540231A00441445 /* Main.storyboard in Resources */,
 				CC46AE74255C015B0053F221 /* NotoSansKR-Bold.otf in Resources */,
+				A53681892566D5FA005516A9 /* NotoSansKR-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
