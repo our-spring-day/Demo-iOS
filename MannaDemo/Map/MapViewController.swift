@@ -20,6 +20,11 @@ protocol ChatSet {
 class MapViewController: UIViewController, ChatSet{
     var defaultOverlayImage = DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
     var compassOverlayImage = CompassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
+<<<<<<< HEAD
+=======
+    
+    
+>>>>>>> feat : 랭킹뷰 대응 끝
     var rankingViewController: RankingView?
     var chattingViewController: chattingView?
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
@@ -60,7 +65,7 @@ class MapViewController: UIViewController, ChatSet{
         return view
     }()
 //    var imageView = LocationProfileImageVIew(name: "상원", frame: CGRect(x: 100, y: 100, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61)))
-    
+//    var bottomBar = BottomBar()
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
@@ -377,10 +382,9 @@ class MapViewController: UIViewController, ChatSet{
             $0.dropShadow()
             $0.addGestureRecognizer(goToChatGesture)
         }
-        timerView.do {
-            $0.addGestureRecognizer(tempTimerGesture)
-        }
-        
+//        timerView.do {
+//            $0.addGestureRecognizer(tempTimerGesture)
+//        }
     }
     
     // MARK: layout
