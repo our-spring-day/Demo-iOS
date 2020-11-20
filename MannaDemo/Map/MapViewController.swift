@@ -50,6 +50,7 @@ class MapViewController: UIViewController, ChatSet{
     var bottomBar = BottomBar()
     var viewForTransition = UIView()
     lazy var currentTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
+//    var currentTimer = Timer.sch
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
@@ -84,7 +85,6 @@ class MapViewController: UIViewController, ChatSet{
         
         locationSocket.on("locationConnect") { [self] (array, ack) in
             rankingViewController!.userList[MannaDemo.myUUID!]?.state = true
-//            self.setCollcetionViewItem()
         }
         chatSocket.on("chatConnect") { [self] (array, ack) in
             print(ack)
