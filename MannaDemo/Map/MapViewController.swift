@@ -64,7 +64,7 @@ class MapViewController: UIViewController, ChatSet{
     override func viewWillDisappear(_ animated: Bool) {
         locationSocket.disconnect()
         chatSocket.disconnect()
-        chattingViewController!.chatMessage.removeAll()
+//        chattingViewController!.chatMessage.removeAll()
     }
     
     // MARK: ViewDidLoad
@@ -505,7 +505,6 @@ class MapViewController: UIViewController, ChatSet{
         UIView.animate(withDuration: 0.3) { [self] in
             viewForTransition.alpha = 1
             chattingViewController?.view.alpha = 1
-//            chattingViewController?.chatView.alpha = 1
         }
         chattingViewController?.viewLoadScrollBottom()
     }
@@ -518,7 +517,6 @@ class MapViewController: UIViewController, ChatSet{
         UIView.animate(withDuration: 0.3) { [self] in
             viewForTransition.alpha = 1
             rankingViewController?.view.alpha = 1
-//            rankingViewController?.rankingView.alpha = 1
         }
     }
     
@@ -552,18 +550,22 @@ class MapViewController: UIViewController, ChatSet{
             UIView.animate(withDuration: 0.3) {
                 self.chattingViewController?.view.alpha = 0
                 self.viewForTransition.alpha = 0
+//                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             } completion: { _ in
                 self.viewForTransition.isHidden = true
                 self.chattingViewController?.view.isHidden = true
                 self.chattingViewController?.view.endEditing(true)
+//                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             }
         } else {
             UIView.animate(withDuration: 0.3) {
+//                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
                 self.rankingViewController?.view.alpha = 0
                 self.viewForTransition.alpha = 0
             } completion: {_ in
                 self.viewForTransition.isHidden = true
                 self.rankingViewController?.view.isHidden = true
+//                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             }
         }
     }

@@ -156,6 +156,7 @@ class ChattingViewController: UIViewController, chattingView {
             $0.backgroundColor = .white
             $0.dismissButton.addTarget(self, action: #selector(didClickedDismissButton), for: .touchUpInside)
             $0.dismissButton.tag = 1
+            $0.title.text = "채팅"
         }
         bottomBar.do {
             $0.chatButton.backgroundColor = UIColor(named: "buttonbackgroundgray")
@@ -220,6 +221,7 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatView.dequeueReusableCell(withIdentifier: ChatCell.cellID, for: indexPath) as! ChatCell
         cell.selectionStyle = .none
+        
         var message = chatMessage[indexPath.row]
         if indexPath.row > 0 {
             // 이전 User, 현재 User 같으면

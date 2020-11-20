@@ -32,7 +32,9 @@ extension Int {
         let currentMinute = minuteFormatter.string(from: currentDate)
         
         if Int(currentHour)! >= 0 && Int(currentHour)! < 12 {
-            result = "오전 \(currentHour.trimmingCharacters(in: ["0"])):\(currentMinute)"
+            
+            result = "\(currentHour)" == "00" ? "오전 12:\(currentMinute)" : "오전 \(currentHour.trimmingCharacters(in: ["0"])):\(currentMinute)"
+//            result = "오전 \(currentHour.trimmingCharacters(in: ["0"])):\(currentMinute)"
         } else {
             result = "오후 \(Int(currentHour)! - 12):\(currentMinute)"
         }
