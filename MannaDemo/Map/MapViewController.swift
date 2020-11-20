@@ -18,18 +18,10 @@ protocol ChatSet {
 }
 
 class MapViewController: UIViewController, ChatSet{
-<<<<<<< HEAD
-    var defaultOverlayImage = DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
-    var compassOverlayImage = CompassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage()
-<<<<<<< HEAD
-=======
-    
-=======
+
     var defaultOverlayImageOverlay = NMFOverlayImage(image: DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage())
     var compassOverlayImageOverlay = NMFOverlayImage(image: CompassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage())
->>>>>>> feat : 오버레이 찌그러짐 해결
-    
->>>>>>> feat : 랭킹뷰 대응 끝
+
     var rankingViewController: RankingView?
     var chattingViewController: chattingView?
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
@@ -93,6 +85,7 @@ class MapViewController: UIViewController, ChatSet{
 
         presenter.currentRanking(userList: rankingViewController!.userList) { userList in
             self.rankingViewController!.userList = userList
+            self.rankingViewController?.sortedUser()
         }
         checkedLocation()
         locationSocket = manager.socket(forNamespace: "/location")
@@ -371,7 +364,7 @@ class MapViewController: UIViewController, ChatSet{
         rankingViewController?.do {
             $0.bottomBar.chatButton.addTarget(self, action: #selector(didClickedChatButtonInRankingView), for: .touchUpInside)
             $0.bottomBar.rankingBUtton.addTarget(self, action: #selector(hideBackgroundView), for: .touchUpInside)
-            $0.dismissButton.addTarget(self, action: #selector(hideBackgroundView), for: .touchUpInside)
+            $0.topBar.dismissButton.addTarget(self, action: #selector(hideBackgroundView), for: .touchUpInside)
         }
         viewForTransition.do {
             $0.backgroundColor = .white
@@ -384,7 +377,7 @@ class MapViewController: UIViewController, ChatSet{
         [mapView, cameraState, myLocationButton, backButton, toastLabel, bottomBar, viewForTransition].forEach { view.addSubview($0) }
         
         backButton.snp.makeConstraints {
-            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 23))
             $0.leading.equalToSuperview().offset(15)
             $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
         }
@@ -395,12 +388,12 @@ class MapViewController: UIViewController, ChatSet{
             $0.height.equalTo(MannaDemo.convertHeight(value: 50))
         }
         myLocationButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 45))
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 23))
             $0.leading.equalTo(cameraState.snp.trailing).offset(MannaDemo.convertWidth(value: 10.88))
             $0.width.height.equalTo(45)
         }
         cameraState.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 45))
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 23))
             $0.trailing.equalToSuperview().offset(-MannaDemo.convertWidth(value: 70.88))
             $0.width.height.equalTo(45)
         }
@@ -491,11 +484,10 @@ class MapViewController: UIViewController, ChatSet{
         mapView.moveCamera(cameraUpdate)
         mapView.positionMode = .compass
         mapView.locationOverlay.icon = compassOverlayImageOverlay
-        mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
-        mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
     }
     
     @objc func didMyLocationButtonClicked(_ sender: UIButton) {
+        
         multipartPath.mapView = nil
         cameraTrakingToggleFlag = true
         tokenWithMarker[MannaDemo.myUUID!]?.alpha = 1
@@ -507,14 +499,13 @@ class MapViewController: UIViewController, ChatSet{
                 //산<->나무 버튼 클릭
                 //현: 숲 트래킹 유무 상관 x -> 후: 나무 트래킹 o
                 //tomylocation
+                //여기한번
                 toMyLocation()
                 mapView.positionMode = .normal
                 myLocationButton.alpha = 0.4
                 cameraState.setImage(#imageLiteral(resourceName: "tree"), for: .normal)
                 myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
                 mapView.locationOverlay.icon = defaultOverlayImageOverlay
-                mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
-                mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
                 
             } else {
                 //내위치 버튼 클릭
@@ -531,13 +522,12 @@ class MapViewController: UIViewController, ChatSet{
                     myLocationButton.alpha = 0.4
                     myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
                     mapView.locationOverlay.icon = defaultOverlayImageOverlay
-                    mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
-                    mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
                 }
             }
         } else {
             //나무일때
             cameraTrakingModeFlag = false
+            
             if sender.tag == 1 {
                 //towholeLocation
                 toWholeLocation()
@@ -546,22 +536,19 @@ class MapViewController: UIViewController, ChatSet{
                 cameraState.setImage(#imageLiteral(resourceName: "forest"), for: .normal)
                 myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
                 mapView.locationOverlay.icon = defaultOverlayImageOverlay
-                mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
-                mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
             } else {
                 if myLocationButton.alpha == 0.4000000059604645{
                     //지금 트래킹 중인거고
                     compassMode()
                 } else {
                     //myLocation
+                    //여기한번
                     toMyLocation()
                     cameraTrakingModeFlag.toggle()
                     mapView.positionMode = .normal
                     myLocationButton.alpha = 0.4
                     myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
                     mapView.locationOverlay.icon = defaultOverlayImageOverlay
-                    mapView.locationOverlay.iconWidth = MannaDemo.convertWidth(value: 60)
-                    mapView.locationOverlay.iconHeight = MannaDemo.convertWidth(value: 100)
                 }
             }
         }
@@ -571,9 +558,6 @@ class MapViewController: UIViewController, ChatSet{
     @objc func toMyLocation() {
         
         if cameraTrakingToggleFlag && cameraTrakingModeFlag && mapView.positionMode != .compass {
-            tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng)
-            tokenWithMarker[MannaDemo.myUUID!]?.alpha = 1
-            tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
             let cameraUpdate =  NMFCameraUpdate(scrollTo: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng),zoomTo: 17)
             cameraUpdate.animation = .fly
             cameraUpdate.animationDuration = 0.4
@@ -628,6 +612,8 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 채팅창 클릭
     @objc func goToChatGestureFunc() {
         chattingViewController!.chatView.reloadData()
+//        self.chattingViewController!.modalPresentationStyle = .custom
+//        self.chattingViewController!.modalTransitionStyle = .crossDissolve
         present(chattingViewController!, animated: true)
     }
     
@@ -638,6 +624,8 @@ class MapViewController: UIViewController, ChatSet{
         
         self.chattingViewController!.modalPresentationStyle = .custom
         self.chattingViewController!.modalTransitionStyle = .crossDissolve
+        
+        chattingViewController?.modalTransitionStyle = .crossDissolve
         present(chattingViewController!, animated: true) { [self] in
             viewForTransition.isHidden = true
         }
@@ -681,7 +669,6 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func hideBackgroundView(_ sender: UIButton) {
-//        viewForTransition.isHidden = true
         if sender.tag == 2 {
             rankingViewController?.dismiss(animated: true)
         }
@@ -720,3 +707,4 @@ class MapViewController: UIViewController, ChatSet{
         }
     }   
 }
+

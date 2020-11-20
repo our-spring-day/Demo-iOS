@@ -13,18 +13,24 @@ protocol RankingView: UIViewController {
     var userList: [String : User] { get set }
     var locationProfileImageArray: [String : NMFOverlayImage] { get set }
     var disconnectProfileImageArray: [String : NMFOverlayImage] { get set }
-    var dismissButton: UIButton { get set }
     var bottomBar: BottomBar { get set }
+    var topBar: TopBar { get set }
+    func sortedUser()
 }
 
 class RankingViewController: UIViewController, RankingView {
+    
     lazy var rankingView = UITableView()
-    var dismissButton = UIButton()
     var timerView = TimerView(.mapView)
-    var userList: [String : User] = [:]
+    var userList: [String : User] = [:] {
+        didSet {
+            sortedUserSelf()
+        }
+    }
     var arrivalUser: [User] = []
     var notArrivalUser: [User] = []
     var bottomBar = BottomBar()
+    var topBar = TopBar()
     
     lazy var urgentButton = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 39))
     lazy var locationProfileImageArray: [String : NMFOverlayImage] = [
@@ -51,7 +57,7 @@ class RankingViewController: UIViewController, RankingView {
     override func viewDidLoad() {
         super.viewDidLoad()
         sortedUser()
-        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(sortedUser), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(sortedUserSelf), userInfo: nil, repeats: true)
         attribute()
         layout()
     }
@@ -72,18 +78,13 @@ class RankingViewController: UIViewController, RankingView {
             $0.separatorStyle = .none
             $0.rowHeight = MannaDemo.convertWidth(value: 70)
         }
-        dismissButton.do {
-            $0.setImage(#imageLiteral(resourceName: "dismiss"), for: .normal)
-            $0.layer.cornerRadius = $0.frame.width / 2
-            $0.clipsToBounds = true
-            $0.addTarget(self, action: #selector(prevButton), for: .touchUpInside)
-            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 18.02), left: MannaDemo.convertHeight(value: 14.37), bottom: MannaDemo.convertHeight(value: 18.94), right: MannaDemo.convertHeight(value: 14.57))
-            $0.tag = 3
+        topBar.do {
+            $0.dismissButton.addTarget(self, action: #selector(prevButton(_:)), for: .touchUpInside)
         }
     }
 
     func layout() {
-        [rankingView, bottomBar, dismissButton].forEach { view.addSubview($0) }
+        [rankingView, bottomBar, topBar].forEach { view.addSubview($0) }
         
         rankingView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -96,14 +97,22 @@ class RankingViewController: UIViewController, RankingView {
             $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(view.snp.bottom).offset(-90)
         }
-        dismissButton.snp.makeConstraints {
-            $0.top.equalTo(view.snp.top).offset(MannaDemo.convertHeight(value: 46))
-            $0.leading.equalToSuperview().offset(15)
-            $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
+        topBar.snp.makeConstraints {
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view).offset(51)
+            $0.height.equalTo(MannaDemo.convertWidth(value: 50))
         }
     }
     
-    @objc func sortedUser() {
+    @objc func sortedUserSelf() {
+        arrivalUser = Array(userList.values).filter { $0.arrived }
+        arrivalUser = arrivalUser.sorted { $0.remainTime < $1.remainTime }
+        notArrivalUser = Array(userList.values).filter { !$0.arrived }
+        notArrivalUser = notArrivalUser.sorted { $0.remainTime < $1.remainTime }
+        rankingView.reloadData()
+    }
+    
+    func sortedUser() {
         arrivalUser = Array(userList.values).filter { $0.arrived }
         arrivalUser = arrivalUser.sorted { $0.remainTime < $1.remainTime }
         notArrivalUser = Array(userList.values).filter { !$0.arrived }
