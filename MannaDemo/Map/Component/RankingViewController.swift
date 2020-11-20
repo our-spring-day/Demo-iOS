@@ -42,7 +42,8 @@ class RankingViewController: UIViewController, RankingView {
         "효근" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["8D44FAA1-2F87-4702-9DAC-B8B15D949880"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
         "규리" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["2872483D-9E7B-46D1-A2B8-44832FE3F1AD"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
         "종찬" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["C65CDF73-8C04-4F76-A26A-AE3400FEC14B"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
-        "용권" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["69751764-A224-4923-9844-C61646743D10"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage())
+        "용권" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["69751764-A224-4923-9844-C61646743D10"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
+        "연재리" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["B8E643AD-E40B-4AF5-8C91-8DBB7412E8B0"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage())
     ]
     lazy var disconnectProfileImageArray: [String : NMFOverlayImage] = [
         "우석" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["f606564d8371e455"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
@@ -52,7 +53,8 @@ class RankingViewController: UIViewController, RankingView {
         "효근" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["8D44FAA1-2F87-4702-9DAC-B8B15D949880"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
         "규리" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["2872483D-9E7B-46D1-A2B8-44832FE3F1AD"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
         "종찬" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["C65CDF73-8C04-4F76-A26A-AE3400FEC14B"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
-        "용권" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["69751764-A224-4923-9844-C61646743D10"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage())
+        "용권" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["69751764-A224-4923-9844-C61646743D10"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
+        "연재리" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["B8E643AD-E40B-4AF5-8C91-8DBB7412E8B0"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage())
     ]
     
     override func viewDidLoad() {

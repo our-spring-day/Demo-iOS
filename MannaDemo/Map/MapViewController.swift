@@ -546,7 +546,6 @@ class MapViewController: UIViewController, ChatSet{
     @objc func dismissChildView(_ sender: UIButton) {
         
         if sender.tag == 1 {
-            
             UIView.animate(withDuration: 0.3) {
                 self.chattingViewController?.view.alpha = 0
                 self.viewForTransition.alpha = 0
