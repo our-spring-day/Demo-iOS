@@ -169,13 +169,15 @@ class MapViewController: UIViewController, ChatSet{
                     guard let lng = lng_ else { return }
                     guard rankingViewController!.userList[token] != nil else { return }
                     rankingViewController!.userList[token]?.networkValidTime = 0
+                    print("여기에 나계속찍혀야돼")
                     if token != MannaDemo.myUUID {
                         rankingViewController!.userList[token]?.latitude = lat
                         rankingViewController!.userList[token]?.longitude = lng
-                        MannaAPI.getPath(lat: lat_!, lng: lng_!) { (result) in
-                            rankingViewController!.userList[token]?.remainDistance = result.distance
-                            rankingViewController!.userList[token]?.remainTime = result.duration
-                        }
+                    }
+                    MannaAPI.getPath(lat: lat_!, lng: lng_!) { (result) in
+                        print("여기에 나계속찍혀야돼",result)
+                        rankingViewController!.userList[token]?.remainDistance = result.distance
+                        rankingViewController!.userList[token]?.remainTime = result.duration
                     }
                 }
             }
@@ -291,8 +293,6 @@ class MapViewController: UIViewController, ChatSet{
         }
     }
     
-    
-    
     // MARK: layout
     func layout() {
         [mapView, cameraState, myLocationButton, backButton, toastLabel, bottomBar, viewForTransition].forEach { view.addSubview($0) }
@@ -379,6 +379,10 @@ class MapViewController: UIViewController, ChatSet{
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
         mapView.zoomLevel = 17
         mapView.moveCamera(cameraUpdate)
+        MannaAPI.getPath(lat: myLatitude, lng: myLongitude) { [self] (result) in
+            rankingViewController!.userList[MannaDemo.myUUID!]?.remainDistance = result.distance
+            rankingViewController!.userList[MannaDemo.myUUID!]?.remainTime = result.duration
+        }
     }
     
     //MARK: 토스트 메세지
