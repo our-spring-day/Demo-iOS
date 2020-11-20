@@ -35,13 +35,13 @@ class BottomBar: UIView {
         [rankingButton, chatButton, timerView].forEach { addSubview($0) }
         
         rankingButton.snp.makeConstraints {
-            $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-34)
+            $0.centerY.equalToSuperview()
             $0.leading.equalTo(chatButton.snp.trailing).offset(MannaDemo.convertWidth(value: 10))
             $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
         }
         chatButton.snp.makeConstraints {
-            $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-34)
-            $0.leading.equalTo(self.snp.leading).offset(20)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(20)
             $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
         }
         timerView.snp.makeConstraints {
@@ -54,6 +54,7 @@ class BottomBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .red
         attribute()
         layout()
     }

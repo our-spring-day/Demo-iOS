@@ -34,7 +34,9 @@ class ChattingViewController: UIViewController, chattingView {
     var tempHeight: CGFloat?
     var chatMessage: [ChatMessage] = []
     var maxY: CGFloat = 0
-    var inputBar = InputBar()
+    var inputBar = InputBar().then {
+        $0.backgroundColor = .red
+    }
     var scrollButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40)).then {
         $0.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         $0.imageView?.contentMode = .scaleAspectFit
@@ -167,6 +169,7 @@ class ChattingViewController: UIViewController, chattingView {
     
     // MARK: DISMISS ACTION
     @objc func didClickedDismissButton() {
+        print("fd")
 //        view.isHidden = true
     }
     // MARK: chatView Layout
@@ -176,7 +179,7 @@ class ChattingViewController: UIViewController, chattingView {
         self.view.addSubview(self.background)
         self.view.addSubview(self.scrollButton)
         self.view.addSubview(self.topBar)
-        self.background.addSubview(self.bottomBar)
+        self.view.addSubview(self.bottomBar)
         
         self.chatView.snp.makeConstraints {
             $0.top.equalTo(view)
@@ -196,17 +199,17 @@ class ChattingViewController: UIViewController, chattingView {
             $0.trailing.equalTo(-20)
             $0.bottom.equalTo(inputBar.snp.top).offset(-20)
         }
-        bottomBar.snp.makeConstraints {
-            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.top.equalTo(inputBar.snp.bottom)
-            $0.bottom.equalTo(background.snp.bottom)
+        self.bottomBar.snp.makeConstraints {
+            $0.leading.trailing.equalTo(0)
+            $0.top.equalTo(inputBar.snp.bottom).offset(30)
         }
-        topBar.snp.makeConstraints {
+        self.topBar.snp.makeConstraints {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(view)
             $0.height.equalTo(MannaDemo.convertWidth(value: 94))
         }
         self.view.bringSubviewToFront(inputBar)
+        self.view.bringSubviewToFront(bottomBar)
     }
 }
 

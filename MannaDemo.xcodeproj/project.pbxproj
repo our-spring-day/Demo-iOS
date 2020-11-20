@@ -268,8 +268,8 @@
 				CC1CC97025429F490020D4C5 /* none7.swift */,
 				A53774E52562E2F100C0A91B /* getDeviceToken.swift */,
 				CCA5F9D22566539D00CFB999 /* BottomBar.swift */,
-				CCA5FA1225669FD300CFB999 /* TopBar.swift */,
 				A5968F6F2564DF7600013D2E /* InputBar.swift */,
+				CCA5FA1225669FD300CFB999 /* TopBar.swift */,
 				CC0F50272564DF2F000026AE /* RenderingView.swift */,
 			);
 			path = Component;
