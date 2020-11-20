@@ -21,7 +21,6 @@ class MapViewController: UIViewController, ChatSet{
     
     var defaultOverlayImageOverlay = NMFOverlayImage(image: DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage())
     var compassOverlayImageOverlay = NMFOverlayImage(image: CompassOverLayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage())
-    
     var rankingViewController: RankingView?
     var chattingViewController: chattingView?
     let userName: [String] = ["우석", "연재", "상원", "재인", "효근", "규리", "종찬", "용권"]
@@ -45,14 +44,12 @@ class MapViewController: UIViewController, ChatSet{
     var cameraState = UIButton()
     var myLocationButton = UIButton()
     var goalMarker = NMFMarker()
-    lazy var goToChatGesture = UITapGestureRecognizer(target: self, action: #selector(goToChatGestureFunc))
-    lazy var tempTimerGesture = UITapGestureRecognizer(target: self, action: #selector(didClickedTimerView))
+    lazy var goToChatGesture = UITapGestureRecognizer(target: self, action: #selector(showChattingView))
     lazy var userListForCollectionView: [User] = Array(rankingViewController!.userList.values)
     var presenter = MapPresenter()
     var bottomBar = BottomBar()
     var viewForTransition = UIView()
     lazy var currentTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
-    //    Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toWholeLocation), userInfo: nil, repeats: true)
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
@@ -87,7 +84,7 @@ class MapViewController: UIViewController, ChatSet{
         
         locationSocket.on("locationConnect") { [self] (array, ack) in
             rankingViewController!.userList[MannaDemo.myUUID!]?.state = true
-            self.setCollcetionViewItem()
+//            self.setCollcetionViewItem()
         }
         chatSocket.on("chatConnect") { [self] (array, ack) in
             print(ack)
@@ -154,14 +151,14 @@ class MapViewController: UIViewController, ChatSet{
                         rankingViewController!.userList[token]?.networkValidTime = 0
                         self.marking()
                         self.showToast(message: "\(name)님 접속하셨습니다.")
-                        self.setCollcetionViewItem()
+//                        self.setCollcetionViewItem()
                         break
                         
                     case "LEAVE":
                         guard let name = username else { return }
                         rankingViewController!.userList[token]?.networkValidTime = 61
                         self.marking()
-                        self.setCollcetionViewItem()
+//                        self.setCollcetionViewItem()
                         self.showToast(message: "\(name)님 나가셨습니다.")
                         break
                         
@@ -186,8 +183,6 @@ class MapViewController: UIViewController, ChatSet{
         }
         Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(timeChecker), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(marking), userInfo: nil, repeats: true)
-        //        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
-        //        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toWholeLocation), userInfo: nil, repeats: true)
         
         array()
         layout()
@@ -207,49 +202,6 @@ class MapViewController: UIViewController, ChatSet{
             chattingViewController!.scrollBottom()
         }
         
-    }
-    
-    @objc func didClickedTimerView() {
-        //        timerView.tempToggleFlag.toggle()
-        //        rankingViewController?.userList[MannaDemo.myUUID!]?.state.toggle()
-        //        if timerView.tempToggleFlag {
-        //            UIView.animate(withDuration: 0.05, animations: {
-        //                self.timerView.snp.updateConstraints {
-        //                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
-        //                }
-        //                self.timerView.alpha = 0
-        //                self.view.setNeedsLayout()
-        //                self.view.layoutIfNeeded()
-        //            },completion: {_ in
-        //                UIView.animate(withDuration: 0.1) {
-        //                    self.timerView.alpha = 1
-        //                    self.timerView.snp.updateConstraints {
-        //                        $0.width.equalTo(MannaDemo.convertWidth(value: 115))
-        //                    }
-        //                    self.view.setNeedsLayout()
-        //                    self.view.layoutIfNeeded()
-        //                }
-        //            })
-        //
-        //        } else {
-        //            UIView.animate(withDuration: 0.05, animations: {
-        //                self.timerView.snp.updateConstraints {
-        //                    $0.width.equalTo(MannaDemo.convertWidth(value: 10))
-        //                }
-        //                self.timerView.alpha = 0
-        //                self.view.setNeedsLayout()
-        //                self.view.layoutIfNeeded()
-        //            },completion: {_ in
-        //                UIView.animate(withDuration: 0.1) {
-        //                    self.timerView.alpha = 1
-        //                    self.timerView.snp.updateConstraints {
-        //                        $0.width.equalTo(MannaDemo.convertWidth(value: 102))
-        //                    }
-        //                    self.view.setNeedsLayout()
-        //                    self.view.layoutIfNeeded()
-        //                }
-        //            })
-        //        }
     }
     
     // MARK: Attribute
@@ -320,22 +272,42 @@ class MapViewController: UIViewController, ChatSet{
         bottomBar.do {
             $0.chatButton.addGestureRecognizer(goToChatGesture)
             $0.rankingButton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
-            $0.timerView.addGestureRecognizer(tempTimerGesture)
         }
         rankingViewController?.do {
-            $0.bottomBar.chatButton.addTarget(self, action: #selector(didClickedChatButtonInRankingView), for: .touchUpInside)
-            $0.bottomBar.rankingButton.addTarget(self, action: #selector(hideBackgroundView), for: .touchUpInside)
-            $0.topBar.dismissButton.addTarget(self, action: #selector(hideBackgroundView), for: .touchUpInside)
+            $0.bottomBar.chatButton.addTarget(self, action: #selector(rankingToChat), for: .touchUpInside)
+            $0.bottomBar.rankingButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
+            $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
+        }
+        chattingViewController?.do {
+            $0.bottomBar.rankingButton.addTarget(self, action: #selector(chatToRanking), for: .touchUpInside)
+            $0.bottomBar.chatButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
+            $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
+
         }
         viewForTransition.do {
             $0.backgroundColor = .white
+            $0.alpha = 0
             $0.isHidden = true
         }
     }
     
+    
+    
     // MARK: layout
     func layout() {
         [mapView, cameraState, myLocationButton, backButton, toastLabel, bottomBar, viewForTransition].forEach { view.addSubview($0) }
+        
+        [chattingViewController, rankingViewController].forEach {
+            addChild($0 as! UIViewController)
+            viewForTransition.addSubview(($0 as AnyObject).view)
+            ($0 as AnyObject).view.snp.makeConstraints {
+                $0.top.leading.trailing.bottom.equalTo(viewForTransition)
+            }
+            ($0 as AnyObject).didMove(toParent: self)
+        }
+        chattingViewController?.view.isHidden = true
+        rankingViewController?.view.isHidden = true
+        
         
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 23))
@@ -376,15 +348,7 @@ class MapViewController: UIViewController, ChatSet{
         }
     }
     
-    @objc func showRankingView() {
-        presenter.currentRanking(userList: rankingViewController!.userList) { userList in
-            self.rankingViewController!.userList = userList
-        }
-        self.rankingViewController!.view.backgroundColor = .white
-        self.rankingViewController!.modalPresentationStyle = .custom
-        self.rankingViewController!.modalTransitionStyle = .crossDissolve
-        self.present(self.rankingViewController!, animated: true)
-    }
+    
     
     //MARK: 마커 클릭 이벤트
     func didMarkerClicked() {
@@ -410,18 +374,10 @@ class MapViewController: UIViewController, ChatSet{
             }
         }
     }
-    
-    //MARK: 컬렉션 뷰 아이템 세팅
-    func setCollcetionViewItem() {
-        //        userListForCollectionView = Array(rankingViewController!.userList.values)
-        //        userListForCollectionView.sort { $0.state && !$1.state}
-        //        userListForCollectionView.sort { $0.remainTime < $1.remainTime }
-    }
-    
     //MARK: init 카메라 세팅
     func camereUpdateOnlyOnce() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: myLatitude, lng: myLongitude))
-        mapView.zoomLevel = 10
+        mapView.zoomLevel = 17
         mapView.moveCamera(cameraUpdate)
     }
     
@@ -536,24 +492,75 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     //MARK: 채팅창 클릭
-    @objc func goToChatGestureFunc() {
+    @objc func showChattingView() {
         chattingViewController!.chatView.reloadData()
-        chattingViewController?.modalPresentationStyle = .custom
-        chattingViewController?.modalTransitionStyle = .crossDissolve
-        present(chattingViewController!, animated: true)
+        viewForTransition.isHidden = false
+        chattingViewController?.view.isHidden = false
+        rankingViewController?.view.isHidden = true
+        
+        UIView.animate(withDuration: 0.3) { [self] in
+            viewForTransition.alpha = 1
+            chattingViewController?.view.alpha = 1
+//            chattingViewController?.chatView.alpha = 1
+        }
+        chattingViewController?.viewLoadScrollBottom()
     }
     
-    @objc func didClickedChatButtonInRankingView() {
+    @objc func showRankingView() {
+        rankingViewController?.rankingView.reloadData()
         viewForTransition.isHidden = false
-        chattingViewController!.chatView.reloadData()
-        rankingViewController?.dismiss(animated: false)
+        rankingViewController?.view.isHidden = false
+        chattingViewController?.view.isHidden = true
+        UIView.animate(withDuration: 0.3) { [self] in
+            viewForTransition.alpha = 1
+            rankingViewController?.view.alpha = 1
+//            rankingViewController?.rankingView.alpha = 1
+        }
+    }
+    
+    @objc func rankingToChat() {
+        chattingViewController?.view.isHidden = false
+        self.chattingViewController!.chatView.reloadData()
+        UIView.animate(withDuration: 0.2) {
+            self.rankingViewController?.view.alpha = 0
+            self.chattingViewController?.view.alpha = 1
+        } completion: { _ in
+            self.rankingViewController?.view.isHidden = true
+        }
+    }
+    
+    @objc func chatToRanking() {
+        chattingViewController?.view.endEditing(true)
+        rankingViewController?.view.isHidden = false
+        self.rankingViewController?.rankingView.reloadData()
+        UIView.animate(withDuration: 0.2) {
+            self.chattingViewController?.view.alpha = 0
+            self.rankingViewController?.view.alpha = 1
+        } completion: { _ in
+            self.chattingViewController?.view.isHidden = true
+        }
+    }
+    
+    @objc func dismissChildView(_ sender: UIButton) {
         
-        self.chattingViewController!.modalPresentationStyle = .custom
-        self.chattingViewController!.modalTransitionStyle = .crossDissolve
-        
-        chattingViewController?.modalTransitionStyle = .crossDissolve
-        present(chattingViewController!, animated: true) { [self] in
-            viewForTransition.isHidden = true
+        if sender.tag == 1 {
+            
+            UIView.animate(withDuration: 0.3) {
+                self.chattingViewController?.view.alpha = 0
+                self.viewForTransition.alpha = 0
+            } completion: { _ in
+                self.viewForTransition.isHidden = true
+                self.chattingViewController?.view.isHidden = true
+                self.chattingViewController?.view.endEditing(true)
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                self.rankingViewController?.view.alpha = 0
+                self.viewForTransition.alpha = 0
+            } completion: {_ in
+                self.viewForTransition.isHidden = true
+                self.rankingViewController?.view.isHidden = true
+            }
         }
     }
     
@@ -584,13 +591,6 @@ class MapViewController: UIViewController, ChatSet{
         }
         
     }
-    
-    @objc func hideBackgroundView(_ sender: UIButton) {
-        if sender.tag == 2 {
-            rankingViewController?.dismiss(animated: true)
-        }
-    }
-    
     //MARK: 위치권한 확인
     func checkedLocation() {
         let status = CLLocationManager.authorizationStatus()

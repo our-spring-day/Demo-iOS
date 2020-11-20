@@ -14,6 +14,8 @@ extension MapViewController: CLLocationManagerDelegate {
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
         
+        myLatitude = locValue.latitude
+        myLongitude = locValue.longitude
         rankingViewController!.userList[MannaDemo.myUUID!]?.latitude = locValue.latitude
         rankingViewController!.userList[MannaDemo.myUUID!]?.longitude = locValue.longitude
         

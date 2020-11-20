@@ -20,7 +20,6 @@ class BottomBar: UIView {
             $0.layer.masksToBounds = true
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
             $0.dropShadow()
-            $0.tag = 1
         }
         rankingButton.do {
             $0.backgroundColor = .white
@@ -29,7 +28,6 @@ class BottomBar: UIView {
             $0.layer.masksToBounds = true
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
             $0.dropShadow()
-            $0.tag = 2
         }
     }
     

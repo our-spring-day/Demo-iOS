@@ -28,7 +28,6 @@ class TopBar: UIView {
             $0.layer.cornerRadius = $0.frame.width / 2
             $0.clipsToBounds = true
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 18.02), left: MannaDemo.convertHeight(value: 14.37), bottom: MannaDemo.convertHeight(value: 18.94), right: MannaDemo.convertHeight(value: 14.57))
-            $0.tag = 3
         }
     }
     
@@ -37,7 +36,8 @@ class TopBar: UIView {
         
         title.snp.makeConstraints {
             $0.leading.equalTo(self).offset(MannaDemo.convertWidth(value: 26))
-            $0.top.equalTo(self).offset(MannaDemo.convertWidth(value: 9))
+//            $0.top.equalTo(self).offset(MannaDemo.convertWidth(value: 9))
+            $0.bottom.equalTo(self).offset(MannaDemo.convertWidth(value: -8))
             $0.width.equalTo(MannaDemo.convertWidth(value: 85))
             $0.height.equalTo(MannaDemo.convertWidth(value: 33))
         }

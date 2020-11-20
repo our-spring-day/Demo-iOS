@@ -16,6 +16,7 @@ protocol RankingView: UIViewController {
     var bottomBar: BottomBar { get set }
     var topBar: TopBar { get set }
     func sortedUser()
+    var rankingView: UITableView { get set }
 }
 
 class RankingViewController: UIViewController, RankingView {
@@ -70,6 +71,8 @@ class RankingViewController: UIViewController, RankingView {
         bottomBar.do {
             $0.backgroundColor = .none
             $0.rankingButton.backgroundColor = UIColor(named: "buttonbackgroundgray")
+            $0.chatButton.tag = 22
+            $0.rankingButton.tag = 2
         }
         rankingView.do {
             $0.backgroundColor = .white
@@ -81,7 +84,8 @@ class RankingViewController: UIViewController, RankingView {
             $0.rowHeight = MannaDemo.convertWidth(value: 70)
         }
         topBar.do {
-            $0.dismissButton.addTarget(self, action: #selector(prevButton(_:)), for: .touchUpInside)
+            $0.dismissButton.addTarget(self, action: #selector(didDismissButtonClicked(_:)), for: .touchUpInside)
+            $0.dismissButton.tag = 2
         }
     }
 
@@ -101,8 +105,8 @@ class RankingViewController: UIViewController, RankingView {
         }
         topBar.snp.makeConstraints {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.top.equalTo(view).offset(51)
-            $0.height.equalTo(MannaDemo.convertWidth(value: 50))
+            $0.top.equalTo(view)
+            $0.height.equalTo(MannaDemo.convertWidth(value: 94))
         }
     }
     
@@ -122,12 +126,8 @@ class RankingViewController: UIViewController, RankingView {
         rankingView.reloadData()
     }
     
-    @objc func prevButton(_ sender: UITapGestureRecognizer) {
-        dismiss(animated: true)
-    }
-    
-    @objc func didClickedChatBUtton() {
-        dismiss(animated: true)
+    @objc func didDismissButtonClicked(_ sender: UITapGestureRecognizer) {
+//        rankingView.alpha = 1
     }
 }
 
