@@ -222,13 +222,6 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		CC2500B52541F04300D630D8 /* singletone */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = singletone;
-			sourceTree = "<group>";
-		};
 		CC41A0A52548449200C0E762 /* lottie */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,12 +267,10 @@
 				CC1CC96D25429F080020D4C5 /* none6.swift */,
 				CC1CC97025429F490020D4C5 /* none7.swift */,
 				A53774E52562E2F100C0A91B /* getDeviceToken.swift */,
-				CC0F50272564DF2F000026AE /* RenderingView.swift */,
 				CCA5F9D22566539D00CFB999 /* BottomBar.swift */,
 				CCA5FA1225669FD300CFB999 /* TopBar.swift */,
 				A5968F6F2564DF7600013D2E /* InputBar.swift */,
-				CC0F50272564DF2F000026AE /* overlayImageView.swift */,
-
+				CC0F50272564DF2F000026AE /* RenderingView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -310,7 +301,6 @@
 				CC41A0A52548449200C0E762 /* lottie */,
 				A5D48F1F2542AD8600399462 /* Extension */,
 				A5D48F182542A5FB00399462 /* Component */,
-				CC2500B52541F04300D630D8 /* singletone */,
 				A515563725404C5700487BEF /* Map */,
 				CCE752492540288F008E0BA1 /* MannaList */,
 				A515562B2540290600487BEF /* RegisterUser */,

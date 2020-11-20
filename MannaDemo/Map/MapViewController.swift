@@ -307,7 +307,6 @@ class MapViewController: UIViewController, ChatSet{
         chattingViewController!.inputBar.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
-        //        view.addSubview(imageView)
         
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
