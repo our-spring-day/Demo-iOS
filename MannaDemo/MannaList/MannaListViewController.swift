@@ -138,9 +138,9 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
         view.meetInfo  = MannaModel.newModel[indexPath.row]
         DispatchQueue.global().async {
             MannaAPI.getChat(mannaID: MannaModel.newModel[indexPath.row].uuid) { result in
-                print(result)
                 subChatView.chatMessage = result
                 view.chattingViewController = subChatView
+                print(result)
             }
         }
         view.modalPresentationStyle = .fullScreen

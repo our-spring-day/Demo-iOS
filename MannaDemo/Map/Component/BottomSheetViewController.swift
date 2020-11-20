@@ -16,10 +16,6 @@ extension BottomSheetViewController {
         case full
     }
     enum Constant {
-//        static let halfViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.5
-//        static let partialViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.64
-//        static let fullViewYPosition: CGFloat = UIScreen.main.bounds.height * 0.00
-        
         static let halfViewYPosition: CGFloat = MannaDemo.convertHeight(value: 470)
         static let partialViewYPosition: CGFloat = MannaDemo.convertHeight(value: 525)
         static let fullViewYPosition: CGFloat = MannaDemo.convertHeight(value: 0)
