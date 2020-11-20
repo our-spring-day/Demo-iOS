@@ -51,6 +51,7 @@ extension MapViewController: NMFMapViewCameraDelegate {
         let test = mapView.projection.point(from: NMGLatLng(lat: mapView.locationOverlay.location.lat, lng: mapView.locationOverlay.location.lng))
         var newLat = test.y - MannaDemo.convertWidth(value: 8)
         let realLatLng = mapView.projection.latlng(from: CGPoint(x: test.x, y: newLat))
+        currentTimer.invalidate()
         tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: realLatLng.lat, lng: realLatLng.lng)
         tokenWithMarker[MannaDemo.myUUID!]?.alpha = 1
         tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView

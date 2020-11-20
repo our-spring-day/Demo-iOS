@@ -18,7 +18,8 @@ extension MapViewController: CLLocationManagerDelegate {
         myLongitude = locValue.longitude
         rankingViewController!.userList[MannaDemo.myUUID!]?.latitude = locValue.latitude
         rankingViewController!.userList[MannaDemo.myUUID!]?.longitude = locValue.longitude
-        
+        tokenWithMarker[MannaDemo.myUUID!]?.position.lat = locValue.latitude
+        tokenWithMarker[MannaDemo.myUUID!]?.position.lng = locValue.longitude
         locationSocket.emit("location", "{\"latitude\":\(locValue.latitude),\"longitude\":\(locValue.longitude)}")
         
     }
