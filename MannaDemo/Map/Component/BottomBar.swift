@@ -54,7 +54,6 @@ class BottomBar: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .red
         attribute()
         layout()
     }

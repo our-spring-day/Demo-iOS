@@ -34,9 +34,7 @@ class ChattingViewController: UIViewController, chattingView {
     var tempHeight: CGFloat?
     var chatMessage: [ChatMessage] = []
     var maxY: CGFloat = 0
-    var inputBar = InputBar().then {
-        $0.backgroundColor = .red
-    }
+    var inputBar = InputBar()
     var scrollButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40)).then {
         $0.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         $0.imageView?.contentMode = .scaleAspectFit
@@ -200,8 +198,8 @@ class ChattingViewController: UIViewController, chattingView {
             $0.bottom.equalTo(inputBar.snp.top).offset(-20)
         }
         self.bottomBar.snp.makeConstraints {
-            $0.leading.trailing.equalTo(0)
-            $0.top.equalTo(inputBar.snp.bottom).offset(30)
+            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.snp.bottom).offset(-90)
         }
         self.topBar.snp.makeConstraints {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)

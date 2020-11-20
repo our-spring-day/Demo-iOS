@@ -49,6 +49,7 @@ class MannaAPI {
                                                     isIncoming: chat["sender"]["deviceToken"].string! == MannaDemo.myUUID ? .me : .other,
                                     sendState: false)
                         result.append(chatPiece)
+                        print("채팅",chatPiece)
                     }
                 }
                 result.sort(by: { $0.timeStamp < $1.timeStamp })
