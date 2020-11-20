@@ -18,6 +18,7 @@ PODS:
   - SwiftKeychainWrapper (4.0.1)
   - SwiftyJSON (5.0.0)
   - Then (2.6.0)
+  - "UITextView+Placeholder (1.4.0)"
 
 DEPENDENCIES:
   - Alamofire
@@ -32,6 +33,7 @@ DEPENDENCIES:
   - SwiftKeychainWrapper
   - SwiftyJSON
   - Then
+  - "UITextView+Placeholder"
 
 SPEC REPOS:
   trunk:
@@ -48,6 +50,7 @@ SPEC REPOS:
     - SwiftKeychainWrapper
     - SwiftyJSON
     - Then
+    - "UITextView+Placeholder"
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
@@ -63,7 +66,8 @@ SPEC CHECKSUMS:
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   Then: 90cd104fd951cec1980a03f57704ad8f784d4d79
+  "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: ff522e9a957b1e77f51f02ca1af9f43d853bc991
+PODFILE CHECKSUM: 8ce386007b8ecdcc40415da6808f442b9ae11740
 
 COCOAPODS: 1.9.1

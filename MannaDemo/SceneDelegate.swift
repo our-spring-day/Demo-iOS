@@ -10,16 +10,17 @@ import SwiftKeychainWrapper
 import SwiftyJSON
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    let url = "http://ec2-13-124-151-24.ap-northeast-2.compute.amazonaws.com:8888/user"
     var window: UIWindow?
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            let rankView = RankingViewController()
-            let mainView = MapViewController()
+            
             let mannalistView = MannaListViewController()
             let registerView = RegisterUserViewController()
-            print("이 기종의 스케일", UIScreen.main.scale)
+            
+//            print("이 기종의 스케일", UIScreen.main.scale)
+            
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {
                 if let uuid = UIDevice.current.identifierForVendor?.uuidString {
                     let saveSuccessful: Bool = KeychainWrapper.standard.set(uuid, forKey: "device_id")
@@ -35,7 +36,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         switch response.result {
                         case .success(let value):
                             let result = JSON(value)["error"]
+                            print("하잇",KeychainWrapper.standard.string(forKey: "device_id"))
                             if result == "Not Found" {
+                                print("여기로 걸리나")
                                 window.rootViewController = registerView
                             } else {
                                 window.rootViewController = mannalistView
@@ -49,6 +52,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     }
                 }
             }
+
             self.window = window
             window.makeKeyAndVisible()
         }

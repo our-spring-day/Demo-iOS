@@ -57,23 +57,29 @@ class RegisterUserViewController: UIViewController {
         let view = UINavigationController(rootViewController: MannaListViewController())
         guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
         guard let userName = userName.text else { return }
-        let url = "https://manna.duckdns.org:18888/useruser?deviceToken=\(deviceID)&username=\(userName)"
-        registerUser(url)
-        print("등록완료!!!")
+        let url = "https://manna.duckdns.org:18888/user"
+        print("deviceID : ", deviceID)
+        print("userName : ", userName)
+        registerUser(url: url, deviceToken: deviceID, username: userName)
         view.modalPresentationStyle = .fullScreen
         present(view, animated: true, completion: nil)
     }
     
-    func registerUser(_ url: String) {
+    func registerUser(url: String, deviceToken: String, username: String) {
+        let params: Parameters = [
+            "deviceToken": deviceToken,
+            "username": username
+        ]
         
         AF.request(url,
                    method: .post,
-                   encoding: JSONEncoding.default).responseJSON { response in
+                   parameters: params,
+                   encoding: URLEncoding.httpBody).responseJSON { response in
                     switch response.result {
                     case .success(let value):
-                        print("\(value)")
+                        print("성공인가 : \(value)")
                     case .failure(let err):
-                        print("\(err)")
+                        print("실패인가 : \(err)")
                     }
             }
     }

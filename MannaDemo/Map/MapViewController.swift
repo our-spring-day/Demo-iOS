@@ -119,6 +119,12 @@ class MapViewController: UIViewController, ChatSet{
             
             chattingViewController!.chatMessage.append(newMessageBinding)
             chattingViewController!.chatView.reloadData()
+            if chattingViewController?.chatBottomState == true {
+                print("아래이군요")
+                chattingViewController?.scrollBottom()
+            } else {
+                print("위군요")
+            }
         }
         
         locationSocket.on("location") { [self] (array, ack) in
@@ -195,6 +201,12 @@ class MapViewController: UIViewController, ChatSet{
         chatSocket.emit("chat", "\(text)")
         chattingViewController?.chatView.reloadData()
         chattingViewController!.inputBar.textView.text = ""
+        
+        let time = DispatchTime.now() + .milliseconds(100)
+        DispatchQueue.main.asyncAfter(deadline: time) { [self] in
+            chattingViewController!.scrollBottom()
+        }
+        
     }
     
     @objc func didClickedTimerView() {
@@ -245,7 +257,6 @@ class MapViewController: UIViewController, ChatSet{
         chattingViewController!.inputBar.sendButton.do {
             $0.addTarget(self, action: #selector(sendMessage), for: .touchUpInside)
         }
-        //        view.addSubview(imageView)
         
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
@@ -527,8 +538,8 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 채팅창 클릭
     @objc func goToChatGestureFunc() {
         chattingViewController!.chatView.reloadData()
-        //        self.chattingViewController!.modalPresentationStyle = .custom
-        //        self.chattingViewController!.modalTransitionStyle = .crossDissolve
+        chattingViewController?.modalPresentationStyle = .custom
+        chattingViewController?.modalTransitionStyle = .crossDissolve
         present(chattingViewController!, animated: true)
     }
     

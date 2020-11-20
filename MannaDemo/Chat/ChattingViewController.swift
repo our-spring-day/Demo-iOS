@@ -15,19 +15,36 @@ protocol chattingView: UIViewController {
     var chatMessage: [ChatMessage] { get set }
     var chatView: UITableView { get set }
     var inputBar: InputBar { get set }
+    var chatBottomState: Bool { get set }
     func scrollBottom()
 }
 
 class ChattingViewController: UIViewController, chattingView {
     let disposeBag = DisposeBag()
     
+    var chatBottomState: Bool = true
+    
     private var didSetupViewConstraints = false
     static let shared = ChattingViewController()
     var chatView = UITableView()
     let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    var tempHeight: CGFloat?
     var chatMessage: [ChatMessage] = []
-
+    var maxY: CGFloat = 0
     var inputBar = InputBar()
+    var scrollButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40)).then {
+        $0.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        $0.imageView?.contentMode = .scaleAspectFit
+        $0.imageEdgeInsets = UIEdgeInsets(top: 13, left: 13, bottom: 13, right: 13)
+        $0.setImage(UIImage(named: "bottom"), for: .normal)
+        $0.layer.cornerRadius = $0.frame.width / 2
+        $0.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.15)
+        $0.layer.shadowOpacity = 1.0
+        $0.layer.shadowRadius = 4
+        $0.layer.shadowOffset = CGSize.zero
+        $0.isHidden = true
+        $0.addTarget(self, action: #selector(scrollBottom), for: .touchUpInside)
+    }
     let background = UIView().then {
         $0.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
     }
@@ -36,46 +53,48 @@ class ChattingViewController: UIViewController, chattingView {
                                                  height: MannaDemo.convertHeight(value: 17)))
         .then {
             $0.setImage(UIImage(named: "good"), for: .normal)
+            $0.addTarget(self, action: #selector(scrollBottom), for: .touchUpInside)
         }
     
     // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        keyboardShow()
         attirbute()
+        layout()
         bind()
-//        scrollBottom()
     }
     
-    func scrollBottom() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewLoadScrollBottom()
+    }
+    
+    @objc func scrollBottom() {
         if chatMessage.count != 0 {
             DispatchQueue.main.async {
                 let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
                 self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-                self.chatView.contentOffset.y += 50
             }
+            scrollButton.isHidden = true
         }
     }
     
-    // MARK: viewWillDisappear removeObserver
-        override func viewWillDisappear(_ animated: Bool) {
-            super.viewWillDisappear(animated)
-            removeObserver()
+    func viewLoadScrollBottom() {
+        if chatMessage.count != 0 {
+            DispatchQueue.main.async {
+                let indexPath = IndexPath(row: self.chatMessage.count - 1, section: 0)
+                self.chatView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            }
+            scrollButton.isHidden = true
         }
-
-        func keyboardShow() {
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        }
-
-        func removeObserver() {
-            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        }
+    }
+    
+    // MARK: RxKeyboard bind
     
     func bind() {
         RxKeyboard.instance.visibleHeight
             .drive(onNext: { [weak self] keyboardVisibleHeight in
-                guard let `self` = self, self.didSetupViewConstraints else { return }
-                print(keyboardVisibleHeight)
+                guard let `self` = self else { return }
                 if keyboardVisibleHeight > 90 {
                     self.inputBar.snp.updateConstraints {
                         $0.bottom.equalTo(self.view.snp.bottom).offset(-keyboardVisibleHeight)
@@ -83,29 +102,33 @@ class ChattingViewController: UIViewController, chattingView {
                 }
                 self.view.setNeedsLayout()
                 UIView.animate(withDuration: 0) {
-                    self.chatView.contentInset.bottom = keyboardVisibleHeight + 60
                     self.view.layoutIfNeeded()
                 }
             })
             .disposed(by: self.disposeBag)
         
         RxKeyboard.instance.willShowVisibleHeight
-          .drive(onNext: { keyboardVisibleHeight in
-            self.chatView.contentOffset.y += (keyboardVisibleHeight - 60)
-          })
-          .disposed(by: self.disposeBag)
+            .drive(onNext: { keyboardVisibleHeight in
+                self.chatView.contentOffset.y += (keyboardVisibleHeight - 95)
+            })
+            
+            .disposed(by: self.disposeBag)
+        
+        RxKeyboard.instance.isHidden
+            .filter { $0 == true }
+            .drive(onNext: { ishiddn in
+                UIView.animate(withDuration: 0) {
+                    self.inputBar.snp.updateConstraints {
+                        $0.bottom.equalTo(self.view.snp.bottom).offset(-90)
+                    }
+                    self.chatView.contentOffset.y -= (291 - 95)
+                    self.view.layoutIfNeeded()
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
-    override func viewDidLayoutSubviews() {
-      super.viewDidLayoutSubviews()
-        print(self.chatView.contentInset.bottom)
-        if self.chatView.contentInset.bottom == 0 {
-            print("으악")
-//          self.chatView.contentInset.bottom = self.inputBar.frame.height * 3
-//            self.input
-        }
-    }
-
+    // MARK: chatView Attribute
     
     func attirbute() {
         let appearance = UINavigationBarAppearance()
@@ -125,21 +148,15 @@ class ChattingViewController: UIViewController, chattingView {
             $0.bounces = false
             $0.keyboardDismissMode = .interactive
         }
-        inputBar.do {
-            $0.textView.delegate = self
-        }
     }
     
     // MARK: chatView Layout
     
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-        guard !self.didSetupViewConstraints else { return }
-        self.didSetupViewConstraints = true
-
+    func layout() {
         self.view.addSubview(self.chatView)
         self.view.addSubview(self.inputBar)
         self.view.addSubview(self.background)
+        self.view.addSubview(self.scrollButton)
         
         self.chatView.snp.makeConstraints {
             $0.leading.trailing.top.equalToSuperview()
@@ -148,25 +165,22 @@ class ChattingViewController: UIViewController, chattingView {
         self.inputBar.snp.makeConstraints {
             $0.leading.trailing.equalTo(0)
             $0.bottom.equalTo(view.snp.bottom).offset(-90)
-            }
+        }
         self.background.snp.makeConstraints {
             $0.leading.trailing.bottom.equalTo(0)
-            $0.top.equalTo(self.inputBar.snp.top).offset(-3)
+            $0.top.equalTo(self.inputBar.snp.top)
+        }
+        self.scrollButton.snp.makeConstraints {
+            $0.width.height.equalTo(40)
+            $0.trailing.equalTo(-20)
+            $0.bottom.equalTo(inputBar.snp.top).offset(-20)
         }
         self.view.bringSubviewToFront(inputBar)
     }
-    
-    @objc func keyboardWillHide(sender: Notification) {
-        UIView.animate(withDuration: 0) {
-            self.inputBar.snp.updateConstraints {
-                $0.bottom.equalTo(self.view.snp.bottom).offset(-90)
-            }
-//            self.chatView.contentOffset.y += (291 - 83)
-//            self.chatView.contentInset.bottom = 50
-            self.view.layoutIfNeeded()
-        }
-    }
 }
+
+
+// MARK: Chat data setting
 
 extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -188,7 +202,7 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
                 message.sendState = false
             }
         }
-     
+        
         cell.chatMessage = message
         
         var nextUser: String?
@@ -243,15 +257,26 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.inputBar.textView.resignFirstResponder()
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == chatMessage.count {
+            print("do something")
+            chatBottomState = true
+        } else {
+            print("not something")
+            chatBottomState = false
+        }
+    }
 }
 
-extension ChattingViewController: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if textView.text == "" {
-            if (text == "\n") {
-                textView.resignFirstResponder()
-            }
+extension ChattingViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        maxY = maxY < chatView.contentOffset.y ? chatView.contentOffset.y : maxY
+        
+        if maxY - chatView.contentOffset.y > 800 {
+            scrollButton.isHidden = false
+        } else {
+            scrollButton.isHidden = true
         }
-        return true
     }
 }

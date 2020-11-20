@@ -102,8 +102,6 @@ class BottomSheetViewController: UIViewController {
                             }
                             self.moveView(state: currentState)},
                            completion: { _ in
-                            //                            self.view.isUserInteractionEnabled = true
-                            //                            self.parentView?.isUserInteractionEnabled = true
                            }
             )
         }
