@@ -171,6 +171,7 @@ class MapViewController: UIViewController, ChatSet{
             chattingViewController!.chatView.reloadData()
         }
         
+
         locationSocket.on("location") { [self] (array, ack) in
             var _: String?
             var deviceToken: String?
