@@ -66,8 +66,10 @@ class RankingViewController: UIViewController, RankingView {
         self.do {
             $0.view.backgroundColor = .white
         }
+        
         bottomBar.do {
             $0.backgroundColor = .none
+            $0.rankingButton.backgroundColor = UIColor(named: "buttonbackgroundgray")
         }
         rankingView.do {
             $0.backgroundColor = .white

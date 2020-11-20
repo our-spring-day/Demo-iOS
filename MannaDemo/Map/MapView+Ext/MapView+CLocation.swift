@@ -13,14 +13,12 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.showsBackgroundLocationIndicator = true
-        myLatitude = locValue.latitude
-        myLongitude = locValue.longitude
-        rankingViewController!.userList[MannaDemo.myUUID!]?.latitude = myLatitude
-        rankingViewController!.userList[MannaDemo.myUUID!]?.longitude = myLongitude
         
-        locationSocket.emit("location", "{\"latitude\":\(myLatitude),\"longitude\":\(myLongitude)}")
+        rankingViewController!.userList[MannaDemo.myUUID!]?.latitude = locValue.latitude
+        rankingViewController!.userList[MannaDemo.myUUID!]?.longitude = locValue.longitude
         
-        setCollcetionViewItem()
+        locationSocket.emit("location", "{\"latitude\":\(locValue.latitude),\"longitude\":\(locValue.longitude)}")
+        
     }
     
     // MARK: 위치권한 다시 받는곳

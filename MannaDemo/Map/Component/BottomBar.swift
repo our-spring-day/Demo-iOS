@@ -9,7 +9,7 @@ import UIKit
 
 class BottomBar: UIView {
     var chatButton = UIButton()
-    var rankingBUtton = UIButton()
+    var rankingButton = UIButton()
     var timerView = TimerView(.mapView)
     
     func attribute() {
@@ -22,7 +22,7 @@ class BottomBar: UIView {
             $0.dropShadow()
             $0.tag = 1
         }
-        rankingBUtton.do {
+        rankingButton.do {
             $0.backgroundColor = .white
             $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
             $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
@@ -34,9 +34,9 @@ class BottomBar: UIView {
     }
     
     func layout() {
-        [rankingBUtton, chatButton, timerView].forEach { addSubview($0) }
+        [rankingButton, chatButton, timerView].forEach { addSubview($0) }
         
-        rankingBUtton.snp.makeConstraints {
+        rankingButton.snp.makeConstraints {
             $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-34)
             $0.leading.equalTo(chatButton.snp.trailing).offset(MannaDemo.convertWidth(value: 10))
             $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
