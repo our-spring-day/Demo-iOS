@@ -54,7 +54,8 @@ extension MapViewController: NMFMapViewCameraDelegate {
         tokenWithMarker[MannaDemo.myUUID!]?.position = NMGLatLng(lat: realLatLng.lat, lng: realLatLng.lng)
         tokenWithMarker[MannaDemo.myUUID!]?.alpha = 1
         tokenWithMarker[MannaDemo.myUUID!]?.mapView = mapView
-        cameraTrakingToggleFlag = false
+        
+        myLocationButton.setImage(#imageLiteral(resourceName: "mylocation"), for: .normal)
         mapView.positionMode = .normal
         mapView.locationOverlay.icon = defaultOverlayImageOverlay
         
