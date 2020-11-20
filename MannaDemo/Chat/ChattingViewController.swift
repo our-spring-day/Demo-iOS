@@ -15,11 +15,14 @@ protocol chattingView: UIViewController {
     var chatMessage: [ChatMessage] { get set }
     var chatView: UITableView { get set }
     var inputBar: InputBar { get set }
+    var chatBottomState: Bool { get set }
     func scrollBottom()
 }
 
 class ChattingViewController: UIViewController, chattingView {
     let disposeBag = DisposeBag()
+    
+    var chatBottomState: Bool = true
     
     private var didSetupViewConstraints = false
     static let shared = ChattingViewController()
@@ -253,6 +256,16 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.inputBar.textView.resignFirstResponder()
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == chatMessage.count {
+            print("do something")
+            chatBottomState = true
+        } else {
+            print("not something")
+            chatBottomState = false
+        }
+    }
 }
 
 extension ChattingViewController: UIScrollViewDelegate {
@@ -264,15 +277,5 @@ extension ChattingViewController: UIScrollViewDelegate {
         } else {
             scrollButton.isHidden = true
         }
-    }
-}
-
-extension ChattingViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        
     }
 }

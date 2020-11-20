@@ -169,6 +169,12 @@ class MapViewController: UIViewController, ChatSet{
             
             chattingViewController!.chatMessage.append(newMessageBinding)
             chattingViewController!.chatView.reloadData()
+            if chattingViewController?.chatBottomState == true {
+                print("아래이군요")
+                chattingViewController?.scrollBottom()
+            } else {
+                print("위군요")
+            }
         }
         
         
