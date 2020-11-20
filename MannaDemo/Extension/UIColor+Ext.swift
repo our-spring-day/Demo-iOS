@@ -31,8 +31,7 @@ extension UIColor {
             return #colorLiteral(red: 0.3529411765, green: 0.4196078431, blue: 1, alpha: 0.1)
         case .urgentOff:
             return #colorLiteral(red: 0.6666666667, green: 0.6666666667, blue: 0.6666666667, alpha: 0.1)
-        }
-        
+        }     
     }
 }
 

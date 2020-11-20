@@ -78,6 +78,7 @@ class ChattingViewController: UIViewController, chattingView {
             scrollButton.isHidden = true
         }
     }
+    
     func viewLoadScrollBottom() {
         if chatMessage.count != 0 {
             DispatchQueue.main.async {
