@@ -9,7 +9,7 @@ import UIKit
 
 class BottomBar: UIView {
     var chatButton = UIButton()
-    var rankingBUtton = UIButton()
+    var rankingButton = UIButton()
     var timerView = TimerView(.mapView)
     
     func attribute() {
@@ -20,23 +20,21 @@ class BottomBar: UIView {
             $0.layer.masksToBounds = true
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
             $0.dropShadow()
-            $0.tag = 1
         }
-        rankingBUtton.do {
+        rankingButton.do {
             $0.backgroundColor = .white
             $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
             $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
             $0.layer.masksToBounds = true
             $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
             $0.dropShadow()
-            $0.tag = 2
         }
     }
     
     func layout() {
-        [rankingBUtton, chatButton, timerView].forEach { addSubview($0) }
+        [rankingButton, chatButton, timerView].forEach { addSubview($0) }
         
-        rankingBUtton.snp.makeConstraints {
+        rankingButton.snp.makeConstraints {
             $0.bottom.equalTo(self.safeAreaLayoutGuide).offset(-34)
             $0.leading.equalTo(chatButton.snp.trailing).offset(MannaDemo.convertWidth(value: 10))
             $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))

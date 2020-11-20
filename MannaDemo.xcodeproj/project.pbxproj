@@ -14,7 +14,6 @@
 		A52A1C3D255BA239000794A5 /* RankingViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3C255BA239000794A5 /* RankingViewCell.swift */; };
 		A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C3F255BAA3C000794A5 /* Ranking.swift */; };
 		A52A1C47255BBB23000794A5 /* Medal.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52A1C46255BBB23000794A5 /* Medal.swift */; };
-		A53681892566D5FA005516A9 /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A53681882566D5FA005516A9 /* NotoSansKR-Regular.otf */; };
 		A53774BF2561655400C0A91B /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53774BE2561655400C0A91B /* UserState.swift */; };
 		A53774C32561876F00C0A91B /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53774C22561876F00C0A91B /* PushKit.framework */; };
 		A53774E62562E2F100C0A91B /* getDeviceToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53774E52562E2F100C0A91B /* getDeviceToken.swift */; };
@@ -58,6 +57,7 @@
 		CC8B84622540231A00441445 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84602540231A00441445 /* Main.storyboard */; };
 		CC8B84642540231A00441445 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84632540231A00441445 /* Assets.xcassets */; };
 		CC8B84672540231A00441445 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC8B84652540231A00441445 /* LaunchScreen.storyboard */; };
+		CC95D6882567B17200B799EE /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CC95D6872567B17200B799EE /* NotoSansKR-Regular.otf */; };
 		CCA5F9D32566539D00CFB999 /* BottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA5F9D22566539D00CFB999 /* BottomBar.swift */; };
 		CCA5FA1325669FD300CFB999 /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA5FA1225669FD300CFB999 /* TopBar.swift */; };
 		CCC19F9A255D34200092DD05 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCC19F99255D34200092DD05 /* Int+Ext.swift */; };
@@ -79,7 +79,6 @@
 		A52A1C3C255BA239000794A5 /* RankingViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingViewCell.swift; sourceTree = "<group>"; };
 		A52A1C3F255BAA3C000794A5 /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
 		A52A1C46255BBB23000794A5 /* Medal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medal.swift; sourceTree = "<group>"; };
-		A53681882566D5FA005516A9 /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "NotoSansKR-Regular.otf"; path = "../../../../Downloads/Noto_Sans_KR/NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
 		A537747D2560043E00C0A91B /* MannaDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MannaDemo.entitlements; sourceTree = "<group>"; };
 		A53774BE2561655400C0A91B /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 		A53774C22561876F00C0A91B /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
@@ -126,6 +125,7 @@
 		CC8B84632540231A00441445 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC8B84662540231A00441445 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CC8B84682540231A00441445 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CC95D6872567B17200B799EE /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
 		CCA5F9D22566539D00CFB999 /* BottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBar.swift; sourceTree = "<group>"; };
 		CCA5FA1225669FD300CFB999 /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 		CCC19F99255D34200092DD05 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
@@ -233,7 +233,7 @@
 		CC46AE71255C014A0053F221 /* Font */ = {
 			isa = PBXGroup;
 			children = (
-				A53681882566D5FA005516A9 /* NotoSansKR-Regular.otf */,
+				CC95D6872567B17200B799EE /* NotoSansKR-Regular.otf */,
 				CC46AE72255C015B0053F221 /* NotoSansKR-Bold.otf */,
 				CC46AE73255C015B0053F221 /* NotoSansKR-Medium.otf */,
 			);
@@ -417,7 +417,7 @@
 				CC8B84642540231A00441445 /* Assets.xcassets in Resources */,
 				CC8B84622540231A00441445 /* Main.storyboard in Resources */,
 				CC46AE74255C015B0053F221 /* NotoSansKR-Bold.otf in Resources */,
-				A53681892566D5FA005516A9 /* NotoSansKR-Regular.otf in Resources */,
+				CC95D6882567B17200B799EE /* NotoSansKR-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

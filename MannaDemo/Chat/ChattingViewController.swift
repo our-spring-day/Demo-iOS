@@ -17,6 +17,9 @@ protocol chattingView: UIViewController {
     var inputBar: InputBar { get set }
     var chatBottomState: Bool { get set }
     func scrollBottom()
+    func viewLoadScrollBottom()
+    var topBar: TopBar { get set }
+    var bottomBar: BottomBar { get set }
 }
 
 class ChattingViewController: UIViewController, chattingView {
@@ -55,6 +58,8 @@ class ChattingViewController: UIViewController, chattingView {
             $0.setImage(UIImage(named: "good"), for: .normal)
             $0.addTarget(self, action: #selector(scrollBottom), for: .touchUpInside)
         }
+    var topBar = TopBar()
+    var bottomBar = BottomBar()
     
     // MARK: viewDidLoad
     override func viewDidLoad() {
@@ -135,10 +140,8 @@ class ChattingViewController: UIViewController, chattingView {
         appearance.configureWithTransparentBackground()
         self.do {
             $0.title = "설정"
-            $0.view.backgroundColor = #colorLiteral(red: 0.9725490196, green: 0.9725490196, blue: 0.9725490196, alpha: 1)
             $0.navigationController?.navigationBar.standardAppearance = appearance
         }
-        
         chatView.do {
             $0.delegate = self
             $0.dataSource = self
@@ -148,18 +151,36 @@ class ChattingViewController: UIViewController, chattingView {
             $0.bounces = false
             $0.keyboardDismissMode = .interactive
         }
+        topBar.do {
+            $0.alpha = 0.85
+            $0.backgroundColor = .white
+            $0.dismissButton.addTarget(self, action: #selector(didClickedDismissButton), for: .touchUpInside)
+            $0.dismissButton.tag = 1
+            $0.title.text = "채팅"
+        }
+        bottomBar.do {
+            $0.chatButton.backgroundColor = UIColor(named: "buttonbackgroundgray")
+            $0.chatButton.addTarget(self, action: #selector(didClickedDismissButton), for: .touchUpInside)
+            $0.chatButton.tag = 1
+        }
     }
     
+    // MARK: DISMISS ACTION
+    @objc func didClickedDismissButton() {
+//        view.isHidden = true
+    }
     // MARK: chatView Layout
-    
     func layout() {
         self.view.addSubview(self.chatView)
         self.view.addSubview(self.inputBar)
         self.view.addSubview(self.background)
         self.view.addSubview(self.scrollButton)
+        self.view.addSubview(self.topBar)
+        self.background.addSubview(self.bottomBar)
         
         self.chatView.snp.makeConstraints {
-            $0.leading.trailing.top.equalToSuperview()
+            $0.top.equalTo(view)
+            $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(background.snp.top)
         }
         self.inputBar.snp.makeConstraints {
@@ -174,6 +195,16 @@ class ChattingViewController: UIViewController, chattingView {
             $0.width.height.equalTo(40)
             $0.trailing.equalTo(-20)
             $0.bottom.equalTo(inputBar.snp.top).offset(-20)
+        }
+        bottomBar.snp.makeConstraints {
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(inputBar.snp.bottom)
+            $0.bottom.equalTo(background.snp.bottom)
+        }
+        topBar.snp.makeConstraints {
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view)
+            $0.height.equalTo(MannaDemo.convertWidth(value: 94))
         }
         self.view.bringSubviewToFront(inputBar)
     }
@@ -190,6 +221,7 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatView.dequeueReusableCell(withIdentifier: ChatCell.cellID, for: indexPath) as! ChatCell
         cell.selectionStyle = .none
+        
         var message = chatMessage[indexPath.row]
         if indexPath.row > 0 {
             // 이전 User, 현재 User 같으면
