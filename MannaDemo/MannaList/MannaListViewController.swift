@@ -87,7 +87,7 @@ class MannaListViewController: UIViewController, reloadData {
         let param: Parameters = [
             "device_id" : deviceID,
         ]
-//        , parameters: param
+
         let result = AF.request("https://manna.duckdns.org:18888/manna?deviceToken=\(deviceID)").responseJSON { response in
 
             switch response.result {

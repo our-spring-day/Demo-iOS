@@ -17,7 +17,7 @@ target 'MannaDemo' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'RxKeyboard'
-
+  pod 'UITextView+Placeholder'
 # Pods for MannaDemo
 
 end

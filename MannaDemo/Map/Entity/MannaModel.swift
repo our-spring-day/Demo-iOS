@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class MannaModel {
     static var model: [Manna] = [
         Manna(time: "asdf", name: "합정 어딘가"),
