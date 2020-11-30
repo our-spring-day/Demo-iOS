@@ -508,9 +508,7 @@ class MapViewController: UIViewController, ChatSet{
         bottomBar.isUserInteractionEnabled = false
         switch subViewState {
         case .chat:
-            print(sender.tag)
             dismissChildView(sender)
-            print(sender.tag)
             subViewState = .none
         case .ranking:
             rankingToChat()

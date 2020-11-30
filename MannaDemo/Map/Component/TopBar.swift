@@ -35,10 +35,10 @@ class TopBar: UIView {
         [title, dismissButton].forEach { addSubview($0) }
         
         title.snp.makeConstraints {
-            $0.leading.equalTo(self).offset(MannaDemo.convertWidth(value: 26))
-//            $0.top.equalTo(self).offset(MannaDemo.convertWidth(value: 9))
-            $0.bottom.equalTo(self).offset(MannaDemo.convertWidth(value: -8))
-            $0.width.equalTo(MannaDemo.convertWidth(value: 85))
+            $0.leading.equalTo(self).offset(20)
+            $0.top.equalTo(self).offset(51.25)
+            
+            $0.width.equalTo(200)
             $0.height.equalTo(MannaDemo.convertWidth(value: 33))
         }
         dismissButton.snp.makeConstraints {

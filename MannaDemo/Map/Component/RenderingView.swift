@@ -207,10 +207,10 @@ class LocationProfileImageVIew: UIView {
         }
         
         triangleVIew.snp.makeConstraints {
-            $0.top.equalTo(backgroundView.snp.bottom).offset(-MannaDemo.convertWidth(value: 5))
+            $0.top.equalTo(backgroundView.snp.bottom).offset(-3.5)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(MannaDemo.convertWidth(value: 20))
-            $0.height.equalTo(MannaDemo.convertWidth(value: 10.44))
+            $0.width.equalTo(12.5)
+            $0.height.equalTo(8)
         }
     }
     
