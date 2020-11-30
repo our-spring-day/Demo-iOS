@@ -12,6 +12,12 @@ import SwiftyJSON
 import SocketIO
 import AudioToolbox
 
+enum SubViewState {
+    case chat
+    case ranking
+    case none
+}
+
 protocol ChatSet {
     var chattingViewController: chattingView? { get set }
     var rankingViewController: RankingView? { get set }
@@ -50,7 +56,7 @@ class MapViewController: UIViewController, ChatSet{
     var bottomBar = BottomBar()
     var viewForTransition = UIView()
     lazy var currentTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
-    
+    var subViewState: SubViewState = .none
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
@@ -271,8 +277,11 @@ class MapViewController: UIViewController, ChatSet{
             $0.isForceShowIcon = true
         }
         bottomBar.do {
-            $0.chatButton.addGestureRecognizer(goToChatGesture)
+//            $0.chatButton.addGestureRecognizer(goToChatGesture)
+            $0.chatButton.addTarget(self, action: #selector(showChattingView), for: .touchUpInside)
             $0.rankingButton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
+            $0.chatButton.tag = 1
+            $0.rankingButton.tag = 2
         }
         rankingViewController?.do {
             $0.bottomBar.chatButton.addTarget(self, action: #selector(rankingToChat), for: .touchUpInside)
@@ -280,8 +289,8 @@ class MapViewController: UIViewController, ChatSet{
             $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
         }
         chattingViewController?.do {
-            $0.bottomBar.rankingButton.addTarget(self, action: #selector(chatToRanking), for: .touchUpInside)
-            $0.bottomBar.chatButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
+//            $0.bottomBar.rankingButton.addTarget(self, action: #selector(chatToRanking), for: .touchUpInside)
+//            $0.bottomBar.chatButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
             $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
 
         }
@@ -495,30 +504,60 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     //MARK: 채팅창 클릭
-    @objc func showChattingView() {
-        chattingViewController!.chatView.reloadData()
-        viewForTransition.isHidden = false
-        chattingViewController?.view.isHidden = false
-        rankingViewController?.view.isHidden = true
-        self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
-        viewForTransition.alpha = 1
-        chattingViewController?.view.alpha = 1
-        UIView.animate(withDuration: 0.3) { [self] in
-            self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
+    @objc func showChattingView(_ sender: UIButton) {
+        bottomBar.isUserInteractionEnabled = false
+        switch subViewState {
+        case .chat:
+            print(sender.tag)
+            dismissChildView(sender)
+            print(sender.tag)
+            subViewState = .none
+        case .ranking:
+            rankingToChat()
+            subViewState = .chat
+        case .none:
+            
+            chattingViewController!.chatView.reloadData()
+            viewForTransition.isHidden = false
+            chattingViewController?.view.isHidden = false
+            rankingViewController?.view.isHidden = true
+            self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
+            viewForTransition.alpha = 1
+            chattingViewController?.view.alpha = 1
+            UIView.animate(withDuration: 0.3) {
+                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
+            } completion: { _ in
+                self.bottomBar.isUserInteractionEnabled = true
+            }
+            chattingViewController?.viewLoadScrollBottom()
+            subViewState = .chat
+            
         }
-        chattingViewController?.viewLoadScrollBottom()
     }
     
-    @objc func showRankingView() {
-        rankingViewController?.rankingView.reloadData()
-        viewForTransition.isHidden = false
-        rankingViewController?.view.isHidden = false
-        chattingViewController?.view.isHidden = true
-        viewForTransition.alpha = 1
-        rankingViewController?.view.alpha = 1
-        self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
-        UIView.animate(withDuration: 0.3) { [self] in
-            self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
+    @objc func showRankingView(_ sender: UIButton) {
+        bottomBar.isUserInteractionEnabled = false
+        switch subViewState {
+        case .chat:
+            chatToRanking()
+            subViewState = .ranking
+        case .ranking:
+            dismissChildView(sender)
+            subViewState = .none
+        case .none:
+            rankingViewController?.rankingView.reloadData()
+            viewForTransition.isHidden = false
+            rankingViewController?.view.isHidden = false
+            chattingViewController?.view.isHidden = true
+            viewForTransition.alpha = 1
+            rankingViewController?.view.alpha = 1
+            self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
+            UIView.animate(withDuration: 0.3) {
+                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
+            } completion: { _ in
+                self.bottomBar.isUserInteractionEnabled = true
+            }
+            subViewState = .ranking
         }
     }
     
@@ -530,6 +569,7 @@ class MapViewController: UIViewController, ChatSet{
             self.chattingViewController?.view.alpha = 1
         } completion: { _ in
             self.rankingViewController?.view.isHidden = true
+            self.bottomBar.isUserInteractionEnabled = true
         }
     }
     
@@ -542,6 +582,7 @@ class MapViewController: UIViewController, ChatSet{
             self.rankingViewController?.view.alpha = 1
         } completion: { _ in
             self.chattingViewController?.view.isHidden = true
+            self.bottomBar.isUserInteractionEnabled = true
         }
     }
     
@@ -557,6 +598,7 @@ class MapViewController: UIViewController, ChatSet{
                 self.chattingViewController?.view.isHidden = true
                 self.chattingViewController?.view.endEditing(true)
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
+                self.bottomBar.isUserInteractionEnabled = true
             }
         } else {
             UIView.animate(withDuration: 0.3) {
@@ -567,6 +609,7 @@ class MapViewController: UIViewController, ChatSet{
                 self.viewForTransition.isHidden = true
                 self.rankingViewController?.view.isHidden = true
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
+                self.bottomBar.isUserInteractionEnabled = true
             }
         }
     }
