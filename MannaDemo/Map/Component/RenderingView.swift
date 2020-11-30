@@ -150,8 +150,6 @@ class DisconnectProfileVIew: UIView {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(MannaDemo.convertWidth(value: 3.3))
             $0.trailing.equalToSuperview().offset(MannaDemo.convertWidth(value: -3.3))
-//            $0.leading.equalToSuperview()
-//            $0.trailing.equalToSuperview()
         }
         triangleVIew.snp.makeConstraints {
 //            $0.bottom.equalToSuperview().offset(MannaDemo.convertWidth(value: -1.5))

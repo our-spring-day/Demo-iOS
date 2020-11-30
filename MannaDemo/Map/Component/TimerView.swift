@@ -89,7 +89,7 @@ class TimerView: UIView {
     
     func attribute() {
         self.do {
-            $0.layer.cornerRadius = MannaDemo.convertWidth(value: 21)
+            $0.layer.cornerRadius = 24
             $0.layer.masksToBounds = true
             switch whereAt {
             case .mapView:

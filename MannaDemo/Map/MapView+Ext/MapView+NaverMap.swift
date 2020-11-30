@@ -27,8 +27,8 @@ extension MapViewController: NMFMapViewCameraDelegate {
             }
         } else {
             tokenWithMarker.map { (key, marker) in
-                marker.width = MannaDemo.convertWidth(value: 50)
-                marker.height = MannaDemo.convertWidth(value: 50)
+                marker.width = 56
+                marker.height = 56
                 
                 goalMarker.width = MannaDemo.convertWidth(value: 50)
                 goalMarker.height = MannaDemo.convertWidth(value: 50)

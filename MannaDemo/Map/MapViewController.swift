@@ -65,7 +65,6 @@ class MapViewController: UIViewController, ChatSet{
     override func viewWillDisappear(_ animated: Bool) {
         locationSocket.disconnect()
         chatSocket.disconnect()
-//        chattingViewController!.chatMessage.removeAll()
     }
     
     // MARK: ViewDidLoad
@@ -322,12 +321,12 @@ class MapViewController: UIViewController, ChatSet{
         }
         myLocationButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 23))
-            $0.leading.equalTo(cameraState.snp.trailing).offset(MannaDemo.convertWidth(value: 10.88))
+            $0.leading.equalTo(cameraState.snp.trailing).offset(10.88)
             $0.width.height.equalTo(45)
         }
         cameraState.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 23))
-            $0.trailing.equalToSuperview().offset(-MannaDemo.convertWidth(value: 70.88))
+            $0.trailing.equalToSuperview().offset(-70.88)
             $0.width.height.equalTo(45)
         }
         bottomBar.snp.makeConstraints {
@@ -344,7 +343,7 @@ class MapViewController: UIViewController, ChatSet{
         rankingViewController!.userList.keys.forEach { tokenWithMarker[$0] = NMFMarker()}
         for marker in tokenWithMarker.values {
             marker.width = MannaDemo.convertWidth(value: 56)
-            marker.height = MannaDemo.convertWidth(value: 62.61)
+            marker.height = MannaDemo.convertWidth(value: 56)
         }
     }
     

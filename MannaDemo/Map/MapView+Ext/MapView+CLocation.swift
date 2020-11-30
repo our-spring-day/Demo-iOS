@@ -21,7 +21,6 @@ extension MapViewController: CLLocationManagerDelegate {
         tokenWithMarker[MannaDemo.myUUID!]?.position.lat = locValue.latitude
         tokenWithMarker[MannaDemo.myUUID!]?.position.lng = locValue.longitude
         locationSocket.emit("location", "{\"latitude\":\(locValue.latitude),\"longitude\":\(locValue.longitude)}")
-        
     }
     
     // MARK: 위치권한 다시 받는곳

@@ -16,17 +16,25 @@ class BottomBar: UIView {
         chatButton.do {
             $0.backgroundColor = .white
             $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
-            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
+            $0.layer.cornerRadius = 54 / 2
             $0.layer.masksToBounds = true
-            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
+            $0.imageEdgeInsets = UIEdgeInsets(top: 17,
+                                              left: 16.5,
+                                              bottom: 16,
+                                              right: 16.5)
+//            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
             $0.dropShadow()
         }
         rankingButton.do {
             $0.backgroundColor = .white
             $0.setImage(#imageLiteral(resourceName: "ranking"), for: .normal)
-            $0.layer.cornerRadius = MannaDemo.convertHeight(value: 53) / 2
+            $0.layer.cornerRadius = 54 / 2
             $0.layer.masksToBounds = true
-            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
+            $0.imageEdgeInsets = UIEdgeInsets(top: 15,
+                                              left: 14.5,
+                                              bottom: 14.5,
+                                              right: 14.5)
+//            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
             $0.dropShadow()
         }
     }
@@ -35,20 +43,21 @@ class BottomBar: UIView {
         [rankingButton, chatButton, timerView].forEach { addSubview($0) }
         
         rankingButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalTo(chatButton.snp.trailing).offset(MannaDemo.convertWidth(value: 10))
-            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
+//            $0.centerY.equalToSuperview()
+            $0.bottom.equalTo(self.snp.bottom).offset(-26)
+            $0.leading.equalTo(chatButton.snp.trailing).offset(8)
+            $0.width.height.equalTo(54)
         }
         chatButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalTo(20)
-            $0.width.height.equalTo(MannaDemo.convertHeight(value: 54))
+            $0.bottom.equalTo(rankingButton)
+            $0.leading.equalTo(19)
+            $0.width.height.equalTo(54)
         }
         timerView.snp.makeConstraints {
-            $0.centerY.equalTo(chatButton.snp.centerY)
-            $0.trailing.equalTo(self).offset(-20)
-            $0.width.equalTo(MannaDemo.convertWidth(value: MannaDemo.convertWidth(value: 111)))
-            $0.height.equalTo(MannaDemo.convertHeight(value: MannaDemo.convertWidth(value: 48)))
+            $0.bottom.equalTo(rankingButton).offset(-1)
+            $0.trailing.equalTo(self).offset(-18)
+            $0.width.equalTo(109)
+            $0.height.equalTo(51)
         }
     }
     
