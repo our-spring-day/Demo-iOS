@@ -50,7 +50,7 @@ class MapViewController: UIViewController, ChatSet{
     var bottomBar = BottomBar()
     var viewForTransition = UIView()
     lazy var currentTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(toMyLocation), userInfo: nil, repeats: true)
-//    var currentTimer = Timer.sch
+    
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
         
@@ -294,7 +294,7 @@ class MapViewController: UIViewController, ChatSet{
     
     // MARK: layout
     func layout() {
-        [mapView, cameraState, myLocationButton, backButton, toastLabel, bottomBar, viewForTransition].forEach { view.addSubview($0) }
+        [mapView, cameraState, myLocationButton, backButton, toastLabel, viewForTransition, bottomBar].forEach { view.addSubview($0) }
         
         [chattingViewController, rankingViewController].forEach {
             addChild($0 as! UIViewController)
@@ -500,10 +500,11 @@ class MapViewController: UIViewController, ChatSet{
         viewForTransition.isHidden = false
         chattingViewController?.view.isHidden = false
         rankingViewController?.view.isHidden = true
-        
+        self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
+        viewForTransition.alpha = 1
+        chattingViewController?.view.alpha = 1
         UIView.animate(withDuration: 0.3) { [self] in
-            viewForTransition.alpha = 1
-            chattingViewController?.view.alpha = 1
+            self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
         }
         chattingViewController?.viewLoadScrollBottom()
     }
@@ -513,9 +514,11 @@ class MapViewController: UIViewController, ChatSet{
         viewForTransition.isHidden = false
         rankingViewController?.view.isHidden = false
         chattingViewController?.view.isHidden = true
+        viewForTransition.alpha = 1
+        rankingViewController?.view.alpha = 1
+        self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
         UIView.animate(withDuration: 0.3) { [self] in
-            viewForTransition.alpha = 1
-            rankingViewController?.view.alpha = 1
+            self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
         }
     }
     
@@ -546,24 +549,24 @@ class MapViewController: UIViewController, ChatSet{
         
         if sender.tag == 1 {
             UIView.animate(withDuration: 0.3) {
+                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
+            } completion: { _ in
                 self.chattingViewController?.view.alpha = 0
                 self.viewForTransition.alpha = 0
-//                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
-            } completion: { _ in
                 self.viewForTransition.isHidden = true
                 self.chattingViewController?.view.isHidden = true
                 self.chattingViewController?.view.endEditing(true)
-//                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
+                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             }
         } else {
             UIView.animate(withDuration: 0.3) {
-//                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
+                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
+            } completion: {_ in
                 self.rankingViewController?.view.alpha = 0
                 self.viewForTransition.alpha = 0
-            } completion: {_ in
                 self.viewForTransition.isHidden = true
                 self.rankingViewController?.view.isHidden = true
-//                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
+                self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             }
         }
     }

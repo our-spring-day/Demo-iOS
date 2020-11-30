@@ -175,6 +175,7 @@ class LocationProfileImageVIew: UIView {
     var backgroundView = UIImageView()
     var triangleVIew = UIImageView()
     var userName = ""
+    
     init(name: String,  frame: CGRect) {
         super.init(frame: frame)
         userName = name
@@ -185,9 +186,9 @@ class LocationProfileImageVIew: UIView {
     func attribute() {
         backgroundView.do {
             $0.image = UIImage(named: "\(userName)")
-            $0.layer.borderWidth = MannaDemo.convertWidth(value: 3)
+            $0.layer.borderWidth = 3
             $0.layer.borderColor = UIColor(named: "bordercolor")?.cgColor
-            $0.layer.cornerRadius = MannaDemo.convertWidth(value: 24)
+            $0.layer.cornerRadius = 24
             $0.contentMode = .scaleAspectFill
             $0.layer.masksToBounds = true
         }
@@ -200,11 +201,11 @@ class LocationProfileImageVIew: UIView {
         [triangleVIew, backgroundView].forEach { self.addSubview($0) }
         
         backgroundView.snp.makeConstraints {
-            $0.width.height.equalTo(MannaDemo.convertWidth(value: 56))
-            $0.top.equalToSuperview()
-            $0.leading.equalToSuperview().offset(MannaDemo.convertWidth(value: 3.3))
-            $0.trailing.equalToSuperview().offset(MannaDemo.convertWidth(value: -3.3))
+//            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.top.centerX.equalToSuperview()
+            $0.width.height.equalTo(50.09)
         }
+        
         triangleVIew.snp.makeConstraints {
             $0.top.equalTo(backgroundView.snp.bottom).offset(-MannaDemo.convertWidth(value: 5))
             $0.centerX.equalToSuperview()
