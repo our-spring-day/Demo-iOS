@@ -167,7 +167,7 @@ class ChattingViewController: UIViewController, chattingView {
     
     // MARK: DISMISS ACTION
     @objc func didClickedDismissButton() {
-        print("fd")
+//        print("fd")
 //        view.isHidden = true
     }
     // MARK: chatView Layout
@@ -293,10 +293,10 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == chatMessage.count {
-            print("do something")
+//            print("do something")
             chatBottomState = true
         } else {
-            print("not something")
+//            print("not something")
             chatBottomState = false
         }
     }

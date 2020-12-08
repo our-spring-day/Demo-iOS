@@ -92,17 +92,17 @@ class MapViewController: UIViewController, ChatSet{
             rankingViewController!.userList[MannaDemo.myUUID!]?.state = true
         }
         chatSocket.on("chatConnect") { [self] (array, ack) in
-            print(ack)
-            print(chatSocket.status)
+//            print(ack)
+//            print(chatSocket.status)
         }
         chatSocket.on("chatDisconnect") { (array, ack) in
-            print(array)
+//            print(array)
         }
         locationSocket.on("locationDisconnect") { (array, ack) in
-            print(array)
+//            print(array)
         }
         locationSocket.on("locationConnect") { (array, ack) in
-            print(array)
+//            print(array)
         }
         chatSocket.on("chat") { [self] (array, ack) in
             let json = JSON(array)
@@ -122,10 +122,10 @@ class MapViewController: UIViewController, ChatSet{
             chattingViewController!.chatMessage.append(newMessageBinding)
             chattingViewController!.chatView.reloadData()
             if chattingViewController?.chatBottomState == true {
-                print("아래이군요")
+//                print("아래이군요")
                 chattingViewController?.scrollBottom()
             } else {
-                print("위군요")
+//                print("위군요")
             }
         }
         
@@ -174,13 +174,13 @@ class MapViewController: UIViewController, ChatSet{
                     guard let lng = lng_ else { return }
                     guard rankingViewController!.userList[token] != nil else { return }
                     rankingViewController!.userList[token]?.networkValidTime = 0
-                    print("여기에 나계속찍혀야돼")
+//                    print("여기에 나계속찍혀야돼")
                     if token != MannaDemo.myUUID {
                         rankingViewController!.userList[token]?.latitude = lat
                         rankingViewController!.userList[token]?.longitude = lng
                     }
                     MannaAPI.getPath(lat: lat_!, lng: lng_!) { (result) in
-                        print("여기에 나계속찍혀야돼",result)
+//                        print("여기에 나계속찍혀야돼",result)
                         rankingViewController!.userList[token]?.remainDistance = result.distance
                         rankingViewController!.userList[token]?.remainTime = result.duration
                     }
@@ -219,11 +219,9 @@ class MapViewController: UIViewController, ChatSet{
         
         backButton.do {
             $0.setImage(#imageLiteral(resourceName: "back"), for: .normal)
-            $0.frame.size.width = 40
-            $0.frame.size.height = 40
-            $0.layer.cornerRadius = $0.frame.width / 2
-            $0.clipsToBounds = true
             $0.addTarget(self, action: #selector(back), for: .touchUpInside)
+            $0.imageEdgeInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+            $0.dropShadow()
         }
         mapView.do {
             $0.frame = view.frame
@@ -320,7 +318,7 @@ class MapViewController: UIViewController, ChatSet{
         backButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(MannaDemo.convertWidth(value: 23))
             $0.leading.equalToSuperview().offset(15)
-            $0.width.height.equalTo(MannaDemo.convertHeight(value: 45))
+            $0.width.height.equalTo(45)
         }
         toastLabel.snp.makeConstraints {
             $0.centerX.equalTo(view)
@@ -514,7 +512,6 @@ class MapViewController: UIViewController, ChatSet{
             rankingToChat()
             subViewState = .chat
         case .none:
-            
             chattingViewController!.chatView.reloadData()
             viewForTransition.isHidden = false
             chattingViewController?.view.isHidden = false
@@ -522,7 +519,7 @@ class MapViewController: UIViewController, ChatSet{
             self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             viewForTransition.alpha = 1
             chattingViewController?.view.alpha = 1
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.2) {
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             } completion: { _ in
                 self.bottomBar.isUserInteractionEnabled = true
@@ -550,7 +547,7 @@ class MapViewController: UIViewController, ChatSet{
             viewForTransition.alpha = 1
             rankingViewController?.view.alpha = 1
             self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.2) {
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             } completion: { _ in
                 self.bottomBar.isUserInteractionEnabled = true
@@ -587,7 +584,7 @@ class MapViewController: UIViewController, ChatSet{
     @objc func dismissChildView(_ sender: UIButton) {
         
         if sender.tag == 1 {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.2) {
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             } completion: { _ in
                 self.chattingViewController?.view.alpha = 0
@@ -599,7 +596,7 @@ class MapViewController: UIViewController, ChatSet{
                 self.bottomBar.isUserInteractionEnabled = true
             }
         } else {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.2) {
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             } completion: {_ in
                 self.rankingViewController?.view.alpha = 0

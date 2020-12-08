@@ -58,8 +58,8 @@ class RegisterUserViewController: UIViewController {
         guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
         guard let userName = userName.text else { return }
         let url = "https://manna.duckdns.org:18888/user"
-        print("deviceID : ", deviceID)
-        print("userName : ", userName)
+//        print("deviceID : ", deviceID)
+//        print("userName : ", userName)
         registerUser(url: url, deviceToken: deviceID, username: userName)
         view.modalPresentationStyle = .fullScreen
         present(view, animated: true, completion: nil)

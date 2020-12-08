@@ -89,11 +89,10 @@ class MannaListViewController: UIViewController, reloadData {
         ]
 
         let result = AF.request("https://manna.duckdns.org:18888/manna?deviceToken=\(deviceID)").responseJSON { response in
-
             switch response.result {
             case .success(let value):
                 JSON(value).forEach { (_,data) in
-                    print("여기 떨어지나",data)
+//                    print("여기 떨어지나",data)
                     let item = NewManna(mannaname: data["mannaName"].string!,
                              createTimestamp: data["createTimestamp"].int!,
                              uuid: data["uuid"].string!)
@@ -140,7 +139,6 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
             MannaAPI.getChat(mannaID: MannaModel.newModel[indexPath.row].uuid) { result in
                 subChatView.chatMessage = result
                 view.chattingViewController = subChatView
-                print(result)
             }
         }
         view.modalPresentationStyle = .fullScreen

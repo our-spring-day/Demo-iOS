@@ -15,36 +15,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            
             let mannalistView = MannaListViewController()
             let registerView = RegisterUserViewController()
-            
-            
             if KeychainWrapper.standard.string(forKey: "device_id") == nil {
                 if let uuid = UIDevice.current.identifierForVendor?.uuidString {
+                    
                     let saveSuccessful: Bool = KeychainWrapper.standard.set(uuid, forKey: "device_id")
-                    print("keychain is successful : \(saveSuccessful)")
+//                    print("keychain is successful : \(saveSuccessful)")
                 }
                 window.rootViewController = registerView
             } else {
+                
                 if let deviceID = KeychainWrapper.standard.string(forKey: "device_id") {
                     let param: Parameters = [
                         "device_id" : deviceID,
                     ]
+                    
                     AF.request("https://manna.duckdns.org:18888/manna?deviceToken=\(deviceID)", parameters: param).responseJSON { response in
                         switch response.result {
                         case .success(let value):
                             let result = JSON(value)["error"]
-                            print("하잇",KeychainWrapper.standard.string(forKey: "device_id"))
+//                            print("하잇",KeychainWrapper.standard.string(forKey: "device_id"))
                             if result == "Not Found" {
-                                print("여기로 걸리나")
+//                                print("여기로 걸리나")
                                 window.rootViewController = registerView
                             } else {
                                 window.rootViewController = mannalistView
                             }
                             break
                         case .failure(let error):
-                            print("실패")
+//                            print("실패")
                             window.rootViewController = registerView
                             break
                         }
