@@ -17,12 +17,15 @@ protocol RankingView: UIViewController {
     var topBar: TopBar { get set }
     func sortedUser()
     var rankingView: UITableView { get set }
-    var 
+    
 }
 
 class RankingViewController: UIViewController, RankingView {
-    lazy var rankingView = UITableView()
+    lazy var rankingView = UITableView(frame: CGRect.zero, style: .grouped)
     var timerView = TimerView(.mapView)
+    let arrivedSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 13), title: "도착")
+    let startSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20), title: "출발")
+    let notstartSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 13), title: "준비")
     var userList: [String : User] = [:] {
         didSet {
             sortedUserSelf()
@@ -71,7 +74,6 @@ class RankingViewController: UIViewController, RankingView {
         self.do {
             $0.view.backgroundColor = .white
         }
-        
         bottomBar.do {
             $0.backgroundColor = .none
             $0.rankingButton.backgroundColor = UIColor(named: "buttonbackgroundgray")
@@ -113,6 +115,7 @@ class RankingViewController: UIViewController, RankingView {
             $0.top.equalTo(view)
             $0.height.equalTo(MannaDemo.convertWidth(value: 94))
         }
+        
     }
     
     @objc func sortedUserSelf() {
@@ -142,19 +145,25 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         return 3
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 10
+        return 68
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         if section == 0 {
-//            headerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-            headerView.backgroundColor = .red
-            headerView.addSubview(<#T##view: UIView##UIView#>)
+            headerView.addSubview(arrivedSectionHeaderView)
+            arrivedSectionHeaderView.snp.makeConstraints {
+                $0.centerY.leading.trailing.height.equalTo(headerView)
+            }
         } else if section == 1 {
-//            headerView.backgroundColor = #colorLiteral(red: 0.7066357986, green: 0.7186221, blue: 0.7235718003, alpha: 0.1084653253)
-            headerView.backgroundColor = .red
+            headerView.addSubview(startSectionHeaderView)
+            startSectionHeaderView.snp.makeConstraints {
+                $0.centerY.leading.trailing.height.equalTo(headerView)
+            }
         } else if section == 2 {
-            headerView.backgroundColor = .red
+            headerView.addSubview(notstartSectionHeaderView)
+            notstartSectionHeaderView.snp.makeConstraints {
+                $0.centerY.leading.trailing.height.equalTo(headerView)
+            }
         }
         return headerView
     }
@@ -180,8 +189,10 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.medal.backgroundColor = #colorLiteral(red: 1, green: 0.9294117647, blue: 0.5803921569, alpha: 1)
             } else if indexPath.row == 1 {
                 cell.medal.medal.image = UIImage(named: "silver")
+                cell.medal.backgroundColor = .none
             } else if indexPath.row == 2 {
                 cell.medal.medal.image = UIImage(named: "bronze")
+                cell.medal.backgroundColor = .none
             }
             cell.setData(data: arrivalUser[indexPath.row])
         } else if indexPath.section == 1 {
