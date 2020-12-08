@@ -208,6 +208,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             cell.setData(data: arrivalUser[indexPath.row])
         } else if indexPath.section == 1 {
             cell.medal.isHidden = true
+            cell.button.isHidden = false
             cell.tapped = { [unowned self] in
                 cell.buttonState = false
                 Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
@@ -225,7 +226,17 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             cell.setData(data: notArrivalUser[indexPath.row])
         } else if indexPath.section == 2 {
             cell.medal.isHidden = false
-            cell.medal.medal.image = UIImage(named: "golden")
+            cell.button.isHidden = true
+            if indexPath.row == 0{
+                cell.medal.medal.image = UIImage(named: "golden")
+                cell.medal.backgroundColor = #colorLiteral(red: 1, green: 0.9294117647, blue: 0.5803921569, alpha: 1)
+            } else if indexPath.row == 1 {
+                cell.medal.medal.image = UIImage(named: "silver")
+                cell.medal.backgroundColor = .none
+            } else if indexPath.row == 2 {
+                cell.medal.medal.image = UIImage(named: "bronze")
+                cell.medal.backgroundColor = .none
+            }
             cell.setData(data: notArrivalUser[indexPath.row])
         }
         return cell

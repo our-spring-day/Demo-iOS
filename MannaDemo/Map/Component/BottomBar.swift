@@ -13,6 +13,9 @@ class BottomBar: UIView {
     var timerView = TimerView(.mapView)
     
     func attribute() {
+        self.do {
+            $0.backgroundColor = .white
+        }
         chatButton.do {
             $0.backgroundColor = .white
             $0.setImage(#imageLiteral(resourceName: "chat"), for: .normal)
@@ -22,7 +25,6 @@ class BottomBar: UIView {
                                               left: 16.5,
                                               bottom: 16,
                                               right: 16.5)
-//            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 17), left: MannaDemo.convertHeight(value: 16.5), bottom: MannaDemo.convertHeight(value: 16), right: MannaDemo.convertHeight(value: 16.5))
             $0.dropShadow()
         }
         rankingButton.do {
@@ -34,7 +36,6 @@ class BottomBar: UIView {
                                               left: 14.5,
                                               bottom: 14.5,
                                               right: 14.5)
-//            $0.imageEdgeInsets = UIEdgeInsets(top: MannaDemo.convertHeight(value: 15), left: MannaDemo.convertHeight(value: 14.5), bottom: MannaDemo.convertHeight(value: 14.5), right: MannaDemo.convertHeight(value: 14.5))
             $0.dropShadow()
         }
     }
@@ -43,8 +44,7 @@ class BottomBar: UIView {
         [rankingButton, chatButton, timerView].forEach { addSubview($0) }
         
         rankingButton.snp.makeConstraints {
-//            $0.centerY.equalToSuperview()
-            $0.bottom.equalTo(self.snp.bottom).offset(-26)
+            $0.bottom.equalTo(self.snp.bottom).offset(MannaDemo.convertHeight(value: -26))
             $0.leading.equalTo(chatButton.snp.trailing).offset(8)
             $0.width.height.equalTo(54)
         }
@@ -54,7 +54,7 @@ class BottomBar: UIView {
             $0.width.height.equalTo(54)
         }
         timerView.snp.makeConstraints {
-            $0.bottom.equalTo(rankingButton).offset(-1)
+            $0.bottom.equalTo(rankingButton).offset(MannaDemo.convertHeight(value: -1))
             $0.trailing.equalTo(self).offset(-18)
             $0.width.equalTo(109)
             $0.height.equalTo(51)

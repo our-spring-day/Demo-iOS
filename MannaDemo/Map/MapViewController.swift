@@ -280,20 +280,15 @@ class MapViewController: UIViewController, ChatSet{
             $0.isForceShowIcon = true
         }
         bottomBar.do {
-//            $0.chatButton.addGestureRecognizer(goToChatGesture)
             $0.chatButton.addTarget(self, action: #selector(showChattingView), for: .touchUpInside)
             $0.rankingButton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
             $0.chatButton.tag = 1
             $0.rankingButton.tag = 2
         }
         rankingViewController?.do {
-//            $0.bottomBar.chatButton.addTarget(self, action: #selector(rankingToChat), for: .touchUpInside)
-//            $0.bottomBar.rankingButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
             $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
         }
         chattingViewController?.do {
-//            $0.bottomBar.rankingButton.addTarget(self, action: #selector(chatToRanking), for: .touchUpInside)
-//            $0.bottomBar.chatButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
             $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
 
         }
@@ -342,8 +337,8 @@ class MapViewController: UIViewController, ChatSet{
             $0.width.height.equalTo(45)
         }
         bottomBar.snp.makeConstraints {
-            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.top.equalTo(view.snp.bottom).offset(-90)
+            $0.bottom.leading.trailing.equalTo(view)
+            $0.top.equalTo(view.snp.bottom).offset(MannaDemo.convertHeight(value: -87))
         }
         viewForTransition.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(view)
