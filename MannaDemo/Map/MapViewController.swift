@@ -23,6 +23,10 @@ protocol ChatSet {
     var rankingViewController: RankingView? { get set }
 }
 
+protocol BottomBarHidden {
+    func bottomBarHidden()
+    func bottomBarAppear()
+}
 class MapViewController: UIViewController, ChatSet{
     
     var defaultOverlayImageOverlay = NMFOverlayImage(image: DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage())
@@ -671,3 +675,11 @@ class MapViewController: UIViewController, ChatSet{
     }   
 }
 
+extension MapViewController: BottomBarHidden {
+    func bottomBarHidden() {
+        bottomBar.isHidden = true
+    }
+    func bottomBarAppear() {
+        bottomBar.isHidden = false
+    }
+}

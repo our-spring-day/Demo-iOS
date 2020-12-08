@@ -16,10 +16,11 @@ protocol RankingView: UIViewController {
     var topBar: TopBar { get set }
     func sortedUser()
     var rankingView: UITableView { get set }
-    
+    var parentView: BottomBarHidden? { get set }
 }
 
 class RankingViewController: UIViewController, RankingView {
+    var parentView: BottomBarHidden?
     lazy var rankingView = UITableView(frame: CGRect.zero, style: .grouped)
     let arrivedSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 13), title: "도착")
     let startSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20), title: "출발")
@@ -29,6 +30,7 @@ class RankingViewController: UIViewController, RankingView {
             sortedUserSelf()
         }
     }
+    let backgroundViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundViewDidTap(_: )))
     var urgeBottomSheetBackgroundView = UIView()
     var arrivalUser: [User] = []
     var notArrivalUser: [User] = []
@@ -90,9 +92,11 @@ class RankingViewController: UIViewController, RankingView {
             $0.backgroundColor = .black
             $0.alpha = 0.3
             $0.isHidden = true
+//            $0.addGestureRecognizer(backgroundViewTapGesture)
         }
         bottomSheet.do {
             $0.isHidden = true
+            $0.addGestureRecognizer(backgroundViewTapGesture)
         }
     }
 
@@ -139,6 +143,10 @@ class RankingViewController: UIViewController, RankingView {
     
     @objc func didDismissButtonClicked(_ sender: UITapGestureRecognizer) {
 //        rankingView.alpha = 1
+    }
+    
+    @objc func backgroundViewDidTap(_ sender: UIView) {
+        print("background tap!!")
     }
 }
 
@@ -205,6 +213,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
                     cell.buttonState = true
                 }
+                parentView?.bottomBarHidden()
 //                // 여기에 재촉하는거 함수 구현
 //                // ->>
 //                if let userName = notArrivalUser[indexPath.row].name {
