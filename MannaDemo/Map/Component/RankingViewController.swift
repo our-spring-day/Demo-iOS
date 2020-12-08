@@ -117,8 +117,8 @@ class RankingViewController: UIViewController, RankingView {
         }
         bottomSheet.snp.makeConstraints {
             $0.leading.trailing.equalTo(view)
-            $0.top.equalTo(view.snp.centerY)
-            $0.bottom.equalTo(view.snp.bottom)
+            $0.top.equalTo(view.snp.bottom)
+            $0.height.equalTo(MannaDemo.convertHeight(value: 330))
         }
         urgeBottomSheetBackgroundView.snp.makeConstraints {
             $0.top.leading.trailing.bottom.equalToSuperview()
@@ -147,6 +147,22 @@ class RankingViewController: UIViewController, RankingView {
     
     @objc func backgroundViewDidTap(_ sender: UIView) {
         print("background tap!!")
+    }
+    
+    func bottomSheetUp() {
+        UIView.animate(withDuration: 0.2) {
+            self.bottomSheet.transform = CGAffineTransform(translationX: 0, y: -MannaDemo.convertHeight(value: 330))
+        } completion: { _ in
+            print("Test")
+        }
+    }
+    
+    func bottomSheetDown() {
+        UIView.animate(withDuration: 0.2) {
+            self.bottomSheet.transform = CGAffineTransform(translationX: 0, y: 0)
+        } completion: { _ in
+            print("Test")
+        }
     }
 }
 
@@ -222,6 +238,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
 //                }
                 urgeBottomSheetBackgroundView.isHidden = false
                 bottomSheet.isHidden = false
+                bottomSheetUp()
             }
             cell.setData(data: notArrivalUser[indexPath.row])
         } else if indexPath.section == 2 {
