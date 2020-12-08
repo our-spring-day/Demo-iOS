@@ -13,7 +13,6 @@ protocol RankingView: UIViewController {
     var userList: [String : User] { get set }
     var locationProfileImageArray: [String : NMFOverlayImage] { get set }
     var disconnectProfileImageArray: [String : NMFOverlayImage] { get set }
-    var bottomBar: BottomBar { get set }
     var topBar: TopBar { get set }
     func sortedUser()
     var rankingView: UITableView { get set }
@@ -22,7 +21,6 @@ protocol RankingView: UIViewController {
 
 class RankingViewController: UIViewController, RankingView {
     lazy var rankingView = UITableView(frame: CGRect.zero, style: .grouped)
-    var timerView = TimerView(.mapView)
     let arrivedSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 13), title: "도착")
     let startSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20), title: "출발")
     let notstartSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 13), title: "준비")
@@ -31,10 +29,10 @@ class RankingViewController: UIViewController, RankingView {
             sortedUserSelf()
         }
     }
+    var urgeBottomSheetBackgroundView = UIView()
     var arrivalUser: [User] = []
     var notArrivalUser: [User] = []
     var notStartUser: [User] = []
-    var bottomBar = BottomBar()
     var topBar = TopBar()
     var bottomSheet = UrgeBottomSheet()
     lazy var urgentButton = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 39))
@@ -74,12 +72,6 @@ class RankingViewController: UIViewController, RankingView {
         self.do {
             $0.view.backgroundColor = .white
         }
-        bottomBar.do {
-            $0.backgroundColor = .none
-            $0.rankingButton.backgroundColor = UIColor(named: "buttonbackgroundgray")
-            $0.chatButton.tag = 22
-            $0.rankingButton.tag = 2
-        }
         rankingView.do {
             $0.backgroundColor = .white
             $0.register(RankingViewCell.self, forCellReuseIdentifier: RankingViewCell.rankingCellID)
@@ -94,22 +86,25 @@ class RankingViewController: UIViewController, RankingView {
             $0.dismissButton.tag = 2
             $0.title.text = "도착 예상 시간"
         }
-        
+        urgeBottomSheetBackgroundView.do {
+            $0.backgroundColor = .black
+            $0.alpha = 0.3
+            $0.isHidden = true
+        }
+        bottomSheet.do {
+            $0.isHidden = true
+        }
     }
 
     func layout() {
-        [rankingView, bottomBar, topBar, bottomSheet].forEach { view.addSubview($0) }
+        [rankingView, topBar, urgeBottomSheetBackgroundView, bottomSheet].forEach { view.addSubview($0) }
         
         rankingView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: topBar.bottomAnchor).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            $0.bottomAnchor.constraint(equalTo: bottomBar.topAnchor).isActive = true
-        }
-        bottomBar.snp.makeConstraints {
-            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.top.equalTo(view.snp.bottom).offset(-90)
+            $0.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
         topBar.snp.makeConstraints {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
@@ -121,7 +116,9 @@ class RankingViewController: UIViewController, RankingView {
             $0.top.equalTo(view.snp.centerY)
             $0.bottom.equalTo(view.snp.bottom)
         }
-        
+        urgeBottomSheetBackgroundView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
     @objc func sortedUserSelf() {
@@ -213,6 +210,8 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
 //                if let userName = notArrivalUser[indexPath.row].name {
 //                    MannaAPI.urgeUser(userName: userName)
 //                }
+                urgeBottomSheetBackgroundView.isHidden = false
+                bottomSheet.isHidden = false
             }
             cell.setData(data: notArrivalUser[indexPath.row])
         } else if indexPath.section == 2 {

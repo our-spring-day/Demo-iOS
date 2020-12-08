@@ -283,8 +283,8 @@ class MapViewController: UIViewController, ChatSet{
             $0.rankingButton.tag = 2
         }
         rankingViewController?.do {
-            $0.bottomBar.chatButton.addTarget(self, action: #selector(rankingToChat), for: .touchUpInside)
-            $0.bottomBar.rankingButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
+//            $0.bottomBar.chatButton.addTarget(self, action: #selector(rankingToChat), for: .touchUpInside)
+//            $0.bottomBar.rankingButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
             $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
         }
         chattingViewController?.do {

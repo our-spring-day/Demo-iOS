@@ -41,7 +41,7 @@ class UrgeBottomSheet: UIView {
         dismissButton.snp.makeConstraints {
             $0.centerY.equalTo(titleLabel)
             $0.trailing.equalTo(self).offset(-28.49)
-            $0.width.height.equalTo(12.73)
+            $0.width.height.equalTo(25.4982)
         }
     }
     
