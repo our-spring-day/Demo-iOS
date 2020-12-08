@@ -30,8 +30,8 @@ extension MapViewController: NMFMapViewCameraDelegate {
                 marker.width = 56
                 marker.height = 56
                 
-                goalMarker.width = MannaDemo.convertWidth(value: 50)
-                goalMarker.height = MannaDemo.convertWidth(value: 50)
+                goalMarker.width = 48
+                goalMarker.height = 48
                 
                 goalMarker.mapView = mapView
                 marker.mapView = mapView

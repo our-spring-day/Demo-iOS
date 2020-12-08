@@ -49,14 +49,14 @@ class MannaAPI {
                                                     isIncoming: chat["sender"]["deviceToken"].string! == MannaDemo.myUUID ? .me : .other,
                                     sendState: false)
                         result.append(chatPiece)
-                        print("채팅",chatPiece)
+//                        print("채팅",chatPiece)
                     }
                 }
                 result.sort(by: { $0.timeStamp < $1.timeStamp })
                 completion(result)
                 break
             case .failure(let err):
-                print(err)
+//                print(err)
                 break
             }
         }
@@ -83,8 +83,8 @@ class MannaAPI {
     static func urgeUser(userName: String) {
         guard let deviceID = KeychainWrapper.standard.string(forKey: "device_id") else { return }
         let userToken = getDeviceToken.getUserDeviceToken(name: userName)
-        print("deviceID : 쏘는 사람 = ",deviceID)
-        print("userToken : 받는 사람 = ",userToken)
+//        print("deviceID : 쏘는 사람 = ",deviceID)
+//        print("userToken : 받는 사람 = ",userToken)
         let url = "https://manna.duckdns.org:18888/manna/96f35135-390f-496c-af00-cdb3a4104550/push/\(userToken)?deviceToken=\(deviceID)"
          
         AF.request(url, method: .post).responseString { response in

@@ -12,7 +12,9 @@ class RankingViewViewController: UIViewController {
     
     var guide = UILabel()
     var airplaneGuide = UILabel()
+    
     var animationView = AnimationView(name:"12670-flying-airplane")
+    
     var dismissButton = UIButton()
     override func viewDidLoad() {
         guide.do {
@@ -73,7 +75,7 @@ class RankingViewViewController: UIViewController {
     
     @objc func dismissRakingView() {
         self.dismiss(animated: true) {
-            print("somethin action after dismiss ranking view")
+//            print("somethin action after dismiss ranking view")
         }
     }
 }

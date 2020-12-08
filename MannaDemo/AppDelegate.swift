@@ -29,9 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         center.requestAuthorization(options: [.alert, .badge, .sound]) { (success, error) in
             if let error = error {
-                print(error)
+//                print(error)
             }
-            print("success : ", success)
+//            print("success : ", success)
             
             DispatchQueue.main.async {
                 application.registerForRemoteNotifications()
@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let deviceTokenString = deviceToken.map { String(format: "%02x", $0) }.joined()
-        print("device 토큰 : ", deviceTokenString)
+//        print("device 토큰 : ", deviceTokenString)
         MannaAPI.registerPushToken(pushToken: deviceTokenString)
     }
 
@@ -68,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
     func applicationWillTerminate(_ application: UIApplication) {
-        print("앱이 죽었슴다")
+//        print("앱이 죽었슴다")
     }
 }
 

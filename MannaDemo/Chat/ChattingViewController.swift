@@ -19,7 +19,7 @@ protocol chattingView: UIViewController {
     func scrollBottom()
     func viewLoadScrollBottom()
     var topBar: TopBar { get set }
-    var bottomBar: BottomBar { get set }
+//    var bottomBar: BottomBar { get set }
 }
 
 class ChattingViewController: UIViewController, chattingView {
@@ -59,7 +59,7 @@ class ChattingViewController: UIViewController, chattingView {
             $0.addTarget(self, action: #selector(scrollBottom), for: .touchUpInside)
         }
     var topBar = TopBar()
-    var bottomBar = BottomBar()
+//    var bottomBar = BottomBar()
     
     // MARK: viewDidLoad
     override func viewDidLoad() {
@@ -158,16 +158,16 @@ class ChattingViewController: UIViewController, chattingView {
             $0.dismissButton.tag = 1
             $0.title.text = "채팅"
         }
-        bottomBar.do {
-            $0.chatButton.backgroundColor = UIColor(named: "buttonbackgroundgray")
-            $0.chatButton.addTarget(self, action: #selector(didClickedDismissButton), for: .touchUpInside)
-            $0.chatButton.tag = 1
-        }
+//        bottomBar.do {
+//            $0.chatButton.backgroundColor = UIColor(named: "buttonbackgroundgray")
+//            $0.chatButton.addTarget(self, action: #selector(didClickedDismissButton), for: .touchUpInside)
+//            $0.chatButton.tag = 1
+//        }
     }
     
     // MARK: DISMISS ACTION
     @objc func didClickedDismissButton() {
-        print("fd")
+//        print("fd")
 //        view.isHidden = true
     }
     // MARK: chatView Layout
@@ -177,7 +177,7 @@ class ChattingViewController: UIViewController, chattingView {
         self.view.addSubview(self.background)
         self.view.addSubview(self.scrollButton)
         self.view.addSubview(self.topBar)
-        self.view.addSubview(self.bottomBar)
+//        self.view.addSubview(self.bottomBar)
         
         self.chatView.snp.makeConstraints {
             $0.top.equalTo(view)
@@ -197,17 +197,17 @@ class ChattingViewController: UIViewController, chattingView {
             $0.trailing.equalTo(-20)
             $0.bottom.equalTo(inputBar.snp.top).offset(-20)
         }
-        self.bottomBar.snp.makeConstraints {
-            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.top.equalTo(view.snp.bottom).offset(-90)
-        }
+//        self.bottomBar.snp.makeConstraints {
+//            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+//            $0.top.equalTo(view.snp.bottom).offset(-90)
+//        }
         self.topBar.snp.makeConstraints {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(view)
             $0.height.equalTo(MannaDemo.convertWidth(value: 94))
         }
         self.view.bringSubviewToFront(inputBar)
-        self.view.bringSubviewToFront(bottomBar)
+//        self.view.bringSubviewToFront(bottomBar)
     }
 }
 
@@ -293,10 +293,10 @@ extension ChattingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == chatMessage.count {
-            print("do something")
+//            print("do something")
             chatBottomState = true
         } else {
-            print("not something")
+//            print("not something")
             chatBottomState = false
         }
     }
