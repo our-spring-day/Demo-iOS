@@ -101,7 +101,7 @@ class RankingViewController: UIViewController, RankingView {
         
         rankingView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.topAnchor.constraint(equalTo: view.topAnchor, constant: MannaDemo.convertHeight(value: 140)).isActive = true
+            $0.topAnchor.constraint(equalTo: topBar.bottomAnchor).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             $0.bottomAnchor.constraint(equalTo: bottomBar.topAnchor).isActive = true
@@ -199,14 +199,15 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             cell.medal.isHidden = true
             cell.tapped = { [unowned self] in
                 cell.buttonState = false
-                // 여기에 재촉하는거 함수 구현
-                // ->>
-                if let userName = notArrivalUser[indexPath.row].name {
-                    MannaAPI.urgeUser(userName: userName)
-                }
                 Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
                     cell.buttonState = true
                 }
+//                // 여기에 재촉하는거 함수 구현
+//                // ->>
+//                if let userName = notArrivalUser[indexPath.row].name {
+//                    MannaAPI.urgeUser(userName: userName)
+//                }
+                
             }
             cell.setData(data: notArrivalUser[indexPath.row])
         } else if indexPath.section == 2 {

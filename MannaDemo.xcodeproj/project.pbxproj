@@ -38,6 +38,7 @@
 		CC051F95257F5C1D00DD1512 /* WidgeTest.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = CC051F90257F5C1A00DD1512 /* WidgeTest.intentdefinition */; };
 		CC051F98257F5C1D00DD1512 /* WidgeTestExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CC051F88257F5C1A00DD1512 /* WidgeTestExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CC051FA0257F900300DD1512 /* CustomSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC051F9F257F900300DD1512 /* CustomSectionView.swift */; };
+		CC051FA7257FB1BF00DD1512 /* UrgeBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC051FA6257FB1BF00DD1512 /* UrgeBottomSheet.swift */; };
 		CC0F50282564DF2F000026AE /* RenderingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0F50272564DF2F000026AE /* RenderingView.swift */; };
 		CC107739255464D300908D71 /* TravelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC107738255464D300908D71 /* TravelData.swift */; };
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
@@ -136,6 +137,7 @@
 		CC051F91257F5C1D00DD1512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC051F93257F5C1D00DD1512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC051F9F257F900300DD1512 /* CustomSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSectionView.swift; sourceTree = "<group>"; };
+		CC051FA6257FB1BF00DD1512 /* UrgeBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgeBottomSheet.swift; sourceTree = "<group>"; };
 		CC0F50272564DF2F000026AE /* RenderingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingView.swift; sourceTree = "<group>"; };
 		CC107738255464D300908D71 /* TravelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelData.swift; sourceTree = "<group>"; };
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 				CC8A0B2225540BAD00063790 /* TimerView.swift */,
 				A52A1C39255BA162000794A5 /* RankingViewController.swift */,
 				A52A1C3C255BA239000794A5 /* RankingViewCell.swift */,
+				CC051FA6257FB1BF00DD1512 /* UrgeBottomSheet.swift */,
 				CC051F9F257F900300DD1512 /* CustomSectionView.swift */,
 				A52A1C46255BBB23000794A5 /* Medal.swift */,
 				CC748318255124FB006C1E02 /* none.swift */,
@@ -595,6 +598,7 @@
 				CC051F95257F5C1D00DD1512 /* WidgeTest.intentdefinition in Sources */,
 				CCC19F9A255D34200092DD05 /* Int+Ext.swift in Sources */,
 				CC107739255464D300908D71 /* TravelData.swift in Sources */,
+				CC051FA7257FB1BF00DD1512 /* UrgeBottomSheet.swift in Sources */,
 				A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */,
 				A53774BF2561655400C0A91B /* UserState.swift in Sources */,
 				CC79E4AE2555B4DE001C726F /* SocketData.swift in Sources */,
