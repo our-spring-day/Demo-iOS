@@ -43,7 +43,14 @@ class MapViewController: UIViewController, ChatSet{
     let multipartPath = NMFMultipartPath()
     var cameraUpdateOnlyOnceFlag = true
     var myLatitude: Double = 0
-    var myLongitude: Double = 0
+    var myLongitude: Double = 0 {
+        didSet {
+            if cameraUpdateOnlyOnceFlag {
+                camereUpdateOnlyOnce()
+                cameraUpdateOnlyOnceFlag = false
+            }
+        }
+    }
     //이거 랭킹 뷰컨으로 옮겨질듯
     var imageToNameFlag = true
     var toastLabel = UILabel()
@@ -59,12 +66,6 @@ class MapViewController: UIViewController, ChatSet{
     var subViewState: SubViewState = .none
     // MARK: ViewDidLoad
     override func viewDidAppear(_ animated: Bool) {
-        
-        if cameraUpdateOnlyOnceFlag {
-            camereUpdateOnlyOnce()
-            cameraUpdateOnlyOnceFlag = false
-        }
-        
     }
     
     // MARK: ViewWillDisappear

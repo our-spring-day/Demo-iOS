@@ -17,10 +17,10 @@ protocol RankingView: UIViewController {
     var topBar: TopBar { get set }
     func sortedUser()
     var rankingView: UITableView { get set }
+    var 
 }
 
 class RankingViewController: UIViewController, RankingView {
-    
     lazy var rankingView = UITableView()
     var timerView = TimerView(.mapView)
     var userList: [String : User] = [:] {
@@ -30,6 +30,7 @@ class RankingViewController: UIViewController, RankingView {
     }
     var arrivalUser: [User] = []
     var notArrivalUser: [User] = []
+    var notStartUser: [User] = []
     var bottomBar = BottomBar()
     var topBar = TopBar()
     
@@ -138,17 +139,22 @@ class RankingViewController: UIViewController, RankingView {
 extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 4
+        return 10
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         if section == 0 {
-            headerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+//            headerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            headerView.backgroundColor = .red
+            headerView.addSubview(<#T##view: UIView##UIView#>)
         } else if section == 1 {
-            headerView.backgroundColor = #colorLiteral(red: 0.7066357986, green: 0.7186221, blue: 0.7235718003, alpha: 0.1084653253)
+//            headerView.backgroundColor = #colorLiteral(red: 0.7066357986, green: 0.7186221, blue: 0.7235718003, alpha: 0.1084653253)
+            headerView.backgroundColor = .red
+        } else if section == 2 {
+            headerView.backgroundColor = .red
         }
         return headerView
     }
@@ -159,7 +165,8 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         } else if section == 1 {
             return notArrivalUser.count
         } else {
-            return 0
+//            return notStartUser.count
+            return 2
         }
     }
     
@@ -171,7 +178,6 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             if indexPath.row == 0{
                 cell.medal.medal.image = UIImage(named: "golden")
                 cell.medal.backgroundColor = #colorLiteral(red: 1, green: 0.9294117647, blue: 0.5803921569, alpha: 1)
-
             } else if indexPath.row == 1 {
                 cell.medal.medal.image = UIImage(named: "silver")
             } else if indexPath.row == 2 {
@@ -187,10 +193,14 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 if let userName = notArrivalUser[indexPath.row].name {
                     MannaAPI.urgeUser(userName: userName)
                 }
-                Timer.scheduledTimer(withTimeInterval: 180, repeats: false) { _ in
+                Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
                     cell.buttonState = true
                 }
             }
+            cell.setData(data: notArrivalUser[indexPath.row])
+        } else if indexPath.section == 2 {
+            cell.medal.isHidden = false
+            cell.medal.medal.image = UIImage(named: "golden")
             cell.setData(data: notArrivalUser[indexPath.row])
         }
         return cell
