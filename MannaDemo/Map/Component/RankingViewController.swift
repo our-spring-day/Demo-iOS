@@ -36,7 +36,7 @@ class RankingViewController: UIViewController, RankingView {
     var notStartUser: [User] = []
     var bottomBar = BottomBar()
     var topBar = TopBar()
-    
+    var bottomSheet = UrgeBottomSheet()
     lazy var urgentButton = UIButton(frame: CGRect(x: 0, y: 0, width: 79, height: 39))
     lazy var locationProfileImageArray: [String : NMFOverlayImage] = [
         "우석" : NMFOverlayImage(image: LocationProfileImageVIew(name: (userList["f606564d8371e455"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage()),
@@ -94,10 +94,11 @@ class RankingViewController: UIViewController, RankingView {
             $0.dismissButton.tag = 2
             $0.title.text = "도착 예상 시간"
         }
+        
     }
 
     func layout() {
-        [rankingView, bottomBar, topBar].forEach { view.addSubview($0) }
+        [rankingView, bottomBar, topBar, bottomSheet].forEach { view.addSubview($0) }
         
         rankingView.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -114,6 +115,11 @@ class RankingViewController: UIViewController, RankingView {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.top.equalTo(view)
             $0.height.equalTo(MannaDemo.convertWidth(value: 94))
+        }
+        bottomSheet.snp.makeConstraints {
+            $0.leading.trailing.equalTo(view)
+            $0.top.equalTo(view.snp.centerY)
+            $0.bottom.equalTo(view.snp.bottom)
         }
         
     }
@@ -207,7 +213,6 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
 //                if let userName = notArrivalUser[indexPath.row].name {
 //                    MannaAPI.urgeUser(userName: userName)
 //                }
-                
             }
             cell.setData(data: notArrivalUser[indexPath.row])
         } else if indexPath.section == 2 {
