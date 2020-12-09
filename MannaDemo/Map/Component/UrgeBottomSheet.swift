@@ -32,6 +32,7 @@ class UrgeBottomSheet: UIView {
             $0.setImage(UIImage(named: "ranking_dismiss"), for: .normal)
         }
         collectionView.do {
+            $0.backgroundColor = .white
             $0.register(UrgeMessageCollectionViewCell.self, forCellWithReuseIdentifier: UrgeMessageCollectionViewCell.cellId)
         }
     }

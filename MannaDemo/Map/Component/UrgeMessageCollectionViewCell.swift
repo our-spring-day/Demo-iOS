@@ -9,7 +9,7 @@ import UIKit
 
 class UrgeMessageCollectionViewCell: UICollectionViewCell {
     static let cellId = "HotKeywordCellId"
-    let keyword = UIButton()
+    let urgeMessageLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,17 +22,20 @@ class UrgeMessageCollectionViewCell: UICollectionViewCell {
     }
     
     private func attribute() {
-        keyword.do {
-            $0.layer.borderWidth = 1
-            $0.setTitleColor(.white, for: .normal)
-            $0.backgroundColor = UIColor(named: "keyColor")
-            $0.layer.cornerRadius = 10
+        urgeMessageLabel.do {
+            $0.textColor = UIColor(red: 0.302, green: 0.302, blue: 0.302, alpha: 1)
+            $0.font = UIFont(name: "NotoSansKR-Medium", size: 14)
+            $0.attributedText = NSMutableAttributedString(string: "", attributes: [NSAttributedString.Key.kern: -0.14])
+            $0.layer.cornerRadius = 20
+            $0.layer.masksToBounds = true
+            $0.backgroundColor = UIColor(named: "urgemessagebackground")
         }
     }
     
     private func layout() {
-        addSubview(keyword)
-        keyword.do {
+//        contentView.addSubview(urgeMessageLabel)
+        addSubview(urgeMessageLabel)
+        urgeMessageLabel.do {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.topAnchor.constraint(equalTo: topAnchor).isActive = true
             $0.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true

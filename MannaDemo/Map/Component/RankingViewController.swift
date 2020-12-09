@@ -30,7 +30,6 @@ class RankingViewController: UIViewController, RankingView {
             sortedUserSelf()
         }
     }
-    
     lazy var backgroundViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundViewDidTap(_: )))
     var urgeBottomSheetBackgroundView = UIView()
     var arrivalUser: [User] = []
@@ -278,12 +277,12 @@ extension RankingViewController: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UrgeMessageCollectionViewCell.cellId, for: indexPath) as! UrgeMessageCollectionViewCell
-        cell.keyword.setTitle("테스트", for: .normal)
+        let cell = bottomSheet.collectionView.dequeueReusableCell(withReuseIdentifier: UrgeMessageCollectionViewCell.cellId, for: indexPath) as! UrgeMessageCollectionViewCell
+        cell.urgeMessageLabel.text = "testest"
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath)
     }
 }
