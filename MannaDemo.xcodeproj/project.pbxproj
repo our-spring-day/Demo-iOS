@@ -43,6 +43,7 @@
 		CC107739255464D300908D71 /* TravelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC107738255464D300908D71 /* TravelData.swift */; };
 		CC1CAC0C2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC0B2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift */; };
 		CC1CAC102580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */; };
+		CC1CAC1A25811CE400A73BA6 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */; };
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
 		CC1CC96E25429F080020D4C5 /* none6.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* none6.swift */; };
 		CC1CC97125429F490020D4C5 /* none7.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* none7.swift */; };
@@ -144,6 +145,7 @@
 		CC107738255464D300908D71 /* TravelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelData.swift; sourceTree = "<group>"; };
 		CC1CAC0B2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgeMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		CC1CC96D25429F080020D4C5 /* none6.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none6.swift; sourceTree = "<group>"; };
 		CC1CC97025429F490020D4C5 /* none7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none7.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 				CC051FA6257FB1BF00DD1512 /* UrgeBottomSheet.swift */,
 				CC1CAC0B2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift */,
 				CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */,
+				CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */,
 				CC051F9F257F900300DD1512 /* CustomSectionView.swift */,
 				A52A1C46255BBB23000794A5 /* Medal.swift */,
 				CC748318255124FB006C1E02 /* none.swift */,
@@ -604,6 +607,7 @@
 				A5A0F06325515C1900A11EEF /* ChatMessage.swift in Sources */,
 				CC051F95257F5C1D00DD1512 /* WidgeTest.intentdefinition in Sources */,
 				CCC19F9A255D34200092DD05 /* Int+Ext.swift in Sources */,
+				CC1CAC1A25811CE400A73BA6 /* PaddingLabel.swift in Sources */,
 				CC107739255464D300908D71 /* TravelData.swift in Sources */,
 				CC051FA7257FB1BF00DD1512 /* UrgeBottomSheet.swift in Sources */,
 				A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */,

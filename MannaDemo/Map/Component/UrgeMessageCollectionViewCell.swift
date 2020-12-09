@@ -9,7 +9,7 @@ import UIKit
 
 class UrgeMessageCollectionViewCell: UICollectionViewCell {
     static let cellId = "HotKeywordCellId"
-    let urgeMessageLabel = UILabel()
+    let urgeMessageLabel = PaddingLabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

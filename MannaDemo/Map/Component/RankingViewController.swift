@@ -68,7 +68,6 @@ class RankingViewController: UIViewController, RankingView {
         "🐢 기어오는구나",
         "💩 외않와?",
         "🤖 삐빅 - 인내심이 바닥났습니다",
-        
         "😌 다시 집에 가면 되나",
         "🤯 아직도 거기냐",
         "🥶 추워...",
@@ -310,7 +309,7 @@ extension RankingViewController: UICollectionViewDataSource, UICollectionViewDel
         let item = urgeMessageList[indexPath.row]
         
         let itemSize = item.size(withAttributes: [
-            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16)
+            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 18)
         ])
         return itemSize
         
