@@ -30,6 +30,7 @@ class RankingViewController: UIViewController, RankingView {
             sortedUserSelf()
         }
     }
+    
     lazy var backgroundViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundViewDidTap(_: )))
     var urgeBottomSheetBackgroundView = UIView()
     var arrivalUser: [User] = []
@@ -98,7 +99,10 @@ class RankingViewController: UIViewController, RankingView {
         bottomSheet.do {
             $0.isHidden = true
             $0.dismissButton.addTarget(self, action: #selector(bottomSheetDown), for: .touchUpInside)
+            $0.collectionView.delegate = self
+            $0.collectionView.dataSource = self
         }
+        
     }
 
     func layout() {
@@ -266,4 +270,20 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 
+}
+
+extension RankingViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UrgeMessageCollectionViewCell.cellId, for: indexPath) as! UrgeMessageCollectionViewCell
+        cell.keyword.setTitle("테스트", for: .normal)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
+    }
 }

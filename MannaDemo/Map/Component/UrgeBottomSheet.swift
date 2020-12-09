@@ -10,6 +10,11 @@ import UIKit
 class UrgeBottomSheet: UIView {
     var titleLabel = UILabel()
     var dismissButton = UIButton()
+    let collectionView: UICollectionView = {
+        let layout = LeftAlignedCollectionViewFlowLayout()
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return view
+    }()
     
     func attribute() {
         self.do {
@@ -26,12 +31,15 @@ class UrgeBottomSheet: UIView {
             $0.backgroundColor = .white
             $0.setImage(UIImage(named: "ranking_dismiss"), for: .normal)
         }
+        collectionView.do {
+            $0.register(UrgeMessageCollectionViewCell.self, forCellWithReuseIdentifier: UrgeMessageCollectionViewCell.cellId)
+        }
     }
     
     override init(frame: CGRect) {
         super.init(frame:frame)
         attribute()
-        [titleLabel, dismissButton].forEach { addSubview($0) }
+        [titleLabel, dismissButton, collectionView].forEach { addSubview($0) }
         
         titleLabel.snp.makeConstraints {
             $0.leading.top.equalTo(self).offset(22)
@@ -42,6 +50,12 @@ class UrgeBottomSheet: UIView {
             $0.centerY.equalTo(titleLabel)
             $0.trailing.equalTo(self).offset(-28.49)
             $0.width.height.equalTo(25.4982)
+        }
+        collectionView.snp.makeConstraints {
+            $0.leading.equalTo(self).offset(MannaDemo.convertWidth(value: 20))
+            $0.top.equalTo(titleLabel.snp.bottom).offset(MannaDemo.convertHeight(value: 25))
+            $0.height.equalTo(200)
+            $0.trailing.equalTo(self.snp.trailing)
         }
     }
     
