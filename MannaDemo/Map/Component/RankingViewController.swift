@@ -97,6 +97,7 @@ class RankingViewController: UIViewController, RankingView {
         }
         bottomSheet.do {
             $0.isHidden = true
+            $0.dismissButton.addTarget(self, action: #selector(bottomSheetDown), for: .touchUpInside)
         }
     }
 
@@ -146,22 +147,31 @@ class RankingViewController: UIViewController, RankingView {
     }
     
     @objc func backgroundViewDidTap(_ sender: UIView) {
-        print("background tap!!")
+        bottomSheetDown()
     }
     
     func bottomSheetUp() {
+        parentView?.bottomBarHidden()
+        urgeBottomSheetBackgroundView.isHidden = false
+        bottomSheet.isHidden = false
         UIView.animate(withDuration: 0.2) {
+
             self.bottomSheet.transform = CGAffineTransform(translationX: 0, y: -MannaDemo.convertHeight(value: 330))
+            self.urgeBottomSheetBackgroundView.alpha = 0.3
         } completion: { _ in
-            print("Test")
+            
         }
     }
     
-    func bottomSheetDown() {
-        UIView.animate(withDuration: 0.2) {
+    @objc func bottomSheetDown() {
+        self.parentView?.bottomBarAppear()
+        UIView.animate(withDuration: 0.2) { [self] in
+            self.parentView?.bottomBar.alpha = 1
             self.bottomSheet.transform = CGAffineTransform(translationX: 0, y: 0)
+            self.urgeBottomSheetBackgroundView.alpha = 0
         } completion: { _ in
-            print("Test")
+            self.urgeBottomSheetBackgroundView.isHidden = true
+            self.bottomSheet.isHidden = true
         }
     }
 }
@@ -230,14 +240,11 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
                     cell.buttonState = true
                 }
-                parentView?.bottomBarHidden()
 //                // 여기에 재촉하는거 함수 구현
 //                // ->>
 //                if let userName = notArrivalUser[indexPath.row].name {
 //                    MannaAPI.urgeUser(userName: userName)
 //                }
-                urgeBottomSheetBackgroundView.isHidden = false
-                bottomSheet.isHidden = false
                 bottomSheetUp()
             }
             cell.setData(data: notArrivalUser[indexPath.row])

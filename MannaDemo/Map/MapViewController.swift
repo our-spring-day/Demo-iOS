@@ -24,6 +24,7 @@ protocol ChatSet {
 }
 
 protocol BottomBarHidden {
+    var bottomBar: BottomBar { get set }
     func bottomBarHidden()
     func bottomBarAppear()
 }
@@ -673,6 +674,7 @@ class MapViewController: UIViewController, ChatSet{
 extension MapViewController: BottomBarHidden {
     func bottomBarHidden() {
         bottomBar.isHidden = true
+        bottomBar.alpha = 0
     }
     func bottomBarAppear() {
         bottomBar.isHidden = false
