@@ -30,7 +30,7 @@ class RankingViewController: UIViewController, RankingView {
             sortedUserSelf()
         }
     }
-    let backgroundViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundViewDidTap(_: )))
+    lazy var backgroundViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundViewDidTap(_: )))
     var urgeBottomSheetBackgroundView = UIView()
     var arrivalUser: [User] = []
     var notArrivalUser: [User] = []
@@ -92,11 +92,11 @@ class RankingViewController: UIViewController, RankingView {
             $0.backgroundColor = .black
             $0.alpha = 0.3
             $0.isHidden = true
-//            $0.addGestureRecognizer(backgroundViewTapGesture)
+            $0.isUserInteractionEnabled = true
+            $0.addGestureRecognizer(backgroundViewTapGesture)
         }
         bottomSheet.do {
             $0.isHidden = true
-            $0.addGestureRecognizer(backgroundViewTapGesture)
         }
     }
 
