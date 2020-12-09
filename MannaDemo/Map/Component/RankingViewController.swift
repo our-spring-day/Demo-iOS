@@ -62,6 +62,26 @@ class RankingViewController: UIViewController, RankingView {
         "연재리" : NMFOverlayImage(image: DisconnectProfileVIew(name: (userList["B8E643AD-E40B-4AF5-8C91-8DBB7412E8B0"]?.name)!, frame: CGRect(x: 0, y: 0, width: MannaDemo.convertWidth(value: 56), height: MannaDemo.convertWidth(value: 62.61))).asImage())
     ]
     
+    var urgeMessageList: [String] = [
+        "👀 난 니가 어딘지 안다",
+        "💗 보고싶어 빨리와",
+        "🐢 기어오는구나",
+        "💩 외않와?",
+        "🤖 삐빅 - 인내심이 바닥났습니다",
+        
+        "😌 다시 집에 가면 되나",
+        "🤯 아직도 거기냐",
+        "🥶 추워...",
+        "🔥 빨리와",
+        "🥱 이젠 정말 질린다",
+        "🥳 늦으면 우리만의 추억 백만개",
+        "🤥 입만 열면 구라인 당신...",
+        "😜 늦으면 우리끼리 셀카 오조오억장",
+        "😇 오~내일 오는건가",
+        "😊 안 뛰고 뭐하냐",
+        "😬 저.기.요."
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         sortedUser()
@@ -103,7 +123,7 @@ class RankingViewController: UIViewController, RankingView {
         }
         
     }
-
+    
     func layout() {
         [rankingView, topBar, urgeBottomSheetBackgroundView, bottomSheet].forEach { view.addSubview($0) }
         
@@ -146,7 +166,7 @@ class RankingViewController: UIViewController, RankingView {
     }
     
     @objc func didDismissButtonClicked(_ sender: UITapGestureRecognizer) {
-//        rankingView.alpha = 1
+        //        rankingView.alpha = 1
     }
     
     @objc func backgroundViewDidTap(_ sender: UIView) {
@@ -158,7 +178,7 @@ class RankingViewController: UIViewController, RankingView {
         urgeBottomSheetBackgroundView.isHidden = false
         bottomSheet.isHidden = false
         UIView.animate(withDuration: 0.2) {
-
+            
             self.bottomSheet.transform = CGAffineTransform(translationX: 0, y: -MannaDemo.convertHeight(value: 330))
             self.urgeBottomSheetBackgroundView.alpha = 0.3
         } completion: { _ in
@@ -214,14 +234,14 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         } else if section == 1 {
             return notArrivalUser.count
         } else {
-//            return notStartUser.count
+            //            return notStartUser.count
             return 2
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = rankingView.dequeueReusableCell(withIdentifier: RankingViewCell.rankingCellID, for: indexPath) as! RankingViewCell
-
+        
         if indexPath.section == 0 {
             cell.button.isHidden = true
             if indexPath.row == 0{
@@ -243,11 +263,11 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
                 Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
                     cell.buttonState = true
                 }
-//                // 여기에 재촉하는거 함수 구현
-//                // ->>
-//                if let userName = notArrivalUser[indexPath.row].name {
-//                    MannaAPI.urgeUser(userName: userName)
-//                }
+                //                // 여기에 재촉하는거 함수 구현
+                //                // ->>
+                //                if let userName = notArrivalUser[indexPath.row].name {
+                //                    MannaAPI.urgeUser(userName: userName)
+                //                }
                 bottomSheetUp()
             }
             cell.setData(data: notArrivalUser[indexPath.row])
@@ -268,7 +288,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return cell
     }
-
+    
 }
 
 extension RankingViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -278,11 +298,32 @@ extension RankingViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = bottomSheet.collectionView.dequeueReusableCell(withReuseIdentifier: UrgeMessageCollectionViewCell.cellId, for: indexPath) as! UrgeMessageCollectionViewCell
-        cell.urgeMessageLabel.text = "testest"
+        cell.urgeMessageLabel.text = urgeMessageList[indexPath.row]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let item = urgeMessageList[indexPath.row]
+        
+        let itemSize = item.size(withAttributes: [
+            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16)
+        ])
+        return itemSize
+        
+        //        let element = urgeMessageList[indexPath.row]
+        //        let fontSize: Int = 12
+        //        let limit = 15
+        //        let size = CGSize(width: collectionView.frame.width-10, height: 1000)
+        //        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: CGFloat(fontSize))]
+        //        let estimatedFrame = element.boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        //        let space = Int(estimatedFrame.height) - limit
+        //        return CGSize(width: Int(collectionView.frame.width)-10, height: 125 + space )
+        //
+        //
+        //
     }
 }

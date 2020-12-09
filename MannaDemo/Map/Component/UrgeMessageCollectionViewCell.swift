@@ -26,21 +26,18 @@ class UrgeMessageCollectionViewCell: UICollectionViewCell {
             $0.textColor = UIColor(red: 0.302, green: 0.302, blue: 0.302, alpha: 1)
             $0.font = UIFont(name: "NotoSansKR-Medium", size: 14)
             $0.attributedText = NSMutableAttributedString(string: "", attributes: [NSAttributedString.Key.kern: -0.14])
-            $0.layer.cornerRadius = 20
+            $0.layer.cornerRadius = 15
             $0.layer.masksToBounds = true
             $0.backgroundColor = UIColor(named: "urgemessagebackground")
         }
     }
     
     private func layout() {
-//        contentView.addSubview(urgeMessageLabel)
         addSubview(urgeMessageLabel)
-        urgeMessageLabel.do {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.topAnchor.constraint(equalTo: topAnchor).isActive = true
-            $0.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-            $0.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-            $0.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        urgeMessageLabel.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(42.61)
         }
     }
 }
