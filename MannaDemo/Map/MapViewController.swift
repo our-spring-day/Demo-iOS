@@ -281,6 +281,7 @@ class MapViewController: UIViewController, ChatSet{
             $0.isForceShowIcon = true
         }
         bottomBar.do {
+            $0.backgroundColor = .none
             $0.chatButton.addTarget(self, action: #selector(showChattingView), for: .touchUpInside)
             $0.rankingButton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
             $0.chatButton.tag = 1
@@ -521,6 +522,7 @@ class MapViewController: UIViewController, ChatSet{
             viewForTransition.alpha = 1
             chattingViewController?.view.alpha = 1
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.backgroundColor = .white
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             } completion: { _ in
                 self.bottomBar.isUserInteractionEnabled = true
@@ -549,6 +551,7 @@ class MapViewController: UIViewController, ChatSet{
             rankingViewController?.view.alpha = 1
             self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.backgroundColor = .white
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             } completion: { _ in
                 self.bottomBar.isUserInteractionEnabled = true
@@ -586,6 +589,7 @@ class MapViewController: UIViewController, ChatSet{
         
         if sender.tag == 1 {
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.backgroundColor = .none
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             } completion: { _ in
                 self.chattingViewController?.view.alpha = 0
@@ -598,6 +602,7 @@ class MapViewController: UIViewController, ChatSet{
             }
         } else {
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.backgroundColor = .none
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             } completion: {_ in
                 self.rankingViewController?.view.alpha = 0
