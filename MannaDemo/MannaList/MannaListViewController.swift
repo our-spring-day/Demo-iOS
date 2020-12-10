@@ -133,6 +133,8 @@ extension MannaListViewController: UITableViewDelegate, UITableViewDataSource {
         view.chattingViewController = subChatView
         view.rankingViewController = subRankingView
         
+        subRankingView.parentView = view
+        
         view.rankingViewController?.userList = UserModel.userList
         view.meetInfo  = MannaModel.newModel[indexPath.row]
         DispatchQueue.global().async {

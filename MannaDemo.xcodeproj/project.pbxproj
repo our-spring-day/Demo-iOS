@@ -38,8 +38,13 @@
 		CC051F95257F5C1D00DD1512 /* WidgeTest.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = CC051F90257F5C1A00DD1512 /* WidgeTest.intentdefinition */; };
 		CC051F98257F5C1D00DD1512 /* WidgeTestExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CC051F88257F5C1A00DD1512 /* WidgeTestExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CC051FA0257F900300DD1512 /* CustomSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC051F9F257F900300DD1512 /* CustomSectionView.swift */; };
+		CC051FA7257FB1BF00DD1512 /* UrgeBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC051FA6257FB1BF00DD1512 /* UrgeBottomSheet.swift */; };
 		CC0F50282564DF2F000026AE /* RenderingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0F50272564DF2F000026AE /* RenderingView.swift */; };
 		CC107739255464D300908D71 /* TravelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC107738255464D300908D71 /* TravelData.swift */; };
+		CC1CAC0C2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC0B2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift */; };
+		CC1CAC102580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */; };
+		CC1CAC1A25811CE400A73BA6 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */; };
+		CC1CAC2F2582160800A73BA6 /* UrgeToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC2E2582160800A73BA6 /* UrgeToastMessage.swift */; };
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
 		CC1CC96E25429F080020D4C5 /* none6.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* none6.swift */; };
 		CC1CC97125429F490020D4C5 /* none7.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* none7.swift */; };
@@ -136,8 +141,13 @@
 		CC051F91257F5C1D00DD1512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC051F93257F5C1D00DD1512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC051F9F257F900300DD1512 /* CustomSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSectionView.swift; sourceTree = "<group>"; };
+		CC051FA6257FB1BF00DD1512 /* UrgeBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgeBottomSheet.swift; sourceTree = "<group>"; };
 		CC0F50272564DF2F000026AE /* RenderingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingView.swift; sourceTree = "<group>"; };
 		CC107738255464D300908D71 /* TravelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelData.swift; sourceTree = "<group>"; };
+		CC1CAC0B2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgeMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		CC1CAC2E2582160800A73BA6 /* UrgeToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgeToastMessage.swift; sourceTree = "<group>"; };
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		CC1CC96D25429F080020D4C5 /* none6.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none6.swift; sourceTree = "<group>"; };
 		CC1CC97025429F490020D4C5 /* none7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none7.swift; sourceTree = "<group>"; };
@@ -320,7 +330,12 @@
 				CC8A0B2225540BAD00063790 /* TimerView.swift */,
 				A52A1C39255BA162000794A5 /* RankingViewController.swift */,
 				A52A1C3C255BA239000794A5 /* RankingViewCell.swift */,
+				CC051FA6257FB1BF00DD1512 /* UrgeBottomSheet.swift */,
+				CC1CAC0B2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift */,
+				CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */,
+				CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */,
 				CC051F9F257F900300DD1512 /* CustomSectionView.swift */,
+				CC1CAC2E2582160800A73BA6 /* UrgeToastMessage.swift */,
 				A52A1C46255BBB23000794A5 /* Medal.swift */,
 				CC748318255124FB006C1E02 /* none.swift */,
 				CC74831425511F0C006C1E02 /* none2.swift */,
@@ -588,13 +603,16 @@
 				CCD8DDC4255E478900BA7D7E /* MapPresenter.swift in Sources */,
 				CC74831C25513098006C1E02 /* none5.swift in Sources */,
 				CC21A7DC255BA03900E31F77 /* CGFloat.swift in Sources */,
+				CC1CAC0C2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift in Sources */,
 				CC8B845F2540231A00441445 /* ViewController.swift in Sources */,
 				CC8B845B2540231A00441445 /* AppDelegate.swift in Sources */,
 				CCE7525D254034EB008E0BA1 /* CreateMannaViewController.swift in Sources */,
 				A5A0F06325515C1900A11EEF /* ChatMessage.swift in Sources */,
 				CC051F95257F5C1D00DD1512 /* WidgeTest.intentdefinition in Sources */,
 				CCC19F9A255D34200092DD05 /* Int+Ext.swift in Sources */,
+				CC1CAC1A25811CE400A73BA6 /* PaddingLabel.swift in Sources */,
 				CC107739255464D300908D71 /* TravelData.swift in Sources */,
+				CC051FA7257FB1BF00DD1512 /* UrgeBottomSheet.swift in Sources */,
 				A52A1C40255BAA3C000794A5 /* Ranking.swift in Sources */,
 				A53774BF2561655400C0A91B /* UserState.swift in Sources */,
 				CC79E4AE2555B4DE001C726F /* SocketData.swift in Sources */,
@@ -603,6 +621,7 @@
 				A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */,
 				CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */,
 				A5F82CE92556811B009A8AC5 /* MannaList.swift in Sources */,
+				CC1CAC2F2582160800A73BA6 /* UrgeToastMessage.swift in Sources */,
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
 				A5A0F05D25514A1400A11EEF /* ChatCell.swift in Sources */,
 				CC8A0B5A2554605F00063790 /* MapView+NaverMap.swift in Sources */,
@@ -627,6 +646,7 @@
 				CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */,
 				A5D48F1A2542A60F00399462 /* Marker.swift in Sources */,
 				CC8A0B5E2554609B00063790 /* MapView+CLocation.swift in Sources */,
+				CC1CAC102580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift in Sources */,
 				A52A1C3D255BA239000794A5 /* RankingViewCell.swift in Sources */,
 				A52A1C3A255BA162000794A5 /* RankingViewController.swift in Sources */,
 			);

@@ -23,6 +23,11 @@ protocol ChatSet {
     var rankingViewController: RankingView? { get set }
 }
 
+protocol BottomBarHidden {
+    var bottomBar: BottomBar { get set }
+    func bottomBarHidden()
+    func bottomBarAppear()
+}
 class MapViewController: UIViewController, ChatSet{
     
     var defaultOverlayImageOverlay = NMFOverlayImage(image: DefaultOverlayView(frame: CGRect(x: 0, y: 0, width: 45, height: 75)).asImage())
@@ -90,7 +95,7 @@ class MapViewController: UIViewController, ChatSet{
         
         
         locationSocket.on("locationConnect") { [self] (array, ack) in
-            rankingViewController!.userList[MannaDemo.myUUID!]?.state = true
+            rankingViewController!.userList[MannaDemo.myUUID!]?.state = .start
         }
         chatSocket.on("chatConnect") { [self] (array, ack) in
 //            print(ack)
@@ -148,23 +153,22 @@ class MapViewController: UIViewController, ChatSet{
                     case "LOCATION":
                         lat_ = result.location?.latitude
                         lng_ = result.location?.longitude
-                        rankingViewController!.userList[token]?.state = true
+                        rankingViewController!.userList[token]?.state = .start
                         break
                         
                     case "JOIN":
                         guard let name = username else { return }
-                        rankingViewController!.userList[token]?.state = true
+                        rankingViewController!.userList[token]?.state = .start
                         rankingViewController!.userList[token]?.networkValidTime = 0
                         self.marking()
                         self.showToast(message: "\(name)님 접속하셨습니다.")
-//                        self.setCollcetionViewItem()
                         break
                         
                     case "LEAVE":
                         guard let name = username else { return }
+                        rankingViewController!.userList[token]?.state = .notStart
                         rankingViewController!.userList[token]?.networkValidTime = 61
                         self.marking()
-//                        self.setCollcetionViewItem()
                         self.showToast(message: "\(name)님 나가셨습니다.")
                         break
                         
@@ -175,7 +179,6 @@ class MapViewController: UIViewController, ChatSet{
                     guard let lng = lng_ else { return }
                     guard rankingViewController!.userList[token] != nil else { return }
                     rankingViewController!.userList[token]?.networkValidTime = 0
-//                    print("여기에 나계속찍혀야돼")
                     if token != MannaDemo.myUUID {
                         rankingViewController!.userList[token]?.latitude = lat
                         rankingViewController!.userList[token]?.longitude = lng
@@ -276,20 +279,16 @@ class MapViewController: UIViewController, ChatSet{
             $0.isForceShowIcon = true
         }
         bottomBar.do {
-//            $0.chatButton.addGestureRecognizer(goToChatGesture)
+            $0.backgroundColor = .none
             $0.chatButton.addTarget(self, action: #selector(showChattingView), for: .touchUpInside)
             $0.rankingButton.addTarget(self, action: #selector(showRankingView), for: .touchUpInside)
             $0.chatButton.tag = 1
             $0.rankingButton.tag = 2
         }
         rankingViewController?.do {
-            $0.bottomBar.chatButton.addTarget(self, action: #selector(rankingToChat), for: .touchUpInside)
-            $0.bottomBar.rankingButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
             $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
         }
         chattingViewController?.do {
-//            $0.bottomBar.rankingButton.addTarget(self, action: #selector(chatToRanking), for: .touchUpInside)
-//            $0.bottomBar.chatButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
             $0.topBar.dismissButton.addTarget(self, action: #selector(dismissChildView), for: .touchUpInside)
 
         }
@@ -338,8 +337,8 @@ class MapViewController: UIViewController, ChatSet{
             $0.width.height.equalTo(45)
         }
         bottomBar.snp.makeConstraints {
-            $0.bottom.leading.trailing.equalTo(view.safeAreaLayoutGuide)
-            $0.top.equalTo(view.snp.bottom).offset(-90)
+            $0.bottom.leading.trailing.equalTo(view)
+            $0.top.equalTo(view.snp.bottom).offset(MannaDemo.convertHeight(value: -87))
         }
         viewForTransition.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalTo(view)
@@ -474,7 +473,7 @@ class MapViewController: UIViewController, ChatSet{
         let maxLatLng = NMGLatLng(lat: 0, lng: 0)
         
         rankingViewController!.userList.keys.forEach {
-            if rankingViewController!.userList[$0]?.state == true {
+            if rankingViewController!.userList[$0]?.state == .start {
                 if rankingViewController!.userList[$0]!.longitude != 0 && rankingViewController!.userList[$0]!.latitude != 0 {
                     if minLatLng.lat > rankingViewController!.userList[$0]!.latitude {
                         minLatLng.lat = rankingViewController!.userList[$0]!.latitude
@@ -513,6 +512,8 @@ class MapViewController: UIViewController, ChatSet{
             rankingToChat()
             subViewState = .chat
         case .none:
+            bottomBar.timerView.whereAt = .rankingView
+            bottomBar.timerView.attribute()
             chattingViewController!.chatView.reloadData()
             viewForTransition.isHidden = false
             chattingViewController?.view.isHidden = false
@@ -521,18 +522,23 @@ class MapViewController: UIViewController, ChatSet{
             viewForTransition.alpha = 1
             chattingViewController?.view.alpha = 1
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.borderView.isHidden = false
+                self.bottomBar.backgroundColor = .white
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             } completion: { _ in
                 self.bottomBar.isUserInteractionEnabled = true
             }
             chattingViewController?.viewLoadScrollBottom()
             subViewState = .chat
-            
         }
     }
     
     @objc func showRankingView(_ sender: UIButton) {
+        
+        
+        
         bottomBar.isUserInteractionEnabled = false
+        
         switch subViewState {
         case .chat:
             chatToRanking()
@@ -541,6 +547,9 @@ class MapViewController: UIViewController, ChatSet{
             dismissChildView(sender)
             subViewState = .none
         case .none:
+            bottomBar.timerView.whereAt = .rankingView
+            bottomBar.timerView.attribute()
+            self.bottomBar.borderView.isHidden = false
             rankingViewController?.rankingView.reloadData()
             viewForTransition.isHidden = false
             rankingViewController?.view.isHidden = false
@@ -549,6 +558,7 @@ class MapViewController: UIViewController, ChatSet{
             rankingViewController?.view.alpha = 1
             self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.backgroundColor = .white
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             } completion: { _ in
                 self.bottomBar.isUserInteractionEnabled = true
@@ -583,9 +593,14 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func dismissChildView(_ sender: UIButton) {
-        
+        self.bottomBar.isUserInteractionEnabled = false
+        bottomBar.timerView.whereAt = .mapView
+        bottomBar.timerView.attribute()
+        bottomBar.borderView.isHidden = true
+        self.subViewState = .none
         if sender.tag == 1 {
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.backgroundColor = .none
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             } completion: { _ in
                 self.chattingViewController?.view.alpha = 0
@@ -598,6 +613,7 @@ class MapViewController: UIViewController, ChatSet{
             }
         } else {
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.backgroundColor = .none
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.height)
             } completion: {_ in
                 self.rankingViewController?.view.alpha = 0
@@ -625,7 +641,7 @@ class MapViewController: UIViewController, ChatSet{
                 } else {
                     tokenWithMarker[key]?.iconImage = (rankingViewController?.locationProfileImageArray[(user.name)!])!
                 }
-                if (rankingViewController!.userList[key]?.state)! {
+                if (rankingViewController!.userList[key]?.state == .start) {
                     if key != MannaDemo.myUUID {
                         tokenWithMarker[key]?.position = NMGLatLng(lat: rankingViewController!.userList[key]!.latitude, lng: rankingViewController!.userList[key]!.longitude)
                         tokenWithMarker[key]?.mapView = mapView
@@ -664,10 +680,19 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 사용자상태 처리
     @objc func timeChecker() {
         rankingViewController!.userList.keys.forEach {
-            if rankingViewController!.userList[$0]?.state == true {
+            if rankingViewController!.userList[$0]?.state == .start {
                 rankingViewController!.userList[$0]?.networkValidTime += 1
             }
         }
     }   
 }
 
+extension MapViewController: BottomBarHidden {
+    func bottomBarHidden() {
+        bottomBar.isHidden = true
+        bottomBar.alpha = 0
+    }
+    func bottomBarAppear() {
+        bottomBar.isHidden = false
+    }
+}

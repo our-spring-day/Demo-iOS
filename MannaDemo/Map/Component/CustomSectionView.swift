@@ -29,8 +29,8 @@ class CustomSectionView: UIView {
             $0.textColor = UIColor(named: "keyColor")
             $0.font = UIFont(name: "NotoSansKR-Bold", size: 13)
             var paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineHeightMultiple = 0.69
-            $0.attributedText = NSMutableAttributedString(string: titleText ?? "", attributes: [NSAttributedString.Key.kern: -0.26, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+            paragraphStyle.lineHeightMultiple = 0
+            $0.attributedText = NSMutableAttributedString(string: titleText!, attributes: [NSAttributedString.Key.kern: -0.26, NSAttributedString.Key.paragraphStyle: paragraphStyle])
         }
         sectionbarView.do {
             $0.backgroundColor = UIColor(named: "keyColor")
@@ -44,8 +44,7 @@ class CustomSectionView: UIView {
         sectionTitleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(self).offset(MannaDemo.convertWidth(value: 31))
-            $0.width.equalTo(24)
-            $0.height.equalTo(26)
+            $0.top.bottom.equalToSuperview()
         }
         sectionbarView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
