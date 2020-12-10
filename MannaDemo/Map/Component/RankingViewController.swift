@@ -205,6 +205,7 @@ class RankingViewController: UIViewController, RankingView {
         }
     }
     func showToast(message : String) {
+        print(UIScreen.main.bounds)
         let toastLabel = UIView(frame: CGRect(x: view.frame.size.width / 2 - 128.5, y: bottomSheet.frame.origin.y - (MannaDemo.convertHeight(value: 23) + 38), width: 257, height: 38))
         let messageLabel = UILabel()
         toastLabel.do {
