@@ -135,7 +135,6 @@ class RankingViewController: UIViewController, RankingView {
             $0.topAnchor.constraint(equalTo: topBar.bottomAnchor).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-//            $0.top.equalTo(view.snp.bottom).offset(MannaDemo.convertHeight(value: -87))
             $0.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: MannaDemo.convertHeight(value: -87)).isActive = true
         }
         topBar.snp.makeConstraints {
@@ -225,13 +224,6 @@ class RankingViewController: UIViewController, RankingView {
         messageLabel.snp.makeConstraints {
             $0.centerX.centerY.equalTo(toastLabel)
         }
-//        toastLabel.messageLabel.do {
-//            $0.backgroundColor = .black
-//        $0.font = UIFont(name: "NotoSansKR-Regular", size: 14)
-//        $0.textColor = .white
-//        $0.textAlignment = .center
-//        }
-        
         self.view.addSubview(toastLabel)
         UIView.animate(withDuration: 1, delay: 0.1, options: .curveEaseOut, animations: {
                         toastLabel.alpha = 0.0

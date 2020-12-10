@@ -63,7 +63,6 @@ class TimerView: UIView {
                 [minuteLabel, secondLabel, colon].forEach { $0.textColor = .white }
                 break
             case .rankingView:
-//                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "20minute") }
                 self.backgroundColor = .none
                 [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "timertextcolor") }
                 break
@@ -76,8 +75,7 @@ class TimerView: UIView {
                 self.backgroundColor = UIColor(named: "10minute")
                 break
             case .rankingView:
-//                self.backgroundColor = .none
-//                [minuteLabel, secondLabel, colon].forEach { $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : UIColor(named: "10minute") }
+
                 self.backgroundColor = .none
                 [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "timertextcolor") }
                 break
@@ -90,8 +88,6 @@ class TimerView: UIView {
                 self.backgroundColor = UIColor(named: "keyColor")
                 break
             case .rankingView:
-//                self.backgroundColor = .none
-//                [minuteLabel, secondLabel, colon].forEach { $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : UIColor(named: "keyColor") }
                 self.backgroundColor = .none
                 [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "timertextcolor") }
                 break
