@@ -507,6 +507,7 @@ class MapViewController: UIViewController, ChatSet{
     @objc func showChattingView(_ sender: UIButton) {
         bottomBar.timerView.whereAt = .rankingView
         bottomBar.timerView.attribute()
+        bottomBar.borderView.isHidden = false
         bottomBar.isUserInteractionEnabled = false
         switch subViewState {
         case .chat:
@@ -539,6 +540,7 @@ class MapViewController: UIViewController, ChatSet{
         bottomBar.timerView.whereAt = .rankingView
         bottomBar.timerView.attribute()
         bottomBar.isUserInteractionEnabled = false
+        bottomBar.borderView.isHidden = false
         switch subViewState {
         case .chat:
             chatToRanking()
@@ -592,6 +594,7 @@ class MapViewController: UIViewController, ChatSet{
     @objc func dismissChildView(_ sender: UIButton) {
         bottomBar.timerView.whereAt = .mapView
         bottomBar.timerView.attribute()
+        bottomBar.borderView.isHidden = true
         if sender.tag == 1 {
             UIView.animate(withDuration: 0.2) {
                 self.bottomBar.backgroundColor = .none

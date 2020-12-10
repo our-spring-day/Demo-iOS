@@ -233,8 +233,8 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         } else if section == 1 {
             return notArrivalUser.count
         } else {
-            //            return notStartUser.count
-            return 2
+                        return notStartUser.count
+//            return 2
         }
     }
     
@@ -269,7 +269,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             }
             cell.setData(data: notArrivalUser[indexPath.row])
         } else if indexPath.section == 2 {
-            cell.setData(data: notArrivalUser[indexPath.row])
+            cell.setData(data: notStartUser[indexPath.row])
             cell.button.isHidden = false
             cell.medal.isHidden = true
         }

@@ -11,10 +11,15 @@ class BottomBar: UIView {
     var chatButton = UIButton()
     var rankingButton = UIButton()
     var timerView = TimerView(.mapView)
+    var borderView = UIView()
     
     func attribute() {
         self.do {
             $0.backgroundColor = .white
+        }
+        borderView.do {
+            $0.backgroundColor = UIColor(named: "bottombarborder")
+            $0.isHidden = true
         }
         chatButton.do {
             $0.backgroundColor = .white
@@ -41,7 +46,7 @@ class BottomBar: UIView {
     }
     
     func layout() {
-        [rankingButton, chatButton, timerView].forEach { addSubview($0) }
+        [rankingButton, chatButton, timerView, borderView].forEach { addSubview($0) }
         
         rankingButton.snp.makeConstraints {
             $0.bottom.equalTo(self.snp.bottom).offset(MannaDemo.convertHeight(value: -26))
@@ -58,6 +63,11 @@ class BottomBar: UIView {
             $0.trailing.equalTo(self).offset(-18)
             $0.width.equalTo(109)
             $0.height.equalTo(51)
+        }
+        borderView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+            $0.top.equalTo(self.snp.top).offset(-0.5)
         }
     }
     

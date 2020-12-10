@@ -60,10 +60,12 @@ class TimerView: UIView {
             switch whereAt {
             case .mapView:
                 self.backgroundColor = UIColor(named: "20minute")
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = .white }
                 break
             case .rankingView:
-                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "20minute") }
-                
+//                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "20minute") }
+                self.backgroundColor = .none
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "timertextcolor") }
                 break
             case .none:
                 print("타이머의 whereAt 변수를 할당하세요")
@@ -74,7 +76,10 @@ class TimerView: UIView {
                 self.backgroundColor = UIColor(named: "10minute")
                 break
             case .rankingView:
-                [minuteLabel, secondLabel, colon].forEach { $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : UIColor(named: "10minute") }
+//                self.backgroundColor = .none
+//                [minuteLabel, secondLabel, colon].forEach { $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : UIColor(named: "10minute") }
+                self.backgroundColor = .none
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "timertextcolor") }
                 break
             case .none:
                 print("타이머의 whereAt 변수를 할당하세요")
@@ -85,7 +90,10 @@ class TimerView: UIView {
                 self.backgroundColor = UIColor(named: "keyColor")
                 break
             case .rankingView:
-                [minuteLabel, secondLabel, colon].forEach { $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : UIColor(named: "keyColor") }
+//                self.backgroundColor = .none
+//                [minuteLabel, secondLabel, colon].forEach { $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : UIColor(named: "keyColor") }
+                self.backgroundColor = .none
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "timertextcolor") }
                 break
             case .none:
                 print("타이머의 whereAt 변수를 할당하세요")
