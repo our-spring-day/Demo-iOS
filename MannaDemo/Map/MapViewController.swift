@@ -506,7 +506,7 @@ class MapViewController: UIViewController, ChatSet{
         bottomBar.isUserInteractionEnabled = false
         bottomBar.timerView.whereAt = .rankingView
         bottomBar.timerView.attribute()
-        bottomBar.borderView.isHidden = false
+        
         switch subViewState {
         case .chat:
             dismissChildView(sender)
@@ -523,6 +523,7 @@ class MapViewController: UIViewController, ChatSet{
             viewForTransition.alpha = 1
             chattingViewController?.view.alpha = 1
             UIView.animate(withDuration: 0.2) {
+                self.bottomBar.borderView.isHidden = false
                 self.bottomBar.backgroundColor = .white
                 self.viewForTransition.transform = CGAffineTransform(translationX: 0, y: 0)
             } completion: { _ in
@@ -538,7 +539,6 @@ class MapViewController: UIViewController, ChatSet{
         bottomBar.isUserInteractionEnabled = false
         bottomBar.timerView.whereAt = .rankingView
         bottomBar.timerView.attribute()
-        bottomBar.borderView.isHidden = false
         switch subViewState {
         case .chat:
             chatToRanking()
@@ -547,6 +547,7 @@ class MapViewController: UIViewController, ChatSet{
             dismissChildView(sender)
             subViewState = .none
         case .none:
+            self.bottomBar.borderView.isHidden = false
             rankingViewController?.rankingView.reloadData()
             viewForTransition.isHidden = false
             rankingViewController?.view.isHidden = false
