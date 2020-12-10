@@ -101,6 +101,9 @@ class RankingViewController: UIViewController, RankingView {
             $0.bounces = false
             $0.separatorStyle = .none
             $0.rowHeight = MannaDemo.convertWidth(value: 70)
+//            $0.contentInsetAdjustmentBehavior = .never
+//            $0.insetsContentViewsToSafeArea = true
+            $0.contentInset = UIEdgeInsets(top: -35, left: 0, bottom: 0, right: 0)
         }
         topBar.do {
             $0.dismissButton.addTarget(self, action: #selector(didDismissButtonClicked(_:)), for: .touchUpInside)
@@ -131,7 +134,8 @@ class RankingViewController: UIViewController, RankingView {
             $0.topAnchor.constraint(equalTo: topBar.bottomAnchor).isActive = true
             $0.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
             $0.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-            $0.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//            $0.top.equalTo(view.snp.bottom).offset(MannaDemo.convertHeight(value: -87))
+            $0.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: MannaDemo.convertHeight(value: -87)).isActive = true
         }
         topBar.snp.makeConstraints {
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
@@ -204,6 +208,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         return 3
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return section == 0 ? 10 : 68
         return 68
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -233,11 +238,17 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         } else if section == 1 {
             return notArrivalUser.count
         } else {
-                        return notStartUser.count
+            return notStartUser.count
 //            return 2
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = rankingView.dequeueReusableCell(withIdentifier: RankingViewCell.rankingCellID, for: indexPath) as! RankingViewCell
         
@@ -246,7 +257,7 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             cell.button.isHidden = true
             if indexPath.row == 0{
                 cell.medal.medal.image = UIImage(named: "golden")
-                cell.medal.backgroundColor = #colorLiteral(red: 1, green: 0.9294117647, blue: 0.5803921569, alpha: 1)
+                cell.medal.backgroundColor = .none
             } else if indexPath.row == 1 {
                 cell.medal.medal.image = UIImage(named: "silver")
                 cell.medal.backgroundColor = .none
@@ -275,7 +286,6 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return cell
     }
-    
 }
 
 extension RankingViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

@@ -44,8 +44,6 @@ class CustomSectionView: UIView {
         sectionTitleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(self).offset(MannaDemo.convertWidth(value: 31))
-//            $0.width.equalTo(24)
-//            $0.height.equalTo(13)
             $0.top.bottom.equalToSuperview()
         }
         sectionbarView.snp.makeConstraints {
