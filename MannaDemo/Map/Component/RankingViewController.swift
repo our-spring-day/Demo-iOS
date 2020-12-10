@@ -101,9 +101,7 @@ class RankingViewController: UIViewController, RankingView {
             $0.bounces = false
             $0.separatorStyle = .none
             $0.rowHeight = MannaDemo.convertWidth(value: 70)
-//            $0.contentInsetAdjustmentBehavior = .never
-//            $0.insetsContentViewsToSafeArea = true
-            $0.contentInset = UIEdgeInsets(top: -35, left: 0, bottom: 0, right: 0)
+            $0.contentInset = UIEdgeInsets(top: -35, left: 0, bottom: -12, right: 0)
         }
         topBar.do {
             $0.dismissButton.addTarget(self, action: #selector(didDismissButtonClicked(_:)), for: .touchUpInside)
@@ -208,8 +206,26 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         return 3
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return section == 0 ? 10 : 68
-        return 68
+        if section == 0 {
+            if arrivalUser.count == 0 {
+                return CGFloat.leastNormalMagnitude
+            } else {
+                return 68
+            }
+        } else if section == 1 {
+            if notArrivalUser.count == 0 {
+                return CGFloat.leastNormalMagnitude
+            } else {
+                return 68
+            }
+        } else if section == 2 {
+            if notStartUser.count == 0 {
+                return CGFloat.leastNormalMagnitude
+            } else {
+                return 68
+            }
+        }
+        return CGFloat.leastNormalMagnitude
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
@@ -239,7 +255,6 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             return notArrivalUser.count
         } else {
             return notStartUser.count
-//            return 2
         }
     }
     
