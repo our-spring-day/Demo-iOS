@@ -25,6 +25,7 @@ class RankingViewController: UIViewController, RankingView {
     let arrivedSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 13), title: "도착")
     let startSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 20), title: "출발")
     let notstartSectionHeaderView = CustomSectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 13), title: "준비")
+    var selectedUserForUrge = ""
     var userList: [String : User] = [:] {
         didSet {
             sortedUserSelf()
@@ -204,6 +205,40 @@ class RankingViewController: UIViewController, RankingView {
             self.bottomSheet.isHidden = true
         }
     }
+    func showToast(message : String) {
+        let toastLabel = UIView(frame: CGRect(x: view.frame.size.width / 2 - 128.5, y: bottomSheet.frame.origin.y - (MannaDemo.convertHeight(value: 23) + 38), width: 257, height: 38))
+        let messageLabel = UILabel()
+        toastLabel.do {
+            $0.layer.cornerRadius = 6
+            $0.layer.masksToBounds = true
+            $0.backgroundColor = .black
+            $0.alpha = 0.7
+        }
+        toastLabel.addSubview(messageLabel)
+        messageLabel.do {
+            $0.font = UIFont(name: "NotoSansKR-Regular", size: 14)
+            $0.textColor = .white
+            let paragraphStyle = NSMutableParagraphStyle()
+            $0.textAlignment = .center
+            $0.attributedText = NSMutableAttributedString(string: "\(message)님에게 재촉메시지를 보냈습니다.", attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        }
+        messageLabel.snp.makeConstraints {
+            $0.centerX.centerY.equalTo(toastLabel)
+        }
+//        toastLabel.messageLabel.do {
+//            $0.backgroundColor = .black
+//        $0.font = UIFont(name: "NotoSansKR-Regular", size: 14)
+//        $0.textColor = .white
+//        $0.textAlignment = .center
+//        }
+        
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 1, delay: 0.1, options: .curveEaseOut, animations: {
+                        toastLabel.alpha = 0.0
+            
+        }, completion: {
+            (isCompleted) in
+            toastLabel.removeFromSuperview() }) }
 }
 
 extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
@@ -293,16 +328,25 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             cell.medal.isHidden = true
             cell.button.isHidden = false
             cell.tapped = { [unowned self] in
-                cell.buttonState = false
-                Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
-                    cell.buttonState = true
-                }
+//                cell.buttonState = false
+//                Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
+//                    cell.buttonState = true
+//                }
+                selectedUserForUrge = notArrivalUser[indexPath.row].name ?? ""
                 bottomSheetUp()
             }
             cell.setData(data: notArrivalUser[indexPath.row])
         } else if indexPath.section == 2 {
             cell.setData(data: notStartUser[indexPath.row])
             cell.button.isHidden = false
+            cell.tapped = { [unowned self] in
+//                cell.buttonState = false
+//                Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
+//                    cell.buttonState = true
+//                }
+                selectedUserForUrge = notStartUser[indexPath.row].name ?? ""
+                bottomSheetUp()
+            }
             cell.medal.isHidden = true
         }
         return cell
@@ -321,7 +365,8 @@ extension RankingViewController: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath)
+        showToast(message: selectedUserForUrge)
+        MannaAPI.urgeUser(userName: selectedUserForUrge)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

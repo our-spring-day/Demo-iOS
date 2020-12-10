@@ -44,6 +44,7 @@
 		CC1CAC0C2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC0B2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift */; };
 		CC1CAC102580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */; };
 		CC1CAC1A25811CE400A73BA6 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */; };
+		CC1CAC2F2582160800A73BA6 /* UrgeToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CAC2E2582160800A73BA6 /* UrgeToastMessage.swift */; };
 		CC1CC96B254297BF0020D4C5 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */; };
 		CC1CC96E25429F080020D4C5 /* none6.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC96D25429F080020D4C5 /* none6.swift */; };
 		CC1CC97125429F490020D4C5 /* none7.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1CC97025429F490020D4C5 /* none7.swift */; };
@@ -146,6 +147,7 @@
 		CC1CAC0B2580A8AF00A73BA6 /* LeftAlignCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgeMessageCollectionViewCell.swift; sourceTree = "<group>"; };
 		CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		CC1CAC2E2582160800A73BA6 /* UrgeToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrgeToastMessage.swift; sourceTree = "<group>"; };
 		CC1CC96A254297BF0020D4C5 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		CC1CC96D25429F080020D4C5 /* none6.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none6.swift; sourceTree = "<group>"; };
 		CC1CC97025429F490020D4C5 /* none7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = none7.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				CC1CAC0F2580AB9900A73BA6 /* UrgeMessageCollectionViewCell.swift */,
 				CC1CAC1925811CE400A73BA6 /* PaddingLabel.swift */,
 				CC051F9F257F900300DD1512 /* CustomSectionView.swift */,
+				CC1CAC2E2582160800A73BA6 /* UrgeToastMessage.swift */,
 				A52A1C46255BBB23000794A5 /* Medal.swift */,
 				CC748318255124FB006C1E02 /* none.swift */,
 				CC74831425511F0C006C1E02 /* none2.swift */,
@@ -618,6 +621,7 @@
 				A5A0F05A25514A0900A11EEF /* ChattingViewController.swift in Sources */,
 				CC41A0872548157C00C0E762 /* MannaDemo.swift in Sources */,
 				A5F82CE92556811B009A8AC5 /* MannaList.swift in Sources */,
+				CC1CAC2F2582160800A73BA6 /* UrgeToastMessage.swift in Sources */,
 				CC8B845D2540231A00441445 /* SceneDelegate.swift in Sources */,
 				A5A0F05D25514A1400A11EEF /* ChatCell.swift in Sources */,
 				CC8A0B5A2554605F00063790 /* MapView+NaverMap.swift in Sources */,
