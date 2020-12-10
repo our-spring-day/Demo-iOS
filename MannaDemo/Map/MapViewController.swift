@@ -504,9 +504,6 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 채팅창 클릭
     @objc func showChattingView(_ sender: UIButton) {
         bottomBar.isUserInteractionEnabled = false
-        bottomBar.timerView.whereAt = .rankingView
-        bottomBar.timerView.attribute()
-        
         switch subViewState {
         case .chat:
             dismissChildView(sender)
@@ -515,6 +512,8 @@ class MapViewController: UIViewController, ChatSet{
             rankingToChat()
             subViewState = .chat
         case .none:
+            bottomBar.timerView.whereAt = .rankingView
+            bottomBar.timerView.attribute()
             chattingViewController!.chatView.reloadData()
             viewForTransition.isHidden = false
             chattingViewController?.view.isHidden = false
@@ -531,14 +530,15 @@ class MapViewController: UIViewController, ChatSet{
             }
             chattingViewController?.viewLoadScrollBottom()
             subViewState = .chat
-            
         }
     }
     
     @objc func showRankingView(_ sender: UIButton) {
+        
+        
+        
         bottomBar.isUserInteractionEnabled = false
-        bottomBar.timerView.whereAt = .rankingView
-        bottomBar.timerView.attribute()
+        
         switch subViewState {
         case .chat:
             chatToRanking()
@@ -547,6 +547,8 @@ class MapViewController: UIViewController, ChatSet{
             dismissChildView(sender)
             subViewState = .none
         case .none:
+            bottomBar.timerView.whereAt = .rankingView
+            bottomBar.timerView.attribute()
             self.bottomBar.borderView.isHidden = false
             rankingViewController?.rankingView.reloadData()
             viewForTransition.isHidden = false
@@ -595,6 +597,7 @@ class MapViewController: UIViewController, ChatSet{
         bottomBar.timerView.whereAt = .mapView
         bottomBar.timerView.attribute()
         bottomBar.borderView.isHidden = true
+        self.subViewState = .none
         if sender.tag == 1 {
             UIView.animate(withDuration: 0.2) {
                 self.bottomBar.backgroundColor = .none
