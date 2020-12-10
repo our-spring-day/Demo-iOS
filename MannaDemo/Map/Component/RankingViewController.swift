@@ -242,35 +242,6 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = rankingView.dequeueReusableCell(withIdentifier: RankingViewCell.rankingCellID, for: indexPath) as! RankingViewCell
         
         if indexPath.section == 0 {
-            cell.button.isHidden = true
-            if indexPath.row == 0{
-                cell.medal.medal.image = UIImage(named: "golden")
-                cell.medal.backgroundColor = #colorLiteral(red: 1, green: 0.9294117647, blue: 0.5803921569, alpha: 1)
-            } else if indexPath.row == 1 {
-                cell.medal.medal.image = UIImage(named: "silver")
-                cell.medal.backgroundColor = .none
-            } else if indexPath.row == 2 {
-                cell.medal.medal.image = UIImage(named: "bronze")
-                cell.medal.backgroundColor = .none
-            }
-            cell.setData(data: arrivalUser[indexPath.row])
-        } else if indexPath.section == 1 {
-            cell.medal.isHidden = true
-            cell.button.isHidden = false
-            cell.tapped = { [unowned self] in
-                cell.buttonState = false
-                Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
-                    cell.buttonState = true
-                }
-                //                // 여기에 재촉하는거 함수 구현
-                //                // ->>
-                //                if let userName = notArrivalUser[indexPath.row].name {
-                //                    MannaAPI.urgeUser(userName: userName)
-                //                }
-                bottomSheetUp()
-            }
-            cell.setData(data: notArrivalUser[indexPath.row])
-        } else if indexPath.section == 2 {
             cell.medal.isHidden = false
             cell.button.isHidden = true
             if indexPath.row == 0{
@@ -282,8 +253,25 @@ extension RankingViewController: UITableViewDelegate, UITableViewDataSource {
             } else if indexPath.row == 2 {
                 cell.medal.medal.image = UIImage(named: "bronze")
                 cell.medal.backgroundColor = .none
+            } else {
+                cell.medal.isHidden = true
+            }
+            cell.setData(data: arrivalUser[indexPath.row])
+        } else if indexPath.section == 1 {
+            cell.medal.isHidden = true
+            cell.button.isHidden = false
+            cell.tapped = { [unowned self] in
+                cell.buttonState = false
+                Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
+                    cell.buttonState = true
+                }
+                bottomSheetUp()
             }
             cell.setData(data: notArrivalUser[indexPath.row])
+        } else if indexPath.section == 2 {
+            cell.setData(data: notArrivalUser[indexPath.row])
+            cell.button.isHidden = false
+            cell.medal.isHidden = true
         }
         return cell
     }
@@ -312,17 +300,5 @@ extension RankingViewController: UICollectionViewDataSource, UICollectionViewDel
             NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 18)
         ])
         return itemSize
-        
-        //        let element = urgeMessageList[indexPath.row]
-        //        let fontSize: Int = 12
-        //        let limit = 15
-        //        let size = CGSize(width: collectionView.frame.width-10, height: 1000)
-        //        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: CGFloat(fontSize))]
-        //        let estimatedFrame = element.boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
-        //        let space = Int(estimatedFrame.height) - limit
-        //        return CGSize(width: Int(collectionView.frame.width)-10, height: 125 + space )
-        //
-        //
-        //
     }
 }

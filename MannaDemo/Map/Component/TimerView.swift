@@ -17,6 +17,12 @@ class TimerView: UIView {
     var minuteLabel = UILabel()
     var secondLabel = UILabel()
     var colon = UILabel()
+    var minute = ""
+    var second = "" {
+        didSet {
+            attribute()
+        }
+    }
     var whereAt: TimerAtwhere?
     var checkIn = UILabel()
     var tempToggleFlag = false {
@@ -28,7 +34,7 @@ class TimerView: UIView {
     init(_ at: TimerAtwhere) {
         super.init(frame: CGRect.zero)
         whereAt = at
-        attribute()
+        //        attribute()
         layout()
         timer()
         Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timer), userInfo: nil, repeats: true)
@@ -44,8 +50,8 @@ class TimerView: UIView {
         let secondFormatter = DateFormatter()
         miniuteFormatter.dateFormat = "mm"
         secondFormatter.dateFormat = "ss"
-        let minute = miniuteFormatter.string(from: Date())
-        let second = secondFormatter.string(from: Date())
+        minute = miniuteFormatter.string(from: Date())
+        second = secondFormatter.string(from: Date())
         
         minuteLabel.text = "\(59 - Int(minute)!)"
         secondLabel.text = "\(59 - Int(second)!)"
@@ -57,7 +63,7 @@ class TimerView: UIView {
                 break
             case .rankingView:
                 [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "20minute") }
-
+                
                 break
             case .none:
                 print("타이머의 whereAt 변수를 할당하세요")
@@ -68,7 +74,7 @@ class TimerView: UIView {
                 self.backgroundColor = UIColor(named: "10minute")
                 break
             case .rankingView:
-                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "10minute") }
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : UIColor(named: "10minute") }
                 break
             case .none:
                 print("타이머의 whereAt 변수를 할당하세요")
@@ -79,7 +85,7 @@ class TimerView: UIView {
                 self.backgroundColor = UIColor(named: "keyColor")
                 break
             case .rankingView:
-                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "keyColor") }
+                [minuteLabel, secondLabel, colon].forEach { $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : UIColor(named: "keyColor") }
                 break
             case .none:
                 print("타이머의 whereAt 변수를 할당하세요")
@@ -91,19 +97,34 @@ class TimerView: UIView {
         self.do {
             $0.layer.cornerRadius = 24
             $0.layer.masksToBounds = true
-            switch whereAt {
-            case .mapView:
-                $0.backgroundColor = UIColor(named: "keyColor")
-                $0.dropShadow()
-            case .rankingView:
-                var viewBlurEffect = UIVisualEffectView()
-                viewBlurEffect.effect = UIBlurEffect(style: .dark)
-                self.addSubview(viewBlurEffect)
-                viewBlurEffect.frame = self.bounds
-                [minuteLabel, secondLabel, colon].forEach { $0.textColor = UIColor(named: "keyColor") }
-                $0.dropShadow()
-            case .none:
-                print("타이머의 whereAt 변수를 할당하세요")
+            //                var viewBlurEffect = UIVisualEffectView()
+            //                viewBlurEffect.effect = UIBlurEffect(style: .dark)
+            //                self.addSubview(viewBlurEffect)
+            //                viewBlurEffect.frame = self.bounds
+            //            if whereAt == .rankingView {
+            //                $0.backgroundColor = .white
+            //            } else {
+            //
+            //            }
+            //
+            if whereAt == .rankingView {
+                UIView.animate(withDuration: 0.2) {
+                    self.backgroundColor = .none
+                }
+            } else {
+                if (59 - Int(minute)!) > 9 && (59 - Int(minute)!) < 19 {
+                    UIView.animate(withDuration: 0.2) {
+                        self.backgroundColor = UIColor(named: "20minute")
+                    }
+                } else if (59 - Int(minute)!) < 10  {
+                    UIView.animate(withDuration: 0.2) {
+                        self.backgroundColor = UIColor(named: "10minute")
+                    }
+                } else {
+                    UIView.animate(withDuration: 0.2) {
+                        self.backgroundColor = UIColor(named: "keyColor")
+                    }
+                }
             }
         }
         
@@ -111,14 +132,14 @@ class TimerView: UIView {
             $0.do {
                 $0.font = UIFont(name: "SFProDisplay-Semibold", size: 19)
                 $0.textAlignment = .center
-                $0.textColor = .white
+                $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : .white
             }
         }
         [colon].forEach {
             $0.text = ":"
             $0.font = UIFont(name: "SFProDisplay-Semibold", size: 19)
             $0.textAlignment = .center
-            $0.textColor = .white
+            $0.textColor = whereAt == .rankingView ? UIColor(named: "timertextcolor") : .white
         }
         checkIn.do {
             $0.font = UIFont(name: "SFProDisplay-Semibold", size: 16)

@@ -505,6 +505,8 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 채팅창 클릭
     @objc func showChattingView(_ sender: UIButton) {
+        bottomBar.timerView.whereAt = .rankingView
+        bottomBar.timerView.attribute()
         bottomBar.isUserInteractionEnabled = false
         switch subViewState {
         case .chat:
@@ -534,6 +536,8 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func showRankingView(_ sender: UIButton) {
+        bottomBar.timerView.whereAt = .rankingView
+        bottomBar.timerView.attribute()
         bottomBar.isUserInteractionEnabled = false
         switch subViewState {
         case .chat:
@@ -586,7 +590,8 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func dismissChildView(_ sender: UIButton) {
-        
+        bottomBar.timerView.whereAt = .mapView
+        bottomBar.timerView.attribute()
         if sender.tag == 1 {
             UIView.animate(withDuration: 0.2) {
                 self.bottomBar.backgroundColor = .none
