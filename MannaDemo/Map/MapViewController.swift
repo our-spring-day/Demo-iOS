@@ -95,7 +95,7 @@ class MapViewController: UIViewController, ChatSet{
         
         
         locationSocket.on("locationConnect") { [self] (array, ack) in
-            rankingViewController!.userList[MannaDemo.myUUID!]?.state = true
+            rankingViewController!.userList[MannaDemo.myUUID!]?.state = .start
         }
         chatSocket.on("chatConnect") { [self] (array, ack) in
 //            print(ack)
@@ -153,23 +153,22 @@ class MapViewController: UIViewController, ChatSet{
                     case "LOCATION":
                         lat_ = result.location?.latitude
                         lng_ = result.location?.longitude
-                        rankingViewController!.userList[token]?.state = true
+                        rankingViewController!.userList[token]?.state = .start
                         break
                         
                     case "JOIN":
                         guard let name = username else { return }
-                        rankingViewController!.userList[token]?.state = true
+                        rankingViewController!.userList[token]?.state = .start
                         rankingViewController!.userList[token]?.networkValidTime = 0
                         self.marking()
                         self.showToast(message: "\(name)님 접속하셨습니다.")
-//                        self.setCollcetionViewItem()
                         break
                         
                     case "LEAVE":
                         guard let name = username else { return }
+                        rankingViewController!.userList[token]?.state = .notStart
                         rankingViewController!.userList[token]?.networkValidTime = 61
                         self.marking()
-//                        self.setCollcetionViewItem()
                         self.showToast(message: "\(name)님 나가셨습니다.")
                         break
                         
@@ -180,7 +179,6 @@ class MapViewController: UIViewController, ChatSet{
                     guard let lng = lng_ else { return }
                     guard rankingViewController!.userList[token] != nil else { return }
                     rankingViewController!.userList[token]?.networkValidTime = 0
-//                    print("여기에 나계속찍혀야돼")
                     if token != MannaDemo.myUUID {
                         rankingViewController!.userList[token]?.latitude = lat
                         rankingViewController!.userList[token]?.longitude = lng
@@ -475,7 +473,7 @@ class MapViewController: UIViewController, ChatSet{
         let maxLatLng = NMGLatLng(lat: 0, lng: 0)
         
         rankingViewController!.userList.keys.forEach {
-            if rankingViewController!.userList[$0]?.state == true {
+            if rankingViewController!.userList[$0]?.state == .start {
                 if rankingViewController!.userList[$0]!.longitude != 0 && rankingViewController!.userList[$0]!.latitude != 0 {
                     if minLatLng.lat > rankingViewController!.userList[$0]!.latitude {
                         minLatLng.lat = rankingViewController!.userList[$0]!.latitude
@@ -505,10 +503,10 @@ class MapViewController: UIViewController, ChatSet{
     
     //MARK: 채팅창 클릭
     @objc func showChattingView(_ sender: UIButton) {
+        bottomBar.isUserInteractionEnabled = false
         bottomBar.timerView.whereAt = .rankingView
         bottomBar.timerView.attribute()
         bottomBar.borderView.isHidden = false
-        bottomBar.isUserInteractionEnabled = false
         switch subViewState {
         case .chat:
             dismissChildView(sender)
@@ -537,9 +535,9 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func showRankingView(_ sender: UIButton) {
+        bottomBar.isUserInteractionEnabled = false
         bottomBar.timerView.whereAt = .rankingView
         bottomBar.timerView.attribute()
-        bottomBar.isUserInteractionEnabled = false
         bottomBar.borderView.isHidden = false
         switch subViewState {
         case .chat:
@@ -592,6 +590,7 @@ class MapViewController: UIViewController, ChatSet{
     }
     
     @objc func dismissChildView(_ sender: UIButton) {
+        self.bottomBar.isUserInteractionEnabled = false
         bottomBar.timerView.whereAt = .mapView
         bottomBar.timerView.attribute()
         bottomBar.borderView.isHidden = true
@@ -638,7 +637,7 @@ class MapViewController: UIViewController, ChatSet{
                 } else {
                     tokenWithMarker[key]?.iconImage = (rankingViewController?.locationProfileImageArray[(user.name)!])!
                 }
-                if (rankingViewController!.userList[key]?.state)! {
+                if (rankingViewController!.userList[key]?.state == .start) {
                     if key != MannaDemo.myUUID {
                         tokenWithMarker[key]?.position = NMGLatLng(lat: rankingViewController!.userList[key]!.latitude, lng: rankingViewController!.userList[key]!.longitude)
                         tokenWithMarker[key]?.mapView = mapView
@@ -677,7 +676,7 @@ class MapViewController: UIViewController, ChatSet{
     //MARK: 사용자상태 처리
     @objc func timeChecker() {
         rankingViewController!.userList.keys.forEach {
-            if rankingViewController!.userList[$0]?.state == true {
+            if rankingViewController!.userList[$0]?.state == .start {
                 rankingViewController!.userList[$0]?.networkValidTime += 1
             }
         }

@@ -45,7 +45,7 @@ class RankingViewCell: UITableViewCell {
             let hour = data.remainTime / 3600
             let minute = (data.remainTime % 3600) / 60
             let messsage = hour > 0 ? "약 \(data.remainTime / 3600) 시간 \((data.remainTime % 3600) / 60) 분 남음" : "약 \((data.remainTime % 3600) / 60) 분 남음"
-            $0.text = data.state ? messsage : ""
+            $0.text = data.state == .start ? messsage : ""
         }
         medal.do {
             $0.layer.cornerRadius = $0.frame.width / 2
